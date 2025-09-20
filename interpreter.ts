@@ -7,14 +7,14 @@ namespace microcode {
     type StateMap = { [id: string]: number }
 
     class RuleClosure {
-        private wakeTime: number = 0 // for timers
+        private wakeTime: number = 0
         private actionRunning: boolean = false
         private modifierIndex: number = 0
         private loopIndex: number = 0
         constructor(
             private index: number,
             public rule: RuleDefn,
-            private parent: Interpreter
+            private interp: Interpreter
         ) {}
 
         kill() {
@@ -39,7 +39,6 @@ namespace microcode {
                     if (this.wakeTime > 0) {
                         basic.pause(this.wakeTime)
                         this.wakeTime = 0
-                        this.modifierIndex = 0
                     }
                     this.runAction()
                     this.checkForLoopFinish()
@@ -58,14 +57,14 @@ namespace microcode {
                         this.modifierIndex = 0
                     } else {
                         // get the loop bound
-                        const loopBound = this.parent.getValue(
+                        const loopBound = this.interp.getValue(
                             this.rule.modifiers.slice(this.modifierIndex + 1),
                             0
                         )
                         this.loopIndex++
                         if (this.loopIndex >= loopBound) {
                             // end of loop
-                            this.actionRunning = false
+                            this.kill()
                         } else {
                             // repeat
                             this.modifierIndex = 0
@@ -107,7 +106,7 @@ namespace microcode {
                     break
                 }
                 case Tid.TID_ACTUATOR_SHOW_NUMBER: {
-                    const v = this.parent.getValue(this.rule.modifiers, 0)
+                    const v = this.interp.getValue(this.rule.modifiers, 0)
                     basic.showNumber(v)
                     this.actionRunning = false
                     return
@@ -115,18 +114,18 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Z_ASSIGN: {
-                    const v = this.parent.getValue(this.rule.modifiers, 0)
-                    this.parent.notifyStateUpdate(this.index, action, v)
+                    const v = this.interp.getValue(this.rule.modifiers, 0)
+                    this.interp.notifyStateUpdate(this.index, action, v)
                     this.actionRunning = false
                 }
                 case Tid.TID_ACTUATOR_RADIO_SEND: {
-                    const v = this.parent.getValue(this.rule.modifiers, 0)
+                    const v = this.interp.getValue(this.rule.modifiers, 0)
                     radio.sendNumber(v)
                     this.actionRunning = false
                     return
                 }
                 case Tid.TID_ACTUATOR_RADIO_SET_GROUP: {
-                    const v = this.parent.getValue(this.rule.modifiers, 1)
+                    const v = this.interp.getValue(this.rule.modifiers, 1)
                     radio.setGroup(v)
                     this.actionRunning = false
                     return
