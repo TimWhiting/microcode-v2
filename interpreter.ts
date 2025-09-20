@@ -14,10 +14,65 @@ namespace microcode {
     // - microphone
     // - switch page
     // - servo
+    // - clear screen animation (to know the program is running)
     // - jacdac (generic way to handle sensor data, spanning jd and mbit)
     // - robot protocol
     // - remove debug messages (user-interface-base?)
     // - generalize handling of mathematics
+
+    /*
+
+            private emitClearScreen() {
+            const loading_anim = hex`
+                0001000000
+                0000010000
+                0000000100
+                0000000002
+                0000000004
+                0000000008
+                0000001000
+                0000100000
+                0010000000
+                0800000000
+                0400000000
+                0200000000
+                0000000000
+            `
+            const scr = this.lookupRole(ServiceClass.DotMatrix, 0)
+            this.callLinked("dot_animation", [
+                scr.emit(this.writer),
+                this.emitString(loading_anim),
+                literal(30),
+            ])
+        }
+        
+    */
+
+    /*
+        JACDAC
+
+    function scToName(sc: ServiceClass) {
+        if (sc == ServiceClass.Button) return "but"
+        if (sc == ServiceClass.DotMatrix) return "dot"
+        if (sc == ServiceClass.SoundLevel) return "snd"
+        if (sc == ServiceClass.Temperature) return "tmp"
+        if (sc == ServiceClass.SoundPlayer) return "mus"
+        if (sc == ServiceClass.Buzzer) return "buz"
+        if (sc == ServiceClass.Accelerometer) return "acc"
+        if (sc == ServiceClass.Radio) return "rad"
+        if (sc == ServiceClass.Potentiometer) return "pot"
+        if (sc == ServiceClass.LightLevel) return "lit"
+        if (sc == ServiceClass.MagneticFieldLevel) return "mag"
+        if (sc == ServiceClass.RotaryEncoder) return "rot"
+        if (sc == ServiceClass.Led) return "led"
+        if (sc == ServiceClass.Servo) return "srv"
+        if (sc == ServiceClass.Distance) return "dst"
+        if (sc == ServiceClass.Reflected) return "ref"
+        if (sc == ServiceClass.Moisture) return "moi"
+        if (sc == ServiceClass.Relay) return "rel"
+        return "unknown"
+    }
+    */
 
     /* old when logic
            if (microcode.jdKind(sensor) == microcode.JdKind.Variable) {
