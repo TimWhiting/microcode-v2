@@ -15,7 +15,158 @@ namespace microcode {
     // - switch page
     // - servo
     // - jacdac (generic way to handle sensor data, spanning jd and mbit)
+    // - robot protocol
     // - remove debug messages (user-interface-base?)
+    // - generalize handling of mathematics
+
+    /* old when logic
+           if (microcode.jdKind(sensor) == microcode.JdKind.Variable) {
+                const pipeId = microcode.jdParam(sensor)
+                const role = this.pipeRole(pipeId)
+                this.withProcedure(role.getDispatcher(), wr => {
+                    this.ifCurrPage(() => {
+                        filterValueIn(() => this.pipeVar(pipeId).read(wr))
+                    })
+                })
+                return
+            }
+
+            const role = this.lookupSensorRole(rule)
+            name += "_" + role.name
+            const wakeup = needsWakeUp(role.classIdentifier)
+
+            // get the procedure for this role
+            this.withProcedure(role.getDispatcher(), wr => {
+                // because all rules with same role are put in same
+                // procedure, we need to make sure we are on the current page
+                this.ifCurrPage(() => {
+                    const code = this.lookupEventCode(role, rule)
+                    if (microcode.jdKind(sensor) == microcode.JdKind.Radio) {
+                        this.ifEq(
+                            wr.emitExpr(Op.EXPR0_PKT_REPORT_CODE, []),
+                            code,
+                            () => {
+                                const radioVar = this.lookupGlobal("z_radio")
+                                radioVar.write(
+                                    wr,
+                                    wr.emitBufLoad(NumFmt.F64, 12)
+                                )
+                                // hack for keeping car radio from interfering with user radio
+                                if (
+                                    sensor ==
+                                        microcode.Tid.TID_SENSOR_CAR_WALL ||
+                                    sensor == microcode.Tid.TID_SENSOR_LINE
+                                ) {
+                                    wr.emitIf(
+                                        wr.emitExpr(Op.EXPR2_LT, [
+                                            literal(
+                                                robot.robots.RobotCompactCommand
+                                                    .ObstacleState
+                                            ),
+                                            radioVar.read(wr),
+                                        ]),
+                                        () => {
+                                            if (
+                                                sensor ==
+                                                microcode.Tid
+                                                    .TID_SENSOR_CAR_WALL
+                                            ) {
+                                                radioVar.write(
+                                                    wr,
+                                                    wr.emitExpr(Op.EXPR2_SUB, [
+                                                        radioVar.read(wr),
+                                                        literal(
+                                                            robot.robots
+                                                                .RobotCompactCommand
+                                                                .ObstacleState
+                                                        ),
+                                                    ])
+                                                )
+                                                filterValueIn(() =>
+                                                    radioVar.read(wr)
+                                                )
+                                            } else {
+                                                wr.emitIf(
+                                                    wr.emitExpr(Op.EXPR2_LE, [
+                                                        literal(
+                                                            robot.robots
+                                                                .RobotCompactCommand
+                                                                .LineState
+                                                        ),
+                                                        radioVar.read(wr),
+                                                    ]),
+                                                    () => {
+                                                        filterValueIn(() =>
+                                                            radioVar.read(wr)
+                                                        )
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    )
+                                } else {
+                                    wr.emitIf(
+                                        wr.emitExpr(Op.EXPR2_LT, [
+                                            radioVar.read(wr),
+                                            literal(
+                                                robot.robots.RobotCompactCommand
+                                                    .ObstacleState
+                                            ),
+                                        ]),
+                                        () => {
+                                            filterValueIn(() =>
+                                                radioVar.read(wr)
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                        )
+                    } else if (
+                        code != null &&
+                        (wakeup == undefined || wakeup == "sound_1_to_5") &&
+                        (rule.filters.length == 0 || this.hasFilterEvent(rule))
+                    ) {
+                        const roleEventCode = this.lookupGlobal(
+                            "z_role_code" + role.index
+                        )
+                        this.ifEq(roleEventCode.read(wr), code, emitBody)
+                    } else if (wakeup) {
+                        if (wakeup.includes("1_to_5")) {
+                            const roleGlobal = this.lookupGlobal(
+                                "z_role" + role.index
+                            )
+                            const roleGlobalChanged = this.lookupGlobal(
+                                "z_role_ch" + role.index
+                            )
+                            wr.emitIf(
+                                wr.emitExpr(Op.EXPR2_EQ, [
+                                    literal(1),
+                                    roleGlobalChanged.read(wr),
+                                ]),
+                                () => {
+                                    filterValueIn(() => roleGlobal.read(wr))
+                                }
+                            )
+                        } else {
+                            const varChanged = this.lookupGlobal(
+                                "z_role_ch" + role.index
+                            )
+                            this.ifEq(varChanged.read(wr), code, emitBody)
+                        }
+                    } else if (
+                        role.classIdentifier == SRV_JACSCRIPT_CONDITION
+                    ) {
+                        // event code not relevant
+                        emitBody()
+                    } else {
+                        this.error("can't handle role")
+                    }
+                })
+            })
+        }
+
+    */
 
     enum OutputResource {
         LEDScreen,
@@ -33,6 +184,10 @@ namespace microcode {
             public rule: RuleDefn,
             private interp: Interpreter
         ) {}
+
+        public active() {
+            return this.actionRunning
+        }
 
         kill() {
             this.actionRunning = false
@@ -60,6 +215,7 @@ namespace microcode {
                     this.runAction()
                     this.checkForLoopFinish()
                     // yield
+                    // TODO: notify interp?
                     basic.pause(0)
                 }
             })
@@ -171,6 +327,9 @@ namespace microcode {
                     this.interp.switchPage(targetPage - 1)
                     break
                 }
+                case Tid.TID_ACTUATOR_SERVO_SET_ANGLE: {
+                    break
+                }
             }
             this.modifierIndex++
         }
@@ -223,18 +382,15 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 }
                 wr.emitBufStore(currValue(), fmt, 0)
                 this.emitSendCmd(role, microcode.serviceCommand(actuator))
+
+            TODO: what do these refer to? jacdac services, for the most part
+
             } else if (aKind == microcode.JdKind.Sequence) {
                 this.emitSequence(rule, 400)
             } else if (aKind == microcode.JdKind.ExtLibFn) {
                 this.emitValueOut(rule, 1)
                 const role = this.lookupActuatorRole(rule)
                 this.callLinked(aJdparam, [role.emit(wr), currValue()])
-            } else {
-                this.error(`can't map act role for ${JSON.stringify(actuator)}`)
-            }
-
-            this.emitPossibleLoop(rule)
-        }
 
         */
 
@@ -298,6 +454,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         private running: boolean = false
         private currentPage: number = 0
         private ruleClosures: RuleClosure[] = []
+        private activeRuleStepped: number = 0
+        private activeRuleCount: number = 0
 
         // state storage for variables and other temporary global state
         // (local per-rule state is kept in RuleClosure)
@@ -349,11 +507,19 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             index: number,
             handler: () => void
         ) {
+            this.checkForStepCompleted()
             // earliest in lexical order wins for a resource
         }
 
         public updateState(ruleIndex: number, tid: number, v: number) {
-            // TODO
+            this.checkForStepCompleted()
+            // earliest in lexical order wins for a resource
+        }
+
+        private checkForStepCompleted() {
+            this.activeRuleStepped++
+            if (this.activeRuleCount == this.activeRuleStepped) {
+            }
         }
 
         private onMicrobitEvent(src: number, ev: number) {
@@ -399,6 +565,10 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 }
                 if (match) activeRules.push(rc)
             })
+            this.activeRuleStepped = 0
+            this.activeRuleCount = this.ruleClosures.filter(rc =>
+                rc.active()
+            ).length
             activeRules.forEach(r => {
                 r.kill()
                 r.runDoSection()
