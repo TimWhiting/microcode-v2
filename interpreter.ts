@@ -6,6 +6,23 @@ namespace microcode {
 
     type StateMap = { [id: string]: number }
 
+    // TODO:
+    // - condition of when
+    // - music
+    // - merge logic in interpreter (delay update)
+    // - speaker (sounds)
+    // - microphone
+    // - switch page
+    // - servo
+    // - jacdac (generic way to handle sensor data, spanning jd and mbit)
+    // - remove debug messages (user-interface-base?)
+
+    enum OutputResource {
+        LEDScreen,
+        Speaker,
+        Radio,
+    }
+
     class RuleClosure {
         private wakeTime: number = 0
         private actionRunning: boolean = false
@@ -42,6 +59,7 @@ namespace microcode {
                     }
                     this.runAction()
                     this.checkForLoopFinish()
+                    // yield
                     basic.pause(0)
                 }
             })
@@ -49,6 +67,7 @@ namespace microcode {
 
         private checkForLoopFinish() {
             if (!this.actionRunning) return
+            control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             if (this.modifierIndex < this.rule.modifiers.length) {
                 const m = this.rule.modifiers[this.modifierIndex]
                 if (getTid(m) == Tid.TID_MODIFIER_LOOP) {
@@ -102,20 +121,29 @@ namespace microcode {
             const action = this.rule.actuators[0]
             switch (action) {
                 case Tid.TID_ACTUATOR_PAINT: {
-                    this.displayLEDImage()
+                    this.interp.updateResource(
+                        OutputResource.LEDScreen,
+                        this.index,
+                        () => this.displayLEDImage()
+                    )
                     break
                 }
                 case Tid.TID_ACTUATOR_SHOW_NUMBER: {
                     const v = this.interp.getValue(this.rule.modifiers, 0)
-                    basic.showNumber(v)
+                    this.interp.updateResource(
+                        OutputResource.LEDScreen,
+                        this.index,
+                        () => basic.showNumber(v)
+                    )
                     this.actionRunning = false
                     return
                 }
                 case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Z_ASSIGN: {
+                    control.waitMicros(ANTI_FREEZE_DELAY * 1000)
                     const v = this.interp.getValue(this.rule.modifiers, 0)
-                    this.interp.notifyStateUpdate(this.index, action, v)
+                    this.interp.updateState(this.index, action, v)
                     this.actionRunning = false
                 }
                 case Tid.TID_ACTUATOR_RADIO_SEND: {
@@ -137,16 +165,78 @@ namespace microcode {
                     break
                 }
                 case Tid.TID_ACTUATOR_SWITCH_PAGE: {
+                    let targetPage = 1
+                    for (const m of this.rule.modifiers)
+                        if (jdKind(m) == JdKind.Page) targetPage = jdParam(m)
+                    this.interp.switchPage(targetPage - 1)
                     break
                 }
             }
             this.modifierIndex++
         }
 
-        private isStartPage() {
-            const sensor = this.rule.sensor
-            return Tid.TID_SENSOR_START_PAGE
+        /*
+private emitRoleCommand(rule: microcode.RuleDefn) {
+            const actuator = rule.actuators.length ? rule.actuators[0] : null
+            const wr = this.writer
+            const currValue = () => this.currValue().read(wr)
+            if (actuator == null) return // do nothing
+            const aKind = microcode.jdKind(actuator)
+            const aJdparam = microcode.jdParam(actuator)
+
+            } else if (aKind == microcode.JdKind.Variable) {
+                this.emitSleep(ANTI_FREEZE_DELAY)
+                this.emitValueOut(rule, 0)
+                const pv = this.pipeVar(aJdparam)
+                pv.write(wr, currValue())
+                this.emitSendCmd(this.pipeRole(aJdparam), CMD_CONDITION_FIRE)
+    
+            } else if (aKind == microcode.JdKind.NumFmt) {
+                const role = this.lookupActuatorRole(rule)
+                this.emitValueOut(rule, 1) // why 1?
+                const fmt: NumFmt = aJdparam
+                const sz = bitSize(fmt) >> 3
+                wr.emitStmt(Op.STMT1_SETUP_PKT_BUFFER, [literal(sz)])
+                if (actuator == microcode.Tid.TID_ACTUATOR_SERVO_SET_ANGLE) {
+                    // TODO no modulo yet in Jacs
+                    // if (curr >= 12) { curr -= 12 }
+                    wr.emitIf(
+                        wr.emitExpr(Op.EXPR2_LE, [literal(12), currValue()]),
+                        () => {
+                            this.currValue().write(
+                                wr,
+                                wr.emitExpr(Op.EXPR2_SUB, [
+                                    currValue(),
+                                    literal(12),
+                                ])
+                            )
+                        }
+                    )
+                    // curr = curr * ((360/12) << 16)
+                    this.currValue().write(
+                        wr,
+                        wr.emitExpr(Op.EXPR2_MUL, [
+                            currValue(),
+                            literal((360 / 12) << 16),
+                        ])
+                    )
+                }
+                wr.emitBufStore(currValue(), fmt, 0)
+                this.emitSendCmd(role, microcode.serviceCommand(actuator))
+            } else if (aKind == microcode.JdKind.Sequence) {
+                this.emitSequence(rule, 400)
+            } else if (aKind == microcode.JdKind.ExtLibFn) {
+                this.emitValueOut(rule, 1)
+                const role = this.lookupActuatorRole(rule)
+                this.callLinked(aJdparam, [role.emit(wr), currValue()])
+            } else {
+                this.error(`can't map act role for ${JSON.stringify(actuator)}`)
+            }
+
+            this.emitPossibleLoop(rule)
         }
+
+        */
 
         public getWakeTime() {
             this.wakeTime = 0
@@ -181,8 +271,6 @@ namespace microcode {
         }
     }
 
-    // DEVICE_ID_ANY == DEVICE_EXT_ANY == 0
-
     type IdMap = { [id: number]: number }
 
     // see DAL for these values
@@ -211,12 +299,13 @@ namespace microcode {
         private currentPage: number = 0
         private ruleClosures: RuleClosure[] = []
 
-        // state storage for variables and other temporary state
+        // state storage for variables and other temporary global state
+        // (local per-rule state is kept in RuleClosure)
         private state: StateMap = {}
 
         constructor(private program: ProgramDefn) {
             this.running = true
-            this.newPage()
+            this.switchPage(0)
             control.onEvent(DAL.DEVICE_ID_BUTTON_A, DAL.DEVICE_EVT_ANY, () =>
                 this.onMicrobitEvent(
                     DAL.DEVICE_ID_BUTTON_A,
@@ -236,9 +325,11 @@ namespace microcode {
             this.ruleClosures = []
         }
 
-        private newPage() {
+        public switchPage(page: number) {
             this.stopAllRules()
+            control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             // set up new rule closures
+            this.currentPage = page
             this.program.pages[this.currentPage].rules.forEach((r, index) => {
                 this.ruleClosures.push(new RuleClosure(index, r, this))
             })
@@ -247,6 +338,22 @@ namespace microcode {
                 const wake = rc.getWakeTime()
                 if (wake > 0) rc.runDoSection()
             })
+        }
+
+        // TODO: we need to have the notion of a round in which the various
+        // TODO: active rules tell us what they want to update and then at the end
+        // TODO: of the round, we decide what updates to actually do
+
+        public updateResource(
+            resource: OutputResource,
+            index: number,
+            handler: () => void
+        ) {
+            // earliest in lexical order wins for a resource
+        }
+
+        public updateState(ruleIndex: number, tid: number, v: number) {
+            // TODO
         }
 
         private onMicrobitEvent(src: number, ev: number) {
@@ -392,10 +499,6 @@ namespace microcode {
             }
         }
 
-        public notifyStateUpdate(ruleIndex: number, tid: number, v: number) {
-            // TODO
-        }
-
         // do we need to take initial value into account?
         public getValue(modifiers: Tile[], defl: number): number {
             let currSeq: Tile[] = []
@@ -444,6 +547,10 @@ namespace microcode {
             return modifiers
         }
 
+        public getValueOut(rule: microcode.RuleDefn, defl: number) {
+            return this.getValue(this.baseModifiers(rule), defl)
+        }
+
         // 0-max inclusive
         private randomInt(max: number) {
             if (max <= 0) return 0
@@ -452,13 +559,6 @@ namespace microcode {
 
         private add(a: number, off: number) {
             return a + off
-        }
-
-        private loopModifierIdx(rule: RuleDefn) {
-            for (let i = 0; i < rule.modifiers.length; ++i) {
-                if (jdKind(rule.modifiers[i]) == JdKind.Loop) return i
-            }
-            return -1
         }
     }
 
