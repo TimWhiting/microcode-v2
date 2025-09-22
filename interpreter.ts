@@ -245,7 +245,24 @@ namespace microcode {
 
         public matchWhen(): boolean {
             // evaluate the condition associated with the rule, if any
+
+            // const code = this.lookupEventCode(role, rule)
             return false
+        }
+
+        private lookupEventCode() {
+            const sensor = this.rule.sensor
+            // get default event for sensor, if exists
+            let evCode = eventCode(sensor)
+            if (evCode != undefined) {
+                // override if user specifies event code
+                for (const m of this.rule.filters)
+                    if (jdKind(m) == JdKind.EventCode) {
+                        return jdParam(m)
+                    }
+                return evCode
+            }
+            return null
         }
 
         public runDoSection() {
