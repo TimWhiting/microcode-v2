@@ -469,14 +469,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         public getWakeTime() {
             this.wakeTime = 0
             const sensor = this.rule.sensor
-            let isTimer = sensor == Tid.TID_SENSOR_TIMER
-            if (
-                sensor == Tid.TID_SENSOR_START_PAGE &&
-                this.rule.filters.some(f => jdKind(f) == JdKind.Timespan)
-            ) {
-                isTimer = true
-            }
-            if (isTimer) {
+            if (sensor == Tid.TID_SENSOR_TIMER || Tid.TID_SENSOR_START_PAGE) {
                 // const timer = this.addProc(name + "_timer")
                 let period = 0
                 let randomPeriod = 0
@@ -484,10 +477,15 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     const mJdparam = jdParam(m)
                     if (jdKind(m) == JdKind.Timespan) {
                         if (mJdparam >= 0) period += mJdparam
-                        else randomPeriod += -mJdparam
+                        else randomPeriod += -mJdparam // see hack in jdParam
                     }
                 }
-                if (period == 0 && randomPeriod == 0) period = 1000 // reasonable default
+                if (
+                    sensor == Tid.TID_SENSOR_TIMER &&
+                    period == 0 &&
+                    randomPeriod == 0
+                )
+                    period = 1000 // reasonable default
                 if (period == 0) period = ANTI_FREEZE_DELAY
 
                 if (randomPeriod > 0)
