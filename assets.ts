@@ -205,7 +205,7 @@ namespace microcode {
             if (name == TID_ACTUATOR_SHOW_NUMBER) return icondb.showNumber
             if (name == TID_ACTUATOR_RADIO_SEND) return icondb.radio_send
             if (name == TID_ACTUATOR_RADIO_SET_GROUP)
-                return icondb.radio_set_group
+                return icondb.radio_set_group_small
             if (name == TID_ACTUATOR_SPEAKER) return icondb.speakerFun
             if (name == TID_ACTUATOR_MUSIC) return icondb.music
 
@@ -1160,6 +1160,24 @@ namespace icondb {
     . . . . . . 4 5 4 . . . . . . .
     . . . . . . 4 5 4 . . . . . . .
     . . . . . . 4 5 4 . . . . . . .
+    . . . . . . . . . . . . . . . .
+`
+    export const radio_set_group_small = bmp`
+    . . . . . . . . . . . . . . . .
+    . . . . . 8 . . . 8 . . . . . .
+    . . . 8 . . 8 8 8 . . 8 . . . .
+    . 8 . . 8 . . . . . 8 . . 8 . .
+    . . 8 . . 8 8 8 8 8 . . 8 . . .
+    . . . 8 . . . . . . . 8 . . . .
+    . . . . 8 8 8 8 8 8 8 . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . 6 6 6 . . . . 6 6 6 . . .
+    . . 6 9 6 9 6 . . 6 9 6 9 6 . .
+    . . . 6 6 6 . . . . 6 6 6 . . .
+    . . . . . . . . . . . . . . . .
+    . . . 6 6 6 . . . . 6 6 6 . . .
+    . . 6 9 6 9 6 . . 6 9 6 9 6 . .
+    . . . 6 6 6 . . . . 6 6 6 . . .
     . . . . . . . . . . . . . . . .
 `
 
