@@ -2,12 +2,20 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // make sure we have V2 simulator
-    input.onLogoEvent(TouchButtonEvent.Pressed, function () {})
+    input.onLogoEvent(TouchButtonEvent.Pressed, function () { })
+    // also enable accelerometer in sim
+    input.onGesture(Gesture.Shake, () => { })
 
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
 
     type StateMap = { [id: string]: number }
+
+    // 0-max inclusive
+    function randomInt(max: number) {
+        if (max <= 0) return 0
+        return Math.floor(Math.random() * (max + 1))
+    }
 
     function emitClearScreen() {
         const anim = hex`
@@ -67,16 +75,6 @@ namespace microcode {
     */
 
     /* old when logic
-           if (microcode.jdKind(sensor) == microcode.JdKind.Variable) {
-                const pipeId = microcode.jdParam(sensor)
-                const role = this.pipeRole(pipeId)
-                this.withProcedure(role.getDispatcher(), wr => {
-                    this.ifCurrPage(() => {
-                        filterValueIn(() => this.pipeVar(pipeId).read(wr))
-                    })
-                })
-                return
-            }
 
             const role = this.lookupSensorRole(rule)
             name += "_" + role.name
@@ -245,9 +243,35 @@ namespace microcode {
 
         public matchWhen(): boolean {
             // evaluate the condition associated with the rule, if any
+            const sensor = this.rule.sensor
+            if (jdKind(sensor) == JdKind.Variable) {
+                const pipeId = jdParam(sensor)
+                return this.filterValueIn(this.interp.state[pipeId])
+            } else if (jdKind(sensor) == JdKind.Radio) {
+                // TODO: lots of radio logic to bring over
+            } else {
+                const eventCode = this.lookupEventCode()
+                if (eventCode && (this.rule.filters.length == 0 || this.hasFilterEvent())) {
+                    // TODO: need to check eventCode against received event...
+                    // TODO: but this requires the role mapping stuff
+                } else {
 
-            // const code = this.lookupEventCode(role, rule)
+                }
+            }
             return false
+        }
+
+        private hasFilterEvent() {
+            return this.rule.filters.some(f => {
+                const k = jdKind(f)
+                return k == JdKind.EventCode || k == JdKind.ServiceInstanceIndex
+            })
+        }
+
+        private filterValueIn(f: number) {
+            if (this.rule.filters.length) {
+                return f == this.interp.getValue(this.rule.filters, 0)
+            } else return true
         }
 
         private lookupEventCode() {
@@ -362,8 +386,9 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Z_ASSIGN: {
                     control.waitMicros(ANTI_FREEZE_DELAY * 1000)
+                    const pipe = jdParam(action)
                     const v = this.interp.getValue(this.rule.modifiers, 0)
-                    this.interp.updateState(this.index, action, v)
+                    this.interp.updateState(this.index, pipe, v)
                     this.actionRunning = false
                 }
                 case Tid.TID_ACTUATOR_RADIO_SEND: {
@@ -555,7 +580,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
 
         // state storage for variables and other temporary global state
         // (local per-rule state is kept in RuleClosure)
-        private state: StateMap = {}
+        public state: StateMap = {}
 
         constructor(private program: ProgramDefn) {
             emitClearScreen()
@@ -608,7 +633,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             // earliest in lexical order wins for a resource
         }
 
-        public updateState(ruleIndex: number, tid: number, v: number) {
+        public updateState(ruleIndex: number, pipe: string, v: number) {
             this.checkForStepCompleted()
             // earliest in lexical order wins for a resource
         }
@@ -685,13 +710,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 v += jdParam(m)
             }
             return v
-        }
-
-        private hasFilterEvent(rule: RuleDefn) {
-            return rule.filters.some(f => {
-                const k = jdKind(f)
-                return k == JdKind.EventCode || k == JdKind.ServiceInstanceIndex
-            })
         }
 
         private pipeVar(id: number) {
@@ -814,18 +832,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             return modifiers
         }
 
-        public getValueOut(rule: microcode.RuleDefn, defl: number) {
+        public getValueOut(rule: RuleDefn, defl: number) {
             return this.getValue(this.baseModifiers(rule), defl)
-        }
-
-        // 0-max inclusive
-        private randomInt(max: number) {
-            if (max <= 0) return 0
-            return Math.floor(Math.random() * (max + 1))
-        }
-
-        private add(a: number, off: number) {
-            return a + off
         }
     }
 
