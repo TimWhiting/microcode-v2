@@ -1,6 +1,12 @@
 namespace microcode {
     // an interpreter for ProgramDefn
 
+    // make sure we have V2 simulator
+    input.onLogoEvent(TouchButtonEvent.Pressed, function () {
+	
+    })
+
+    
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
 
@@ -509,6 +515,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             emitClearScreen()
             this.running = true
             this.switchPage(0)
+            
+            // need to get the V2 simulator
             control.onEvent(DAL.DEVICE_ID_BUTTON_A, DAL.DEVICE_EVT_ANY, () =>
                 this.onMicrobitEvent(
                     DAL.DEVICE_ID_BUTTON_A,
@@ -521,6 +529,17 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     control.eventValue()
                 )
             )
+            control.onEvent(DAL.MICROBIT_ID_LOGO, DAL.DEVICE_EVT_ANY, () =>
+                this.onMicrobitEvent(
+                    DAL.MICROBIT_ID_LOGO,
+                    control.eventValue()
+                )
+            )
+
+            // TODO: 
+            // - pins
+            // - accelerometer
+            // - 
         }
 
         private stopAllRules() {
@@ -553,6 +572,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             handler: () => void
         ) {
             this.checkForStepCompleted()
+            handler()
             // earliest in lexical order wins for a resource
         }
 

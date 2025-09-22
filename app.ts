@@ -24,7 +24,9 @@ namespace microcode {
             user_interface_base.resolveTooltip = (ariaId: string) =>
                 resolveTooltip(ariaId)
 
-            //
+            // run the program
+            // runProgram(this.progdef)
+
             controller.setRepeatDefault(250, 30)
             // keymap.setupKeys()
 
