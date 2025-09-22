@@ -2,11 +2,8 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // make sure we have V2 simulator
-    input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-	
-    })
+    input.onLogoEvent(TouchButtonEvent.Pressed, function () {})
 
-    
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
 
@@ -499,6 +496,15 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         6: Tid.TID_FILTER_ACCEL_FACE_DOWN,
     }
 
+    const buttons = [
+        DAL.DEVICE_ID_BUTTON_A,
+        DAL.DEVICE_ID_BUTTON_B,
+        DAL.MICROBIT_ID_LOGO,
+        DAL.ID_PIN_P0,
+        DAL.ID_PIN_P1,
+        DAL.ID_PIN_P2,
+    ]
+
     class Interpreter {
         private hasErrors: boolean = false
         private running: boolean = false
@@ -515,31 +521,17 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             emitClearScreen()
             this.running = true
             this.switchPage(0)
-            
-            // need to get the V2 simulator
-            control.onEvent(DAL.DEVICE_ID_BUTTON_A, DAL.DEVICE_EVT_ANY, () =>
-                this.onMicrobitEvent(
-                    DAL.DEVICE_ID_BUTTON_A,
-                    control.eventValue()
-                )
-            )
-            control.onEvent(DAL.DEVICE_ID_BUTTON_B, DAL.DEVICE_EVT_ANY, () =>
-                this.onMicrobitEvent(
-                    DAL.DEVICE_ID_BUTTON_B,
-                    control.eventValue()
-                )
-            )
-            control.onEvent(DAL.MICROBIT_ID_LOGO, DAL.DEVICE_EVT_ANY, () =>
-                this.onMicrobitEvent(
-                    DAL.MICROBIT_ID_LOGO,
-                    control.eventValue()
-                )
-            )
 
-            // TODO: 
+            buttons.forEach(b => {
+                control.onEvent(b, DAL.DEVICE_EVT_ANY, () =>
+                    this.onMicrobitEvent(b, control.eventValue())
+                )
+            })
+
+            // TODO:
             // - pins
             // - accelerometer
-            // - 
+            // -
         }
 
         private stopAllRules() {
