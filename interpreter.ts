@@ -218,7 +218,8 @@ namespace microcode {
     enum OutputResource {
         LEDScreen,
         Speaker,
-        Radio,
+        RadioSend,
+        RadioGroup,
     }
 
     class RuleClosure {
@@ -261,8 +262,7 @@ namespace microcode {
                     }
                     this.runAction()
                     this.checkForLoopFinish()
-                    // yield
-                    // TODO: notify interp?
+                    // yield, otherwise the app will hang
                     basic.pause(0)
                 }
             })
@@ -351,13 +351,21 @@ namespace microcode {
                 }
                 case Tid.TID_ACTUATOR_RADIO_SEND: {
                     const v = this.interp.getValue(this.rule.modifiers, 0)
-                    radio.sendNumber(v)
+                    this.interp.updateResource(
+                        OutputResource.RadioSend,
+                        this.index,
+                        () => radio.sendNumber(v)
+                    )
                     this.actionRunning = false
                     return
                 }
                 case Tid.TID_ACTUATOR_RADIO_SET_GROUP: {
                     const v = this.interp.getValue(this.rule.modifiers, 1)
-                    radio.setGroup(v)
+                    this.interp.updateResource(
+                        OutputResource.RadioSend,
+                        this.index,
+                        () => radio.setGroup(v)
+                    )
                     this.actionRunning = false
                     return
                 }
@@ -365,7 +373,24 @@ namespace microcode {
                     break
                 }
                 case Tid.TID_ACTUATOR_SPEAKER: {
-                    break
+                    if (this.rule.modifiers.length == 0) {
+                        music.play(
+                            music.builtinPlayableSoundEffect(
+                                soundExpression.giggle
+                            ),
+                            music.PlaybackMode.UntilDone
+                        )
+                        this.actionRunning = false
+                        return
+                    } else {
+                        const mod = this.rule.modifiers[this.modifierIndex]
+                        let sound = jdParam(mod)
+                        music.play(
+                            music.builtinPlayableSoundEffect(sound),
+                            music.PlaybackMode.UntilDone
+                        )
+                        break
+                    }
                 }
                 case Tid.TID_ACTUATOR_SWITCH_PAGE: {
                     let targetPage = 1

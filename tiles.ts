@@ -1288,25 +1288,25 @@ namespace microcode {
                 return jacs.NumFmt.U32
             //
             case Tid.TID_MODIFIER_EMOJI_GIGGLE:
-                return "giggle"
+                return soundExpression.giggle
             case Tid.TID_MODIFIER_EMOJI_HAPPY:
-                return "happy"
+                return soundExpression.happy
             case Tid.TID_MODIFIER_EMOJI_HELLO:
-                return "hello"
+                return soundExpression.hello
             case Tid.TID_MODIFIER_EMOJI_MYSTERIOUS:
-                return "mysterious"
+                return soundExpression.mysterious
             case Tid.TID_MODIFIER_EMOJI_SAD:
-                return "sad"
+                return soundExpression.sad
             case Tid.TID_MODIFIER_EMOJI_SLIDE:
-                return "slide"
+                return soundExpression.slide
             case Tid.TID_MODIFIER_EMOJI_SOARING:
-                return "soaring"
+                return soundExpression.soaring
             case Tid.TID_MODIFIER_EMOJI_SPRING:
-                return "spring"
+                return soundExpression.spring
             case Tid.TID_MODIFIER_EMOJI_TWINKLE:
-                return "twinkle"
+                return soundExpression.twinkle
             case Tid.TID_MODIFIER_EMOJI_YAWN:
-                return "yawn"
+                return soundExpression.yawn
             //
             case Tid.TID_MODIFIER_RGB_LED_COLOR_SPARKLE:
                 return "led_anim_sparkle"
