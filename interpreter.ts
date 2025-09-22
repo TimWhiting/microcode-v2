@@ -6,24 +6,8 @@ namespace microcode {
 
     type StateMap = { [id: string]: number }
 
-    // TODO:
-    // - condition of when
-    // - music
-    // - merge logic in interpreter (delay update)
-    // - speaker (sounds)
-    // - microphone
-    // - switch page
-    // - servo
-    // - clear screen animation (to know the program is running)
-    // - jacdac (generic way to handle sensor data, spanning jd and mbit)
-    // - robot protocol
-    // - remove debug messages (user-interface-base?)
-    // - generalize handling of mathematics
-
-    /*
-
-            private emitClearScreen() {
-            const loading_anim = hex`
+    function emitClearScreen() {
+        const anim = hex`
                 0001000000
                 0000010000
                 0000000100
@@ -38,15 +22,20 @@ namespace microcode {
                 0200000000
                 0000000000
             `
-            const scr = this.lookupRole(ServiceClass.DotMatrix, 0)
-            this.callLinked("dot_animation", [
-                scr.emit(this.writer),
-                this.emitString(loading_anim),
-                literal(30),
-            ])
+        let pos = 0
+        while (pos < anim.length) {
+            for (let col = 0; col < 5; col++) {
+                for (let row = 0; row < 5; row++) {
+                    const onOff =
+                        anim[pos + col + (row >> 3)] & (1 << (row & 7))
+                    if (onOff) led.plot(col, row)
+                    else led.unplot(col, row)
+                }
+            }
+            control.waitMicros(20000)
+            pos = pos + 5
         }
-        
-    */
+    }
 
     /*
         JACDAC
@@ -517,6 +506,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         private state: StateMap = {}
 
         constructor(private program: ProgramDefn) {
+            emitClearScreen()
             this.running = true
             this.switchPage(0)
             control.onEvent(DAL.DEVICE_ID_BUTTON_A, DAL.DEVICE_EVT_ANY, () =>
