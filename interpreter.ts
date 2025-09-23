@@ -2,9 +2,9 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // make sure we have V2 simulator
-    input.onLogoEvent(TouchButtonEvent.Pressed, function () { })
+    input.onLogoEvent(TouchButtonEvent.Pressed, function () {})
     // also enable accelerometer in sim
-    input.onGesture(Gesture.Shake, () => { })
+    input.onGesture(Gesture.Shake, () => {})
 
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
@@ -251,11 +251,13 @@ namespace microcode {
                 // TODO: lots of radio logic to bring over
             } else {
                 const eventCode = this.lookupEventCode()
-                if (eventCode && (this.rule.filters.length == 0 || this.hasFilterEvent())) {
+                if (
+                    eventCode &&
+                    (this.rule.filters.length == 0 || this.hasFilterEvent())
+                ) {
                     // TODO: need to check eventCode against received event...
                     // TODO: but this requires the role mapping stuff
                 } else {
-
                 }
             }
             return false
@@ -526,10 +528,10 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     sensor == Tid.TID_SENSOR_TIMER &&
                     period == 0 &&
                     randomPeriod == 0
-                )
+                ) {
                     period = 1000 // reasonable default
+                }
                 if (period == 0) period = ANTI_FREEZE_DELAY
-
                 if (randomPeriod > 0)
                     period += Math.floor(Math.random() * randomPeriod)
                 this.wakeTime = period
@@ -588,15 +590,10 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             this.switchPage(0)
 
             buttons.forEach(b => {
-                control.onEvent(b, DAL.DEVICE_EVT_ANY, () =>
+                control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
                     this.onMicrobitEvent(b, control.eventValue())
-                )
+                })
             })
-
-            // TODO:
-            // - pins
-            // - accelerometer
-            // -
         }
 
         private stopAllRules() {
