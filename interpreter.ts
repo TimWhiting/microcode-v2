@@ -513,7 +513,10 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         public getWakeTime() {
             this.wakeTime = 0
             const sensor = this.rule.sensor
-            if (sensor == Tid.TID_SENSOR_TIMER || Tid.TID_SENSOR_START_PAGE) {
+            if (
+                sensor == Tid.TID_SENSOR_TIMER ||
+                sensor == Tid.TID_SENSOR_START_PAGE
+            ) {
                 // const timer = this.addProc(name + "_timer")
                 let period = 0
                 let randomPeriod = 0
