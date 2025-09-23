@@ -35,7 +35,8 @@
         "protocol.ts",
         "navigator.ts",
         "tooltips.ts",
-        "interpreter.ts"
+        "interpreter.ts",
+        "sensors.ts"
     ],
     "testFiles": [],
     "targetVersions": {
