@@ -582,6 +582,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         private ruleClosures: RuleClosure[] = []
         private activeRuleStepped: number = 0
         private activeRuleCount: number = 0
+        private sensors: Sensor[] = []
 
         // state storage for variables and other temporary global state
         // (local per-rule state is kept in RuleClosure)
@@ -597,6 +598,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     this.onMicrobitEvent(b, control.eventValue())
                 })
             })
+
+            this.startSensors()
         }
 
         private stopAllRules() {
@@ -694,6 +697,31 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             activeRules.forEach(r => {
                 r.kill()
                 r.runDoSection()
+            })
+        }
+
+        private startSensors() {
+            // initialize sensors
+            this.sensors.push(Sensor.getFromName("Light"))
+            this.sensors.push(Sensor.getFromName("Temperature"))
+            this.sensors.push(Sensor.getFromName("Magnet"))
+            this.sensors.push(Sensor.getFromName("Volume"))
+            this.sensors.forEach(s => {
+                this.state[s.getName()] = s.getNormalisedReading()
+            })
+            control.inBackground(() => {
+                while (this.running) {
+                    // poll the sensors and check for change
+                    this.sensors.forEach(s => {
+                        const oldReading = this.state[s.getName()]
+                        const newReading = s.getNormalisedReading()
+                        if (Math.abs(newReading - oldReading) > 0.1) {
+                            this.state[s.getName()] = newReading
+                            // map to TID
+                        }
+                    })
+                    basic.pause(300)
+                }
             })
         }
 
