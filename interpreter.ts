@@ -575,12 +575,12 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         DAL.ID_PIN_P2,
     ]
 
-    type SensorMap = { [id: string]: { delta: number; tid: number } }
-    const sensorToDelta: SensorMap = {
-        Light: { delta: 50, tid: Tid.TID_SENSOR_LIGHT },
-        Microphone: { delta: 50, tid: Tid.TID_SENSOR_MICROPHONE },
-        Temperature: { delta: 1, tid: Tid.TID_SENSOR_TEMP },
-        Magnet: { delta: 2000, tid: Tid.TID_SENSOR_MAGNET },
+    type SensorMap = { [id: string]: { normalized: boolean; tid: number } }
+    const sensorInfo: SensorMap = {
+        Light: { normalized: true, tid: Tid.TID_SENSOR_LIGHT },
+        Microphone: { normalized: true, tid: Tid.TID_SENSOR_MICROPHONE },
+        Temperature: { normalized: false, tid: Tid.TID_SENSOR_TEMP },
+        Magnet: { normalized: true, tid: Tid.TID_SENSOR_MAGNET },
     }
 
     class Interpreter {
@@ -702,7 +702,15 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             })
         }
 
-        private notifySensorChange(tid: number) {}
+        private notifySensorChange(tid: number, name: string, val: number) {
+            console.log(`sensor ${name} = ${val}`)
+        }
+
+        private getSensorValue(sensor: Sensor) {
+            return sensorInfo[sensor.getName()].normalized
+                ? sensor.getNormalisedReading()
+                : sensor.getReading()
+        }
 
         private startSensors() {
             // initialize sensors
@@ -711,21 +719,25 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             this.sensors.push(Sensor.getFromName("Magnet"))
             this.sensors.push(Sensor.getFromName("Microphone"))
             this.sensors.forEach(s => {
-                this.state[s.getName()] = s.getReading()
+                this.state[s.getName()] = this.getSensorValue(s)
             })
             control.inBackground(() => {
                 while (this.running) {
                     // poll the sensors and check for change
                     this.sensors.forEach(s => {
                         const oldReading = this.state[s.getName()]
-                        const newReading = s.getReading()
+                        const newReading = this.getSensorValue(s)
+                        const normalized = sensorInfo[s.getName()].normalized
+                        const delta = Math.abs(newReading - oldReading)
                         if (
-                            Math.abs(newReading - oldReading) >=
-                            sensorToDelta[s.getName()].delta
+                            (normalized && delta >= 0.2) ||
+                            (!normalized && delta >= 1)
                         ) {
                             this.state[s.getName()] = newReading
                             this.notifySensorChange(
-                                sensorToDelta[s.getName()].tid
+                                sensorInfo[s.getName()].tid,
+                                s.getName(),
+                                newReading
                             )
                         }
                     })
