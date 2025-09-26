@@ -545,6 +545,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     }
 
     type IdMap = { [id: number]: number }
+    type StringMap = { [id: string]: number }
 
     // see DAL for these values
     const matchPressReleaseTable: IdMap = {
@@ -574,6 +575,12 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         DAL.ID_PIN_P1,
         DAL.ID_PIN_P2,
     ]
+    const sensorToDelta: StringMap = {
+        Light: 50,
+        Volume: 50,
+        Temperature: 1,
+        Magnet: 2000,
+    }
 
     class Interpreter {
         private hasErrors: boolean = false
@@ -681,12 +688,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     r.sensor == Tid.TID_SENSOR_MICROPHONE &&
                     ev == DAL.DEVICE_ID_MICROPHONE
                 ) {
-                } else if (r.sensor == Tid.TID_SENSOR_LIGHT) {
-                    // TODO: light for change event
-                    this.state["z_light"] = input.lightLevel()
-                } else if (r.sensor == Tid.TID_SENSOR_TEMP) {
-                    // TODO: heck for change event
-                    this.state["z_temp"] = input.temperature()
                 }
                 if (match) activeRules.push(rc)
             })
@@ -715,7 +716,10 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     this.sensors.forEach(s => {
                         const oldReading = this.state[s.getName()]
                         const newReading = s.getNormalisedReading()
-                        if (Math.abs(newReading - oldReading) > 0.1) {
+                        if (
+                            Math.abs(newReading - oldReading) >=
+                            sensorToDelta[s.getName()]
+                        ) {
                             this.state[s.getName()] = newReading
                             // map to TID
                         }
