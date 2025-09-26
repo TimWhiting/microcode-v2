@@ -148,7 +148,7 @@ class Sensor {
             })
         else if (name == "Temp." || name == "Temperature" || name == "T")
             return new Sensor({
-                name: "Temp.",
+                name: "Temperature",
                 rName: "T",
                 f: () => input.temperature(),
                 min: -40,

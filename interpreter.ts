@@ -545,7 +545,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     }
 
     type IdMap = { [id: number]: number }
-    type StringMap = { [id: string]: number }
 
     // see DAL for these values
     const matchPressReleaseTable: IdMap = {
@@ -575,11 +574,13 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         DAL.ID_PIN_P1,
         DAL.ID_PIN_P2,
     ]
-    const sensorToDelta: StringMap = {
-        Light: 50,
-        Volume: 50,
-        Temperature: 1,
-        Magnet: 2000,
+
+    type SensorMap = { [id: string]: { delta: number; tid: number } }
+    const sensorToDelta: SensorMap = {
+        Light: { delta: 50, tid: Tid.TID_SENSOR_LIGHT },
+        Microphone: { delta: 50, tid: Tid.TID_SENSOR_MICROPHONE },
+        Temperature: { delta: 1, tid: Tid.TID_SENSOR_TEMP },
+        Magnet: { delta: 2000, tid: Tid.TID_SENSOR_MAGNET },
     }
 
     class Interpreter {
@@ -701,27 +702,31 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             })
         }
 
+        private notifySensorChange(tid: number) {}
+
         private startSensors() {
             // initialize sensors
             this.sensors.push(Sensor.getFromName("Light"))
             this.sensors.push(Sensor.getFromName("Temperature"))
             this.sensors.push(Sensor.getFromName("Magnet"))
-            this.sensors.push(Sensor.getFromName("Volume"))
+            this.sensors.push(Sensor.getFromName("Microphone"))
             this.sensors.forEach(s => {
-                this.state[s.getName()] = s.getNormalisedReading()
+                this.state[s.getName()] = s.getReading()
             })
             control.inBackground(() => {
                 while (this.running) {
                     // poll the sensors and check for change
                     this.sensors.forEach(s => {
                         const oldReading = this.state[s.getName()]
-                        const newReading = s.getNormalisedReading()
+                        const newReading = s.getReading()
                         if (
                             Math.abs(newReading - oldReading) >=
-                            sensorToDelta[s.getName()]
+                            sensorToDelta[s.getName()].delta
                         ) {
                             this.state[s.getName()] = newReading
-                            // map to TID
+                            this.notifySensorChange(
+                                sensorToDelta[s.getName()].tid
+                            )
                         }
                     })
                     basic.pause(300)
