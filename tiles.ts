@@ -348,6 +348,9 @@ namespace microcode {
         modifiers: [Tid.MODIFIER_START, Tid.MODIFER_END],
     }
 
+    // TODO: this should be radically simplifed
+    //     export function tidToString(e: Tid) { return "T" + (e.toString()) }
+
     export function tidToString(e: Tid) {
         switch (e) {
             case Tid.TID_SENSOR_START_PAGE:
@@ -640,6 +643,7 @@ namespace microcode {
         }
     }
 
+    // TODO: should separate {sensors, filters, etc} into different namespaces
     export function isSensor(tid: Tid) {
         return tid >= Tid.SENSOR_START && tid <= Tid.SENSOR_END
     }
@@ -775,6 +779,7 @@ namespace microcode {
         // these tids are dead
         if (tid == Tid.TID_ACTUATOR_MICROPHONE || tid == Tid.TID_FILTER_ACCEL)
             return false
+        // TODO: revisit this since we now separate micro:bit and JD
         const ext = jdExternalClass(tile)
         if (ext) {
             const count = 1 // jdc.numServiceInstances(ext)
@@ -1061,23 +1066,18 @@ namespace microcode {
         return undefined
     }
 
+    // TODO: revisit this since we don't use JacScript any more
     // following functions are needed to compile to JacScript
-
     // let P be jdParam
     export enum JdKind {
         Literal = 1, // value is P
         Variable, // value is variables[P]
         Page, // value is page[P]
         EventCode,
-        ServiceInstanceIndex,
         ServiceCommandArg, // argument of command sent will be set to P; P2 is duration in ms for Sequance
-        ExtLibFn, // call external function P(P2)
         Timespan,
         RadioValue,
-        Rotary,
         Temperature,
-
-        Loop, // repeat modifier
 
         // Filter/actuator kinds
         Radio, // radio send/recv
@@ -1085,14 +1085,11 @@ namespace microcode {
         NumFmt, // on actuator - P is numfmt
 
         // for each modifier (defaults to [defaultModifier]), do ...
-        // P is a shortcut external function
-        // P2 is service arg size
         Sequence,
     }
 
     export function jdKind(tile: Tile): JdKind {
         const tid = getTid(tile)
-        if (isPressReleaseEvent(tid)) return JdKind.ServiceInstanceIndex
         if (
             isLineEvent(tid) ||
             isFilterConstant(tid) ||
@@ -1109,11 +1106,8 @@ namespace microcode {
         )
             return JdKind.ServiceCommandArg
         if (isPage(tid)) return JdKind.Page
-        if (isLedModifier(tid)) return JdKind.ExtLibFn
         if (isCarModifier(tid)) return JdKind.NumFmt
         switch (tid) {
-            case Tid.TID_MODIFIER_LOOP:
-                return JdKind.Loop
             case Tid.TID_SENSOR_RADIO_RECEIVE:
             case Tid.TID_SENSOR_CAR_WALL:
             case Tid.TID_SENSOR_LINE:
@@ -1125,8 +1119,6 @@ namespace microcode {
                 return JdKind.Temperature
             case Tid.TID_MODIFIER_RANDOM_TOSS:
                 return JdKind.RandomToss
-            case Tid.TID_SENSOR_ROTARY:
-                return JdKind.Rotary
             case Tid.TID_FILTER_ROTARY_LEFT:
             case Tid.TID_FILTER_ROTARY_RIGHT:
             case Tid.TID_FILTER_TEMP_WARMER:
@@ -1149,8 +1141,6 @@ namespace microcode {
             case Tid.TID_ACTUATOR_RGB_LED:
             case Tid.TID_ACTUATOR_CAR:
                 return JdKind.Sequence
-            case Tid.TID_ACTUATOR_SHOW_NUMBER:
-                return JdKind.ExtLibFn
             case Tid.TID_ACTUATOR_RADIO_SEND:
             case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:

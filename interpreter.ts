@@ -266,7 +266,7 @@ namespace microcode {
         private hasFilterEvent() {
             return this.rule.filters.some(f => {
                 const k = jdKind(f)
-                return k == JdKind.EventCode || k == JdKind.ServiceInstanceIndex
+                return k == JdKind.EventCode
             })
         }
 
@@ -503,10 +503,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
 
             } else if (aKind == microcode.JdKind.Sequence) {
                 this.emitSequence(rule, 400)
-            } else if (aKind == microcode.JdKind.ExtLibFn) {
-                this.emitValueOut(rule, 1)
-                const role = this.lookupActuatorRole(rule)
-                this.callLinked(aJdparam, [role.emit(wr), currValue()])
 
         */
 
@@ -658,7 +654,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         private onMicrobitEvent(src: number, ev: number) {
             if (!this.running) return
             // see if any rule matches
-            let activeRules: RuleClosure[] = []
+            const activeRules: RuleClosure[] = []
             this.ruleClosures.forEach(rc => {
                 const r = rc.rule
                 let match = false
@@ -692,6 +688,10 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 }
                 if (match) activeRules.push(rc)
             })
+            this.processNewActiveRules(activeRules)
+        }
+
+        private processNewActiveRules(activeRules: RuleClosure[]) {
             this.activeRuleStepped = 0
             this.activeRuleCount = this.ruleClosures.filter(rc =>
                 rc.active()
@@ -704,6 +704,16 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
 
         private notifySensorChange(tid: number, name: string, val: number) {
             console.log(`sensor ${name} = ${val}`)
+            if (!this.running) return
+            // see if any rule matches
+            const activeRules: RuleClosure[] = []
+            this.ruleClosures.forEach(rc => {
+                if (rc.rule.sensor == tid) {
+                    // TODO: need to check when section
+                    activeRules.push(rc)
+                }
+            })
+            this.processNewActiveRules(activeRules)
         }
 
         private getSensorValue(sensor: Sensor) {
@@ -875,7 +885,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 if (defl != undefined) return [defl]
             } else {
                 for (let i = 0; i < modifiers.length; ++i)
-                    if (jdKind(modifiers[i]) == JdKind.Loop)
+                    if (modifiers[i] == Tid.TID_MODIFIER_LOOP)
                         return modifiers.slice(0, i)
             }
             return modifiers
