@@ -219,7 +219,7 @@ namespace microcode {
             this.loopIndex = 0
         }
 
-        public matchWhen(): boolean {
+        public matchWhen(sensorName: string): boolean {
             // evaluate the condition associated with the rule, if any
             const sensor = this.rule.sensor
             if (jdKind(sensor) == JdKind.Variable) {
@@ -235,7 +235,6 @@ namespace microcode {
                 ) {
                     // TODO: need to check eventCode against received event...
                 } else {
-                    const sensorName = tidToSensor(sensor)
                     return this.filterValueIn(this.interp.state[sensorName])
                 }
             }
@@ -558,15 +557,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         Magnet: { normalized: true, tid: Tid.TID_SENSOR_MAGNET },
     }
 
-    // TODO: is this needed?
-    function tidToSensor(tid: number) {
-        let ret: string = undefined
-        Object.keys(sensorInfo).forEach(k => {
-            if (sensorInfo[k].tid == tid) ret = k
-        })
-        return ret
-    }
-
     enum SensorChange {
         Up,
         Down,
@@ -705,7 +695,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             // see if any rule matches
             const activeRules: RuleClosure[] = []
             this.ruleClosures.forEach(rc => {
-                if (rc.matchWhen()) activeRules.push(rc)
+                if (rc.matchWhen(name)) activeRules.push(rc)
             })
             this.processNewActiveRules(activeRules)
         }
