@@ -1259,13 +1259,6 @@ namespace microcode {
             case Tid.TID_FILTER_ACCEL_FACE_DOWN:
                 return 0x86
             //
-            case Tid.TID_ACTUATOR_PAINT:
-                return "dot_animation"
-            case Tid.TID_ACTUATOR_SHOW_NUMBER:
-                return "dot_showNumber"
-            case Tid.TID_ACTUATOR_MUSIC:
-                return "note_sequence"
-            //
             case Tid.TID_ACTUATOR_RADIO_SEND:
                 return jacs.NumFmt.F64
             case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
@@ -1297,11 +1290,6 @@ namespace microcode {
                 return soundExpression.twinkle
             case Tid.TID_MODIFIER_EMOJI_YAWN:
                 return soundExpression.yawn
-            //
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_SPARKLE:
-                return "led_anim_sparkle"
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_RAINBOW:
-                return "led_anim_rainbow"
         }
         return undefined
     }
@@ -1309,32 +1297,6 @@ namespace microcode {
     export function jdParam2(tile: Tile): number {
         const tid = getTid(tile)
         switch (tid) {
-            // length of the melody (milliseconds)
-            case Tid.TID_MODIFIER_EMOJI_GIGGLE:
-                return 1478
-            case Tid.TID_MODIFIER_EMOJI_HAPPY:
-                return 1233
-            case Tid.TID_MODIFIER_EMOJI_HELLO:
-                return 547
-            case Tid.TID_MODIFIER_EMOJI_MYSTERIOUS:
-                return 4794
-            case Tid.TID_MODIFIER_EMOJI_SAD:
-                return 1687
-            case Tid.TID_MODIFIER_EMOJI_SLIDE:
-                return 1315
-            case Tid.TID_MODIFIER_EMOJI_SOARING:
-                return 8192
-            case Tid.TID_MODIFIER_EMOJI_SPRING:
-                return 2083
-            case Tid.TID_MODIFIER_EMOJI_TWINKLE:
-                return 6772
-            case Tid.TID_MODIFIER_EMOJI_YAWN:
-                return 2816
-            case Tid.TID_ACTUATOR_PAINT:
-                return 5
-            case Tid.TID_ACTUATOR_MUSIC:
-                return 6
-
             case Tid.TID_MODIFIER_CAR_FORWARD:
                 return robot.robots.RobotCompactCommand.MotorRunForward
             case Tid.TID_MODIFIER_CAR_REVERSE:
@@ -1363,6 +1325,7 @@ namespace microcode {
                 return robot.robots.RobotCompactCommand.ArmOpen
             case Tid.TID_MODIFIER_CAR_ARM_CLOSE:
                 return robot.robots.RobotCompactCommand.ArmClose
+
             case Tid.TID_MODIFIER_RGB_LED_COLOR_1:
                 return 0x2f0000
             case Tid.TID_MODIFIER_RGB_LED_COLOR_2:
@@ -1493,6 +1456,7 @@ namespace microcode {
         }
     }
 
+    /* TODO: don't need this low-level approach, but need to recall which JD we support
     export function serviceCommand(tile: Tile) {
         const tid = getTid(tile)
         switch (tid) {
@@ -1515,6 +1479,7 @@ namespace microcode {
                 return undefined
         }
     }
+    */
 
     // export function serviceCommandArg(tile: Tile): string | Buffer {
     //     if (tile instanceof ModifierEditor) return tile.serviceCommandArg()

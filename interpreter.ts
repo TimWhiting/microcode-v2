@@ -76,6 +76,9 @@ namespace microcode {
 
     /* old when logic
 
+    1. match against event code (with lots of special casing for radio+robot)
+    2. match against sensor value
+
             const role = this.lookupSensorRole(rule)
             name += "_" + role.name
             const wakeup = needsWakeUp(role.classIdentifier)
@@ -167,32 +170,7 @@ namespace microcode {
                                 }
                             }
                         )
-                    } else if (
-                        code != null &&
-                        (wakeup == undefined || wakeup == "sound_1_to_5") &&
-                        (rule.filters.length == 0 || this.hasFilterEvent(rule))
-                    ) {
-                        const roleEventCode = this.lookupGlobal(
-                            "z_role_code" + role.index
-                        )
-                        this.ifEq(roleEventCode.read(wr), code, emitBody)
-                    } else if (wakeup) {
-                        if (wakeup.includes("1_to_5")) {
-                            const roleGlobal = this.lookupGlobal(
-                                "z_role" + role.index
-                            )
-                            const roleGlobalChanged = this.lookupGlobal(
-                                "z_role_ch" + role.index
-                            )
-                            wr.emitIf(
-                                wr.emitExpr(Op.EXPR2_EQ, [
-                                    literal(1),
-                                    roleGlobalChanged.read(wr),
-                                ]),
-                                () => {
-                                    filterValueIn(() => roleGlobal.read(wr))
-                                }
-                            )
+
                         } else {
                             const varChanged = this.lookupGlobal(
                                 "z_role_ch" + role.index
@@ -256,8 +234,11 @@ namespace microcode {
                     (this.rule.filters.length == 0 || this.hasFilterEvent())
                 ) {
                     // TODO: need to check eventCode against received event...
-                    // TODO: but this requires the role mapping stuff
                 } else {
+                    // in this case, we should have a numeric value to compare against
+                    // TODO: map from sensor TID to variable name
+                    const sensorValue = "TODO"
+                    return this.filterValueIn(this.interp.state[sensorValue])
                 }
             }
             return false
@@ -578,6 +559,10 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         Temperature: { normalized: false, tid: Tid.TID_SENSOR_TEMP },
         Magnet: { normalized: true, tid: Tid.TID_SENSOR_MAGNET },
     }
+    enum SensorChange {
+        Up,
+        Down,
+    }
 
     class Interpreter {
         private hasErrors: boolean = false
@@ -678,7 +663,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     r.sensor == Tid.TID_SENSOR_RADIO_RECEIVE &&
                     ev == DAL.DEVICE_ID_RADIO
                 ) {
-                    // record radio value into state
                     this.state["z_radio"] = radio.receiveNumber()
                     // TODO: evaluate the filters
                 } else if (
@@ -702,7 +686,12 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             })
         }
 
-        private notifySensorChange(tid: number, name: string, val: number) {
+        private notifySensorChange(
+            tid: number,
+            name: string,
+            val: number,
+            change: SensorChange
+        ) {
             console.log(`sensor ${name} = ${val}`)
             if (!this.running) return
             // see if any rule matches
@@ -717,11 +706,13 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
 
         private getSensorValue(sensor: Sensor) {
+            const gen1to5 = (v: number) => Math.round(4 * v) + 1
             return sensorInfo[sensor.getName()].normalized
-                ? sensor.getNormalisedReading()
+                ? gen1to5(sensor.getNormalisedReading())
                 : sensor.getReading()
         }
 
+        // TODO: generating an event from sensor (temp up, temp down)
         private startSensors() {
             // initialize sensors
             this.sensors.push(Sensor.getFromName("Light"))
@@ -740,14 +731,17 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                         const normalized = sensorInfo[s.getName()].normalized
                         const delta = Math.abs(newReading - oldReading)
                         if (
-                            (normalized && delta >= 0.2) ||
+                            (normalized && newReading != oldReading) ||
                             (!normalized && delta >= 1)
                         ) {
                             this.state[s.getName()] = newReading
                             this.notifySensorChange(
                                 sensorInfo[s.getName()].tid,
                                 s.getName(),
-                                newReading
+                                newReading,
+                                newReading > oldReading
+                                    ? SensorChange.Up
+                                    : SensorChange.Down
                             )
                         }
                     })
