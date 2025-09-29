@@ -235,10 +235,8 @@ namespace microcode {
                 ) {
                     // TODO: need to check eventCode against received event...
                 } else {
-                    // in this case, we should have a numeric value to compare against
-                    // TODO: map from sensor TID to variable name
-                    const sensorValue = "TODO"
-                    return this.filterValueIn(this.interp.state[sensorValue])
+                    const sensorName = tidToSensor(sensor)
+                    return this.filterValueIn(this.interp.state[sensorName])
                 }
             }
             return false
@@ -559,6 +557,16 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         Temperature: { normalized: false, tid: Tid.TID_SENSOR_TEMP },
         Magnet: { normalized: true, tid: Tid.TID_SENSOR_MAGNET },
     }
+
+    // TODO: is this needed?
+    function tidToSensor(tid: number) {
+        let ret: string = undefined
+        Object.keys(sensorInfo).forEach(k => {
+            if (sensorInfo[k].tid == tid) ret = k
+        })
+        return ret
+    }
+
     enum SensorChange {
         Up,
         Down,
@@ -697,10 +705,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             // see if any rule matches
             const activeRules: RuleClosure[] = []
             this.ruleClosures.forEach(rc => {
-                if (rc.rule.sensor == tid) {
-                    // TODO: need to check when section
-                    activeRules.push(rc)
-                }
+                if (rc.matchWhen()) activeRules.push(rc)
             })
             this.processNewActiveRules(activeRules)
         }
