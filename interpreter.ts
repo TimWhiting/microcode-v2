@@ -224,7 +224,8 @@ namespace microcode {
             const sensor = this.rule.sensor
             if (jdKind(sensor) == JdKind.Variable) {
                 const pipeId = jdParam(sensor)
-                return this.filterValueIn(this.interp.state[pipeId])
+                if (pipeId == sensorName)
+                    return this.filterValueIn(this.interp.state[pipeId])
             } else if (jdKind(sensor) == JdKind.Radio) {
                 // TODO: lots of radio logic to bring over
             } else {
@@ -626,6 +627,15 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         public updateState(ruleIndex: number, pipe: string, v: number) {
             this.checkForStepCompleted()
             // earliest in lexical order wins for a resource
+            this.state[pipe] = v
+            console.log(`pipe ${pipe} = ${v}`)
+            if (!this.running) return
+            // see if any rule matches
+            const activeRules: RuleClosure[] = []
+            this.ruleClosures.forEach(rc => {
+                if (rc.matchWhen(pipe)) activeRules.push(rc)
+            })
+            this.processNewActiveRules(activeRules)
         }
 
         private checkForStepCompleted() {
@@ -662,11 +672,12 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     ev == DAL.DEVICE_ID_RADIO
                 ) {
                     this.state["z_radio"] = radio.receiveNumber()
-                    // TODO: evaluate the filters
+                    match = rc.matchWhen("z_radio")
                 } else if (
                     r.sensor == Tid.TID_SENSOR_MICROPHONE &&
                     ev == DAL.DEVICE_ID_MICROPHONE
                 ) {
+                    // TODO: check for loud/soft event
                 }
                 if (match) activeRules.push(rc)
             })
