@@ -537,7 +537,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
 
     type SensorMap = { [id: string]: { normalized: boolean; tid: number } }
     const sensorInfo: SensorMap = {
-        Light: { normalized: true, tid: Tid.TID_SENSOR_LIGHT },
+        Light: { normalized: true, tid: Tid.TID_SENSOR_LED_LIGHT },
         Microphone: { normalized: true, tid: Tid.TID_SENSOR_MICROPHONE },
         Temperature: { normalized: false, tid: Tid.TID_SENSOR_TEMP },
         Magnet: { normalized: true, tid: Tid.TID_SENSOR_MAGNET },
@@ -547,9 +547,9 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         let result: string = undefined
         Object.keys(sensorInfo).forEach(k => {
             const keyTid = sensorInfo[k].tid
-            // console.log(`key = ${k}, tid = ${keyTid}`)
             if (tid == keyTid) result = k
         })
+        console.log(`key = ${result}, tid = ${tid}`)
         return result
     }
 
@@ -572,8 +572,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         public state: StateMap = {}
 
         constructor(private program: ProgramDefn) {
-            const dummy = tidToSensor(Tid.TID_SENSOR_LIGHT)
-            console.log(`dummy = ${dummy}`)
             emitClearScreen()
             this.running = true
             this.switchPage(0)
