@@ -766,10 +766,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             return v
         }
 
-        private pipeVar(id: number) {
-            return "z_pipe" + (id || 0)
-        }
-
         private error(msg: string) {
             this.hasErrors = true
             console.error("Error: " + msg)
@@ -784,7 +780,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 case JdKind.Literal:
                     return mJdpararm
                 case JdKind.Variable:
-                    return this.state[this.pipeVar(mJdpararm)] || 0
+                    return this.state[mJdpararm] || 0
                 case JdKind.RadioValue:
                     return this.state["z_radio"] || 0
                 default:
