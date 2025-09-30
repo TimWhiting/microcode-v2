@@ -170,25 +170,6 @@ namespace microcode {
                                 }
                             }
                         )
-
-                        } else {
-                            const varChanged = this.lookupGlobal(
-                                "z_role_ch" + role.index
-                            )
-                            this.ifEq(varChanged.read(wr), code, emitBody)
-                        }
-                    } else if (
-                        role.classIdentifier == SRV_JACSCRIPT_CONDITION
-                    ) {
-                        // event code not relevant
-                        emitBody()
-                    } else {
-                        this.error("can't handle role")
-                    }
-                })
-            })
-        }
-
     */
 
     enum OutputResource {
@@ -236,7 +217,11 @@ namespace microcode {
                 ) {
                     // TODO: need to check eventCode against received event...
                 } else {
-                    return this.filterValueIn(this.interp.state[sensorName])
+                    const thisSensorName = tidToSensor(sensor)
+                    return (
+                        sensorName == thisSensorName &&
+                        this.filterValueIn(this.interp.state[sensorName])
+                    )
                 }
             }
             return false
@@ -558,6 +543,16 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         Magnet: { normalized: true, tid: Tid.TID_SENSOR_MAGNET },
     }
 
+    function tidToSensor(tid: number): string {
+        let result: string = undefined
+        Object.keys(sensorInfo).forEach(k => {
+            const keyTid = sensorInfo[k].tid
+            // console.log(`key = ${k}, tid = ${keyTid}`)
+            if (tid == keyTid) result = k
+        })
+        return result
+    }
+
     enum SensorChange {
         Up,
         Down,
@@ -577,6 +572,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         public state: StateMap = {}
 
         constructor(private program: ProgramDefn) {
+            const dummy = tidToSensor(Tid.TID_SENSOR_LIGHT)
+            console.log(`dummy = ${dummy}`)
             emitClearScreen()
             this.running = true
             this.switchPage(0)
