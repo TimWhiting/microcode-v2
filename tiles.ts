@@ -7,11 +7,11 @@ namespace microcode {
     // Once a tid is assigned, it can NEVER BE CHANGED OR REPURPOSED.
     // Every tid must be unique in the set of all tids.
     export const TID_SENSOR_START_PAGE = "T10"
-    export const TID_SENSOR_PRESS = "S2"
-    export const TID_SENSOR_RELEASE = "S2B"
-    export const TID_SENSOR_ACCELEROMETER = "S3"
-    export const TID_SENSOR_TIMER = "S4"
-    export const TID_SENSOR_LIGHT = "S5"
+    export const TID_SENSOR_PRESS = "T11"
+    export const TID_SENSOR_RELEASE = "T12"
+    export const TID_SENSOR_ACCELEROMETER = "T13"
+    export const TID_SENSOR_TIMER = "T14"
+    export const TID_SENSOR_LIGHT = "T15"
     export const TID_SENSOR_TEMP = "S6"
     export const TID_SENSOR_RADIO_RECEIVE = "S7"
     export const TID_SENSOR_MICROPHONE = "S8"
@@ -353,16 +353,6 @@ namespace microcode {
 
     export function tidToString(e: Tid) {
         switch (e) {
-            case Tid.TID_SENSOR_PRESS:
-                return TID_SENSOR_PRESS
-            case Tid.TID_SENSOR_RELEASE:
-                return TID_SENSOR_RELEASE
-            case Tid.TID_SENSOR_ACCELEROMETER:
-                return TID_SENSOR_ACCELEROMETER
-            case Tid.TID_SENSOR_TIMER:
-                return TID_SENSOR_TIMER
-            case Tid.TID_SENSOR_LIGHT:
-                return TID_SENSOR_LIGHT
             case Tid.TID_SENSOR_LED_LIGHT:
                 return TID_SENSOR_LED_LIGHT
             case Tid.TID_SENSOR_TEMP:
