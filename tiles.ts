@@ -136,21 +136,21 @@ namespace microcode {
     export const TID_ACTUATOR_RELAY = "T54"
     export const TID_ACTUATOR_SERVO_POWER = "T55"
 
-    export const TID_ACTUATOR_CAR = "CAR"
-    export const TID_MODIFIER_CAR_FORWARD = "CAR1"
-    export const TID_MODIFIER_CAR_REVERSE = "CAR2"
-    export const TID_MODIFIER_CAR_TURN_LEFT = "CAR3"
-    export const TID_MODIFIER_CAR_TURN_RIGHT = "CAR4"
-    export const TID_MODIFIER_CAR_STOP = "CAR5"
-    export const TID_MODIFIER_CAR_FORWARD_FAST = "CAR6"
-    export const TID_MODIFIER_CAR_SPIN_LEFT = "CAR7"
-    export const TID_MODIFIER_CAR_SPIN_RIGHT = "CAR8"
-    export const TID_MODIFIER_CAR_LED_COLOR_1 = "CAR9"
-    export const TID_MODIFIER_CAR_LED_COLOR_2 = "CAR10"
-    export const TID_MODIFIER_CAR_LED_COLOR_3 = "CAR11"
-    export const TID_MODIFIER_CAR_LED_COLOR_4 = "CAR12"
-    export const TID_MODIFIER_CAR_ARM_OPEN = "CAR13"
-    export const TID_MODIFIER_CAR_ARM_CLOSE = "CAR14"
+    export const TID_ACTUATOR_CAR = "T52"
+    export const TID_MODIFIER_CAR_FORWARD = "T190"
+    export const TID_MODIFIER_CAR_REVERSE = "T191"
+    export const TID_MODIFIER_CAR_TURN_LEFT = "T192"
+    export const TID_MODIFIER_CAR_TURN_RIGHT = "T193"
+    export const TID_MODIFIER_CAR_STOP = "T194"
+    export const TID_MODIFIER_CAR_FORWARD_FAST = "T195"
+    export const TID_MODIFIER_CAR_SPIN_LEFT = "T196"
+    export const TID_MODIFIER_CAR_SPIN_RIGHT = "T197"
+    export const TID_MODIFIER_CAR_LED_COLOR_1 = "T198"
+    export const TID_MODIFIER_CAR_LED_COLOR_2 = "T199"
+    export const TID_MODIFIER_CAR_LED_COLOR_3 = "T200"
+    export const TID_MODIFIER_CAR_LED_COLOR_4 = "T201"
+    export const TID_MODIFIER_CAR_ARM_OPEN = "T202"
+    export const TID_MODIFIER_CAR_ARM_CLOSE = "T203"
     export const TID_MODIFIER_ON = "M26"
     export const TID_MODIFIER_OFF = "M27"
 
@@ -353,37 +353,6 @@ namespace microcode {
 
     export function tidToString(e: Tid) {
         switch (e) {
-
-            case Tid.TID_ACTUATOR_CAR:
-                return TID_ACTUATOR_CAR
-            case Tid.TID_MODIFIER_CAR_FORWARD:
-                return TID_MODIFIER_CAR_FORWARD
-            case Tid.TID_MODIFIER_CAR_REVERSE:
-                return TID_MODIFIER_CAR_REVERSE
-            case Tid.TID_MODIFIER_CAR_TURN_LEFT:
-                return TID_MODIFIER_CAR_TURN_LEFT
-            case Tid.TID_MODIFIER_CAR_TURN_RIGHT:
-                return TID_MODIFIER_CAR_TURN_RIGHT
-            case Tid.TID_MODIFIER_CAR_STOP:
-                return TID_MODIFIER_CAR_STOP
-            case Tid.TID_MODIFIER_CAR_FORWARD_FAST:
-                return TID_MODIFIER_CAR_FORWARD_FAST
-            case Tid.TID_MODIFIER_CAR_SPIN_LEFT:
-                return TID_MODIFIER_CAR_SPIN_LEFT
-            case Tid.TID_MODIFIER_CAR_SPIN_RIGHT:
-                return TID_MODIFIER_CAR_SPIN_RIGHT
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_1:
-                return TID_MODIFIER_CAR_LED_COLOR_1
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_2:
-                return TID_MODIFIER_CAR_LED_COLOR_2
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_3:
-                return TID_MODIFIER_CAR_LED_COLOR_3
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_4:
-                return TID_MODIFIER_CAR_LED_COLOR_4
-            case Tid.TID_MODIFIER_CAR_ARM_OPEN:
-                return TID_MODIFIER_CAR_ARM_OPEN
-            case Tid.TID_MODIFIER_CAR_ARM_CLOSE:
-                return TID_MODIFIER_CAR_ARM_CLOSE
             case Tid.TID_MODIFIER_ON:
                 return TID_MODIFIER_ON
             case Tid.TID_MODIFIER_OFF:
