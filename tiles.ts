@@ -23,10 +23,10 @@ namespace microcode {
     export const TID_SENSOR_ROTARY = "T24"
     export const TID_SENSOR_CAR_WALL = "T25"
     export const TID_SENSOR_LINE = "T26"
-    export const TID_SENSOR_LED_LIGHT = "S15"
-    export const TID_SENSOR_MOISTURE = "S16"
-    export const TID_SENSOR_DISTANCE = "S17"
-    export const TID_SENSOR_REFLECTED = "S18"
+    export const TID_SENSOR_LED_LIGHT = "T27"
+    export const TID_SENSOR_MOISTURE = "T28"
+    export const TID_SENSOR_DISTANCE = "T29"
+    export const TID_SENSOR_REFLECTED = "T30"
 
     // filters for TID_SENSOR_PRESS
     export const TID_FILTER_PIN_0 = "T70"
@@ -56,103 +56,103 @@ namespace microcode {
     export const TID_FILTER_ACCEL_FACE_UP = "T108"
     export const TID_FILTER_ACCEL_FACE_DOWN = "T109"
     export const TID_FILTER_TIMESPAN_RANDOM = "T85"
-    export const TID_FILTER_TIMESPAN_VERY_LONG = "F19"
-    export const TID_FILTER_CUP_X_READ = "F20A"
-    export const TID_FILTER_CUP_Y_READ = "F20B"
-    export const TID_FILTER_CUP_Z_READ = "F20C"
-    export const TID_FILTER_ROTARY_LEFT = "F21L"
-    export const TID_FILTER_ROTARY_RIGHT = "F21R"
-    export const TID_FILTER_TEMP_WARMER = "F22U"
-    export const TID_FILTER_TEMP_COLDER = "F22D"
-    export const TID_FILTER_LINE_LEFT = "F23L"
-    export const TID_FILTER_LINE_RIGHT = "F23R"
-    export const TID_FILTER_LINE_BOTH = "F23B"
-    export const TID_FILTER_LINE_NEITHER = "F23N"
-    export const TID_FILTER_LINE_NEITHER_LEFT = "F23NL"
-    export const TID_FILTER_LINE_NEITHER_RIGHT = "F23NR"
-    export const TID_FILTER_ON = "F24"
-    export const TID_FILTER_OFF = "F25"
+    export const TID_FILTER_TIMESPAN_VERY_LONG = "T86"
+    export const TID_FILTER_CUP_X_READ = "T95"
+    export const TID_FILTER_CUP_Y_READ = "T96"
+    export const TID_FILTER_CUP_Z_READ = "T97"
+    export const TID_FILTER_ROTARY_LEFT = "T98"
+    export const TID_FILTER_ROTARY_RIGHT = "T99"
+    export const TID_FILTER_TEMP_WARMER = "T100"
+    export const TID_FILTER_TEMP_COLDER = "T101"
+    export const TID_FILTER_LINE_LEFT = "T102"
+    export const TID_FILTER_LINE_RIGHT = "T103"
+    export const TID_FILTER_LINE_BOTH = "T104"
+    export const TID_FILTER_LINE_NEITHER = "T105"
+    export const TID_FILTER_LINE_NEITHER_LEFT = "T106"
+    export const TID_FILTER_LINE_NEITHER_RIGHT = "T107"
+    export const TID_FILTER_ON = "T110"
+    export const TID_FILTER_OFF = "T111"
 
-    export const TID_ACTUATOR_SWITCH_PAGE = "A1"
-    export const TID_ACTUATOR_SPEAKER = "A2"
+    export const TID_ACTUATOR_SWITCH_PAGE = "T40"
+    export const TID_ACTUATOR_SPEAKER = "T41"
     export const TID_ACTUATOR_MICROPHONE = "A3" // dead but don't delete
-    export const TID_ACTUATOR_MUSIC = "A4"
-    export const TID_ACTUATOR_PAINT = "A5"
-    export const TID_ACTUATOR_RADIO_SEND = "A6"
-    export const TID_ACTUATOR_RADIO_SET_GROUP = "A6A"
-    export const TID_ACTUATOR_RGB_LED = "A8"
-    export const TID_ACTUATOR_CUP_X_ASSIGN = "A9A"
-    export const TID_ACTUATOR_CUP_Y_ASSIGN = "A9B"
-    export const TID_ACTUATOR_CUP_Z_ASSIGN = "A9C"
-    export const TID_ACTUATOR_SHOW_NUMBER = "A10"
+    export const TID_ACTUATOR_MUSIC = "T43"
+    export const TID_ACTUATOR_PAINT = "T44"
+    export const TID_ACTUATOR_RADIO_SEND = "T45"
+    export const TID_ACTUATOR_RADIO_SET_GROUP = "T46"
+    export const TID_ACTUATOR_RGB_LED = "T47"
+    export const TID_ACTUATOR_CUP_X_ASSIGN = "T48"
+    export const TID_ACTUATOR_CUP_Y_ASSIGN = "T49"
+    export const TID_ACTUATOR_CUP_Z_ASSIGN = "T50"
+    export const TID_ACTUATOR_SHOW_NUMBER = "T51"
 
-    export const TID_MODIFIER_PAGE_1 = "M1"
-    export const TID_MODIFIER_PAGE_2 = "M2"
-    export const TID_MODIFIER_PAGE_3 = "M3"
-    export const TID_MODIFIER_PAGE_4 = "M4"
-    export const TID_MODIFIER_PAGE_5 = "M5"
+    export const TID_MODIFIER_PAGE_1 = "T150"
+    export const TID_MODIFIER_PAGE_2 = "T151"
+    export const TID_MODIFIER_PAGE_3 = "T152"
+    export const TID_MODIFIER_PAGE_4 = "T153"
+    export const TID_MODIFIER_PAGE_5 = "T154"
 
-    export const TID_MODIFIER_COIN_1 = "M6"
-    export const TID_MODIFIER_COIN_2 = "M7"
-    export const TID_MODIFIER_COIN_3 = "M8"
-    export const TID_MODIFIER_COIN_4 = "M9"
-    export const TID_MODIFIER_COIN_5 = "M10"
+    export const TID_MODIFIER_COIN_1 = "T155"
+    export const TID_MODIFIER_COIN_2 = "T156"
+    export const TID_MODIFIER_COIN_3 = "T157"
+    export const TID_MODIFIER_COIN_4 = "T158"
+    export const TID_MODIFIER_COIN_5 = "T159"
 
-    export const TID_MODIFIER_ICON_EDITOR = "M15"
-    export const TID_MODIFIER_COLOR_RED = "M16"
-    export const TID_MODIFIER_COLOR_DARKPURPLE = "M17"
+    export const TID_MODIFIER_ICON_EDITOR = "T160"
+    export const TID_MODIFIER_COLOR_RED = "T161"
+    export const TID_MODIFIER_COLOR_DARKPURPLE = "T162"
 
-    export const TID_MODIFIER_EMOJI_GIGGLE = "M19giggle"
-    export const TID_MODIFIER_EMOJI_HAPPY = "M19happy"
-    export const TID_MODIFIER_EMOJI_HELLO = "M19hello"
-    export const TID_MODIFIER_EMOJI_MYSTERIOUS = "M19mysterious"
-    export const TID_MODIFIER_EMOJI_SAD = "M19sad"
-    export const TID_MODIFIER_EMOJI_SLIDE = "M19slide"
-    export const TID_MODIFIER_EMOJI_SOARING = "M19soaring"
-    export const TID_MODIFIER_EMOJI_SPRING = "M19spring"
-    export const TID_MODIFIER_EMOJI_TWINKLE = "M19twinkle"
-    export const TID_MODIFIER_EMOJI_YAWN = "M19yawn"
+    export const TID_MODIFIER_EMOJI_GIGGLE = "T163"
+    export const TID_MODIFIER_EMOJI_HAPPY = "T164"
+    export const TID_MODIFIER_EMOJI_HELLO = "T165"
+    export const TID_MODIFIER_EMOJI_MYSTERIOUS = "T166"
+    export const TID_MODIFIER_EMOJI_SAD = "T167"
+    export const TID_MODIFIER_EMOJI_SLIDE = "T168"
+    export const TID_MODIFIER_EMOJI_SOARING = "T169"
+    export const TID_MODIFIER_EMOJI_SPRING = "T170"
+    export const TID_MODIFIER_EMOJI_TWINKLE = "T171"
+    export const TID_MODIFIER_EMOJI_YAWN = "T172"
 
-    export const TID_MODIFIER_CUP_X_READ = "M20A"
-    export const TID_MODIFIER_CUP_Y_READ = "M20B"
-    export const TID_MODIFIER_CUP_Z_READ = "M20C"
-    export const TID_MODIFIER_RADIO_VALUE = "M21"
-    export const TID_MODIFIER_RANDOM_TOSS = "M22"
-    export const TID_MODIFIER_LOOP = "M23"
-    export const TID_MODIFIER_MELODY_EDITOR = "M24"
-    export const TID_MODIFIER_TEMP_READ = "M25"
+    export const TID_MODIFIER_CUP_X_READ = "T173"
+    export const TID_MODIFIER_CUP_Y_READ = "T174"
+    export const TID_MODIFIER_CUP_Z_READ = "T175"
+    export const TID_MODIFIER_RADIO_VALUE = "T176"
+    export const TID_MODIFIER_RANDOM_TOSS = "T177"
+    export const TID_MODIFIER_LOOP = "T178"
+    export const TID_MODIFIER_MELODY_EDITOR = "T179"
+    export const TID_MODIFIER_TEMP_READ = "T180"
 
-    export const TID_MODIFIER_RGB_LED_COLOR_X = "A20_"
-    export const TID_MODIFIER_RGB_LED_COLOR_1 = "A20_1"
-    export const TID_MODIFIER_RGB_LED_COLOR_2 = "A20_2"
-    export const TID_MODIFIER_RGB_LED_COLOR_3 = "A20_3"
-    export const TID_MODIFIER_RGB_LED_COLOR_4 = "A20_4"
-    export const TID_MODIFIER_RGB_LED_COLOR_5 = "A20_5"
-    export const TID_MODIFIER_RGB_LED_COLOR_6 = "A20_6"
-    export const TID_MODIFIER_RGB_LED_COLOR_RAINBOW = "A20_rainbow"
-    export const TID_MODIFIER_RGB_LED_COLOR_SPARKLE = "A20_sparkle"
+    export const TID_MODIFIER_RGB_LED_COLOR_X = "T181"
+    export const TID_MODIFIER_RGB_LED_COLOR_1 = "T182"
+    export const TID_MODIFIER_RGB_LED_COLOR_2 = "T183"
+    export const TID_MODIFIER_RGB_LED_COLOR_3 = "T184"
+    export const TID_MODIFIER_RGB_LED_COLOR_4 = "T185"
+    export const TID_MODIFIER_RGB_LED_COLOR_5 = "T186"
+    export const TID_MODIFIER_RGB_LED_COLOR_6 = "T187"
+    export const TID_MODIFIER_RGB_LED_COLOR_RAINBOW = "T188"
+    export const TID_MODIFIER_RGB_LED_COLOR_SPARKLE = "T189"
 
-    export const TID_ACTUATOR_SERVO_SET_ANGLE = "A21_"
-    export const TID_ACTUATOR_RELAY = "A22"
-    export const TID_ACTUATOR_SERVO_POWER = "A23"
+    export const TID_ACTUATOR_SERVO_SET_ANGLE = "T53"
+    export const TID_ACTUATOR_RELAY = "T54"
+    export const TID_ACTUATOR_SERVO_POWER = "T55"
 
-    export const TID_ACTUATOR_CAR = "CAR"
-    export const TID_MODIFIER_CAR_FORWARD = "CAR1"
-    export const TID_MODIFIER_CAR_REVERSE = "CAR2"
-    export const TID_MODIFIER_CAR_TURN_LEFT = "CAR3"
-    export const TID_MODIFIER_CAR_TURN_RIGHT = "CAR4"
-    export const TID_MODIFIER_CAR_STOP = "CAR5"
-    export const TID_MODIFIER_CAR_FORWARD_FAST = "CAR6"
-    export const TID_MODIFIER_CAR_SPIN_LEFT = "CAR7"
-    export const TID_MODIFIER_CAR_SPIN_RIGHT = "CAR8"
-    export const TID_MODIFIER_CAR_LED_COLOR_1 = "CAR9"
-    export const TID_MODIFIER_CAR_LED_COLOR_2 = "CAR10"
-    export const TID_MODIFIER_CAR_LED_COLOR_3 = "CAR11"
-    export const TID_MODIFIER_CAR_LED_COLOR_4 = "CAR12"
-    export const TID_MODIFIER_CAR_ARM_OPEN = "CAR13"
-    export const TID_MODIFIER_CAR_ARM_CLOSE = "CAR14"
-    export const TID_MODIFIER_ON = "M26"
-    export const TID_MODIFIER_OFF = "M27"
+    export const TID_ACTUATOR_CAR = "T52"
+    export const TID_MODIFIER_CAR_FORWARD = "T190"
+    export const TID_MODIFIER_CAR_REVERSE = "T191"
+    export const TID_MODIFIER_CAR_TURN_LEFT = "T192"
+    export const TID_MODIFIER_CAR_TURN_RIGHT = "T193"
+    export const TID_MODIFIER_CAR_STOP = "T194"
+    export const TID_MODIFIER_CAR_FORWARD_FAST = "T195"
+    export const TID_MODIFIER_CAR_SPIN_LEFT = "T196"
+    export const TID_MODIFIER_CAR_SPIN_RIGHT = "T197"
+    export const TID_MODIFIER_CAR_LED_COLOR_1 = "T198"
+    export const TID_MODIFIER_CAR_LED_COLOR_2 = "T199"
+    export const TID_MODIFIER_CAR_LED_COLOR_3 = "T200"
+    export const TID_MODIFIER_CAR_LED_COLOR_4 = "T201"
+    export const TID_MODIFIER_CAR_ARM_OPEN = "T202"
+    export const TID_MODIFIER_CAR_ARM_CLOSE = "T203"
+    export const TID_MODIFIER_ON = "T204"
+    export const TID_MODIFIER_OFF = "T205"
 
     // DO NOT CHANGE THESE NUMBERS
     export enum Tid {
@@ -348,215 +348,8 @@ namespace microcode {
         modifiers: [Tid.MODIFIER_START, Tid.MODIFER_END],
     }
 
-    // TODO: this should be radically simplifed
-    //     export function tidToString(e: Tid) { return "T" + (e.toString()) }
-
     export function tidToString(e: Tid) {
-        switch (e) {
-            case Tid.TID_SENSOR_LED_LIGHT:
-                return TID_SENSOR_LED_LIGHT
-            case Tid.TID_SENSOR_MOISTURE:
-                return TID_SENSOR_MOISTURE
-            case Tid.TID_SENSOR_DISTANCE:
-                return TID_SENSOR_DISTANCE
-            case Tid.TID_SENSOR_REFLECTED:
-                return TID_SENSOR_REFLECTED
-
-            case Tid.TID_FILTER_TIMESPAN_RANDOM:
-                return TID_FILTER_TIMESPAN_RANDOM
-            case Tid.TID_FILTER_TIMESPAN_VERY_LONG:
-                return TID_FILTER_TIMESPAN_VERY_LONG
-            case Tid.TID_FILTER_CUP_X_READ:
-                return TID_FILTER_CUP_X_READ
-            case Tid.TID_FILTER_CUP_Y_READ:
-                return TID_FILTER_CUP_Y_READ
-            case Tid.TID_FILTER_CUP_Z_READ:
-                return TID_FILTER_CUP_Z_READ
-            case Tid.TID_FILTER_ROTARY_LEFT:
-                return TID_FILTER_ROTARY_LEFT
-            case Tid.TID_FILTER_ROTARY_RIGHT:
-                return TID_FILTER_ROTARY_RIGHT
-            case Tid.TID_FILTER_TEMP_WARMER:
-                return TID_FILTER_TEMP_WARMER
-            case Tid.TID_FILTER_TEMP_COLDER:
-                return TID_FILTER_TEMP_COLDER
-            case Tid.TID_FILTER_LINE_LEFT:
-                return TID_FILTER_LINE_LEFT
-            case Tid.TID_FILTER_LINE_RIGHT:
-                return TID_FILTER_LINE_RIGHT
-            case Tid.TID_FILTER_LINE_BOTH:
-                return TID_FILTER_LINE_BOTH
-            case Tid.TID_FILTER_LINE_NEITHER:
-                return TID_FILTER_LINE_NEITHER
-            case Tid.TID_FILTER_LINE_NEITHER_LEFT:
-                return TID_FILTER_LINE_NEITHER_LEFT
-            case Tid.TID_FILTER_LINE_NEITHER_RIGHT:
-                return TID_FILTER_LINE_NEITHER_RIGHT
-
-            case Tid.TID_ACTUATOR_SWITCH_PAGE:
-                return TID_ACTUATOR_SWITCH_PAGE
-            case Tid.TID_ACTUATOR_SPEAKER:
-                return TID_ACTUATOR_SPEAKER
-            case Tid.TID_ACTUATOR_MUSIC:
-                return TID_ACTUATOR_MUSIC
-            case Tid.TID_ACTUATOR_PAINT:
-                return TID_ACTUATOR_PAINT
-            case Tid.TID_ACTUATOR_RADIO_SEND:
-                return TID_ACTUATOR_RADIO_SEND
-            case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
-                return TID_ACTUATOR_RADIO_SET_GROUP
-            case Tid.TID_ACTUATOR_RGB_LED:
-                return TID_ACTUATOR_RGB_LED
-            case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
-                return TID_ACTUATOR_CUP_X_ASSIGN
-            case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
-                return TID_ACTUATOR_CUP_Y_ASSIGN
-            case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
-                return TID_ACTUATOR_CUP_Z_ASSIGN
-            case Tid.TID_ACTUATOR_SHOW_NUMBER:
-                return TID_ACTUATOR_SHOW_NUMBER
-
-            case Tid.TID_MODIFIER_PAGE_1:
-                return TID_MODIFIER_PAGE_1
-            case Tid.TID_MODIFIER_PAGE_2:
-                return TID_MODIFIER_PAGE_2
-            case Tid.TID_MODIFIER_PAGE_3:
-                return TID_MODIFIER_PAGE_3
-            case Tid.TID_MODIFIER_PAGE_4:
-                return TID_MODIFIER_PAGE_4
-            case Tid.TID_MODIFIER_PAGE_5:
-                return TID_MODIFIER_PAGE_5
-
-            case Tid.TID_MODIFIER_COIN_1:
-                return TID_MODIFIER_COIN_1
-            case Tid.TID_MODIFIER_COIN_2:
-                return TID_MODIFIER_COIN_2
-            case Tid.TID_MODIFIER_COIN_3:
-                return TID_MODIFIER_COIN_3
-            case Tid.TID_MODIFIER_COIN_4:
-                return TID_MODIFIER_COIN_4
-            case Tid.TID_MODIFIER_COIN_5:
-                return TID_MODIFIER_COIN_5
-
-            case Tid.TID_MODIFIER_ICON_EDITOR:
-                return TID_MODIFIER_ICON_EDITOR
-
-            case Tid.TID_MODIFIER_COLOR_RED:
-                return TID_MODIFIER_COLOR_RED
-            case Tid.TID_MODIFIER_COLOR_DARKPURPLE:
-                return TID_MODIFIER_COLOR_DARKPURPLE
-
-            case Tid.TID_MODIFIER_EMOJI_GIGGLE:
-                return TID_MODIFIER_EMOJI_GIGGLE
-            case Tid.TID_MODIFIER_EMOJI_HAPPY:
-                return TID_MODIFIER_EMOJI_HAPPY
-            case Tid.TID_MODIFIER_EMOJI_HELLO:
-                return TID_MODIFIER_EMOJI_HELLO
-            case Tid.TID_MODIFIER_EMOJI_MYSTERIOUS:
-                return TID_MODIFIER_EMOJI_MYSTERIOUS
-            case Tid.TID_MODIFIER_EMOJI_SAD:
-                return TID_MODIFIER_EMOJI_SAD
-            case Tid.TID_MODIFIER_EMOJI_SLIDE:
-                return TID_MODIFIER_EMOJI_SLIDE
-            case Tid.TID_MODIFIER_EMOJI_SOARING:
-                return TID_MODIFIER_EMOJI_SOARING
-            case Tid.TID_MODIFIER_EMOJI_SPRING:
-                return TID_MODIFIER_EMOJI_SPRING
-            case Tid.TID_MODIFIER_EMOJI_TWINKLE:
-                return TID_MODIFIER_EMOJI_TWINKLE
-            case Tid.TID_MODIFIER_EMOJI_YAWN:
-                return TID_MODIFIER_EMOJI_YAWN
-
-            case Tid.TID_MODIFIER_CUP_X_READ:
-                return TID_MODIFIER_CUP_X_READ
-            case Tid.TID_MODIFIER_CUP_Y_READ:
-                return TID_MODIFIER_CUP_Y_READ
-            case Tid.TID_MODIFIER_CUP_Z_READ:
-                return TID_MODIFIER_CUP_Z_READ
-
-            case Tid.TID_MODIFIER_RADIO_VALUE:
-                return TID_MODIFIER_RADIO_VALUE
-            case Tid.TID_MODIFIER_RANDOM_TOSS:
-                return TID_MODIFIER_RANDOM_TOSS
-
-            case Tid.TID_MODIFIER_LOOP:
-                return TID_MODIFIER_LOOP
-
-            case Tid.TID_MODIFIER_MELODY_EDITOR:
-                return TID_MODIFIER_MELODY_EDITOR
-
-            case Tid.TID_MODIFIER_TEMP_READ:
-                return TID_MODIFIER_TEMP_READ
-
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_X:
-                return TID_MODIFIER_RGB_LED_COLOR_X
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_1:
-                return TID_MODIFIER_RGB_LED_COLOR_1
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_2:
-                return TID_MODIFIER_RGB_LED_COLOR_2
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_3:
-                return TID_MODIFIER_RGB_LED_COLOR_3
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_4:
-                return TID_MODIFIER_RGB_LED_COLOR_4
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_5:
-                return TID_MODIFIER_RGB_LED_COLOR_5
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_6:
-                return TID_MODIFIER_RGB_LED_COLOR_6
-
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_RAINBOW:
-                return TID_MODIFIER_RGB_LED_COLOR_RAINBOW
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_SPARKLE:
-                return TID_MODIFIER_RGB_LED_COLOR_SPARKLE
-
-            case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
-                return TID_ACTUATOR_SERVO_SET_ANGLE
-            case Tid.TID_ACTUATOR_SERVO_POWER:
-                return TID_ACTUATOR_SERVO_POWER
-            case Tid.TID_ACTUATOR_RELAY:
-                return TID_ACTUATOR_RELAY
-
-            case Tid.TID_ACTUATOR_CAR:
-                return TID_ACTUATOR_CAR
-            case Tid.TID_MODIFIER_CAR_FORWARD:
-                return TID_MODIFIER_CAR_FORWARD
-            case Tid.TID_MODIFIER_CAR_REVERSE:
-                return TID_MODIFIER_CAR_REVERSE
-            case Tid.TID_MODIFIER_CAR_TURN_LEFT:
-                return TID_MODIFIER_CAR_TURN_LEFT
-            case Tid.TID_MODIFIER_CAR_TURN_RIGHT:
-                return TID_MODIFIER_CAR_TURN_RIGHT
-            case Tid.TID_MODIFIER_CAR_STOP:
-                return TID_MODIFIER_CAR_STOP
-            case Tid.TID_MODIFIER_CAR_FORWARD_FAST:
-                return TID_MODIFIER_CAR_FORWARD_FAST
-            case Tid.TID_MODIFIER_CAR_SPIN_LEFT:
-                return TID_MODIFIER_CAR_SPIN_LEFT
-            case Tid.TID_MODIFIER_CAR_SPIN_RIGHT:
-                return TID_MODIFIER_CAR_SPIN_RIGHT
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_1:
-                return TID_MODIFIER_CAR_LED_COLOR_1
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_2:
-                return TID_MODIFIER_CAR_LED_COLOR_2
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_3:
-                return TID_MODIFIER_CAR_LED_COLOR_3
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_4:
-                return TID_MODIFIER_CAR_LED_COLOR_4
-            case Tid.TID_MODIFIER_CAR_ARM_OPEN:
-                return TID_MODIFIER_CAR_ARM_OPEN
-            case Tid.TID_MODIFIER_CAR_ARM_CLOSE:
-                return TID_MODIFIER_CAR_ARM_CLOSE
-            case Tid.TID_MODIFIER_ON:
-                return TID_MODIFIER_ON
-            case Tid.TID_MODIFIER_OFF:
-                return TID_MODIFIER_OFF
-            case Tid.TID_FILTER_ON:
-                return TID_FILTER_ON
-            case Tid.TID_FILTER_OFF:
-                return TID_FILTER_OFF
-            default:
-                //  assert(false, "unknown tid: " + e)
-                return "T" + e.toString()
-        }
+        return "T" + e.toString()
     }
 
     // TODO: should separate {sensors, filters, etc} into different namespaces
