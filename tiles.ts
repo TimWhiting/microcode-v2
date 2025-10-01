@@ -70,8 +70,8 @@ namespace microcode {
     export const TID_FILTER_LINE_NEITHER = "T105"
     export const TID_FILTER_LINE_NEITHER_LEFT = "T106"
     export const TID_FILTER_LINE_NEITHER_RIGHT = "T107"
-    export const TID_FILTER_ON = "F24"
-    export const TID_FILTER_OFF = "F25"
+    export const TID_FILTER_ON = "T110"
+    export const TID_FILTER_OFF = "T111"
 
     export const TID_ACTUATOR_SWITCH_PAGE = "T40"
     export const TID_ACTUATOR_SPEAKER = "T41"
@@ -151,8 +151,8 @@ namespace microcode {
     export const TID_MODIFIER_CAR_LED_COLOR_4 = "T201"
     export const TID_MODIFIER_CAR_ARM_OPEN = "T202"
     export const TID_MODIFIER_CAR_ARM_CLOSE = "T203"
-    export const TID_MODIFIER_ON = "M26"
-    export const TID_MODIFIER_OFF = "M27"
+    export const TID_MODIFIER_ON = "T204"
+    export const TID_MODIFIER_OFF = "T205"
 
     // DO NOT CHANGE THESE NUMBERS
     export enum Tid {
@@ -348,23 +348,8 @@ namespace microcode {
         modifiers: [Tid.MODIFIER_START, Tid.MODIFER_END],
     }
 
-    // TODO: this should be radically simplifed
-    //     export function tidToString(e: Tid) { return "T" + (e.toString()) }
-
     export function tidToString(e: Tid) {
-        switch (e) {
-            case Tid.TID_MODIFIER_ON:
-                return TID_MODIFIER_ON
-            case Tid.TID_MODIFIER_OFF:
-                return TID_MODIFIER_OFF
-            case Tid.TID_FILTER_ON:
-                return TID_FILTER_ON
-            case Tid.TID_FILTER_OFF:
-                return TID_FILTER_OFF
-            default:
-                //  assert(false, "unknown tid: " + e)
-                return "T" + e.toString()
-        }
+        return "T" + e.toString()
     }
 
     // TODO: should separate {sensors, filters, etc} into different namespaces
