@@ -29,15 +29,15 @@ namespace microcode {
     export const TID_SENSOR_REFLECTED = "S18"
 
     // filters for TID_SENSOR_PRESS
-    export const TID_FILTER_PIN_0 = "F0"
-    export const TID_FILTER_PIN_1 = "F1"
-    export const TID_FILTER_PIN_2 = "F2"
-    export const TID_FILTER_BUTTON_A = "F3"
-    export const TID_FILTER_BUTTON_B = "F4"
-    export const TID_FILTER_KITA_KEY_1 = "F5"
-    export const TID_FILTER_KITA_KEY_2 = "F6"
+    export const TID_FILTER_PIN_0 = "T70"
+    export const TID_FILTER_PIN_1 = "T71"
+    export const TID_FILTER_PIN_2 = "T72"
+    export const TID_FILTER_BUTTON_A = "T73"
+    export const TID_FILTER_BUTTON_B = "T74"
+    export const TID_FILTER_KITA_KEY_1 = "T75"
+    export const TID_FILTER_KITA_KEY_2 = "T76"
 
-    export const TID_FILTER_LOGO = "F7"
+    export const TID_FILTER_LOGO = "T77"
     export const TID_FILTER_COIN_1 = "F8"
     export const TID_FILTER_COIN_2 = "F9"
     export const TID_FILTER_COIN_3 = "F10"
@@ -362,22 +362,6 @@ namespace microcode {
             case Tid.TID_SENSOR_REFLECTED:
                 return TID_SENSOR_REFLECTED
 
-            case Tid.TID_FILTER_PIN_0:
-                return TID_FILTER_PIN_0
-            case Tid.TID_FILTER_PIN_1:
-                return TID_FILTER_PIN_1
-            case Tid.TID_FILTER_PIN_2:
-                return TID_FILTER_PIN_2
-            case Tid.TID_FILTER_BUTTON_A:
-                return TID_FILTER_BUTTON_A
-            case Tid.TID_FILTER_BUTTON_B:
-                return TID_FILTER_BUTTON_B
-            case Tid.TID_FILTER_KITA_KEY_1:
-                return TID_FILTER_KITA_KEY_1
-            case Tid.TID_FILTER_KITA_KEY_2:
-                return TID_FILTER_KITA_KEY_2
-            case Tid.TID_FILTER_LOGO:
-                return TID_FILTER_LOGO
             case Tid.TID_FILTER_COIN_1:
                 return TID_FILTER_COIN_1
             case Tid.TID_FILTER_COIN_2:
