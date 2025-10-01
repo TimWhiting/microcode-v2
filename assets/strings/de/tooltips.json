@@ -125,7 +125,7 @@
     "T187": "schwarz",
     "T188": "Regenbogen",
     "T189": "Funkeln",
-    "A21_": "Servo-Einstellwinkel",
+    "T53": "Servo-Einstellwinkel",
     "SR_LED": "LED {x} {y} {state}",
     "SR_NOTE": "Note {index} {state}",
     "SR_ON": "an",

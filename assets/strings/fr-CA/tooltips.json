@@ -125,7 +125,7 @@
     "T187": "noir",
     "T188": "arc en ciel",
     "T189": "paillettes",
-    "A21_": "servo changer angle",
+    "T53": "servo changer angle",
     "SR_LED": "LED {x} {y} {state}",
     "SR_NOTE": "note {index} {state}",
     "SR_ON": "activée",

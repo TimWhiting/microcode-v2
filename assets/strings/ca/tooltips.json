@@ -125,7 +125,7 @@
     "T187": "negre",
     "T188": "arc de Sant Martí",
     "T189": "espurna",
-    "A21_": "angle de configuració del servo",
+    "T53": "angle de configuració del servo",
     "SR_LED": "LED {x} {y} {state}",
     "SR_NOTE": "nota {index} {state}",
     "SR_ON": "encès",

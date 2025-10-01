@@ -23,10 +23,10 @@ namespace microcode {
     export const TID_SENSOR_ROTARY = "T24"
     export const TID_SENSOR_CAR_WALL = "T25"
     export const TID_SENSOR_LINE = "T26"
-    export const TID_SENSOR_LED_LIGHT = "S15"
-    export const TID_SENSOR_MOISTURE = "S16"
-    export const TID_SENSOR_DISTANCE = "S17"
-    export const TID_SENSOR_REFLECTED = "S18"
+    export const TID_SENSOR_LED_LIGHT = "T27"
+    export const TID_SENSOR_MOISTURE = "T28"
+    export const TID_SENSOR_DISTANCE = "T29"
+    export const TID_SENSOR_REFLECTED = "T30"
 
     // filters for TID_SENSOR_PRESS
     export const TID_FILTER_PIN_0 = "T70"
@@ -132,9 +132,9 @@ namespace microcode {
     export const TID_MODIFIER_RGB_LED_COLOR_RAINBOW = "T188"
     export const TID_MODIFIER_RGB_LED_COLOR_SPARKLE = "T189"
 
-    export const TID_ACTUATOR_SERVO_SET_ANGLE = "A21_"
-    export const TID_ACTUATOR_RELAY = "A22"
-    export const TID_ACTUATOR_SERVO_POWER = "A23"
+    export const TID_ACTUATOR_SERVO_SET_ANGLE = "T53"
+    export const TID_ACTUATOR_RELAY = "T54"
+    export const TID_ACTUATOR_SERVO_POWER = "T55"
 
     export const TID_ACTUATOR_CAR = "CAR"
     export const TID_MODIFIER_CAR_FORWARD = "CAR1"
@@ -353,21 +353,6 @@ namespace microcode {
 
     export function tidToString(e: Tid) {
         switch (e) {
-            case Tid.TID_SENSOR_LED_LIGHT:
-                return TID_SENSOR_LED_LIGHT
-            case Tid.TID_SENSOR_MOISTURE:
-                return TID_SENSOR_MOISTURE
-            case Tid.TID_SENSOR_DISTANCE:
-                return TID_SENSOR_DISTANCE
-            case Tid.TID_SENSOR_REFLECTED:
-                return TID_SENSOR_REFLECTED
-
-            case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
-                return TID_ACTUATOR_SERVO_SET_ANGLE
-            case Tid.TID_ACTUATOR_SERVO_POWER:
-                return TID_ACTUATOR_SERVO_POWER
-            case Tid.TID_ACTUATOR_RELAY:
-                return TID_ACTUATOR_RELAY
 
             case Tid.TID_ACTUATOR_CAR:
                 return TID_ACTUATOR_CAR

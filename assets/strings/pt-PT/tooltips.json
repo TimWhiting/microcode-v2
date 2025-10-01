@@ -119,7 +119,7 @@
     "T187": "preto",
     "T188": "arco-íris",
     "T189": "brilhante",
-    "A21_": "definir ângulo do servo",
+    "T53": "definir ângulo do servo",
     "SR_LED": "LED {x} {y} {state}",
     "SR_NOTE": "nota {index} {state}",
     "SR_ON": "ligado",

@@ -118,7 +118,7 @@
     "T187": "negro",
     "T188": "arco iris",
     "T189": "destello",
-    "A21_": "establecer ángulo del servo",
+    "T53": "establecer ángulo del servo",
     "SR_LED": "LED {x} {y} {state}",
     "SR_NOTE": "nota {index} {state}",
     "SR_ON": "encendido",
