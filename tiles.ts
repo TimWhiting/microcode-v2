@@ -12,12 +12,12 @@ namespace microcode {
     export const TID_SENSOR_ACCELEROMETER = "T13"
     export const TID_SENSOR_TIMER = "T14"
     export const TID_SENSOR_LIGHT = "T15"
-    export const TID_SENSOR_TEMP = "S6"
-    export const TID_SENSOR_RADIO_RECEIVE = "S7"
-    export const TID_SENSOR_MICROPHONE = "S8"
-    export const TID_SENSOR_CUP_X_WRITTEN = "S9A"
-    export const TID_SENSOR_CUP_Y_WRITTEN = "S9B"
-    export const TID_SENSOR_CUP_Z_WRITTEN = "S9C"
+    export const TID_SENSOR_TEMP = "T16"
+    export const TID_SENSOR_RADIO_RECEIVE = "T17"
+    export const TID_SENSOR_MICROPHONE = "T18"
+    export const TID_SENSOR_CUP_X_WRITTEN = "T19"
+    export const TID_SENSOR_CUP_Y_WRITTEN = "T20"
+    export const TID_SENSOR_CUP_Z_WRITTEN = "T21"
     export const TID_SENSOR_MAGNET = "S10"
     export const TID_SENSOR_SLIDER = "S11"
     export const TID_SENSOR_ROTARY = "S12"
@@ -355,18 +355,6 @@ namespace microcode {
         switch (e) {
             case Tid.TID_SENSOR_LED_LIGHT:
                 return TID_SENSOR_LED_LIGHT
-            case Tid.TID_SENSOR_TEMP:
-                return TID_SENSOR_TEMP
-            case Tid.TID_SENSOR_RADIO_RECEIVE:
-                return TID_SENSOR_RADIO_RECEIVE
-            case Tid.TID_SENSOR_MICROPHONE:
-                return TID_SENSOR_MICROPHONE
-            case Tid.TID_SENSOR_CUP_X_WRITTEN:
-                return TID_SENSOR_CUP_X_WRITTEN
-            case Tid.TID_SENSOR_CUP_Y_WRITTEN:
-                return TID_SENSOR_CUP_Y_WRITTEN
-            case Tid.TID_SENSOR_CUP_Z_WRITTEN:
-                return TID_SENSOR_CUP_Z_WRITTEN
             case Tid.TID_SENSOR_MAGNET:
                 return TID_SENSOR_MAGNET
             case Tid.TID_SENSOR_SLIDER:
