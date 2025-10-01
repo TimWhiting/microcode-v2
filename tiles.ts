@@ -113,14 +113,14 @@ namespace microcode {
     export const TID_MODIFIER_EMOJI_TWINKLE = "T171"
     export const TID_MODIFIER_EMOJI_YAWN = "T172"
 
-    export const TID_MODIFIER_CUP_X_READ = "M20A"
-    export const TID_MODIFIER_CUP_Y_READ = "M20B"
-    export const TID_MODIFIER_CUP_Z_READ = "M20C"
-    export const TID_MODIFIER_RADIO_VALUE = "M21"
-    export const TID_MODIFIER_RANDOM_TOSS = "M22"
-    export const TID_MODIFIER_LOOP = "M23"
-    export const TID_MODIFIER_MELODY_EDITOR = "M24"
-    export const TID_MODIFIER_TEMP_READ = "M25"
+    export const TID_MODIFIER_CUP_X_READ = "T173"
+    export const TID_MODIFIER_CUP_Y_READ = "T174"
+    export const TID_MODIFIER_CUP_Z_READ = "T175"
+    export const TID_MODIFIER_RADIO_VALUE = "T176"
+    export const TID_MODIFIER_RANDOM_TOSS = "T177"
+    export const TID_MODIFIER_LOOP = "T178"
+    export const TID_MODIFIER_MELODY_EDITOR = "T179"
+    export const TID_MODIFIER_TEMP_READ = "T180"
 
     export const TID_MODIFIER_RGB_LED_COLOR_X = "A20_"
     export const TID_MODIFIER_RGB_LED_COLOR_1 = "A20_1"
@@ -361,29 +361,7 @@ namespace microcode {
                 return TID_SENSOR_DISTANCE
             case Tid.TID_SENSOR_REFLECTED:
                 return TID_SENSOR_REFLECTED
-
-
-            case Tid.TID_MODIFIER_CUP_X_READ:
-                return TID_MODIFIER_CUP_X_READ
-            case Tid.TID_MODIFIER_CUP_Y_READ:
-                return TID_MODIFIER_CUP_Y_READ
-            case Tid.TID_MODIFIER_CUP_Z_READ:
-                return TID_MODIFIER_CUP_Z_READ
-
-            case Tid.TID_MODIFIER_RADIO_VALUE:
-                return TID_MODIFIER_RADIO_VALUE
-            case Tid.TID_MODIFIER_RANDOM_TOSS:
-                return TID_MODIFIER_RANDOM_TOSS
-
-            case Tid.TID_MODIFIER_LOOP:
-                return TID_MODIFIER_LOOP
-
-            case Tid.TID_MODIFIER_MELODY_EDITOR:
-                return TID_MODIFIER_MELODY_EDITOR
-
-            case Tid.TID_MODIFIER_TEMP_READ:
-                return TID_MODIFIER_TEMP_READ
-
+            
             case Tid.TID_MODIFIER_RGB_LED_COLOR_X:
                 return TID_MODIFIER_RGB_LED_COLOR_X
             case Tid.TID_MODIFIER_RGB_LED_COLOR_1:

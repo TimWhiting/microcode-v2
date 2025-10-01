@@ -109,14 +109,14 @@
     "T171": "twinkle",
     "T172": "yawn",
 
-    "M20A": "variable X",
-    "M20B": "variable Y",
-    "M20C": "variable Z",
-    "M21": "radio value",
-    "M22": "dice",
-    "M23": "repeat",
-    "M24": "melody",
-    "M25": "temperature",
+    "T173": "variable X",
+    "T174": "variable Y",
+    "T175": "variable Z",
+    "T176": "radio value",
+    "T177": "dice",
+    "T178": "repeat",
+    "T179": "melody",
+    "T180": "temperature",
 
     "T47": "LED",
 
