@@ -86,11 +86,11 @@ namespace microcode {
     export const TID_ACTUATOR_CUP_Z_ASSIGN = "T50"
     export const TID_ACTUATOR_SHOW_NUMBER = "T51"
 
-    export const TID_MODIFIER_PAGE_1 = "M1"
-    export const TID_MODIFIER_PAGE_2 = "M2"
-    export const TID_MODIFIER_PAGE_3 = "M3"
-    export const TID_MODIFIER_PAGE_4 = "M4"
-    export const TID_MODIFIER_PAGE_5 = "M5"
+    export const TID_MODIFIER_PAGE_1 = "T150"
+    export const TID_MODIFIER_PAGE_2 = "T151"
+    export const TID_MODIFIER_PAGE_3 = "T152"
+    export const TID_MODIFIER_PAGE_4 = "T153"
+    export const TID_MODIFIER_PAGE_5 = "T154"
 
     export const TID_MODIFIER_COIN_1 = "M6"
     export const TID_MODIFIER_COIN_2 = "M7"
@@ -361,18 +361,6 @@ namespace microcode {
                 return TID_SENSOR_DISTANCE
             case Tid.TID_SENSOR_REFLECTED:
                 return TID_SENSOR_REFLECTED
-
-
-            case Tid.TID_MODIFIER_PAGE_1:
-                return TID_MODIFIER_PAGE_1
-            case Tid.TID_MODIFIER_PAGE_2:
-                return TID_MODIFIER_PAGE_2
-            case Tid.TID_MODIFIER_PAGE_3:
-                return TID_MODIFIER_PAGE_3
-            case Tid.TID_MODIFIER_PAGE_4:
-                return TID_MODIFIER_PAGE_4
-            case Tid.TID_MODIFIER_PAGE_5:
-                return TID_MODIFIER_PAGE_5
 
             case Tid.TID_MODIFIER_COIN_1:
                 return TID_MODIFIER_COIN_1
