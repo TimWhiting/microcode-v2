@@ -98,20 +98,20 @@ namespace microcode {
     export const TID_MODIFIER_COIN_4 = "T158"
     export const TID_MODIFIER_COIN_5 = "T159"
 
-    export const TID_MODIFIER_ICON_EDITOR = "M15"
-    export const TID_MODIFIER_COLOR_RED = "M16"
-    export const TID_MODIFIER_COLOR_DARKPURPLE = "M17"
+    export const TID_MODIFIER_ICON_EDITOR = "T160"
+    export const TID_MODIFIER_COLOR_RED = "T161"
+    export const TID_MODIFIER_COLOR_DARKPURPLE = "T162"
 
-    export const TID_MODIFIER_EMOJI_GIGGLE = "M19giggle"
-    export const TID_MODIFIER_EMOJI_HAPPY = "M19happy"
-    export const TID_MODIFIER_EMOJI_HELLO = "M19hello"
-    export const TID_MODIFIER_EMOJI_MYSTERIOUS = "M19mysterious"
-    export const TID_MODIFIER_EMOJI_SAD = "M19sad"
-    export const TID_MODIFIER_EMOJI_SLIDE = "M19slide"
-    export const TID_MODIFIER_EMOJI_SOARING = "M19soaring"
-    export const TID_MODIFIER_EMOJI_SPRING = "M19spring"
-    export const TID_MODIFIER_EMOJI_TWINKLE = "M19twinkle"
-    export const TID_MODIFIER_EMOJI_YAWN = "M19yawn"
+    export const TID_MODIFIER_EMOJI_GIGGLE = "T163"
+    export const TID_MODIFIER_EMOJI_HAPPY = "T164"
+    export const TID_MODIFIER_EMOJI_HELLO = "T165"
+    export const TID_MODIFIER_EMOJI_MYSTERIOUS = "T166"
+    export const TID_MODIFIER_EMOJI_SAD = "T167"
+    export const TID_MODIFIER_EMOJI_SLIDE = "T168"
+    export const TID_MODIFIER_EMOJI_SOARING = "T169"
+    export const TID_MODIFIER_EMOJI_SPRING = "T170"
+    export const TID_MODIFIER_EMOJI_TWINKLE = "T171"
+    export const TID_MODIFIER_EMOJI_YAWN = "T172"
 
     export const TID_MODIFIER_CUP_X_READ = "M20A"
     export const TID_MODIFIER_CUP_Y_READ = "M20B"
@@ -362,34 +362,6 @@ namespace microcode {
             case Tid.TID_SENSOR_REFLECTED:
                 return TID_SENSOR_REFLECTED
 
-            case Tid.TID_MODIFIER_ICON_EDITOR:
-                return TID_MODIFIER_ICON_EDITOR
-
-            case Tid.TID_MODIFIER_COLOR_RED:
-                return TID_MODIFIER_COLOR_RED
-            case Tid.TID_MODIFIER_COLOR_DARKPURPLE:
-                return TID_MODIFIER_COLOR_DARKPURPLE
-
-            case Tid.TID_MODIFIER_EMOJI_GIGGLE:
-                return TID_MODIFIER_EMOJI_GIGGLE
-            case Tid.TID_MODIFIER_EMOJI_HAPPY:
-                return TID_MODIFIER_EMOJI_HAPPY
-            case Tid.TID_MODIFIER_EMOJI_HELLO:
-                return TID_MODIFIER_EMOJI_HELLO
-            case Tid.TID_MODIFIER_EMOJI_MYSTERIOUS:
-                return TID_MODIFIER_EMOJI_MYSTERIOUS
-            case Tid.TID_MODIFIER_EMOJI_SAD:
-                return TID_MODIFIER_EMOJI_SAD
-            case Tid.TID_MODIFIER_EMOJI_SLIDE:
-                return TID_MODIFIER_EMOJI_SLIDE
-            case Tid.TID_MODIFIER_EMOJI_SOARING:
-                return TID_MODIFIER_EMOJI_SOARING
-            case Tid.TID_MODIFIER_EMOJI_SPRING:
-                return TID_MODIFIER_EMOJI_SPRING
-            case Tid.TID_MODIFIER_EMOJI_TWINKLE:
-                return TID_MODIFIER_EMOJI_TWINKLE
-            case Tid.TID_MODIFIER_EMOJI_YAWN:
-                return TID_MODIFIER_EMOJI_YAWN
 
             case Tid.TID_MODIFIER_CUP_X_READ:
                 return TID_MODIFIER_CUP_X_READ
