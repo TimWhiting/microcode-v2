@@ -73,18 +73,18 @@ namespace microcode {
     export const TID_FILTER_ON = "F24"
     export const TID_FILTER_OFF = "F25"
 
-    export const TID_ACTUATOR_SWITCH_PAGE = "A1"
-    export const TID_ACTUATOR_SPEAKER = "A2"
+    export const TID_ACTUATOR_SWITCH_PAGE = "T40"
+    export const TID_ACTUATOR_SPEAKER = "T41"
     export const TID_ACTUATOR_MICROPHONE = "A3" // dead but don't delete
-    export const TID_ACTUATOR_MUSIC = "A4"
-    export const TID_ACTUATOR_PAINT = "A5"
-    export const TID_ACTUATOR_RADIO_SEND = "A6"
-    export const TID_ACTUATOR_RADIO_SET_GROUP = "A6A"
-    export const TID_ACTUATOR_RGB_LED = "A8"
-    export const TID_ACTUATOR_CUP_X_ASSIGN = "A9A"
-    export const TID_ACTUATOR_CUP_Y_ASSIGN = "A9B"
-    export const TID_ACTUATOR_CUP_Z_ASSIGN = "A9C"
-    export const TID_ACTUATOR_SHOW_NUMBER = "A10"
+    export const TID_ACTUATOR_MUSIC = "T43"
+    export const TID_ACTUATOR_PAINT = "T44"
+    export const TID_ACTUATOR_RADIO_SEND = "T45"
+    export const TID_ACTUATOR_RADIO_SET_GROUP = "T46"
+    export const TID_ACTUATOR_RGB_LED = "T47"
+    export const TID_ACTUATOR_CUP_X_ASSIGN = "T48"
+    export const TID_ACTUATOR_CUP_Y_ASSIGN = "T49"
+    export const TID_ACTUATOR_CUP_Z_ASSIGN = "T50"
+    export const TID_ACTUATOR_SHOW_NUMBER = "T51"
 
     export const TID_MODIFIER_PAGE_1 = "M1"
     export const TID_MODIFIER_PAGE_2 = "M2"
@@ -362,28 +362,6 @@ namespace microcode {
             case Tid.TID_SENSOR_REFLECTED:
                 return TID_SENSOR_REFLECTED
 
-            case Tid.TID_ACTUATOR_SWITCH_PAGE:
-                return TID_ACTUATOR_SWITCH_PAGE
-            case Tid.TID_ACTUATOR_SPEAKER:
-                return TID_ACTUATOR_SPEAKER
-            case Tid.TID_ACTUATOR_MUSIC:
-                return TID_ACTUATOR_MUSIC
-            case Tid.TID_ACTUATOR_PAINT:
-                return TID_ACTUATOR_PAINT
-            case Tid.TID_ACTUATOR_RADIO_SEND:
-                return TID_ACTUATOR_RADIO_SEND
-            case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
-                return TID_ACTUATOR_RADIO_SET_GROUP
-            case Tid.TID_ACTUATOR_RGB_LED:
-                return TID_ACTUATOR_RGB_LED
-            case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
-                return TID_ACTUATOR_CUP_X_ASSIGN
-            case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
-                return TID_ACTUATOR_CUP_Y_ASSIGN
-            case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
-                return TID_ACTUATOR_CUP_Z_ASSIGN
-            case Tid.TID_ACTUATOR_SHOW_NUMBER:
-                return TID_ACTUATOR_SHOW_NUMBER
 
             case Tid.TID_MODIFIER_PAGE_1:
                 return TID_MODIFIER_PAGE_1
