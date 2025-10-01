@@ -122,15 +122,15 @@ namespace microcode {
     export const TID_MODIFIER_MELODY_EDITOR = "T179"
     export const TID_MODIFIER_TEMP_READ = "T180"
 
-    export const TID_MODIFIER_RGB_LED_COLOR_X = "A20_"
-    export const TID_MODIFIER_RGB_LED_COLOR_1 = "A20_1"
-    export const TID_MODIFIER_RGB_LED_COLOR_2 = "A20_2"
-    export const TID_MODIFIER_RGB_LED_COLOR_3 = "A20_3"
-    export const TID_MODIFIER_RGB_LED_COLOR_4 = "A20_4"
-    export const TID_MODIFIER_RGB_LED_COLOR_5 = "A20_5"
-    export const TID_MODIFIER_RGB_LED_COLOR_6 = "A20_6"
-    export const TID_MODIFIER_RGB_LED_COLOR_RAINBOW = "A20_rainbow"
-    export const TID_MODIFIER_RGB_LED_COLOR_SPARKLE = "A20_sparkle"
+    export const TID_MODIFIER_RGB_LED_COLOR_X = "T181"
+    export const TID_MODIFIER_RGB_LED_COLOR_1 = "T182"
+    export const TID_MODIFIER_RGB_LED_COLOR_2 = "T183"
+    export const TID_MODIFIER_RGB_LED_COLOR_3 = "T184"
+    export const TID_MODIFIER_RGB_LED_COLOR_4 = "T185"
+    export const TID_MODIFIER_RGB_LED_COLOR_5 = "T186"
+    export const TID_MODIFIER_RGB_LED_COLOR_6 = "T187"
+    export const TID_MODIFIER_RGB_LED_COLOR_RAINBOW = "T188"
+    export const TID_MODIFIER_RGB_LED_COLOR_SPARKLE = "T189"
 
     export const TID_ACTUATOR_SERVO_SET_ANGLE = "A21_"
     export const TID_ACTUATOR_RELAY = "A22"
@@ -361,26 +361,6 @@ namespace microcode {
                 return TID_SENSOR_DISTANCE
             case Tid.TID_SENSOR_REFLECTED:
                 return TID_SENSOR_REFLECTED
-            
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_X:
-                return TID_MODIFIER_RGB_LED_COLOR_X
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_1:
-                return TID_MODIFIER_RGB_LED_COLOR_1
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_2:
-                return TID_MODIFIER_RGB_LED_COLOR_2
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_3:
-                return TID_MODIFIER_RGB_LED_COLOR_3
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_4:
-                return TID_MODIFIER_RGB_LED_COLOR_4
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_5:
-                return TID_MODIFIER_RGB_LED_COLOR_5
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_6:
-                return TID_MODIFIER_RGB_LED_COLOR_6
-
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_RAINBOW:
-                return TID_MODIFIER_RGB_LED_COLOR_RAINBOW
-            case Tid.TID_MODIFIER_RGB_LED_COLOR_SPARKLE:
-                return TID_MODIFIER_RGB_LED_COLOR_SPARKLE
 
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
                 return TID_ACTUATOR_SERVO_SET_ANGLE
