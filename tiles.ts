@@ -92,11 +92,11 @@ namespace microcode {
     export const TID_MODIFIER_PAGE_4 = "T153"
     export const TID_MODIFIER_PAGE_5 = "T154"
 
-    export const TID_MODIFIER_COIN_1 = "M6"
-    export const TID_MODIFIER_COIN_2 = "M7"
-    export const TID_MODIFIER_COIN_3 = "M8"
-    export const TID_MODIFIER_COIN_4 = "M9"
-    export const TID_MODIFIER_COIN_5 = "M10"
+    export const TID_MODIFIER_COIN_1 = "T155"
+    export const TID_MODIFIER_COIN_2 = "T156"
+    export const TID_MODIFIER_COIN_3 = "T157"
+    export const TID_MODIFIER_COIN_4 = "T158"
+    export const TID_MODIFIER_COIN_5 = "T159"
 
     export const TID_MODIFIER_ICON_EDITOR = "M15"
     export const TID_MODIFIER_COLOR_RED = "M16"
@@ -361,17 +361,6 @@ namespace microcode {
                 return TID_SENSOR_DISTANCE
             case Tid.TID_SENSOR_REFLECTED:
                 return TID_SENSOR_REFLECTED
-
-            case Tid.TID_MODIFIER_COIN_1:
-                return TID_MODIFIER_COIN_1
-            case Tid.TID_MODIFIER_COIN_2:
-                return TID_MODIFIER_COIN_2
-            case Tid.TID_MODIFIER_COIN_3:
-                return TID_MODIFIER_COIN_3
-            case Tid.TID_MODIFIER_COIN_4:
-                return TID_MODIFIER_COIN_4
-            case Tid.TID_MODIFIER_COIN_5:
-                return TID_MODIFIER_COIN_5
 
             case Tid.TID_MODIFIER_ICON_EDITOR:
                 return TID_MODIFIER_ICON_EDITOR
