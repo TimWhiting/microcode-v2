@@ -43,19 +43,19 @@ namespace microcode {
     export const TID_FILTER_COIN_3 = "T80"
     export const TID_FILTER_COIN_4 = "T81"
     export const TID_FILTER_COIN_5 = "T82"
-    export const TID_FILTER_TIMESPAN_SHORT = "F13"
-    export const TID_FILTER_TIMESPAN_LONG = "F14"
-    export const TID_FILTER_LOUD = "F15"
-    export const TID_FILTER_QUIET = "F16"
-    export const TID_FILTER_ACCEL = "F17"
-    export const TID_FILTER_ACCEL_SHAKE = "F17_shake"
-    export const TID_FILTER_ACCEL_TILT_UP = "F17_tilt_up"
-    export const TID_FILTER_ACCEL_TILT_DOWN = "F17_tilt_down"
-    export const TID_FILTER_ACCEL_TILT_LEFT = "F17_tilt_left"
-    export const TID_FILTER_ACCEL_TILT_RIGHT = "F17_tilt_right"
-    export const TID_FILTER_ACCEL_FACE_UP = "F17_face_up"
-    export const TID_FILTER_ACCEL_FACE_DOWN = "F17_face_down"
-    export const TID_FILTER_TIMESPAN_RANDOM = "F18"
+    export const TID_FILTER_TIMESPAN_SHORT = "T83"
+    export const TID_FILTER_TIMESPAN_LONG = "T84"
+    export const TID_FILTER_LOUD = "T87"
+    export const TID_FILTER_QUIET = "T88"
+    export const TID_FILTER_ACCEL = "T89"
+    export const TID_FILTER_ACCEL_SHAKE = "T90"
+    export const TID_FILTER_ACCEL_TILT_UP = "T91"
+    export const TID_FILTER_ACCEL_TILT_DOWN = "T92"
+    export const TID_FILTER_ACCEL_TILT_LEFT = "T93"
+    export const TID_FILTER_ACCEL_TILT_RIGHT = "T94"
+    export const TID_FILTER_ACCEL_FACE_UP = "T108"
+    export const TID_FILTER_ACCEL_FACE_DOWN = "T109"
+    export const TID_FILTER_TIMESPAN_RANDOM = "T85"
     export const TID_FILTER_TIMESPAN_VERY_LONG = "F19"
     export const TID_FILTER_CUP_X_READ = "F20A"
     export const TID_FILTER_CUP_Y_READ = "F20B"
@@ -362,30 +362,6 @@ namespace microcode {
             case Tid.TID_SENSOR_REFLECTED:
                 return TID_SENSOR_REFLECTED
 
-            case Tid.TID_FILTER_TIMESPAN_SHORT:
-                return TID_FILTER_TIMESPAN_SHORT
-            case Tid.TID_FILTER_TIMESPAN_LONG:
-                return TID_FILTER_TIMESPAN_LONG
-            case Tid.TID_FILTER_LOUD:
-                return TID_FILTER_LOUD
-            case Tid.TID_FILTER_QUIET:
-                return TID_FILTER_QUIET
-            case Tid.TID_FILTER_ACCEL:
-                return TID_FILTER_ACCEL
-            case Tid.TID_FILTER_ACCEL_SHAKE:
-                return TID_FILTER_ACCEL_SHAKE
-            case Tid.TID_FILTER_ACCEL_TILT_UP:
-                return TID_FILTER_ACCEL_TILT_UP
-            case Tid.TID_FILTER_ACCEL_TILT_DOWN:
-                return TID_FILTER_ACCEL_TILT_DOWN
-            case Tid.TID_FILTER_ACCEL_TILT_LEFT:
-                return TID_FILTER_ACCEL_TILT_LEFT
-            case Tid.TID_FILTER_ACCEL_FACE_DOWN:
-                return TID_FILTER_ACCEL_FACE_DOWN
-            case Tid.TID_FILTER_ACCEL_FACE_UP:
-                return TID_FILTER_ACCEL_FACE_UP
-            case Tid.TID_FILTER_ACCEL_TILT_RIGHT:
-                return TID_FILTER_ACCEL_TILT_RIGHT
             case Tid.TID_FILTER_TIMESPAN_RANDOM:
                 return TID_FILTER_TIMESPAN_RANDOM
             case Tid.TID_FILTER_TIMESPAN_VERY_LONG:
