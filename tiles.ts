@@ -6,7 +6,7 @@ namespace microcode {
 
     // Once a tid is assigned, it can NEVER BE CHANGED OR REPURPOSED.
     // Every tid must be unique in the set of all tids.
-    export const TID_SENSOR_START_PAGE = "S1"
+    export const TID_SENSOR_START_PAGE = "T10"
     export const TID_SENSOR_PRESS = "S2"
     export const TID_SENSOR_RELEASE = "S2B"
     export const TID_SENSOR_ACCELEROMETER = "S3"
@@ -353,8 +353,6 @@ namespace microcode {
 
     export function tidToString(e: Tid) {
         switch (e) {
-            case Tid.TID_SENSOR_START_PAGE:
-                return TID_SENSOR_START_PAGE
             case Tid.TID_SENSOR_PRESS:
                 return TID_SENSOR_PRESS
             case Tid.TID_SENSOR_RELEASE:
@@ -638,8 +636,8 @@ namespace microcode {
             case Tid.TID_FILTER_OFF:
                 return TID_FILTER_OFF
             default:
-                assert(false, "unknown tid: " + e)
-                return undefined
+                //  assert(false, "unknown tid: " + e)
+                return "T" + e.toString()
         }
     }
 
@@ -1243,26 +1241,6 @@ namespace microcode {
                 return 5000
             case Tid.TID_FILTER_TIMESPAN_RANDOM:
                 return -1000
-            //
-            case Tid.TID_FILTER_ACCEL_SHAKE:
-                return 0x8b
-            case Tid.TID_FILTER_ACCEL_TILT_UP:
-                return 0x81
-            case Tid.TID_FILTER_ACCEL_TILT_DOWN:
-                return 0x82
-            case Tid.TID_FILTER_ACCEL_TILT_LEFT:
-                return 0x83
-            case Tid.TID_FILTER_ACCEL_TILT_RIGHT:
-                return 0x84
-            case Tid.TID_FILTER_ACCEL_FACE_UP:
-                return 0x85
-            case Tid.TID_FILTER_ACCEL_FACE_DOWN:
-                return 0x86
-            //
-            case Tid.TID_ACTUATOR_RADIO_SEND:
-                return jacs.NumFmt.F64
-            case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
-                return jacs.NumFmt.U8
             //
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
                 return jacs.NumFmt.I32

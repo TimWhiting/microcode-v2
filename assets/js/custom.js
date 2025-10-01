@@ -418,7 +418,7 @@ addSimMessageHandler("accessibility", data => {
         value += `: ${mapAriaId("when")} `
         const whens = msg.whens
         if (whens && whens.length > 0) value += whens.map(mapAriaId).join(" ")
-        else value += mapAriaId("S1")
+        else value += mapAriaId("T10")
         value += `, ${mapAriaId("do")} `
         const dos = msg.dos
         if (dos && dos.length > 0) value += dos.map(mapAriaId).join(" ")
@@ -446,8 +446,8 @@ addSimMessageHandler("accessibility", data => {
 const clickSound =
     typeof Howl !== "undefined"
         ? new Howl({
-            src: ["./assets/sounds/click.wav", "./sounds/click.wav"],
-        })
+              src: ["./assets/sounds/click.wav", "./sounds/click.wav"],
+          })
         : undefined
 async function playClick() {
     if (speakTooltips || !clickSound) return
@@ -595,40 +595,43 @@ function showArt(jsg, samples) {
         )
         // markdown samples
         const mds = `# Samples
-${samples.map(
-            ({ label, b64, icon }) => `
+${samples
+    .map(
+        ({ label, b64, icon }) => `
 ## ${label}
 
-${icon
-                    ? `-   ![${label} icon](./images/generated/icon_sample_${norm(
-                        label
-                    )}.png){:class="icon-sample"}`
-                    : ""
-                }
+${
+    icon
+        ? `-   ![${label} icon](./images/generated/icon_sample_${norm(
+              label
+          )}.png){:class="icon-sample"}`
+        : ""
+}
 -   [Open in MicroCode](/microcode/#${compressProgram(b64)})
 
 `
-        ).join("\n")}
+    )
+    .join("\n")}
 `
         await writeText(dir, "samples.md", mds)
         // markdown docs
         const md = `## Tiles
 ${jsg
-                .filter(({ type }) => type === "icon")
-                .sort(({ name }) => name)
-                .map(
-                    ({ type, name }) => `
+    .filter(({ type }) => type === "icon")
+    .sort(({ name }) => name)
+    .map(
+        ({ type, name }) => `
 ### ![${mapAriaId(name)}](./images/generated/${norm(
-                        `${type}_${name}`
-                    )}.png){:class="icon"} \`${mapAriaId(name)}\` {#${norm(
-                        `${type}_${name}`
-                    )}}
+            `${type}_${name}`
+        )}.png){:class="icon"} \`${mapAriaId(name)}\` {#${norm(
+            `${type}_${name}`
+        )}}
 
 - ${type}
 
 `
-                )
-                .join("")}`
+    )
+    .join("")}`
         await writeText(dir, "reference.md", md)
         window.location.reload()
     }

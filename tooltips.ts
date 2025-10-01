@@ -11,7 +11,7 @@ namespace microcode {
         else if (id === "when") res = "when"
         else if (id === "do") res = "do"
         else if (id === "connect") res = "connect"
-        else if (id === "S1") res = "page start"
+        else if (id === "T10") res = "page start"
         else if (id === "S2") res = "press"
         else if (id === "S2B") res = "release"
         else if (id === "S3") res = "move"

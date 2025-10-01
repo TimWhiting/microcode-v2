@@ -7,7 +7,7 @@
     "do": "do",
     "connect": "connect",
 
-    "S1": "page start",
+    "T10": "page start",
     "S2": "press",
     "S2B": "release",
     "S3": "move",
