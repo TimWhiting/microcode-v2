@@ -35,7 +35,7 @@
     "T83": "1/4 seconde",
     "T84": "1 seconde",
     "T85": "1 willekeurige seconde",
-    "F19": "5 seconden",
+    "T86": "5 seconden",
     "T87": "luid",
     "T88": "stil",
     "T90": "schudden",
@@ -43,9 +43,9 @@
     "T92": "naar beneden kantelen",
     "T93": "naar links kantelen",
     "T94": "naar rechts kantelen",
-    "F20A": "variabele X",
-    "F20B": "variabele Y",
-    "F20C": "variabele Z",
+    "T95": "variabele X",
+    "T96": "variabele Y",
+    "T97": "variabele Z",
     "C0": "bewerken",
     "C1": "voorbeelden",
     "A1": "wijzig pagina",
@@ -115,7 +115,7 @@
     "A21_": "servo hoek instellen",
     "CAR1": "vooruit",
     "CAR5": "stop",
-    "F23L": "links",
-    "F23R": "rechts",
-    "F23N": "geen"
+    "T102": "links",
+    "T103": "rechts",
+    "T105": "geen"
 }

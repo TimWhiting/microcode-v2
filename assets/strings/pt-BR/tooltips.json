@@ -35,7 +35,7 @@
     "T83": "1/4 segundo",
     "T84": "1 segundo",
     "T85": "1 segundo aleatório",
-    "F19": "5 segundos",
+    "T86": "5 segundos",
     "T87": "alto",
     "T88": "silencioso",
     "T90": "agitar",
@@ -43,9 +43,9 @@
     "T92": "inclinar para baixo",
     "T93": "inclinar para esquerda",
     "T94": "inclinar para direita",
-    "F20A": "variável X",
-    "F20B": "variável Y",
-    "F20C": "variável Z",
+    "T95": "variável X",
+    "T96": "variável Y",
+    "T97": "variável Z",
     "C0": "editar",
     "C1": "exemplos",
     "A1": "vá para página",
@@ -115,7 +115,7 @@
     "A21_": "defina ângulo servo",
     "CAR1": "para frente",
     "CAR5": "parar",
-    "F23L": "esquerda",
-    "F23R": "direita",
-    "F23N": "nenhum"
+    "T102": "esquerda",
+    "T103": "direita",
+    "T105": "nenhum"
 }

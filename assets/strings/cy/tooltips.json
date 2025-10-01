@@ -35,7 +35,7 @@
     "T83": "1/4 ail",
     "T84": "1 ail",
     "T85": "1 ar hap yn ail",
-    "F19": "5 eiliad",
+    "T86": "5 eiliad",
     "T87": "uchel",
     "T88": "tawel",
     "T90": "ysgwyd",
@@ -43,9 +43,9 @@
     "T92": "gwyro i lawr",
     "T93": "gwyro i'r chwith",
     "T94": "gwyro i'r dde",
-    "F20A": "newidyn X",
-    "F20B": "newidyn Y",
-    "F20C": "newidyn Z",
+    "T95": "newidyn X",
+    "T96": "newidyn Y",
+    "T97": "newidyn Z",
     "C0": "golygu",
     "C1": "samplau",
     "A1": "newid tudalen",
@@ -114,7 +114,7 @@
     "A21_": "gosod ongl servo",
     "CAR1": "ymlaen",
     "CAR5": "stopio",
-    "F23L": "chwith",
-    "F23R": "dde",
-    "F23N": "dim"
+    "T102": "chwith",
+    "T103": "dde",
+    "T105": "dim"
 }

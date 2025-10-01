@@ -36,7 +36,7 @@
     "T83": "1/4 segundo",
     "T84": "1 segundo",
     "T85": "Ausazko segundu 1",
-    "F19": "5 segundo",
+    "T86": "5 segundo",
     "T87": "ozena",
     "T88": "baxu",
     "T90": "astindu",
@@ -44,9 +44,9 @@
     "T92": "beherantz makurtu",
     "T93": "okertu ezkerrerantz",
     "T94": "okertu eskuinerantz",
-    "F20A": "X aldagaia",
-    "F20B": "Y aldagaia",
-    "F20C": "Z aldagaia",
+    "T95": "X aldagaia",
+    "T96": "Y aldagaia",
+    "T97": "Z aldagaia",
     "C0": "editatu",
     "C1": "adibideak",
     "A1": "orria aldatu",
@@ -116,7 +116,7 @@
     "A21_": "serboaren angelua ezarri",
     "CAR1": "aurrera",
     "CAR5": "gelditu",
-    "F23L": "ezker",
-    "F23R": "eskuin",
-    "F23N": "bat ere ez"
+    "T102": "ezker",
+    "T103": "eskuin",
+    "T105": "bat ere ez"
 }

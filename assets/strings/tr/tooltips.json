@@ -35,7 +35,7 @@
     "T83": "1/4 saniye",
     "T84": "1 saniye",
     "T85": "1 rastgele saniye",
-    "F19": "5 saniye",
+    "T86": "5 saniye",
     "T87": "yüksek ses",
     "T88": "sessiz",
     "T90": "salla",
@@ -43,9 +43,9 @@
     "T92": "aşağı eğ",
     "T93": "sola eğin",
     "T94": "sağa eğin",
-    "F20A": "değişken X",
-    "F20B": "değişken Y",
-    "F20C": "değişken Z",
+    "T95": "değişken X",
+    "T96": "değişken Y",
+    "T97": "değişken Z",
     "C0": "düzenle",
     "C1": "örnekler",
     "A1": "geçiş sayfası",
@@ -117,7 +117,7 @@
     "CAR1": "ileri",
     "CAR5": "dur",
     "T26": "çizgi",
-    "F23L": "sol",
-    "F23R": "sağ",
-    "F23N": "hiçbiri"
+    "T102": "sol",
+    "T103": "sağ",
+    "T105": "hiçbiri"
 }

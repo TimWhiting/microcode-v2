@@ -56,20 +56,20 @@ namespace microcode {
     export const TID_FILTER_ACCEL_FACE_UP = "T108"
     export const TID_FILTER_ACCEL_FACE_DOWN = "T109"
     export const TID_FILTER_TIMESPAN_RANDOM = "T85"
-    export const TID_FILTER_TIMESPAN_VERY_LONG = "F19"
-    export const TID_FILTER_CUP_X_READ = "F20A"
-    export const TID_FILTER_CUP_Y_READ = "F20B"
-    export const TID_FILTER_CUP_Z_READ = "F20C"
-    export const TID_FILTER_ROTARY_LEFT = "F21L"
-    export const TID_FILTER_ROTARY_RIGHT = "F21R"
-    export const TID_FILTER_TEMP_WARMER = "F22U"
-    export const TID_FILTER_TEMP_COLDER = "F22D"
-    export const TID_FILTER_LINE_LEFT = "F23L"
-    export const TID_FILTER_LINE_RIGHT = "F23R"
-    export const TID_FILTER_LINE_BOTH = "F23B"
-    export const TID_FILTER_LINE_NEITHER = "F23N"
-    export const TID_FILTER_LINE_NEITHER_LEFT = "F23NL"
-    export const TID_FILTER_LINE_NEITHER_RIGHT = "F23NR"
+    export const TID_FILTER_TIMESPAN_VERY_LONG = "T86"
+    export const TID_FILTER_CUP_X_READ = "T95"
+    export const TID_FILTER_CUP_Y_READ = "T96"
+    export const TID_FILTER_CUP_Z_READ = "T97"
+    export const TID_FILTER_ROTARY_LEFT = "T98"
+    export const TID_FILTER_ROTARY_RIGHT = "T99"
+    export const TID_FILTER_TEMP_WARMER = "T100"
+    export const TID_FILTER_TEMP_COLDER = "T101"
+    export const TID_FILTER_LINE_LEFT = "T102"
+    export const TID_FILTER_LINE_RIGHT = "T103"
+    export const TID_FILTER_LINE_BOTH = "T104"
+    export const TID_FILTER_LINE_NEITHER = "T105"
+    export const TID_FILTER_LINE_NEITHER_LEFT = "T106"
+    export const TID_FILTER_LINE_NEITHER_RIGHT = "T107"
     export const TID_FILTER_ON = "F24"
     export const TID_FILTER_OFF = "F25"
 
@@ -361,37 +361,6 @@ namespace microcode {
                 return TID_SENSOR_DISTANCE
             case Tid.TID_SENSOR_REFLECTED:
                 return TID_SENSOR_REFLECTED
-
-            case Tid.TID_FILTER_TIMESPAN_RANDOM:
-                return TID_FILTER_TIMESPAN_RANDOM
-            case Tid.TID_FILTER_TIMESPAN_VERY_LONG:
-                return TID_FILTER_TIMESPAN_VERY_LONG
-            case Tid.TID_FILTER_CUP_X_READ:
-                return TID_FILTER_CUP_X_READ
-            case Tid.TID_FILTER_CUP_Y_READ:
-                return TID_FILTER_CUP_Y_READ
-            case Tid.TID_FILTER_CUP_Z_READ:
-                return TID_FILTER_CUP_Z_READ
-            case Tid.TID_FILTER_ROTARY_LEFT:
-                return TID_FILTER_ROTARY_LEFT
-            case Tid.TID_FILTER_ROTARY_RIGHT:
-                return TID_FILTER_ROTARY_RIGHT
-            case Tid.TID_FILTER_TEMP_WARMER:
-                return TID_FILTER_TEMP_WARMER
-            case Tid.TID_FILTER_TEMP_COLDER:
-                return TID_FILTER_TEMP_COLDER
-            case Tid.TID_FILTER_LINE_LEFT:
-                return TID_FILTER_LINE_LEFT
-            case Tid.TID_FILTER_LINE_RIGHT:
-                return TID_FILTER_LINE_RIGHT
-            case Tid.TID_FILTER_LINE_BOTH:
-                return TID_FILTER_LINE_BOTH
-            case Tid.TID_FILTER_LINE_NEITHER:
-                return TID_FILTER_LINE_NEITHER
-            case Tid.TID_FILTER_LINE_NEITHER_LEFT:
-                return TID_FILTER_LINE_NEITHER_LEFT
-            case Tid.TID_FILTER_LINE_NEITHER_RIGHT:
-                return TID_FILTER_LINE_NEITHER_RIGHT
 
             case Tid.TID_ACTUATOR_SWITCH_PAGE:
                 return TID_ACTUATOR_SWITCH_PAGE

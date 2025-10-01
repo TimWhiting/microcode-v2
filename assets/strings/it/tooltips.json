@@ -35,7 +35,7 @@
     "T83": "1/4 di secondo",
     "T84": "1 secondo",
     "T85": "un secondo a caso",
-    "F19": "5 secondi",
+    "T86": "5 secondi",
     "T87": "forte",
     "T88": "silenzioso",
     "T90": "scuotimento",
@@ -43,9 +43,9 @@
     "T92": "inclinato in giù",
     "T93": "inclinazione a sinistra",
     "T94": "inclinazione a destra",
-    "F20A": "variabile X",
-    "F20B": "variabile Y",
-    "F20C": "variabile Z",
+    "T95": "variabile X",
+    "T96": "variabile Y",
+    "T97": "variabile Z",
     "C0": "modifica",
     "C1": "campioni",
     "A1": "cambia pagina",
@@ -116,7 +116,7 @@
     "CAR1": "avanti",
     "CAR5": "ferma",
     "T26": "linea",
-    "F23L": "sinistra",
-    "F23R": "destra",
-    "F23N": "Nulla"
+    "T102": "sinistra",
+    "T103": "destra",
+    "T105": "Nulla"
 }

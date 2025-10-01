@@ -37,7 +37,7 @@
     "T83": "1/4 sekunde",
     "T84": "1 sekunda",
     "T85": "do 1 sekunde",
-    "F19": "5 sekundi",
+    "T86": "5 sekundi",
     "T87": "glasan",
     "T88": "tih",
     "T90": "protrese",
@@ -45,9 +45,9 @@
     "T92": "nagne unatrag",
     "T93": "nagne ulijevo",
     "T94": "nagne udesno",
-    "F20A": "varijabla X",
-    "F20B": "varijabla Y",
-    "F20C": "varijabla Z",
+    "T95": "varijabla X",
+    "T96": "varijabla Y",
+    "T97": "varijabla Z",
     "C0": "uredi",
     "C1": "primjeri",
     "A1": "prebaci na stranicu",
@@ -116,7 +116,7 @@
     "A20_sparkle": "svjetlucanje",
     "A21_": "postavi kut servo motora",
     "CAR5": "zaustavi",
-    "F23L": "lijevo",
-    "F23R": "desno",
-    "F23N": "nepoznato"
+    "T102": "lijevo",
+    "T103": "desno",
+    "T105": "nepoznato"
 }
