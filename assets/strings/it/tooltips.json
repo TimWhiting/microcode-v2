@@ -17,7 +17,7 @@
     "T19": "variabile X modificata",
     "T20": "variabile Y modificata",
     "T21": "variabile Z modificata",
-    "S10": "calamita",
+    "T22": "calamita",
     "rule": "regola",
     "add_rule": "aggiungi regola",
     "delete_rule": "cancella regola",
@@ -115,7 +115,7 @@
     "SR_OFF": "off",
     "CAR1": "avanti",
     "CAR5": "ferma",
-    "S14": "linea",
+    "T26": "linea",
     "F23L": "sinistra",
     "F23R": "destra",
     "F23N": "Nulla"

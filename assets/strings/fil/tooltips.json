@@ -17,7 +17,7 @@
     "T19": "nagbago ang variable X",
     "T20": "nagbago ang variable Y",
     "T21": "nagbago ang variable Z",
-    "S10": "magneto",
+    "T22": "magneto",
     "rule": "tuntunin",
     "add_rule": "dagdag tuntunin",
     "delete_rule": "tangalin tuntunin",

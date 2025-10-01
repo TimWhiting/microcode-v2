@@ -17,7 +17,7 @@
     "T19": "X değişkeni değiştirildi",
     "T20": "Y değişkeni değiştirildi",
     "T21": "Z değişkeni değiştirildi",
-    "S10": "mıknatıs",
+    "T22": "mıknatıs",
     "rule": "kural",
     "add_rule": "kural ekle",
     "delete_rule": "kuralı sil",
@@ -116,7 +116,7 @@
     "A21_": "servo ayar açısı",
     "CAR1": "ileri",
     "CAR5": "dur",
-    "S14": "çizgi",
+    "T26": "çizgi",
     "F23L": "sol",
     "F23R": "sağ",
     "F23N": "hiçbiri"

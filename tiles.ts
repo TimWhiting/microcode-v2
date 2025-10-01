@@ -18,11 +18,11 @@ namespace microcode {
     export const TID_SENSOR_CUP_X_WRITTEN = "T19"
     export const TID_SENSOR_CUP_Y_WRITTEN = "T20"
     export const TID_SENSOR_CUP_Z_WRITTEN = "T21"
-    export const TID_SENSOR_MAGNET = "S10"
-    export const TID_SENSOR_SLIDER = "S11"
-    export const TID_SENSOR_ROTARY = "S12"
-    export const TID_SENSOR_CAR_WALL = "S13"
-    export const TID_SENSOR_LINE = "S14"
+    export const TID_SENSOR_MAGNET = "T22"
+    export const TID_SENSOR_SLIDER = "T23"
+    export const TID_SENSOR_ROTARY = "T24"
+    export const TID_SENSOR_CAR_WALL = "T25"
+    export const TID_SENSOR_LINE = "T26"
     export const TID_SENSOR_LED_LIGHT = "S15"
     export const TID_SENSOR_MOISTURE = "S16"
     export const TID_SENSOR_DISTANCE = "S17"
@@ -355,16 +355,6 @@ namespace microcode {
         switch (e) {
             case Tid.TID_SENSOR_LED_LIGHT:
                 return TID_SENSOR_LED_LIGHT
-            case Tid.TID_SENSOR_MAGNET:
-                return TID_SENSOR_MAGNET
-            case Tid.TID_SENSOR_SLIDER:
-                return TID_SENSOR_SLIDER
-            case Tid.TID_SENSOR_ROTARY:
-                return TID_SENSOR_ROTARY
-            case Tid.TID_SENSOR_CAR_WALL:
-                return TID_SENSOR_CAR_WALL
-            case Tid.TID_SENSOR_LINE:
-                return TID_SENSOR_LINE
             case Tid.TID_SENSOR_MOISTURE:
                 return TID_SENSOR_MOISTURE
             case Tid.TID_SENSOR_DISTANCE:
