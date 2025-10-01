@@ -8,7 +8,7 @@
         "microphone": "*",
         "datalogger": "*",
         "settings": "*",
-        "user-interface-base": "github:microbit-apps/user-interface-base#v0.0.23"
+        "user-interface-base": "github:microbit-apps/user-interface-base#v0.0.24"
     },
     "files": [
         "analytics.ts",

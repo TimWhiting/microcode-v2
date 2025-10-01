@@ -41,7 +41,7 @@ namespace microcode {
         getField(): any {
             return null
         }
-        getIcon(): string | Bitmap {
+        getIcon(): string | number | Bitmap {
             return null
         }
         getNewInstance(field: any = null): ModifierEditor {
@@ -121,7 +121,7 @@ namespace microcode {
             return this.field
         }
 
-        getIcon(): string | Bitmap {
+        getIcon(): string | number | Bitmap {
             return this.firstInstance
                 ? getIcon(Tid.TID_MODIFIER_ICON_EDITOR)
                 : this.fieldEditor.toImage(this.field)
@@ -230,7 +230,7 @@ namespace microcode {
             return this.field
         }
 
-        getIcon(): string | Bitmap {
+        getIcon(): string | number | Bitmap {
             return this.firstInstance
                 ? getIcon(Tid.TID_MODIFIER_MELODY_EDITOR)
                 : this.fieldEditor.toImage(this.field)
@@ -297,7 +297,9 @@ namespace microcode {
         picker.show(
             {
                 width: 5,
-                title: accessibility.ariaToTooltip(TID_MODIFIER_ICON_EDITOR),
+                title: accessibility.ariaToTooltip(
+                    tidToString(Tid.TID_MODIFIER_ICON_EDITOR)
+                ),
                 onClick: (index: number) => {
                     let row = Math.idiv(index, 5)
                     let col = index % 5
@@ -344,7 +346,9 @@ namespace microcode {
         picker.show(
             {
                 width: MELODY_LENGTH,
-                title: accessibility.ariaToTooltip(TID_MODIFIER_MELODY_EDITOR),
+                title: accessibility.ariaToTooltip(
+                    tidToString(Tid.TID_MODIFIER_MELODY_EDITOR)
+                ),
                 onClick: index => {
                     let row = Math.idiv(index, MELODY_LENGTH)
                     let col = index % MELODY_LENGTH

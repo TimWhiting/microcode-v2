@@ -73,7 +73,7 @@ namespace microcode {
 
     export function getIcon(tile: Tile) {
         if (tile instanceof ModifierEditor) return tile.getIcon()
-        return tidToString(tile)
+        return tile
     }
 
     export type RuleRep = { [name: string]: Tile[] }
