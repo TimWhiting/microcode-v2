@@ -38,11 +38,11 @@ namespace microcode {
     export const TID_FILTER_KITA_KEY_2 = "T76"
 
     export const TID_FILTER_LOGO = "T77"
-    export const TID_FILTER_COIN_1 = "F8"
-    export const TID_FILTER_COIN_2 = "F9"
-    export const TID_FILTER_COIN_3 = "F10"
-    export const TID_FILTER_COIN_4 = "F11"
-    export const TID_FILTER_COIN_5 = "F12"
+    export const TID_FILTER_COIN_1 = "T78"
+    export const TID_FILTER_COIN_2 = "T79"
+    export const TID_FILTER_COIN_3 = "T80"
+    export const TID_FILTER_COIN_4 = "T81"
+    export const TID_FILTER_COIN_5 = "T82"
     export const TID_FILTER_TIMESPAN_SHORT = "F13"
     export const TID_FILTER_TIMESPAN_LONG = "F14"
     export const TID_FILTER_LOUD = "F15"
@@ -362,16 +362,6 @@ namespace microcode {
             case Tid.TID_SENSOR_REFLECTED:
                 return TID_SENSOR_REFLECTED
 
-            case Tid.TID_FILTER_COIN_1:
-                return TID_FILTER_COIN_1
-            case Tid.TID_FILTER_COIN_2:
-                return TID_FILTER_COIN_2
-            case Tid.TID_FILTER_COIN_3:
-                return TID_FILTER_COIN_3
-            case Tid.TID_FILTER_COIN_4:
-                return TID_FILTER_COIN_4
-            case Tid.TID_FILTER_COIN_5:
-                return TID_FILTER_COIN_5
             case Tid.TID_FILTER_TIMESPAN_SHORT:
                 return TID_FILTER_TIMESPAN_SHORT
             case Tid.TID_FILTER_TIMESPAN_LONG:
