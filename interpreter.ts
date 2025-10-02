@@ -511,9 +511,9 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         1: Tid.TID_FILTER_BUTTON_A, // DAL.DEVICE_ID_BUTTON_A
         2: Tid.TID_FILTER_BUTTON_B, // DAL.DEVICE_ID_BUTTON_B
         121: Tid.TID_FILTER_LOGO, // DAL.MICROBIT_ID_LOGO
-        100: Tid.TID_FILTER_PIN_0, // DAL.DEVICE_ID_IO_P0
-        101: Tid.TID_FILTER_PIN_1, // DAL.DEVICE_ID_IO_P1
-        102: Tid.TID_FILTER_PIN_2, // DAL.DEVICE_ID_IO_P2
+        100: Tid.TID_FILTER_PIN_0, // DAL.ID_PIN_P0
+        101: Tid.TID_FILTER_PIN_1, // DAL.ID_PIN_P1
+        102: Tid.TID_FILTER_PIN_2, // DAL.ID_PIN_P2
     }
 
     const matchAccelerometerTable: IdMap = {
