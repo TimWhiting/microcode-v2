@@ -1022,20 +1022,4 @@ namespace microcode {
         }
     }
     */
-
-    // export function serviceCommandArg(tile: Tile): string | Buffer {
-    //     if (tile instanceof ModifierEditor) return tile.serviceCommandArg()
-    //     const ret = jdParam(tile)
-    //     if (typeof ret == "string") return ret
-    //     return undefined
-    // }
-
-    export function serviceIndex(tile: Tile) {
-        const tid = getTid(tile)
-        // these are special cases where we have multiple
-        // instances of the same service
-        if (tid == Tid.TID_SENSOR_LIGHT) return 1
-        // default index is 0
-        return 0
-    }
 }
