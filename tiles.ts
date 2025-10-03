@@ -536,7 +536,12 @@ namespace microcode {
                 // return { allow: only5 }
                 return { allow: ["on_off_event"] }
             case Tid.TID_SENSOR_MICROPHONE:
-                return { allow: only5.concat([Tid.TID_FILTER_LOUD]) }
+                return {
+                    allow: only5.concat([
+                        Tid.TID_FILTER_LOUD,
+                        Tid.TID_FILTER_QUIET,
+                    ]),
+                }
             case Tid.TID_SENSOR_TEMP:
                 return { allow: ["temperature_event"] }
             case Tid.TID_SENSOR_ROTARY:

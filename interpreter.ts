@@ -657,22 +657,28 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                         r.filters[0] == matchPressReleaseTable[src]
                 } else if (
                     r.sensor == Tid.TID_SENSOR_ACCELEROMETER &&
-                    ev == DAL.DEVICE_ID_ACCELEROMETER
+                    src == DAL.DEVICE_ID_ACCELEROMETER
                 ) {
                     match =
                         r.filters.length == 0 ||
                         r.filters[0] == matchAccelerometerTable[ev]
                 } else if (
                     r.sensor == Tid.TID_SENSOR_RADIO_RECEIVE &&
-                    ev == DAL.DEVICE_ID_RADIO
+                    src == DAL.DEVICE_ID_RADIO
                 ) {
                     this.state["z_radio"] = radio.receiveNumber()
                     match = rc.matchWhen("z_radio")
                 } else if (
                     r.sensor == Tid.TID_SENSOR_MICROPHONE &&
-                    ev == DAL.DEVICE_ID_MICROPHONE
+                    src == DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR
                 ) {
-                    // TODO: check for loud/soft event
+                    match =
+                        ((r.filters.length == 0 ||
+                            r.filters[0] == Tid.TID_FILTER_LOUD) &&
+                            ev == DAL.LEVEL_THRESHOLD_HIGH) ||
+                        (r.filters.length == 1 &&
+                            r.filters[0] == Tid.TID_FILTER_QUIET &&
+                            ev == DAL.LEVEL_THRESHOLD_LOW)
                 }
                 if (match) activeRules.push(rc)
             })

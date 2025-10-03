@@ -205,7 +205,8 @@ namespace microcode {
                 return icondb.tile_timespan_fiveSeconds
             if (name == Tid.TID_FILTER_TIMESPAN_RANDOM)
                 return icondb.tile_timespan_random
-            if (name == Tid.TID_FILTER_LOUD) return icondb.speaker
+            if (name == Tid.TID_FILTER_LOUD) return icondb.speakerFun
+            if (name == Tid.TID_FILTER_QUIET) return icondb.speakerSoft
             if (name == Tid.TID_FILTER_TEMP_WARMER) return icondb.temp_warmer
             if (name == Tid.TID_FILTER_TEMP_COLDER) return icondb.temp_colder
             if (name == Tid.TID_FILTER_ACCEL_SHAKE) return icondb.moveShake
@@ -1576,19 +1577,19 @@ namespace icondb {
 . . . . . . . . . . . . . 4 4 .
 `
 
-    export const speaker = bmp`
+    export const speakerSoft = bmp`
 . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . .
 . . . . . c . . . . . . . . . .
-. . . . c b . . . . . 8 . . . .
-. . . c b c . . . 8 . . 8 . . .
-. c c b c c . 8 . . 8 . 8 . . .
-. b b c c c . . 8 . 8 . 8 . . .
-. c c c c c . . 8 . 8 . 8 . . .
-. c c c c c . 8 . . 8 . 8 . . .
-. . . c c c . . . 8 . . 8 . . .
-. . . . c c . . . . . 8 . . . .
+. . . . c b . . . . . . . . . .
+. . . c b c . . . . . . . . . .
+. c c b c c . 8 . . . . . . . .
+. b b c c c . . 8 . . . . . . .
+. c c c c c . . 8 . . . . . . .
+. c c c c c . 8 . . . . . . . .
+. . . c c c . . . . . . . . . .
+. . . . c c . . . . . . . . . .
 . . . . . c . . . . . . . . . .
 . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . .
@@ -3288,6 +3289,43 @@ bffffffffffffffffffffffffffffffb
     . . . . . . . . . . . . . 5 5 4
     . . . . . . . . . . . . . 4 4 .
 `
+    export const loud = bmp`
+. . . . . . . . . . . . . . . .
+. 2 2 2 2 2 2 2 2 2 2 2 2 2 2 .
+. 2 f f 2 2 2 2 2 2 f f f 2 2 .
+. 2 f f 2 2 2 2 2 f f 2 f f 2 .
+. 2 f f 2 2 2 2 2 f 2 2 2 f 2 .
+. 2 f f 2 2 2 2 2 f f 2 f f 2 .
+. 2 f f f f 2 2 2 2 f f f 2 2 .
+. 2 2 2 2 2 2 2 2 2 2 2 2 2 2 .
+. 2 2 2 2 2 2 2 2 2 2 2 2 2 2 .
+. 2 f f 2 2 f 2 2 f f f f 2 2 .
+. 2 f f 2 2 f 2 2 f f 2 2 f 2 .
+. 2 f f 2 2 f 2 2 f f 2 2 f 2 .
+. 2 f f 2 2 f 2 2 f f 2 2 f 2 .
+. 2 2 f f f 2 2 2 f f f f 2 2 .
+. 2 2 2 2 2 2 2 2 2 2 2 2 2 2 .
+. . . . . . . . . . . . . . . .
+`
+
+    export const quiet = bmp`
+9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+9 9 9 9 1 1 1 9 9 9 9 9 9 9 1 9
+9 9 9 1 1 1 1 1 9 9 1 1 1 9 9 9
+9 9 1 1 1 1 1 1 9 9 9 1 1 1 9 9
+9 9 9 9 1 1 9 9 9 9 9 9 1 1 1 9
+9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+9 9 9 9 9 9 9 1 1 1 1 9 9 9 9 9
+9 9 9 9 9 9 9 9 1 1 1 9 9 9 9 9
+9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+9 9 9 7 7 7 7 7 7 9 9 9 9 9 9 9
+7 7 7 7 7 7 7 7 7 7 7 9 9 9 7 7
+7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+`
 
     /* maybe use these later
     export const rc_high = bmp`
@@ -3362,43 +3400,6 @@ bffffffffffffffffffffffffffffffb
         . . . . . . . . . . . . . . . .
         . . . . . . . . . . . . . . . .
     `
-    export const loud = bmp`
-. . . . . . . . . . . . . . . .
-. 2 2 2 2 2 2 2 2 2 2 2 2 2 2 .
-. 2 f f 2 2 2 2 2 2 f f f 2 2 .
-. 2 f f 2 2 2 2 2 f f 2 f f 2 .
-. 2 f f 2 2 2 2 2 f 2 2 2 f 2 .
-. 2 f f 2 2 2 2 2 f f 2 f f 2 .
-. 2 f f f f 2 2 2 2 f f f 2 2 .
-. 2 2 2 2 2 2 2 2 2 2 2 2 2 2 .
-. 2 2 2 2 2 2 2 2 2 2 2 2 2 2 .
-. 2 f f 2 2 f 2 2 f f f f 2 2 .
-. 2 f f 2 2 f 2 2 f f 2 2 f 2 .
-. 2 f f 2 2 f 2 2 f f 2 2 f 2 .
-. 2 f f 2 2 f 2 2 f f 2 2 f 2 .
-. 2 2 f f f 2 2 2 f f f f 2 2 .
-. 2 2 2 2 2 2 2 2 2 2 2 2 2 2 .
-. . . . . . . . . . . . . . . .
-`
-
-    export const quiet = img`
-9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
-9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
-9 9 9 9 1 1 1 9 9 9 9 9 9 9 1 9
-9 9 9 1 1 1 1 1 9 9 1 1 1 9 9 9
-9 9 1 1 1 1 1 1 9 9 9 1 1 1 9 9
-9 9 9 9 1 1 9 9 9 9 9 9 1 1 1 9
-9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
-9 9 9 9 9 9 9 1 1 1 1 9 9 9 9 9
-9 9 9 9 9 9 9 9 1 1 1 9 9 9 9 9
-9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
-9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
-9 9 9 7 7 7 7 7 7 9 9 9 9 9 9 9
-7 7 7 7 7 7 7 7 7 7 7 9 9 9 7 7
-7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-`
 
     */
 }
