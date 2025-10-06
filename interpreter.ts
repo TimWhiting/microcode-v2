@@ -200,7 +200,7 @@ namespace microcode {
             this.loopIndex = 0
         }
 
-        public matchWhen(sensorName: string): boolean {
+        public matchWhen(sensorName: string, event = 0): boolean {
             // evaluate the condition associated with the rule, if any
             const sensor = this.rule.sensor
             if (jdKind(sensor) == JdKind.Variable) {
@@ -210,28 +210,17 @@ namespace microcode {
             } else if (jdKind(sensor) == JdKind.Radio) {
                 // TODO: lots of radio logic to bring over
             } else {
-                const eventCode = this.lookupEventCode()
-                if (
-                    eventCode &&
-                    (this.rule.filters.length == 0 || this.hasFilterEvent())
-                ) {
-                    // TODO: need to check eventCode against received event...
-                } else {
-                    const thisSensorName = tidToSensor(sensor)
-                    return (
-                        sensorName == thisSensorName &&
-                        this.filterValueIn(this.interp.state[sensorName])
-                    )
+                const thisSensorName = tidToSensor(sensor)
+                if (sensorName == thisSensorName) {
+                    const eventCode = this.lookupEventCode()
+                    if (eventCode) {
+                        return event == eventCode
+                    } else {
+                        return this.filterValueIn(this.interp.state[sensorName])
+                    }
                 }
             }
             return false
-        }
-
-        private hasFilterEvent() {
-            return this.rule.filters.some(f => {
-                const k = jdKind(f)
-                return k == JdKind.EventCode
-            })
         }
 
         private filterValueIn(f: number) {
@@ -243,8 +232,8 @@ namespace microcode {
         private lookupEventCode() {
             const sensor = this.rule.sensor
             // get default event for sensor, if exists
-            let evCode = eventCode(sensor)
-            if (evCode != undefined) {
+            let evCode = defaultEventCode(sensor)
+            if (evCode) {
                 // override if user specifies event code
                 for (const m of this.rule.filters)
                     if (jdKind(m) == JdKind.EventCode) {
@@ -552,11 +541,10 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             const keyTid = sensorInfo[k].tid
             if (tid == keyTid) result = k
         })
-        console.log(`key = ${result}, tid = ${tid}`)
         return result
     }
 
-    enum SensorChange {
+    export enum SensorChange {
         Up,
         Down,
     }
@@ -642,7 +630,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             }
         }
 
-        private onMicrobitEvent(src: number, ev: number) {
+        private onMicrobitEvent(src: number, ev: number = -1) {
             if (!this.running) return
             // see if any rule matches
             const activeRules: RuleClosure[] = []
@@ -710,7 +698,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             // see if any rule matches
             const activeRules: RuleClosure[] = []
             this.ruleClosures.forEach(rc => {
-                if (rc.matchWhen(name)) activeRules.push(rc)
+                if (rc.matchWhen(name, change)) activeRules.push(rc)
             })
             this.processNewActiveRules(activeRules)
         }

@@ -769,20 +769,18 @@ namespace microcode {
             //
             case Tid.TID_FILTER_ROTARY_LEFT:
             case Tid.TID_FILTER_TEMP_COLDER:
-            case Tid.TID_FILTER_LOUD:
             case Tid.TID_FILTER_OFF:
-                return 1
+                return SensorChange.Down
             //
             case Tid.TID_FILTER_ROTARY_RIGHT:
             case Tid.TID_FILTER_TEMP_WARMER:
-            case Tid.TID_FILTER_QUIET:
             case Tid.TID_FILTER_ON:
-                return 2
+                return SensorChange.Up
             //
             case Tid.TID_MODIFIER_ON:
-                return 0x00000001
+                return SensorChange.Up
             case Tid.TID_MODIFIER_OFF:
-                return 0x00000000
+                return SensorChange.Down
             //
             case Tid.TID_FILTER_LINE_BOTH:
                 return robot.robots.RobotCompactCommand.LineBoth
@@ -889,25 +887,13 @@ namespace microcode {
     }
 
     // Jacdac event codes
-    export function eventCode(tile: Tile) {
+    export function defaultEventCode(tile: Tile) {
         const tid = getTid(tile)
         switch (tid) {
             case Tid.TID_SENSOR_TEMP:
-            case Tid.TID_FILTER_QUIET:
-            case Tid.TID_SENSOR_RELEASE:
-                return 2
-            case Tid.TID_SENSOR_LINE:
-            case Tid.TID_SENSOR_CAR_WALL:
-            case Tid.TID_SENSOR_RADIO_RECEIVE:
-                return 0x91
-            case Tid.TID_SENSOR_MICROPHONE:
-            case Tid.TID_SENSOR_ROTARY:
-            case Tid.TID_FILTER_LOUD:
-            case Tid.TID_SENSOR_PRESS:
+            case Tid.TID_SENSOR_LINE: // TODO: generalize from Jacdac
             case Tid.TID_SENSOR_REFLECTED:
-                return 1
-            case Tid.TID_SENSOR_ACCELEROMETER:
-                return 0x8b
+                return SensorChange.Up
             default:
                 return undefined
         }
