@@ -696,6 +696,12 @@ namespace microcode {
             case Tid.TID_FILTER_QUIET:
             case Tid.TID_FILTER_ON:
             case Tid.TID_FILTER_OFF:
+            case Tid.TID_FILTER_BUTTON_A:
+            case Tid.TID_FILTER_BUTTON_B:
+            case Tid.TID_FILTER_LOGO:
+            case Tid.TID_FILTER_PIN_0:
+            case Tid.TID_FILTER_PIN_1:
+            case Tid.TID_FILTER_PIN_2:
                 return JdKind.EventCode
             case Tid.TID_ACTUATOR_PAINT:
             case Tid.TID_ACTUATOR_SPEAKER:
@@ -735,21 +741,12 @@ namespace microcode {
         if (isCarModifier(tid)) return jacs.NumFmt.F64
         switch (tid) {
             case Tid.TID_FILTER_BUTTON_A:
-                return 0
             case Tid.TID_FILTER_BUTTON_B:
-                return 1
             case Tid.TID_FILTER_LOGO:
-                return 2
             case Tid.TID_FILTER_PIN_0:
-                return 3
             case Tid.TID_FILTER_PIN_1:
-                return 4
             case Tid.TID_FILTER_PIN_2:
-                return 5
-            case Tid.TID_FILTER_KITA_KEY_1:
-                return 6
-            case Tid.TID_FILTER_KITA_KEY_2:
-                return 7
+                return tid
             //
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
@@ -898,6 +895,7 @@ namespace microcode {
             case Tid.TID_SENSOR_ACCELEROMETER:
             case Tid.TID_SENSOR_PRESS:
             case Tid.TID_SENSOR_RELEASE:
+            case Tid.TID_SENSOR_RADIO_RECEIVE:
                 return -1 // any
             default:
                 return undefined

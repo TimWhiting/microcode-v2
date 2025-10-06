@@ -154,7 +154,7 @@ namespace microcode {
                     const eventCode = this.lookupEventCode()
                     console.log(`match ${sensor} ${event} ${eventCode}`)
                     if (eventCode) {
-                        return event == -1 || event == eventCode
+                        return eventCode == -1 || event == eventCode
                     } else {
                         return this.filterValueIn(event)
                     }
@@ -548,12 +548,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 const r = rc.rule
                 let match = false
                 if (
-                    r.sensor == Tid.TID_SENSOR_RADIO_RECEIVE &&
-                    src == DAL.DEVICE_ID_RADIO
-                ) {
-                    this.state["z_radio"] = radio.receiveNumber()
-                    match = rc.matchWhen("z_radio")
-                } else if (
                     r.sensor == Tid.TID_SENSOR_MICROPHONE &&
                     src == DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR
                 ) {
@@ -874,7 +868,12 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     )
 
     radio.onReceivedNumber(radioNum => {
-        if (theInterpreter)
-            theInterpreter.onMicrobitEvent(DAL.DEVICE_ID_RADIO, radioNum)
+        if (theInterpreter) {
+            theInterpreter.state["z_radio"] = radioNum
+            theInterpreter.onMicrobitEvent(
+                Tid.TID_SENSOR_RADIO_RECEIVE,
+                radioNum
+            )
+        }
     })
 }
