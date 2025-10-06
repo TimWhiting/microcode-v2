@@ -739,15 +739,8 @@ namespace microcode {
         if (isPage(tid)) return tid - Tid.TID_MODIFIER_PAGE_1 + 1
         if (isLedColor(tid)) return "led_solid"
         if (isCarModifier(tid)) return jacs.NumFmt.F64
+        if (isAccelerometerEvent(tid) || isPressReleaseEvent(tid)) return tid
         switch (tid) {
-            case Tid.TID_FILTER_BUTTON_A:
-            case Tid.TID_FILTER_BUTTON_B:
-            case Tid.TID_FILTER_LOGO:
-            case Tid.TID_FILTER_PIN_0:
-            case Tid.TID_FILTER_PIN_1:
-            case Tid.TID_FILTER_PIN_2:
-                return tid
-            //
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
             case Tid.TID_FILTER_CUP_X_READ:

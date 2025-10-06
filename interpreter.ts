@@ -1,5 +1,6 @@
 // not working
 // - rock paper scissors, shake event not recognized in sim
+// - 91 event code?
 
 namespace microcode {
     // an interpreter for ProgramDefn
@@ -787,6 +788,11 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     }
 
     // ----------------------------------------------------------------
+    // TODO: Runtime Host
+    // - we will want to have a Host interface for the runtime
+    // - which will make it easier to do unit tests with a mock runtime
+    // ----------------------------------------------------------------
+
     // mapping of micro:bit and DAL namespace into MicroCode tiles
 
     // see DAL for these values
