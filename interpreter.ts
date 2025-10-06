@@ -1,5 +1,10 @@
+// not working
+// - rock paper scissors, shake event not recognized in sim
+
 namespace microcode {
     // an interpreter for ProgramDefn
+
+    control.singleSimulator()
 
     // make sure we have V2 simulator
     input.onLogoEvent(TouchButtonEvent.Pressed, function () {})
@@ -495,13 +500,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             emitClearScreen()
             this.running = true
             this.switchPage(0)
-
-            buttons.forEach(b => {
-                control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
-                    this.onMicrobitEvent(b, control.eventValue())
-                })
-            })
-
             this.startSensors()
         }
 
@@ -559,7 +557,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             }
         }
 
-        private onMicrobitEvent(src: number, ev: number = -1) {
+        public onMicrobitEvent(src: number, ev: number = -1) {
             if (!this.running) return
             // see if any rule matches
             const activeRules: RuleClosure[] = []
@@ -579,6 +577,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     r.sensor == Tid.TID_SENSOR_ACCELEROMETER &&
                     src == DAL.DEVICE_ID_ACCELEROMETER
                 ) {
+                    // not working in sim
+                    console.log(`accel = ${ev}`)
                     match =
                         r.filters.length == 0 ||
                         r.filters[0] == matchAccelerometerTable[ev]
@@ -823,4 +823,41 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         if (theInterpreter) theInterpreter.stop()
         theInterpreter = undefined
     }
+
+    // wire up the micro:bit to the interpreter, outside to
+    // prevent accumulation of event handlers
+    buttons.forEach(b => {
+        // TODO: garbage collection of these? otherwise they will
+        // TODO: accumulate. Best to put outside Interp
+        control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
+            if (theInterpreter)
+                theInterpreter.onMicrobitEvent(b, control.eventValue())
+        })
+    })
+
+    // need this only for the simulator
+    input.onGesture(Gesture.Shake, () => {
+        if (theInterpreter)
+            theInterpreter.onMicrobitEvent(
+                DAL.DEVICE_ID_ACCELEROMETER,
+                Gesture.Shake
+            )
+    })
+
+    // handle all other accelerometer events
+    control.onEvent(DAL.DEVICE_ID_ACCELEROMETER, DAL.DEVICE_EVT_ANY, () => {
+        if (theInterpreter && control.eventValue() != Gesture.Shake)
+            theInterpreter.onMicrobitEvent(
+                DAL.DEVICE_ID_ACCELEROMETER,
+                control.eventValue()
+            )
+    })
+
+    // TODO
+    control.onEvent(DAL.DEVICE_ID_MICROPHONE, DAL.DEVICE_EVT_ANY, () => {})
+
+    radio.onReceivedNumber(radioNum => {
+        if (theInterpreter)
+            theInterpreter.onMicrobitEvent(DAL.DEVICE_ID_RADIO, radioNum)
+    })
 }
