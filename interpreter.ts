@@ -1,7 +1,3 @@
-// not working
-// - rock paper scissors, shake event not recognized in sim
-// - 91 event code?
-
 namespace microcode {
     // an interpreter for ProgramDefn
 
@@ -296,6 +292,7 @@ namespace microcode {
                     this.interp.updateResource(
                         OutputResource.RadioSend,
                         this.index,
+                        // TODO: need to put this stuff in RuntimeHost
                         () => radio.sendNumber(v)
                     )
                     this.actionRunning = false
@@ -539,35 +536,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             }
         }
 
-        // TODO: this should be unified with notifySensorChange,
-        // TODO: by moving DAL specific stuff out of the interpreter
-        public onMicrobitEvent(src: number, ev: number = -1) {
-            if (!src || !this.running) return
-            // see if any rule matches
-            const activeRules: RuleClosure[] = []
-            this.ruleClosures.forEach(rc => {
-                const r = rc.rule
-                let match = false
-                if (
-                    r.sensor == Tid.TID_SENSOR_MICROPHONE &&
-                    src == DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR
-                ) {
-                    match =
-                        ((r.filters.length == 0 ||
-                            r.filters[0] == Tid.TID_FILTER_LOUD) &&
-                            ev == DAL.LEVEL_THRESHOLD_HIGH) ||
-                        (r.filters.length == 1 &&
-                            r.filters[0] == Tid.TID_FILTER_QUIET &&
-                            ev == DAL.LEVEL_THRESHOLD_LOW)
-                } else {
-                    // generic handling
-                    match = rc.matchWhen(src, ev)
-                }
-                if (match) activeRules.push(rc)
-            })
-            this.processNewActiveRules(activeRules)
-        }
-
         private processNewActiveRules(activeRules: RuleClosure[]) {
             this.activeRuleStepped = 0
             this.activeRuleCount = this.ruleClosures.filter(rc =>
@@ -577,6 +545,17 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 r.kill()
                 r.runDoSection()
             })
+        }
+
+        // the following two methods could be unified
+        public onMicrobitEvent(src: number, ev: number = -1) {
+            if (!src || !this.running) return
+            // see if any rule matches
+            const activeRules: RuleClosure[] = []
+            this.ruleClosures.forEach(rc => {
+                if (rc.matchWhen(src, ev)) activeRules.push(rc)
+            })
+            this.processNewActiveRules(activeRules)
         }
 
         private notifySensorChange(
@@ -861,15 +840,22 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     })
 
     // microphone events
+    // TODO: move logic out of Interpreter
     control.onEvent(
         DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
         DAL.DEVICE_EVT_ANY,
         () => {
-            if (theInterpreter)
+            if (theInterpreter) {
+                const ev = control.eventValue()
                 theInterpreter.onMicrobitEvent(
-                    DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
-                    control.eventValue()
+                    Tid.TID_SENSOR_MICROPHONE,
+                    ev == DAL.LEVEL_THRESHOLD_HIGH
+                        ? Tid.TID_FILTER_LOUD
+                        : ev == DAL.LEVEL_THRESHOLD_LOW
+                        ? Tid.TID_FILTER_QUIET
+                        : undefined
                 )
+            }
         }
     )
 
