@@ -107,7 +107,7 @@ namespace microcode {
             this.loopIndex = 0
         }
 
-        public matchWhen(sensorName: string, event = 0): boolean {
+        public matchWhen(sensorName: string | number, event = 0): boolean {
             const sensor = this.rule.sensor
             if (jdKind(sensor) == JdKind.Variable) {
                 const pipeId = jdParam(sensor)
@@ -432,35 +432,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
 
     type IdMap = { [id: number]: number }
 
-    // see DAL for these values
-    const matchPressReleaseTable: IdMap = {
-        1: Tid.TID_FILTER_BUTTON_A, // DAL.DEVICE_ID_BUTTON_A
-        2: Tid.TID_FILTER_BUTTON_B, // DAL.DEVICE_ID_BUTTON_B
-        121: Tid.TID_FILTER_LOGO, // DAL.MICROBIT_ID_LOGO
-        100: Tid.TID_FILTER_PIN_0, // DAL.ID_PIN_P0
-        101: Tid.TID_FILTER_PIN_1, // DAL.ID_PIN_P1
-        102: Tid.TID_FILTER_PIN_2, // DAL.ID_PIN_P2
-    }
-
-    const matchAccelerometerTable: IdMap = {
-        11: Tid.TID_FILTER_ACCEL_SHAKE,
-        1: Tid.TID_FILTER_ACCEL_TILT_UP,
-        2: Tid.TID_FILTER_ACCEL_TILT_DOWN,
-        3: Tid.TID_FILTER_ACCEL_TILT_LEFT,
-        4: Tid.TID_FILTER_ACCEL_TILT_RIGHT,
-        5: Tid.TID_FILTER_ACCEL_FACE_UP,
-        6: Tid.TID_FILTER_ACCEL_FACE_DOWN,
-    }
-
-    const buttons = [
-        DAL.DEVICE_ID_BUTTON_A,
-        DAL.DEVICE_ID_BUTTON_B,
-        DAL.MICROBIT_ID_LOGO,
-        DAL.ID_PIN_P0,
-        DAL.ID_PIN_P1,
-        DAL.ID_PIN_P2,
-    ]
-
     type SensorMap = { [id: string]: { normalized: boolean; tid: number } }
     const sensorInfo: SensorMap = {
         Light: { normalized: true, tid: Tid.TID_SENSOR_LED_LIGHT },
@@ -557,6 +528,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             }
         }
 
+        // TODO: this should be unified with notifySensorChange,
+        // TODO: by moving DAL specific stuff out of the interpreter
         public onMicrobitEvent(src: number, ev: number = -1) {
             if (!this.running) return
             // see if any rule matches
@@ -824,11 +797,45 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         theInterpreter = undefined
     }
 
+    // ----------------------------------------------------------------
+    // mapping of micro:bit and DAL namespace into MicroCode tiles
+
+    // see DAL for these values
+    const matchPressReleaseTable: IdMap = {
+        1: Tid.TID_FILTER_BUTTON_A, // DAL.DEVICE_ID_BUTTON_A
+        2: Tid.TID_FILTER_BUTTON_B, // DAL.DEVICE_ID_BUTTON_B
+        121: Tid.TID_FILTER_LOGO, // DAL.MICROBIT_ID_LOGO
+        100: Tid.TID_FILTER_PIN_0, // DAL.ID_PIN_P0
+        101: Tid.TID_FILTER_PIN_1, // DAL.ID_PIN_P1
+        102: Tid.TID_FILTER_PIN_2, // DAL.ID_PIN_P2
+    }
+
+    const matchAccelerometerTable: IdMap = {
+        11: Tid.TID_FILTER_ACCEL_SHAKE,
+        1: Tid.TID_FILTER_ACCEL_TILT_UP,
+        2: Tid.TID_FILTER_ACCEL_TILT_DOWN,
+        3: Tid.TID_FILTER_ACCEL_TILT_LEFT,
+        4: Tid.TID_FILTER_ACCEL_TILT_RIGHT,
+        5: Tid.TID_FILTER_ACCEL_FACE_UP,
+        6: Tid.TID_FILTER_ACCEL_FACE_DOWN,
+    }
+
+    const buttons = [
+        DAL.DEVICE_ID_BUTTON_A,
+        DAL.DEVICE_ID_BUTTON_B,
+        DAL.MICROBIT_ID_LOGO,
+        DAL.ID_PIN_P0,
+        DAL.ID_PIN_P1,
+        DAL.ID_PIN_P2,
+    ]
+
     // wire up the micro:bit to the interpreter, outside to
     // prevent accumulation of event handlers
+
     buttons.forEach(b => {
-        // TODO: garbage collection of these? otherwise they will
-        // TODO: accumulate. Best to put outside Interp
+        // TODO: could do translate of DAL into Tid space here
+        // TODO: since we know the DAL device; this way the interp
+        // TODO: doesn't need to know about micro:bit events...
         control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
             if (theInterpreter)
                 theInterpreter.onMicrobitEvent(b, control.eventValue())
@@ -853,8 +860,18 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             )
     })
 
-    // TODO
-    control.onEvent(DAL.DEVICE_ID_MICROPHONE, DAL.DEVICE_EVT_ANY, () => {})
+    // microphone events
+    control.onEvent(
+        DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
+        DAL.DEVICE_EVT_ANY,
+        () => {
+            if (theInterpreter)
+                theInterpreter.onMicrobitEvent(
+                    DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
+                    control.eventValue()
+                )
+        }
+    )
 
     radio.onReceivedNumber(radioNum => {
         if (theInterpreter)
