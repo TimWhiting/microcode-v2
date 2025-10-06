@@ -139,7 +139,7 @@ namespace microcode {
                     radioVal < robot.robots.RobotCompactCommand.ObstacleState
                 )
                     return this.filterValueIn(radioVal)
-            } else {
+            } else if (typeof sensorName == "string") {
                 const thisSensorName = tidToSensor(sensor)
                 if (sensorName == thisSensorName) {
                     const eventCode = this.lookupEventCode()
@@ -147,6 +147,16 @@ namespace microcode {
                         return event == eventCode
                     } else {
                         return this.filterValueIn(this.interp.state[sensorName])
+                    }
+                }
+            } else if (typeof sensorName == "number") {
+                if (sensorName == sensor) {
+                    const eventCode = this.lookupEventCode()
+                    console.log(`match ${sensor} ${event} ${eventCode}`)
+                    if (eventCode) {
+                        return event == -1 || event == eventCode
+                    } else {
+                        return this.filterValueIn(event)
                     }
                 }
             }
@@ -531,31 +541,13 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         // TODO: this should be unified with notifySensorChange,
         // TODO: by moving DAL specific stuff out of the interpreter
         public onMicrobitEvent(src: number, ev: number = -1) {
-            if (!this.running) return
+            if (!src || !this.running) return
             // see if any rule matches
             const activeRules: RuleClosure[] = []
             this.ruleClosures.forEach(rc => {
                 const r = rc.rule
                 let match = false
                 if (
-                    (r.sensor == Tid.TID_SENSOR_PRESS &&
-                        ev == DAL.DEVICE_BUTTON_EVT_DOWN) ||
-                    (r.sensor == Tid.TID_SENSOR_RELEASE &&
-                        ev == DAL.DEVICE_BUTTON_EVT_UP)
-                ) {
-                    match =
-                        r.filters.length == 0 ||
-                        r.filters[0] == matchPressReleaseTable[src]
-                } else if (
-                    r.sensor == Tid.TID_SENSOR_ACCELEROMETER &&
-                    src == DAL.DEVICE_ID_ACCELEROMETER
-                ) {
-                    // not working in sim
-                    console.log(`accel = ${ev}`)
-                    match =
-                        r.filters.length == 0 ||
-                        r.filters[0] == matchAccelerometerTable[ev]
-                } else if (
                     r.sensor == Tid.TID_SENSOR_RADIO_RECEIVE &&
                     src == DAL.DEVICE_ID_RADIO
                 ) {
@@ -572,6 +564,9 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                         (r.filters.length == 1 &&
                             r.filters[0] == Tid.TID_FILTER_QUIET &&
                             ev == DAL.LEVEL_THRESHOLD_LOW)
+                } else {
+                    // generic handling
+                    match = rc.matchWhen(src, ev)
                 }
                 if (match) activeRules.push(rc)
             })
@@ -833,12 +828,17 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     // prevent accumulation of event handlers
 
     buttons.forEach(b => {
-        // TODO: could do translate of DAL into Tid space here
-        // TODO: since we know the DAL device; this way the interp
-        // TODO: doesn't need to know about micro:bit events...
         control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
+            const ev = control.eventValue()
             if (theInterpreter)
-                theInterpreter.onMicrobitEvent(b, control.eventValue())
+                theInterpreter.onMicrobitEvent(
+                    ev == DAL.DEVICE_BUTTON_EVT_DOWN
+                        ? Tid.TID_SENSOR_PRESS
+                        : ev == DAL.DEVICE_BUTTON_EVT_UP
+                        ? Tid.TID_SENSOR_RELEASE
+                        : undefined,
+                    matchPressReleaseTable[b]
+                )
         })
     })
 
@@ -846,8 +846,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     input.onGesture(Gesture.Shake, () => {
         if (theInterpreter)
             theInterpreter.onMicrobitEvent(
-                DAL.DEVICE_ID_ACCELEROMETER,
-                Gesture.Shake
+                Tid.TID_SENSOR_ACCELEROMETER,
+                Tid.TID_FILTER_ACCEL_SHAKE
             )
     })
 
@@ -855,8 +855,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     control.onEvent(DAL.DEVICE_ID_ACCELEROMETER, DAL.DEVICE_EVT_ANY, () => {
         if (theInterpreter && control.eventValue() != Gesture.Shake)
             theInterpreter.onMicrobitEvent(
-                DAL.DEVICE_ID_ACCELEROMETER,
-                control.eventValue()
+                Tid.TID_SENSOR_ACCELEROMETER,
+                matchAccelerometerTable[control.eventValue()]
             )
     })
 

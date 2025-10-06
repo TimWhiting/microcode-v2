@@ -893,7 +893,12 @@ namespace microcode {
             case Tid.TID_SENSOR_TEMP:
             case Tid.TID_SENSOR_LINE: // TODO: generalize from Jacdac
             case Tid.TID_SENSOR_REFLECTED:
+            case Tid.TID_SENSOR_MICROPHONE:
                 return SensorChange.Up
+            case Tid.TID_SENSOR_ACCELEROMETER:
+            case Tid.TID_SENSOR_PRESS:
+            case Tid.TID_SENSOR_RELEASE:
+                return -1 // any
             default:
                 return undefined
         }
