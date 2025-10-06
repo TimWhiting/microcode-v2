@@ -74,104 +74,6 @@ namespace microcode {
     }
     */
 
-    /* old when logic
-
-    1. match against event code (with lots of special casing for radio+robot)
-    2. match against sensor value
-
-            const role = this.lookupSensorRole(rule)
-            name += "_" + role.name
-            const wakeup = needsWakeUp(role.classIdentifier)
-
-            // get the procedure for this role
-            this.withProcedure(role.getDispatcher(), wr => {
-                // because all rules with same role are put in same
-                // procedure, we need to make sure we are on the current page
-                this.ifCurrPage(() => {
-                    const code = this.lookupEventCode(role, rule)
-                    if (microcode.jdKind(sensor) == microcode.JdKind.Radio) {
-                        this.ifEq(
-                            wr.emitExpr(Op.EXPR0_PKT_REPORT_CODE, []),
-                            code,
-                            () => {
-                                const radioVar = this.lookupGlobal("z_radio")
-                                radioVar.write(
-                                    wr,
-                                    wr.emitBufLoad(NumFmt.F64, 12)
-                                )
-                                // hack for keeping car radio from interfering with user radio
-                                if (
-                                    sensor ==
-                                        microcode.Tid.TID_SENSOR_CAR_WALL ||
-                                    sensor == microcode.Tid.TID_SENSOR_LINE
-                                ) {
-                                    wr.emitIf(
-                                        wr.emitExpr(Op.EXPR2_LT, [
-                                            literal(
-                                                robot.robots.RobotCompactCommand
-                                                    .ObstacleState
-                                            ),
-                                            radioVar.read(wr),
-                                        ]),
-                                        () => {
-                                            if (
-                                                sensor ==
-                                                microcode.Tid
-                                                    .TID_SENSOR_CAR_WALL
-                                            ) {
-                                                radioVar.write(
-                                                    wr,
-                                                    wr.emitExpr(Op.EXPR2_SUB, [
-                                                        radioVar.read(wr),
-                                                        literal(
-                                                            robot.robots
-                                                                .RobotCompactCommand
-                                                                .ObstacleState
-                                                        ),
-                                                    ])
-                                                )
-                                                filterValueIn(() =>
-                                                    radioVar.read(wr)
-                                                )
-                                            } else {
-                                                wr.emitIf(
-                                                    wr.emitExpr(Op.EXPR2_LE, [
-                                                        literal(
-                                                            robot.robots
-                                                                .RobotCompactCommand
-                                                                .LineState
-                                                        ),
-                                                        radioVar.read(wr),
-                                                    ]),
-                                                    () => {
-                                                        filterValueIn(() =>
-                                                            radioVar.read(wr)
-                                                        )
-                                                    }
-                                                )
-                                            }
-                                        }
-                                    )
-                                } else {
-                                    wr.emitIf(
-                                        wr.emitExpr(Op.EXPR2_LT, [
-                                            radioVar.read(wr),
-                                            literal(
-                                                robot.robots.RobotCompactCommand
-                                                    .ObstacleState
-                                            ),
-                                        ]),
-                                        () => {
-                                            filterValueIn(() =>
-                                                radioVar.read(wr)
-                                            )
-                                        }
-                                    )
-                                }
-                            }
-                        )
-    */
-
     enum OutputResource {
         LEDScreen,
         Speaker,
@@ -201,14 +103,25 @@ namespace microcode {
         }
 
         public matchWhen(sensorName: string, event = 0): boolean {
-            // evaluate the condition associated with the rule, if any
             const sensor = this.rule.sensor
             if (jdKind(sensor) == JdKind.Variable) {
                 const pipeId = jdParam(sensor)
                 if (pipeId == sensorName)
                     return this.filterValueIn(this.interp.state[pipeId])
             } else if (jdKind(sensor) == JdKind.Radio) {
-                // TODO: lots of radio logic to bring over
+                const radioVal = this.getRadioVal()
+                if (
+                    sensor == Tid.TID_SENSOR_CAR_WALL ||
+                    sensor == Tid.TID_SENSOR_LINE
+                ) {
+                    // this hack separates radio ranges used to communicate with robot car
+                    if (robot.robots.RobotCompactCommand.ObstacleState < radioVal)
+                        if (sensor == Tid.TID_SENSOR_CAR_WALL)
+                            return this.filterValueIn(radioVal - robot.robots.RobotCompactCommand.ObstacleState)
+                        else if (robot.robots.RobotCompactCommand.LineState <= radioVal)
+                            return this.filterValueIn(radioVal)
+                } else if (radioVal < robot.robots.RobotCompactCommand.ObstacleState)
+                    return this.filterValueIn(radioVal)
             } else {
                 const thisSensorName = tidToSensor(sensor)
                 if (sensorName == thisSensorName) {
@@ -220,8 +133,11 @@ namespace microcode {
                     }
                 }
             }
-            return false
-        }
+    return false
+            
+       private getRadioVal() {
+            return this.interp.state["z_radio"]
+       }
 
         private filterValueIn(f: number) {
             if (this.rule.filters.length) {
