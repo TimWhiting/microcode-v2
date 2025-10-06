@@ -115,12 +115,24 @@ namespace microcode {
                     sensor == Tid.TID_SENSOR_LINE
                 ) {
                     // this hack separates radio ranges used to communicate with robot car
-                    if (robot.robots.RobotCompactCommand.ObstacleState < radioVal)
+                    if (
+                        robot.robots.RobotCompactCommand.ObstacleState <
+                        radioVal
+                    )
                         if (sensor == Tid.TID_SENSOR_CAR_WALL)
-                            return this.filterValueIn(radioVal - robot.robots.RobotCompactCommand.ObstacleState)
-                        else if (robot.robots.RobotCompactCommand.LineState <= radioVal)
+                            return this.filterValueIn(
+                                radioVal -
+                                    robot.robots.RobotCompactCommand
+                                        .ObstacleState
+                            )
+                        else if (
+                            robot.robots.RobotCompactCommand.LineState <=
+                            radioVal
+                        )
                             return this.filterValueIn(radioVal)
-                } else if (radioVal < robot.robots.RobotCompactCommand.ObstacleState)
+                } else if (
+                    radioVal < robot.robots.RobotCompactCommand.ObstacleState
+                )
                     return this.filterValueIn(radioVal)
             } else {
                 const thisSensorName = tidToSensor(sensor)
@@ -133,11 +145,12 @@ namespace microcode {
                     }
                 }
             }
-    return false
-            
-       private getRadioVal() {
+            return false
+        }
+
+        private getRadioVal() {
             return this.interp.state["z_radio"]
-       }
+        }
 
         private filterValueIn(f: number) {
             if (this.rule.filters.length) {
