@@ -543,7 +543,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
 
         // the following two methods could be unified
-        public onMicrobitEvent(sensorTid: number, filter: number = -1) {
+        public onSensorEvent(sensorTid: number, filter: number = -1) {
             if (!sensorTid || !this.running) return
             // see if any rule matches
             const activeRules: RuleClosure[] = []
@@ -804,7 +804,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
             const ev = control.eventValue()
             if (theInterpreter)
-                theInterpreter.onMicrobitEvent(
+                theInterpreter.onSensorEvent(
                     ev == DAL.DEVICE_BUTTON_EVT_DOWN
                         ? Tid.TID_SENSOR_PRESS
                         : ev == DAL.DEVICE_BUTTON_EVT_UP
@@ -818,7 +818,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     // need this only for the simulator
     input.onGesture(Gesture.Shake, () => {
         if (theInterpreter)
-            theInterpreter.onMicrobitEvent(
+            theInterpreter.onSensorEvent(
                 Tid.TID_SENSOR_ACCELEROMETER,
                 Tid.TID_FILTER_ACCEL_SHAKE
             )
@@ -827,7 +827,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     // handle all other accelerometer events
     control.onEvent(DAL.DEVICE_ID_ACCELEROMETER, DAL.DEVICE_EVT_ANY, () => {
         if (theInterpreter && control.eventValue() != Gesture.Shake)
-            theInterpreter.onMicrobitEvent(
+            theInterpreter.onSensorEvent(
                 Tid.TID_SENSOR_ACCELEROMETER,
                 matchAccelerometerTable[control.eventValue()]
             )
@@ -841,7 +841,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         () => {
             if (theInterpreter) {
                 const ev = control.eventValue()
-                theInterpreter.onMicrobitEvent(
+                theInterpreter.onSensorEvent(
                     Tid.TID_SENSOR_MICROPHONE,
                     ev == DAL.LEVEL_THRESHOLD_HIGH
                         ? Tid.TID_FILTER_LOUD
@@ -856,10 +856,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     radio.onReceivedNumber(radioNum => {
         if (theInterpreter) {
             theInterpreter.state["Radio"] = radioNum
-            theInterpreter.onMicrobitEvent(
-                Tid.TID_SENSOR_RADIO_RECEIVE,
-                radioNum
-            )
+            theInterpreter.onSensorEvent(Tid.TID_SENSOR_RADIO_RECEIVE, radioNum)
         }
     })
 }
