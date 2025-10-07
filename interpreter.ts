@@ -161,7 +161,7 @@ namespace microcode {
         }
 
         private getRadioVal() {
-            return this.interp.state["z_radio"]
+            return this.interp.state["Radio"]
         }
 
         private filterValueIn(f: number) {
@@ -548,12 +548,12 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
 
         // the following two methods could be unified
-        public onMicrobitEvent(src: number, ev: number = -1) {
-            if (!src || !this.running) return
+        public onMicrobitEvent(sensorTid: number, filter: number = -1) {
+            if (!sensorTid || !this.running) return
             // see if any rule matches
             const activeRules: RuleClosure[] = []
             this.ruleClosures.forEach(rc => {
-                if (rc.matchWhen(src, ev)) activeRules.push(rc)
+                if (rc.matchWhen(sensorTid, filter)) activeRules.push(rc)
             })
             this.processNewActiveRules(activeRules)
         }
@@ -644,13 +644,13 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             const mJdpararm = jdParam(expr)
             switch (mKind) {
                 case JdKind.Temperature:
-                    return this.state["z_temp"] || 0
+                    return this.state["Temperature"] || 0
                 case JdKind.Literal:
                     return mJdpararm
                 case JdKind.Variable:
                     return this.state[mJdpararm] || 0
                 case JdKind.RadioValue:
-                    return this.state["z_radio"] || 0
+                    return this.state["Radio"] || 0
                 default:
                     this.error("can't emit kind: " + mKind)
                     return 0
@@ -861,7 +861,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
 
     radio.onReceivedNumber(radioNum => {
         if (theInterpreter) {
-            theInterpreter.state["z_radio"] = radioNum
+            theInterpreter.state["Radio"] = radioNum
             theInterpreter.onMicrobitEvent(
                 Tid.TID_SENSOR_RADIO_RECEIVE,
                 radioNum
