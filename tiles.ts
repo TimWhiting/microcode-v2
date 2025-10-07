@@ -370,7 +370,7 @@ namespace microcode {
     export function priority(tile: Tile): number {
         const tid = getTid(tile)
         if (isFilter(tid)) {
-            if (isFilterConstant(tid)) return jdParam(tid)
+            if (isFilterConstant(tid)) return getParam(tid)
             if (isLineEvent(tid)) {
                 if (tid == Tid.TID_FILTER_LINE_BOTH) return 101
                 else return tid
@@ -627,10 +627,7 @@ namespace microcode {
         return undefined
     }
 
-    // TODO: revisit this since we don't use JacScript any more
-    // following functions are needed to compile to JacScript
-    // let P be jdParam
-    export enum JdKind {
+    export enum TileKind {
         Literal = 1, // value is P
         Variable, // value is variables[P]
         Page, // value is page[P]
@@ -649,7 +646,7 @@ namespace microcode {
         Sequence,
     }
 
-    export function jdKind(tile: Tile): JdKind {
+    export function getKind(tile: Tile): TileKind {
         const tid = getTid(tile)
         if (
             isLineEvent(tid) ||
@@ -658,28 +655,28 @@ namespace microcode {
             tid == Tid.TID_MODIFIER_ON ||
             tid == Tid.TID_MODIFIER_OFF
         )
-            return JdKind.Literal
-        if (isTimespan(tid)) return JdKind.Timespan
+            return TileKind.Literal
+        if (isTimespan(tid)) return TileKind.Timespan
         if (
             isEmoji(tid) ||
             tid == Tid.TID_MODIFIER_ICON_EDITOR ||
             tid == Tid.TID_MODIFIER_MELODY_EDITOR
         )
-            return JdKind.ServiceCommandArg
-        if (isPage(tid)) return JdKind.Page
-        if (isCarModifier(tid)) return JdKind.NumFmt
+            return TileKind.ServiceCommandArg
+        if (isPage(tid)) return TileKind.Page
+        if (isCarModifier(tid)) return TileKind.NumFmt
         switch (tid) {
             case Tid.TID_SENSOR_RADIO_RECEIVE:
             case Tid.TID_SENSOR_CAR_WALL:
             case Tid.TID_SENSOR_LINE:
-                return JdKind.Radio
+                return TileKind.Radio
             case Tid.TID_MODIFIER_RADIO_VALUE:
-                return JdKind.RadioValue
+                return TileKind.RadioValue
             case Tid.TID_SENSOR_TEMP:
             case Tid.TID_MODIFIER_TEMP_READ:
-                return JdKind.Temperature
+                return TileKind.Temperature
             case Tid.TID_MODIFIER_RANDOM_TOSS:
-                return JdKind.RandomToss
+                return TileKind.RandomToss
             case Tid.TID_FILTER_ROTARY_LEFT:
             case Tid.TID_FILTER_ROTARY_RIGHT:
             case Tid.TID_FILTER_TEMP_WARMER:
@@ -701,19 +698,19 @@ namespace microcode {
             case Tid.TID_FILTER_PIN_0:
             case Tid.TID_FILTER_PIN_1:
             case Tid.TID_FILTER_PIN_2:
-                return JdKind.EventCode
+                return TileKind.EventCode
             case Tid.TID_ACTUATOR_PAINT:
             case Tid.TID_ACTUATOR_SPEAKER:
             case Tid.TID_ACTUATOR_MUSIC:
             case Tid.TID_ACTUATOR_RGB_LED:
             case Tid.TID_ACTUATOR_CAR:
-                return JdKind.Sequence
+                return TileKind.Sequence
             case Tid.TID_ACTUATOR_RADIO_SEND:
             case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
-                return JdKind.NumFmt
+                return TileKind.NumFmt
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
             case Tid.TID_SENSOR_CUP_Z_WRITTEN:
@@ -726,12 +723,12 @@ namespace microcode {
             case Tid.TID_MODIFIER_CUP_X_READ:
             case Tid.TID_MODIFIER_CUP_Y_READ:
             case Tid.TID_MODIFIER_CUP_Z_READ:
-                return JdKind.Variable
+                return TileKind.Variable
         }
         return undefined
     }
 
-    export function jdParam(tile: Tile): any {
+    export function getParam(tile: Tile): any {
         const tid = getTid(tile)
         if (isModifierConstant(tid)) return tid - Tid.TID_MODIFIER_COIN_1 + 1
         if (isFilterConstant(tid)) return tid - Tid.TID_FILTER_COIN_1 + 1
@@ -823,7 +820,7 @@ namespace microcode {
         return undefined
     }
 
-    export function jdParam2(tile: Tile): number {
+    export function getParam2(tile: Tile): number {
         const tid = getTid(tile)
         switch (tid) {
             case Tid.TID_MODIFIER_CAR_FORWARD:

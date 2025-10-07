@@ -106,11 +106,11 @@ namespace microcode {
 
         public matchWhen(sensorName: string | number, event = 0): boolean {
             const sensor = this.rule.sensor
-            if (jdKind(sensor) == JdKind.Variable) {
-                const pipeId = jdParam(sensor)
+            if (getKind(sensor) == TileKind.Variable) {
+                const pipeId = getParam(sensor)
                 if (pipeId == sensorName)
                     return this.filterValueIn(this.interp.state[pipeId])
-            } else if (jdKind(sensor) == JdKind.Radio) {
+            } else if (getKind(sensor) == TileKind.Radio) {
                 const radioVal = this.getRadioVal()
                 if (
                     sensor == Tid.TID_SENSOR_CAR_WALL ||
@@ -177,8 +177,8 @@ namespace microcode {
             if (evCode) {
                 // override if user specifies event code
                 for (const m of this.rule.filters)
-                    if (jdKind(m) == JdKind.EventCode) {
-                        return jdParam(m)
+                    if (getKind(m) == TileKind.EventCode) {
+                        return getParam(m)
                     }
                 return evCode
             }
@@ -282,7 +282,7 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Z_ASSIGN: {
                     control.waitMicros(ANTI_FREEZE_DELAY * 1000)
-                    const pipe = jdParam(action)
+                    const pipe = getParam(action)
                     const v = this.interp.getValue(this.rule.modifiers, 0)
                     this.interp.updateState(this.index, pipe, v)
                     this.actionRunning = false
@@ -326,7 +326,7 @@ namespace microcode {
                         return
                     } else {
                         const mod = this.rule.modifiers[this.modifierIndex]
-                        let sound = jdParam(mod)
+                        let sound = getParam(mod)
                         music.play(
                             music.builtinPlayableSoundEffect(sound),
                             music.PlaybackMode.UntilDone
@@ -337,7 +337,8 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_SWITCH_PAGE: {
                     let targetPage = 1
                     for (const m of this.rule.modifiers)
-                        if (jdKind(m) == JdKind.Page) targetPage = jdParam(m)
+                        if (getKind(m) == TileKind.Page)
+                            targetPage = getParam(m)
                     this.interp.switchPage(targetPage - 1)
                     break
                 }
@@ -409,8 +410,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 let period = 0
                 let randomPeriod = 0
                 for (const m of this.rule.filters) {
-                    const mJdparam = jdParam(m)
-                    if (jdKind(m) == JdKind.Timespan) {
+                    const mJdparam = getParam(m)
+                    if (getKind(m) == TileKind.Timespan) {
                         if (mJdparam >= 0) period += mJdparam
                         else randomPeriod += -mJdparam // see hack in jdParam
                     }
@@ -621,8 +622,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             if (mods.length == 0) return defl
             let v = 0
             for (const m of mods) {
-                if (jdKind(m) != JdKind.Literal) return undefined
-                v += jdParam(m)
+                if (getKind(m) != TileKind.Literal) return undefined
+                v += getParam(m)
             }
             return v
         }
@@ -633,16 +634,16 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
 
         private getExprValue(expr: Tile): number {
-            const mKind = jdKind(expr)
-            const mJdpararm = jdParam(expr)
+            const mKind = getKind(expr)
+            const mJdpararm = getParam(expr)
             switch (mKind) {
-                case JdKind.Temperature:
+                case TileKind.Temperature:
                     return this.state["Temperature"] || 0
-                case JdKind.Literal:
+                case TileKind.Literal:
                     return mJdpararm
-                case JdKind.Variable:
+                case TileKind.Variable:
                     return this.state[mJdpararm] || 0
-                case JdKind.RadioValue:
+                case TileKind.RadioValue:
                     return this.state["Radio"] || 0
                 default:
                     this.error("can't emit kind: " + mKind)
@@ -669,7 +670,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
 
             if (mods.length == 0) return defl
             else {
-                if (jdKind(mods[0]) == JdKind.RandomToss) {
+                if (getKind(mods[0]) == TileKind.RandomToss) {
                     let rndBnd = this.getAddSeq(0, mods.slice(1), 5)
                     if (!rndBnd || rndBnd <= 2) rndBnd = 2
                     addOrSet(Math.floor(Math.random() * rndBnd))
@@ -687,8 +688,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
 
         private breaksValSeq(mod: Tile) {
-            switch (jdKind(mod)) {
-                case JdKind.RandomToss:
+            switch (getKind(mod)) {
+                case TileKind.RandomToss:
                     return true
                 default:
                     return false
