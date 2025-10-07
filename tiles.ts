@@ -336,18 +336,6 @@ namespace microcode {
         // these tids are dead
         if (tid == Tid.TID_ACTUATOR_MICROPHONE || tid == Tid.TID_FILTER_ACCEL)
             return false
-        // TODO: revisit this since we now separate micro:bit and JD
-        const ext = jdExternalClass(tile)
-        if (ext) {
-            const count = 1 // jdc.numServiceInstances(ext)
-            // special case for buttons, which already exist on micro:bit (6 of them)
-            // we also have light sensor on board micro:bit (1 of them), as well as in Kit A
-            return ext == jacs.ServiceClass.Button
-                ? count > 6
-                : ext == jacs.ServiceClass.LightLevel
-                ? count > 1
-                : count > 0
-        }
         return true
     }
 
@@ -382,13 +370,24 @@ namespace microcode {
     export function priority(tile: Tile): number {
         const tid = getTid(tile)
         if (isFilter(tid)) {
-            if (isFilterConstant(tid) || isPressReleaseEvent(tid))
-                return jdParam(tid)
+            if (isFilterConstant(tid)) return jdParam(tid)
             if (isLineEvent(tid)) {
                 if (tid == Tid.TID_FILTER_LINE_BOTH) return 101
                 else return tid
             }
             switch (tid) {
+                case Tid.TID_FILTER_BUTTON_A:
+                    return 0
+                case Tid.TID_FILTER_BUTTON_B:
+                    return 1
+                case Tid.TID_FILTER_LOGO:
+                    return 2
+                case Tid.TID_FILTER_PIN_0:
+                    return 3
+                case Tid.TID_FILTER_PIN_1:
+                    return 4
+                case Tid.TID_FILTER_PIN_2:
+                    return 5
                 case Tid.TID_FILTER_TIMESPAN_SHORT:
                     return 10
                 case Tid.TID_FILTER_TIMESPAN_LONG:
@@ -876,7 +875,6 @@ namespace microcode {
         return undefined
     }
 
-    // Jacdac event codes
     export function defaultEventCode(tile: Tile) {
         const tid = getTid(tile)
         switch (tid) {

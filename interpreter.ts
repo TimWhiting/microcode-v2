@@ -357,13 +357,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             const aKind = microcode.jdKind(actuator)
             const aJdparam = microcode.jdParam(actuator)
 
-            } else if (aKind == microcode.JdKind.Variable) {
-                this.emitSleep(ANTI_FREEZE_DELAY)
-                this.emitValueOut(rule, 0)
-                const pv = this.pipeVar(aJdparam)
-                pv.write(wr, currValue())
-                this.emitSendCmd(this.pipeRole(aJdparam), CMD_CONDITION_FIRE)
-    
+            
             } else if (aKind == microcode.JdKind.NumFmt) {
                 const role = this.lookupActuatorRole(rule)
                 this.emitValueOut(rule, 1) // why 1?
@@ -581,7 +575,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 : sensor.getReading()
         }
 
-        // TODO: generating an event from sensor (temp up, temp down)
         private startSensors() {
             // initialize sensors
             this.sensors.push(Sensor.getFromName("Light"))
