@@ -77,10 +77,12 @@ namespace microcode {
     */
 
     enum OutputResource {
-        LEDScreen,
+        LEDScreen = 1000,
         Speaker,
         RadioSend,
         RadioGroup,
+        Variable,
+        PageCounter,
     }
 
     class RuleClosure {
@@ -198,6 +200,9 @@ namespace microcode {
                         this.wakeTime = 0
                     }
                     this.runAction()
+                    // TODO: runAction asks to run on a resource
+                    // TODO: pause here and wait for permission
+                    // TODO: if no, permission, stop running this action
                     this.checkForLoopFinish()
                     // yield, otherwise the app will hang
                     basic.pause(0)
@@ -255,6 +260,30 @@ namespace microcode {
             basic.pause(200)
         }
 
+        private askAction() {
+            if (this.wakeTime > 0 || !this.actionRunning) return undefined
+            const action = this.rule.actuators[0]
+            switch (action) {
+                case Tid.TID_ACTUATOR_PAINT:
+                case Tid.TID_ACTUATOR_SHOW_NUMBER:
+                    return OutputResource.LEDScreen
+                case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
+                case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
+                case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
+                    return action
+                case Tid.TID_ACTUATOR_RADIO_SEND:
+                    return OutputResource.RadioSend
+                case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
+                    return OutputResource.RadioGroup
+                case Tid.TID_ACTUATOR_MUSIC:
+                case Tid.TID_ACTUATOR_SPEAKER:
+                    return OutputResource.Speaker
+                case Tid.TID_ACTUATOR_SWITCH_PAGE:
+                    return OutputResource.Variable
+            }
+            return undefined
+        }
+
         private runAction() {
             if (this.wakeTime > 0 || !this.actionRunning) return
             // execute one step
@@ -286,6 +315,7 @@ namespace microcode {
                     const v = this.interp.getValue(this.rule.modifiers, 0)
                     this.interp.updateState(this.index, pipe, v)
                     this.actionRunning = false
+                    return
                 }
                 case Tid.TID_ACTUATOR_RADIO_SEND: {
                     const v = this.interp.getValue(this.rule.modifiers, 0)
@@ -357,7 +387,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             const aKind = microcode.jdKind(actuator)
             const aJdparam = microcode.jdParam(actuator)
 
-            
+
             } else if (aKind == microcode.JdKind.NumFmt) {
                 const role = this.lookupActuatorRole(rule)
                 this.emitValueOut(rule, 1) // why 1?
@@ -392,9 +422,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 this.emitSendCmd(role, microcode.serviceCommand(actuator))
 
             TODO: what do these refer to? jacdac services, for the most part
-
-            } else if (aKind == microcode.JdKind.Sequence) {
-                this.emitSequence(rule, 400)
 
         */
 
