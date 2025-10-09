@@ -153,6 +153,7 @@ namespace microcode {
                             sensor != Tid.TID_SENSOR_LINE) ||
                         getKind(sensor) == TileKind.Variable
                     ) {
+                        // TODO: add the comparison operator into the program
                         const plus = new Button({
                             parent: this,
                             style: buttonStyle(tile),
@@ -173,6 +174,7 @@ namespace microcode {
                             getKind(tiles[index + 1]) == TileKind.Variable ||
                             getKind(tiles[index + 1]) == TileKind.RandomToss)
                     ) {
+                        // TODO: add the arithmetic operator into the program
                         const plus = new Button({
                             parent: this,
                             style: buttonStyle(tile),
@@ -237,6 +239,7 @@ namespace microcode {
             )
         }
 
+        // TODO: deal with comparisons and arithmetic operators
         private deleteIncompatibleTiles(name: string, index: number) {
             const doit = (name: string, index: number) => {
                 const ruleTiles = this.ruledef.getRuleRep()[name]
