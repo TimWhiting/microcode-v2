@@ -84,6 +84,7 @@ namespace microcode {
             }
             return ret
         }
+        // move to RuntimeHost
         toMicroBit(img: Bitmap) {
             let s: string[] = []
             for (let row = 0; row < 5; row++) {

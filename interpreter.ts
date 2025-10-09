@@ -79,9 +79,7 @@ namespace microcode {
     enum OutputResource {
         LEDScreen = 1000,
         Speaker,
-        RadioSend,
-        RadioGroup,
-        Variable,
+        Radio,
         PageCounter,
     }
 
@@ -272,14 +270,13 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
                     return action
                 case Tid.TID_ACTUATOR_RADIO_SEND:
-                    return OutputResource.RadioSend
                 case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
-                    return OutputResource.RadioGroup
+                    return OutputResource.Radio
                 case Tid.TID_ACTUATOR_MUSIC:
                 case Tid.TID_ACTUATOR_SPEAKER:
                     return OutputResource.Speaker
                 case Tid.TID_ACTUATOR_SWITCH_PAGE:
-                    return OutputResource.Variable
+                    return OutputResource.PageCounter
             }
             return undefined
         }
@@ -792,6 +789,17 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     // - we will want to have a Host interface for the runtime
     // - which will make it easier to do unit tests with a mock runtime
     // ----------------------------------------------------------------
+    interface RuntimeHost {
+        // sensors (inputs)
+        // actuators (outputs)
+        showIcon(led5x5: Bitmap): void
+        showNumber(n: number): void
+        sendRadio(n: number): void
+        setRadioGroup(n: number): void
+        playSound(sound: number): void
+        playMusic(music: string): void
+        sendRoleCommand(role: string, cmd: number, data: number[]): void
+    }
 
     // mapping of micro:bit and DAL namespace into MicroCode tiles
 
