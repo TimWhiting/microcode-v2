@@ -110,8 +110,9 @@ namespace microcode {
             // editor icons
             if (name == "delete") return icondb.btn_delete
             if (name == "plus") return icondb.btn_plus
-            if (name == "arith_plus") return icondb.arith_plus
-            if (name == "arith_equals") return icondb.arith_equals
+            if (name == "arith_plus") return icondb.operatorIcon("+")
+            if (name == "arith_equals") return icondb.operatorIcon("=")
+            // TODO: add ops and comparisons
             if (name == "when_insertion_point")
                 return icondb.btn_when_insertion_point
             if (name == "do_insertion_point")
@@ -252,6 +253,18 @@ namespace microcode {
             if (name == Tid.TID_MODIFIER_TEMP_READ) return icondb.thermometer
             if (name == Tid.TID_MODIFIER_RADIO_VALUE) return icondb.radio_value
 
+            if (name == Tid.TID_OPERATOR_DIVIDE) return icondb.operatorIcon("/")
+            if (name == Tid.TID_OPERATOR_MINUS) return icondb.operatorIcon("-")
+            if (name == Tid.TID_OPERATOR_MULTIPLY)
+                return icondb.operatorIcon("*")
+            if (name == Tid.TID_OPERATOR_PLUS) return icondb.operatorIcon("+")
+            if (name == Tid.TID_COMPARE_EQ) return icondb.operatorIcon("=")
+            if (name == Tid.TID_COMPARE_NEQ) return icondb.operatorIcon("<>")
+            if (name == Tid.TID_COMPARE_LT) return icondb.operatorIcon("<")
+            if (name == Tid.TID_COMPARE_LTE) return icondb.operatorIcon("<=")
+            if (name == Tid.TID_COMPARE_GT) return icondb.operatorIcon(">")
+            if (name == Tid.TID_COMPARE_GTE) return icondb.operatorIcon(">=")
+
             // micro:bit car
             const car = carImages(name)
             if (car) return car
@@ -329,6 +342,23 @@ namespace microcode {
 }
 
 namespace icondb {
+    // TODO: is it worth caching these?
+    export function operatorIcon(op: string) {
+        // the image should be 8x8 for single characters, 16x8 for two characters
+        // then print into image
+        if (op.length == 1) {
+            const img = bitmaps.create(8, 8)
+            img.fill(0)
+            img.print(op, 2, 0, 15)
+            return img
+        } else {
+            const img = bitmaps.create(16, 8)
+            img.fill(0)
+            img.print(op, 2, 0, 15)
+            return img
+        }
+    }
+
     const note4x3 = bmp`
     . f f .
     f c c .

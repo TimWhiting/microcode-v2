@@ -185,6 +185,22 @@ namespace microcode {
         TID_MODIFIER_ON = 204,
         TID_MODIFIER_OFF = 205,
         MODIFER_END = 205,
+
+        TID_OPERATOR_START = 210,
+        TID_OPERATOR_PLUS = 210,
+        TID_OPERATOR_MINUS = 211,
+        TID_OPERATOR_MULTIPLY = 212,
+        TID_OPERATOR_DIVIDE = 213,
+        TID_OPERATOR_END = 213,
+
+        TID_COMPARE_START = 220,
+        TID_COMPARE_EQ = 220,
+        TID_COMPARE_NEQ = 221,
+        TID_COMPARE_LT = 222,
+        TID_COMPARE_LTE = 223,
+        TID_COMPARE_GT = 224,
+        TID_COMPARE_GTE = 225,
+        TID_COMPARE_END = 225,
     }
 
     type RangeMap = { [id: string]: [Tid, Tid] }
