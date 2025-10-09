@@ -330,6 +330,22 @@ namespace microcode {
 }
 
 namespace icondb {
+    export function operatorIcon(op: string) {
+        // the image should be 8x8 for single characters, 16x8 for two characters
+        // then print into image
+        if (op.length == 1) {
+            const img = bitmaps.create(8, 8)
+            img.fill(3)
+            img.print(op, 1, 0, 15)
+            return img
+        } else {
+            const img = bitmaps.create(16, 8)
+            img.fill(3)
+            img.print(op, 2, 0, 15)
+            return img
+        }
+    }
+
     const note4x3 = bmp`
     . f f .
     f c c .
