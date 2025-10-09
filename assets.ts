@@ -112,6 +112,7 @@ namespace microcode {
             if (name == "plus") return icondb.btn_plus
             if (name == "arith_plus") return icondb.arith_plus
             if (name == "arith_equals") return icondb.arith_equals
+            // TODO: add ops and comparisons
             if (name == "when_insertion_point")
                 return icondb.btn_when_insertion_point
             if (name == "do_insertion_point")
