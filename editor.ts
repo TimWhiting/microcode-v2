@@ -45,7 +45,7 @@ namespace microcode {
         private progdef: ProgramDefn
         private currPage: number
         private diskBtn: Button
-        private connectBtn: Button
+        // private connectBtn: Button
         private pageBtn: Button
         public pageEditor: PageEditor
         public cursor: Cursor
@@ -268,15 +268,15 @@ namespace microcode {
                 y: 8,
                 onClick: () => this.pickDiskSLot(),
             })
-            this.connectBtn = new Button({
-                parent: this.hudroot,
-                style: ButtonStyles.BorderedPurple,
-                icon: icondb.microbit_logo_btn,
-                ariaId: "connect",
-                x: Screen.LEFT_EDGE + 36,
-                y: 8,
-                onClick: () => connectJacdac(),
-            })
+            // this.connectBtn = new Button({
+            //     parent: this.hudroot,
+            //     style: ButtonStyles.BorderedPurple,
+            //     icon: icondb.microbit_logo_btn,
+            //     ariaId: "connect",
+            //     x: Screen.LEFT_EDGE + 36,
+            //     y: 8,
+            //     onClick: () => connectJacdac(),
+            // })
             this.pageBtn = new Button({
                 parent: this.hudroot,
                 style: ButtonStyles.BorderedPurple,
@@ -447,11 +447,11 @@ namespace microcode {
                 this.navigator.clear()
             } else this.navigator = new RuleRowNavigator()
 
-            this.navigator.setBtns([
-                this.connectBtn.visible()
-                    ? [this.diskBtn, this.connectBtn, this.pageBtn]
-                    : [this.diskBtn, this.pageBtn],
-            ])
+            // this.navigator.setBtns([
+            //     this.connectBtn.visible()
+            //         ? [this.diskBtn, this.connectBtn, this.pageBtn]
+            //         : [this.diskBtn, this.pageBtn],
+            // ])
 
             this.pageEditor.addToNavigator()
 
@@ -508,12 +508,12 @@ namespace microcode {
             // TODO: move cursor to next button when visible?
             if (!this.rendering) {
                 this.diskBtn.draw()
-                const wasVisible = this.connectBtn.visible()
-                this.connectBtn.setVisible(
-                    false // jdc.numServiceInstances(jacs.ServiceClass.DotMatrix) == 0
-                )
-                if (wasVisible !== this.connectBtn.visible()) this.changed()
-                if (this.connectBtn.visible()) this.connectBtn.draw()
+                // const wasVisible = this.connectBtn.visible()
+                // this.connectBtn.setVisible(
+                //     false // jdc.numServiceInstances(jacs.ServiceClass.DotMatrix) == 0
+                // )
+                // if (wasVisible !== this.connectBtn.visible()) this.changed()
+                // if (this.connectBtn.visible()) this.connectBtn.draw()
             }
             this.pageBtn.draw()
         }
