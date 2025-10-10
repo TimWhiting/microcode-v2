@@ -447,11 +447,7 @@ namespace microcode {
                 this.navigator.clear()
             } else this.navigator = new RuleRowNavigator()
 
-            // this.navigator.setBtns([
-            //     this.connectBtn.visible()
-            //         ? [this.diskBtn, this.connectBtn, this.pageBtn]
-            //         : [this.diskBtn, this.pageBtn],
-            // ])
+            this.navigator.setBtns([[this.diskBtn, this.pageBtn]])
 
             this.pageEditor.addToNavigator()
 
