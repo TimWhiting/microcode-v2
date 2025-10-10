@@ -136,7 +136,6 @@ namespace microcode {
         private processSection(name: string, rule: RuleRep) {
             const tiles = rule[name]
             tiles.forEach((tile, index) => {
-                // TODO: need to change name if tid is a math or comparison operator
                 if (isComparisonOperator(getTid(tile)))
                     name = "comparisonOperators"
                 else if (isMathOperator(getTid(tile))) name = "mathOperators"
@@ -149,51 +148,11 @@ namespace microcode {
                     y: 0,
                     onClick: () => this.editTile(name, index),
                 })
-                if (name == "filters" && index == 0) {
-                    const sensor = this.ruledef.sensors[0]
-                    // TODO: move this to language.ts as part of insertion
-                    if (
-                        (getKind(sensor) == TileKind.Radio &&
-                            sensor != Tid.TID_SENSOR_LINE) ||
-                        getKind(sensor) == TileKind.Variable
-                    ) {
-                        // TODO: add the comparison operator into the program
-                        const plus = new Button({
-                            parent: this,
-                            style: buttonStyle(tile),
-                            icon: "arith_equals",
-                            ariaId: "arith_equals",
-                            x: 0,
-                            y: 0,
-                        })
-                        this.ruleButtons[name].push(plus)
-                    }
-                }
                 this.ruleButtons[name].push(button)
-                // TODO: move this out to language.ts as part of insertion
-                if (index < tiles.length - 1) {
-                    if (
-                        (getKind(tile) == TileKind.Literal ||
-                            getKind(tile) == TileKind.Variable) &&
-                        (getKind(tiles[index + 1]) == TileKind.Literal ||
-                            getKind(tiles[index + 1]) == TileKind.Variable ||
-                            getKind(tiles[index + 1]) == TileKind.RandomToss)
-                    ) {
-                        // TODO: add the arithmetic operator into the program
-                        const plus = new Button({
-                            parent: this,
-                            style: buttonStyle(tile),
-                            icon: "arith_plus",
-                            ariaId: "arith_plus",
-                            x: 0,
-                            y: 0,
-                        })
-                        this.ruleButtons[name].push(plus)
-                    }
-                }
             })
             return tiles.length > 0
         }
+
         private instantiateProgramTiles() {
             this.destroyProgramTiles()
             const rule = this.ruledef.getRuleRep()
@@ -244,33 +203,6 @@ namespace microcode {
             )
         }
 
-        // TODO: deal with comparisons and arithmetic operators
-        private deleteIncompatibleTiles(name: string, index: number) {
-            const doit = (name: string, index: number) => {
-                const ruleTiles = this.ruledef.getRuleRep()[name]
-
-                while (index < ruleTiles.length) {
-                    const suggestions = this.getSuggestions(name, index)
-                    const compatible = suggestions.find(
-                        t => getTid(t) == getTid(ruleTiles[index])
-                    )
-                    if (compatible) index++
-                    else {
-                        ruleTiles.splice(index, ruleTiles.length - index)
-                        return false
-                    }
-                }
-                return true
-            }
-            doit(name, index)
-            if (name === "filters") {
-                // a change in the the when section may affect the do section
-                let ok = doit("actuators", 0)
-                if (ok) doit("modifiers", 0)
-                else this.ruledef.getRuleRep()["modifiers"] = []
-            }
-        }
-
         // TODO: need to deal with arithmetic and comparison operators
         // TODO: should make insert and update operations in
         private editTile(name: string, index: number) {
@@ -280,21 +212,14 @@ namespace microcode {
                 if (tile) {
                     if (index >= ruleTiles.length) {
                         reportEvent("tile.add", { tid: getTid(tile) })
-                        ruleTiles.push(tile)
+                        this.ruledef.push(tile, name)
                     } else {
                         reportEvent("tile.update", { tid: getTid(tile) })
-                        ruleTiles[index] = tile
-                        if (name == "sensors")
-                            this.deleteIncompatibleTiles("filters", 0)
-                        else if (name == "actuators")
-                            this.deleteIncompatibleTiles("modifiers", 0)
-                        else this.deleteIncompatibleTiles(name, index + 1)
+                        this.ruledef.updateAt(name, index, tile)
                     }
                 } else {
-                    ruleTiles.splice(index, 1)
+                    this.ruledef.deleteAt(name, index)
                     reportEvent("tile.delete")
-                    if (name == "filters" || name == "modifiers")
-                        this.deleteIncompatibleTiles(name, index)
                 }
                 Language.ensureValid(this.ruledef)
                 this.editor.saveAndCompileProgram()

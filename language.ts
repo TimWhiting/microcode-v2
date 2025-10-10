@@ -76,6 +76,45 @@ namespace microcode {
         return tile
     }
 
+    /* 
+                if (name == "filters" && index == 0) {
+                    const sensor = this.ruledef.sensors[0]
+                    // TODO: move this to language.ts as part of insertion
+                    if (
+                        (getKind(sensor) == TileKind.Radio &&
+                            sensor != Tid.TID_SENSOR_LINE) ||
+                        getKind(sensor) == TileKind.Variable
+                    ) {
+                        // TODO: add the comparison operator into the program
+                        const plus = new Button({
+                            parent: this,
+                            style: buttonStyle(tile),
+                            icon: "arith_equals",
+                            ariaId: "arith_equals",
+                            x: 0,
+                            y: 0,
+                        })
+                        this.ruleButtons[name].push(plus)
+                    }
+                }
+                
+                                // TODO: move this out to language.ts as part of insertion
+
+                        // TODO: add the arithmetic operator into the program
+                        const plus = new Button({
+                            parent: this,
+                            style: buttonStyle(tile),
+                            icon: "arith_plus",
+                            ariaId: "arith_plus",
+                            x: 0,
+                            y: 0,
+                        })
+                        this.ruleButtons[name].push(plus)
+                    }
+                }
+
+    */
+
     export type RuleRep = { [name: string]: Tile[] }
     export class RuleDefn {
         sensors: number[]
@@ -108,6 +147,65 @@ namespace microcode {
         public isEmpty(): boolean {
             return this.sensors.length === 0 && this.actuators.length === 0
         }
+
+        // TODO: invoke this when loading from program
+        public push(tile: Tile, name: string) {
+            const tiles = this.getRuleRep()[name]
+            tiles.push(tile)
+            const index = tiles.length - 2
+            // if we have two values in a row, insert a plus
+            if (name == "filters" || name == "modifiers") {
+                if (index >= 0) {
+                    if (
+                        (getKind(tile) == TileKind.Literal ||
+                            getKind(tile) == TileKind.Variable) &&
+                        (getKind(tiles[index + 1]) == TileKind.Literal ||
+                            getKind(tiles[index + 1]) == TileKind.Variable ||
+                            getKind(tiles[index + 1]) == TileKind.RandomToss)
+                    ) {
+                        tiles.insertAt(index + 1, Tid.TID_OPERATOR_PLUS)
+                    }
+                }
+            }
+        }
+
+        public deleteAt(name: string, index: number) {
+            // do the deletion
+            if (name == "filters" || name == "modifiers")
+                this.deleteIncompatibleTiles(name, index)
+        }
+
+        private getSuggestions(name: string, index: number) {
+            return Language.getTileSuggestions(this, name, index)
+        }
+
+        private deleteIncompatibleTiles(name: string, index: number) {
+            const doit = (name: string, index: number) => {
+                const ruleTiles = this.getRuleRep()[name]
+
+                while (index < ruleTiles.length) {
+                    const suggestions = this.getSuggestions(name, index)
+                    const compatible = suggestions.find(
+                        t => getTid(t) == getTid(ruleTiles[index])
+                    )
+                    if (compatible) index++
+                    else {
+                        ruleTiles.splice(index, ruleTiles.length - index)
+                        return false
+                    }
+                }
+                return true
+            }
+            doit(name, index)
+            if (name === "filters") {
+                // a change in the the when section may affect the do section
+                let ok = doit("actuators", 0)
+                if (ok) doit("modifiers", 0)
+                else this.getRuleRep()["modifiers"] = []
+            }
+        }
+
+        public updateAt(name: string, index: number, tile: Tile) {}
 
         public toBuffer(bw: BufferWriter) {
             if (this.isEmpty()) return
