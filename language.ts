@@ -149,7 +149,7 @@ namespace microcode {
         }
 
         // TODO: invoke this when loading from program
-        public push(tile: Tile, name: string) {
+        public push(tile: Tile, name: string): number {
             const tiles = this.getRuleRep()[name]
             tiles.push(tile)
             const index = tiles.length - 2
@@ -164,9 +164,11 @@ namespace microcode {
                             getKind(tiles[index + 1]) == TileKind.RandomToss)
                     ) {
                         tiles.insertAt(index + 1, Tid.TID_OPERATOR_PLUS)
+                        return 2
                     }
                 }
             }
+            return 1
         }
 
         public deleteAt(name: string, index: number) {
@@ -385,6 +387,10 @@ namespace microcode {
             name: string,
             index: number
         ): Tile[] {
+            const tile = rule.getRuleRep()[name][index]
+            if (isComparisonOperator(getTid(tile))) name = "comparisonOperators"
+            else if (isMathOperator(getTid(tile))) name = "mathOperators"
+
             // based on the name, we have a range of tiles to choose from
             const [lower, upper] = ranges[name]
             let all: Tile[] = []

@@ -136,9 +136,6 @@ namespace microcode {
         private processSection(name: string, rule: RuleRep) {
             const tiles = rule[name]
             tiles.forEach((tile, index) => {
-                if (isComparisonOperator(getTid(tile)))
-                    name = "comparisonOperators"
-                else if (isMathOperator(getTid(tile))) name = "mathOperators"
                 const button = new Button({
                     parent: this,
                     style: buttonStyle(tile),
@@ -208,11 +205,11 @@ namespace microcode {
         private editTile(name: string, index: number) {
             const ruleTiles = this.ruledef.getRuleRep()[name]
             const tileUpdated = (tile: Tile) => {
-                const editedAdded = !!tile
+                let numberAdded = 0
                 if (tile) {
                     if (index >= ruleTiles.length) {
                         reportEvent("tile.add", { tid: getTid(tile) })
-                        this.ruledef.push(tile, name)
+                        numberAdded = this.ruledef.push(tile, name)
                     } else {
                         reportEvent("tile.update", { tid: getTid(tile) })
                         this.ruledef.updateAt(name, index, tile)
@@ -224,9 +221,12 @@ namespace microcode {
                 Language.ensureValid(this.ruledef)
                 this.editor.saveAndCompileProgram()
                 this.instantiateProgramTiles()
-                if (editedAdded && this.nextEmpty(name, index)) {
+                if (numberAdded == 1 && this.nextEmpty(name, index)) {
                     // Queue a move to the right
                     this.queuedCursorMove = CursorDir.Right
+                } else if (numberAdded == 2) {
+                    // Queue two moves to the right
+                    this.queuedCursorMove = CursorDir.Down
                 }
                 this.page.changed()
             }
@@ -277,6 +277,7 @@ namespace microcode {
             let onDelete = undefined
             let selectedButton = -1
             if (index < ruleTiles.length) {
+                // TODO: don't allow delete on operators
                 onDelete = () => {
                     tileUpdated(undefined)
                 }
@@ -366,8 +367,16 @@ namespace microcode {
         update() {
             if (this.queuedCursorMove) {
                 switch (this.queuedCursorMove) {
+                    case CursorDir.Down:
+                        control.raiseEvent(
+                            ControllerButtonEvent.Pressed,
+                            controller.right.id
+                        )
                     case CursorDir.Right:
-                        // control.raiseEvent(KEY_DOWN, controller.right.id)
+                        control.raiseEvent(
+                            ControllerButtonEvent.Pressed,
+                            controller.right.id
+                        )
                         break
                     // Add other cases as needed
                 }
