@@ -317,7 +317,7 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_RADIO_SEND: {
                     const v = this.interp.getValue(this.rule.modifiers, 0)
                     this.interp.updateResource(
-                        OutputResource.RadioSend,
+                        OutputResource.Radio,
                         this.index,
                         // TODO: need to put this stuff in RuntimeHost
                         () => radio.sendNumber(v)
@@ -328,7 +328,7 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_RADIO_SET_GROUP: {
                     const v = this.interp.getValue(this.rule.modifiers, 1)
                     this.interp.updateResource(
-                        OutputResource.RadioSend,
+                        OutputResource.Radio,
                         this.index,
                         () => radio.setGroup(v)
                     )

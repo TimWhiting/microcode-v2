@@ -136,6 +136,10 @@ namespace microcode {
         private processSection(name: string, rule: RuleRep) {
             const tiles = rule[name]
             tiles.forEach((tile, index) => {
+                // TODO: need to change name if tid is a math or comparison operator
+                if (isComparisonOperator(getTid(tile)))
+                    name = "comparisonOperators"
+                else if (isMathOperator(getTid(tile))) name = "mathOperators"
                 const button = new Button({
                     parent: this,
                     style: buttonStyle(tile),
@@ -147,7 +151,7 @@ namespace microcode {
                 })
                 if (name == "filters" && index == 0) {
                     const sensor = this.ruledef.sensors[0]
-                    // TODO: this logic should be part of the SensorTileDefn
+                    // TODO: move this to language.ts as part of insertion
                     if (
                         (getKind(sensor) == TileKind.Radio &&
                             sensor != Tid.TID_SENSOR_LINE) ||
@@ -166,6 +170,7 @@ namespace microcode {
                     }
                 }
                 this.ruleButtons[name].push(button)
+                // TODO: move this out to language.ts as part of insertion
                 if (index < tiles.length - 1) {
                     if (
                         (getKind(tile) == TileKind.Literal ||
@@ -266,6 +271,8 @@ namespace microcode {
             }
         }
 
+        // TODO: need to deal with arithmetic and comparison operators
+        // TODO: should make insert and update operations in
         private editTile(name: string, index: number) {
             const ruleTiles = this.ruledef.getRuleRep()[name]
             const tileUpdated = (tile: Tile) => {

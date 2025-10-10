@@ -210,6 +210,8 @@ namespace microcode {
         filters: [Tid.FILTER_START, Tid.FILTER_END],
         actuators: [Tid.ACTUATOR_START, Tid.ACTUATOR_END],
         modifiers: [Tid.MODIFIER_START, Tid.MODIFER_END],
+        mathOperators: [Tid.TID_OPERATOR_START, Tid.TID_OPERATOR_END],
+        comparisonOperators: [Tid.TID_COMPARE_START, Tid.TID_COMPARE_END],
     }
 
     export function tidToString(e: Tid) {
@@ -222,7 +224,11 @@ namespace microcode {
     }
 
     export function isFilter(tid: Tid) {
-        return tid >= Tid.FILTER_START && tid <= Tid.FILTER_END
+        return (
+            (tid >= Tid.FILTER_START && tid <= Tid.FILTER_END) ||
+            isMathOperator(tid) ||
+            isComparisonOperator(tid)
+        )
     }
 
     export function isActuator(tid: Tid) {
@@ -230,7 +236,18 @@ namespace microcode {
     }
 
     export function isModifier(tid: Tid) {
-        return tid >= Tid.MODIFIER_START && tid <= Tid.MODIFER_END
+        return (
+            (tid >= Tid.MODIFIER_START && tid <= Tid.MODIFER_END) ||
+            isMathOperator(tid)
+        )
+    }
+
+    export function isMathOperator(tid: Tid) {
+        return tid >= Tid.TID_OPERATOR_START && tid <= Tid.TID_OPERATOR_END
+    }
+
+    export function isComparisonOperator(tid: Tid) {
+        return tid >= Tid.TID_COMPARE_START && tid <= Tid.TID_COMPARE_END
     }
 
     function isPressReleaseEvent(tidEnum: Tid) {

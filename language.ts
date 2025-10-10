@@ -95,6 +95,7 @@ namespace microcode {
             return this.sensors[0]
         }
 
+        // TODO: hide the internal representation and provide a cleaner API
         public getRuleRep(): RuleRep {
             return {
                 sensors: this.sensors,
@@ -298,7 +299,13 @@ namespace microcode {
                 .filter((tile: Tile) => isVisible(tile))
                 .sort((t1, t2) => priority(t1) - priority(t2))
 
-            if (name === "sensors" || name === "actuators") return all
+            if (
+                name === "sensors" ||
+                name === "actuators" ||
+                name == "mathOperators" ||
+                name == "comparisonOperators"
+            )
+                return all
 
             // Collect existing tiles up to index.
             let existing: Tile[] = []
