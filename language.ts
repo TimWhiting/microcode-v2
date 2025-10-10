@@ -134,7 +134,6 @@ namespace microcode {
             return this.sensors[0]
         }
 
-        // TODO: hide the internal representation and provide a cleaner API
         public getRuleRep(): RuleRep {
             return {
                 sensors: this.sensors,
@@ -172,7 +171,7 @@ namespace microcode {
         }
 
         public deleteAt(name: string, index: number) {
-            // do the deletion
+            // TODO: do the deletion
             if (name == "filters" || name == "modifiers")
                 this.deleteIncompatibleTiles(name, index)
         }
@@ -182,6 +181,7 @@ namespace microcode {
         }
 
         private deleteIncompatibleTiles(name: string, index: number) {
+            // TODO: update to deal with math operators
             const doit = (name: string, index: number) => {
                 const ruleTiles = this.getRuleRep()[name]
 
@@ -207,7 +207,10 @@ namespace microcode {
             }
         }
 
-        public updateAt(name: string, index: number, tile: Tile) {}
+        public updateAt(name: string, index: number, tile: Tile) {
+            const tiles = this.getRuleRep()[name]
+            tiles[index] = tile
+        }
 
         public toBuffer(bw: BufferWriter) {
             if (this.isEmpty()) return
