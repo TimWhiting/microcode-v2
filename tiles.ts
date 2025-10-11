@@ -394,6 +394,11 @@ namespace microcode {
         }
     }
 
+    export function filterModifierWithDelete(tile: Tile): boolean {
+        const tid = getTid(tile)
+        return !(isMathOperator(tid) || isComparisonOperator(tid))
+    }
+
     export function buttonStyle(tile: Tile): ButtonStyle {
         return getFieldEditor(tile)
             ? ButtonStyles.Transparent

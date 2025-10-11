@@ -275,12 +275,15 @@ namespace microcode {
             let onDelete = undefined
             let selectedButton = -1
             if (index < ruleTiles.length) {
+                const tile = ruleTiles[index]
                 // TODO: don't allow delete on operators
-                onDelete = () => {
-                    tileUpdated(undefined)
-                }
+                onDelete = filterModifierWithDelete(tile)
+                    ? () => {
+                          tileUpdated(undefined)
+                      }
+                    : undefined
                 const selected = btns.indexOf(
-                    btns.find(b => b.icon === getIcon(getTid(ruleTiles[index]))) // TODO
+                    btns.find(b => b.icon === getIcon(getTid(tile))) // TODO
                 )
                 if (selected >= 0) {
                     selectedButton = selected
