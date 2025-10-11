@@ -7,7 +7,7 @@ namespace microcode {
         disallow?: (string | number)[]
     }
 
-    export function mergeConstraints(src: Constraints, dst: Constraints) {
+    function mergeConstraints(src: Constraints, dst: Constraints) {
         if (!src) {
             return
         }
@@ -28,10 +28,7 @@ namespace microcode {
         }
     }
 
-    export function isCompatibleWith(
-        src: Constraints,
-        c: Constraints
-    ): boolean {
+    function isCompatibleWith(src: Constraints, c: Constraints): boolean {
         if (!src) return true
         if (src.requires) {
             let compat = false
@@ -43,7 +40,7 @@ namespace microcode {
         return true
     }
 
-    export function filterModifierCompat(
+    function filterModifierCompat(
         tile: Tile,
         category: string | number,
         c: Constraints
@@ -76,7 +73,7 @@ namespace microcode {
         return tile
     }
 
-    /* 
+    /*  TODO: reimplement this
                 if (name == "filters" && index == 0) {
                     const sensor = this.ruledef.sensors[0]
                     // TODO: move this to language.ts as part of insertion
@@ -98,21 +95,6 @@ namespace microcode {
                     }
                 }
                 
-                                // TODO: move this out to language.ts as part of insertion
-
-                        // TODO: add the arithmetic operator into the program
-                        const plus = new Button({
-                            parent: this,
-                            style: buttonStyle(tile),
-                            icon: "arith_plus",
-                            ariaId: "arith_plus",
-                            x: 0,
-                            y: 0,
-                        })
-                        this.ruleButtons[name].push(plus)
-                    }
-                }
-
     */
 
     export type RuleRep = { [name: string]: Tile[] }
@@ -418,8 +400,16 @@ namespace microcode {
             let existing: Tile[] = []
             const ruleRep = rule.getRuleRep()
             for (let i = 0; i < index; ++i) {
-                existing.push(ruleRep[name][i])
+                const tile = ruleRep[name][i]
+                if (
+                    isMathOperator(getTid(tile)) ||
+                    isComparisonOperator(getTid(tile))
+                )
+                    continue
+                existing.push(tile)
             }
+
+            // TODO: need to deal with presence of math operators
 
             // Return empty set if the last existing tile is a "terminal".
             if (existing.length) {

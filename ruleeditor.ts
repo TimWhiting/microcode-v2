@@ -200,8 +200,6 @@ namespace microcode {
             )
         }
 
-        // TODO: need to deal with arithmetic and comparison operators
-        // TODO: should make insert and update operations in
         private editTile(name: string, index: number) {
             const ruleTiles = this.ruledef.getRuleRep()[name]
             const tileUpdated = (tile: Tile) => {
