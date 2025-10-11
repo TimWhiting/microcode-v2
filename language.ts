@@ -7,6 +7,11 @@ namespace microcode {
         disallow?: (string | number)[]
     }
 
+    // TODO:
+    // - NO: should we allow random toss followed by math operator? can happen because of deletion
+    // - update of random toss to a number doesn't check following math operator
+    // - best way to fix is to do a full scan of the rule after any change
+
     function mergeConstraints(src: Constraints, dst: Constraints) {
         if (!src) {
             return
@@ -129,20 +134,19 @@ namespace microcode {
             return this.sensors.length === 0 && this.actuators.length === 0
         }
 
-        // TODO: invoke this when loading from program
         public push(tile: Tile, name: string): number {
             const tiles = this.getRuleRep()[name]
             tiles.push(tile)
             const index = tiles.length - 2
-            // if we have two values in a row, insert a plus
             if (name == "filters" || name == "modifiers") {
                 if (index >= 0) {
+                    const secondLast = tiles[index]
                     if (
+                        (getKind(secondLast) == TileKind.Literal ||
+                            getKind(secondLast) == TileKind.Variable) &&
                         (getKind(tile) == TileKind.Literal ||
-                            getKind(tile) == TileKind.Variable) &&
-                        (getKind(tiles[index + 1]) == TileKind.Literal ||
-                            getKind(tiles[index + 1]) == TileKind.Variable ||
-                            getKind(tiles[index + 1]) == TileKind.RandomToss)
+                            getKind(tile) == TileKind.Variable ||
+                            getKind(tile) == TileKind.RandomToss)
                     ) {
                         tiles.insertAt(index + 1, Tid.TID_OPERATOR_PLUS)
                         return 2
@@ -154,11 +158,11 @@ namespace microcode {
 
         public deleteAt(name: string, index: number) {
             const ruleTiles = this.getRuleRep()[name]
-            if (index >= 0 && index < ruleTiles.length) {
-                ruleTiles.splice(index, 1)
-            }
+            const tile = ruleTiles[index]
+            ruleTiles.splice(index, 1)
+            // TODO: random toss deleted, followed by a math operator
             if (name == "filters" || name == "modifiers") {
-                const newIndex = this.deleteIncompatibleTiles(name, index)
+                const newIndex = this.deleteIncompatibleTiles(name, index, tile)
                 return newIndex < index
             }
             return false
@@ -168,7 +172,11 @@ namespace microcode {
             return Language.getTileSuggestions(this, name, index)
         }
 
-        private deleteIncompatibleTiles(name: string, index: number): number {
+        private deleteIncompatibleTiles(
+            name: string,
+            index: number,
+            tile: Tile
+        ): number {
             const doit = (name: string, i: number) => {
                 const ruleTiles = this.getRuleRep()[name]
 
@@ -259,7 +267,7 @@ namespace microcode {
                     const newOne = modifier.getNewInstance(field)
                     defn.modifiers.push(<any>newOne)
                 } else {
-                    defn.modifiers.push(modifierEnum)
+                    defn.push(modifierEnum, "modifiers")
                 }
                 assert(!br.eof())
             }
