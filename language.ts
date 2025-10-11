@@ -153,33 +153,53 @@ namespace microcode {
         }
 
         public deleteAt(name: string, index: number) {
-            // TODO: do the deletion
-            if (name == "filters" || name == "modifiers")
-                this.deleteIncompatibleTiles(name, index)
+            const ruleTiles = this.getRuleRep()[name]
+            if (index >= 0 && index < ruleTiles.length) {
+                ruleTiles.splice(index, 1)
+            }
+            if (name == "filters" || name == "modifiers") {
+                const newIndex = this.deleteIncompatibleTiles(name, index)
+                return newIndex < index
+            }
+            return false
         }
 
         private getSuggestions(name: string, index: number) {
             return Language.getTileSuggestions(this, name, index)
         }
 
-        private deleteIncompatibleTiles(name: string, index: number) {
-            // TODO: update to deal with math operators
-            const doit = (name: string, index: number) => {
+        private deleteIncompatibleTiles(name: string, index: number): number {
+            const doit = (name: string, i: number) => {
                 const ruleTiles = this.getRuleRep()[name]
 
-                while (index < ruleTiles.length) {
-                    const suggestions = this.getSuggestions(name, index)
+                while (i < ruleTiles.length) {
+                    const suggestions = this.getSuggestions(name, i)
                     const compatible = suggestions.find(
-                        t => getTid(t) == getTid(ruleTiles[index])
+                        t => getTid(t) == getTid(ruleTiles[i])
                     )
-                    if (compatible) index++
+                    if (compatible) i++
                     else {
-                        ruleTiles.splice(index, ruleTiles.length - index)
+                        ruleTiles.splice(i, ruleTiles.length - i)
                         return false
                     }
                 }
                 return true
             }
+            // first, look to see if we should delete a math operator
+            const ruleTiles = this.getRuleRep()[name]
+            if (index > 0) {
+                const tile = ruleTiles[index - 1]
+                if (isMathOperator(getTid(tile))) {
+                    ruleTiles.splice(index - 1, 1)
+                    index--
+                }
+            } else if (index == 0) {
+                const tile = ruleTiles[index]
+                if (isMathOperator(getTid(tile))) {
+                    ruleTiles.splice(index, 1)
+                }
+            }
+            // now delete incompatible tiles
             doit(name, index)
             if (name === "filters") {
                 // a change in the the when section may affect the do section
@@ -187,6 +207,7 @@ namespace microcode {
                 if (ok) doit("modifiers", 0)
                 else this.getRuleRep()["modifiers"] = []
             }
+            return index
         }
 
         public updateAt(name: string, index: number, tile: Tile) {

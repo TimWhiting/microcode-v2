@@ -500,8 +500,6 @@ namespace microcode {
 
         private drawNav() {
             control.enablePerfCounter()
-            // if dot matrix is visible, then we're connected to some Jacdac bus
-            // TODO: move cursor to next button when visible?
             if (!this.rendering) {
                 this.diskBtn.draw()
                 // const wasVisible = this.connectBtn.visible()

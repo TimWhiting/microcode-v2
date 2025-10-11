@@ -204,6 +204,7 @@ namespace microcode {
             const ruleTiles = this.ruledef.getRuleRep()[name]
             const tileUpdated = (tile: Tile) => {
                 let numberAdded = 0
+                let deleted = false
                 if (tile) {
                     if (index >= ruleTiles.length) {
                         reportEvent("tile.add", { tid: getTid(tile) })
@@ -213,7 +214,7 @@ namespace microcode {
                         this.ruledef.updateAt(name, index, tile)
                     }
                 } else {
-                    this.ruledef.deleteAt(name, index)
+                    deleted = this.ruledef.deleteAt(name, index)
                     reportEvent("tile.delete")
                 }
                 Language.ensureValid(this.ruledef)
@@ -225,6 +226,9 @@ namespace microcode {
                 } else if (numberAdded == 2) {
                     // Queue two moves to the right
                     this.queuedCursorMove = CursorDir.Down
+                } else if (deleted) {
+                    // Queue a move to the left
+                    this.queuedCursorMove = CursorDir.Left
                 }
                 this.page.changed()
             }
@@ -373,12 +377,20 @@ namespace microcode {
                             ControllerButtonEvent.Pressed,
                             controller.right.id
                         )
-                    case CursorDir.Right:
+                    case CursorDir.Right: {
                         control.raiseEvent(
                             ControllerButtonEvent.Pressed,
                             controller.right.id
                         )
                         break
+                    }
+                    case CursorDir.Left: {
+                        control.raiseEvent(
+                            ControllerButtonEvent.Pressed,
+                            controller.left.id
+                        )
+                        break
+                    }
                     // Add other cases as needed
                 }
                 this.queuedCursorMove = undefined
