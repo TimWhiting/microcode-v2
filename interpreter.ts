@@ -2,8 +2,10 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // TODO: 1. generate token stream and parse it
-    // TODO: 2. deal with variables
+    // TODO: 2. deal with variables (just substitution for now)
     // TODO: 3. deal with random-toss
+    // TODO: 4. divide by zero -> NaN
+    // TODO: 5. add comparison operators and math to filter expressions
 
     control.singleSimulator()
 
