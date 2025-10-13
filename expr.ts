@@ -21,12 +21,21 @@
 // SOFTWARE.
 
 namespace expr {
-    interface ParserState {
-        tokens: string[]
-        currentTokenIndex: number
-        currentToken: string
-        nextToken: () => void
-        variables: VariableMap
+    class ParserState {
+        private currentTokenIndex: number
+        constructor(private tokens: string[], public variables: VariableMap) {
+            this.currentTokenIndex = 0
+        }
+
+        get currentToken() {
+            return this.tokens[this.currentTokenIndex]
+        }
+        set currentToken(value) {
+            this.tokens[this.currentTokenIndex] = value
+        }
+        nextToken() {
+            this.currentTokenIndex++
+        }
     }
 
     type ValueType = number | string | boolean | any[] | object
@@ -316,26 +325,7 @@ namespace expr {
         }
 
         public evaluate(tokens: string[], variables?: VariableMap): any {
-            const tempVariables = this.variables
-            // if (variables) {
-            //     for (const key in variables) {
-            //         tempVariables[key] = variables[key]
-            //     }
-            // }
-            const state: ParserState = {
-                tokens,
-                currentTokenIndex: 0,
-                get currentToken() {
-                    return this.tokens[this.currentTokenIndex]
-                },
-                set currentToken(value) {
-                    this.tokens[this.currentTokenIndex] = value
-                },
-                nextToken() {
-                    this.currentTokenIndex++
-                },
-                variables: tempVariables,
-            }
+            const state = new ParserState(tokens, this.variables)
             const result = this.parseExpression(state)
 
             if (state.currentToken !== undefined) {
