@@ -649,16 +649,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             this.running = false
         }
 
-        private constantFold(mods: Tile[], defl = 0) {
-            if (mods.length == 0) return defl
-            let v = 0
-            for (const m of mods) {
-                if (getKind(m) != TileKind.Literal) return undefined
-                v += getParam(m)
-            }
-            return v
-        }
-
         private error(msg: string) {
             this.hasErrors = true
             console.error("Error: " + msg)
@@ -682,6 +672,17 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             }
         }
 
+        private constantFold(mods: Tile[], defl = 0) {
+            if (mods.length == 0) return defl
+            let v = 0
+            for (const m of mods) {
+                if (getKind(m) != TileKind.Literal) return undefined
+                v += getParam(m)
+            }
+            return v
+        }
+
+        // TODO: convert to use parser
         private getAddSeq(
             current: number,
             mods: Tile[],
@@ -718,6 +719,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             return result
         }
 
+        // TODO: convert to use parser
         private breaksValSeq(mod: Tile) {
             switch (getKind(mod)) {
                 case TileKind.RandomToss:
@@ -727,7 +729,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             }
         }
 
-        // do we need to take initial value into account?
+        // TODO: convert to use parser
         public getValue(modifiers: Tile[], defl: number): number {
             let currSeq: Tile[] = []
             let first = true
