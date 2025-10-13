@@ -19,12 +19,6 @@ namespace microcode {
 
     type StateMap = { [id: string]: number }
 
-    // 0-max inclusive
-    function randomInt(max: number) {
-        if (max <= 0) return 0
-        return Math.floor(Math.random() * (max + 1))
-    }
-
     function emitClearScreen() {
         const anim = hex`
                 0001000000
@@ -656,113 +650,43 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             console.error("Error: " + msg)
         }
 
-        private getExprValue(expr: Tile): number {
+        private getExprValue(expr: Tile): string {
+            if (isMathOperator(getTid(expr))) {
+                switch (getTid(expr)) {
+                    case Tid.TID_OPERATOR_DIVIDE:
+                        return "/"
+                    case Tid.TID_OPERATOR_MULTIPLY:
+                        return "*"
+                    case Tid.TID_OPERATOR_MINUS:
+                        return "-"
+                    case Tid.TID_OPERATOR_PLUS:
+                        return "+"
+                }
+            }
             const mKind = getKind(expr)
             const mJdpararm = getParam(expr)
+            let result = 0
             switch (mKind) {
                 case TileKind.Temperature:
-                    return this.state["Temperature"] || 0
+                    result = this.state["Temperature"] || 0
+                    break
                 case TileKind.Literal:
-                    return mJdpararm
+                    result = mJdpararm
+                    break
                 case TileKind.Variable:
-                    return this.state[mJdpararm] || 0
+                    result = this.state[mJdpararm] || 0
                 case TileKind.RadioValue:
-                    return this.state["Radio"] || 0
+                    result = this.state["Radio"] || 0
                 default:
                     this.error("can't emit kind: " + mKind)
-                    return 0
+                    result = 0
             }
+            return result.toString()
         }
 
-        private constantFold(mods: Tile[], defl = 0) {
-            if (mods.length == 0) return defl
-            let v = 0
-            for (const m of mods) {
-                if (getKind(m) != TileKind.Literal) return undefined
-                v += getParam(m)
-            }
-            return v
-        }
-
-        // TODO: convert to use parser
-        private getAddSeq(
-            current: number,
-            mods: Tile[],
-            defl: number = 0,
-            clear = true
-        ): number {
-            // make this functional
-            let result: number = current
-
-            const addOrSet = (vv: number) => {
-                if (clear) result = vv
-                else {
-                    result += vv
-                }
-                clear = false
-            }
-
-            if (mods.length == 0) return defl
-            else {
-                if (getKind(mods[0]) == TileKind.RandomToss) {
-                    let rndBnd = this.getAddSeq(0, mods.slice(1), 5)
-                    if (!rndBnd || rndBnd <= 2) rndBnd = 2
-                    addOrSet(Math.floor(Math.random() * rndBnd))
-                } else {
-                    const folded = this.constantFold(mods, defl)
-                    if (folded != undefined) {
-                        addOrSet(folded)
-                    } else {
-                        for (let i = 0; i < mods.length; ++i)
-                            addOrSet(this.getExprValue(mods[i]))
-                    }
-                }
-            }
-            return result
-        }
-
-        // TODO: convert to use parser
-        private breaksValSeq(mod: Tile) {
-            switch (getKind(mod)) {
-                case TileKind.RandomToss:
-                    return true
-                default:
-                    return false
-            }
-        }
-
-        // TODO: convert to use parser
         public getValue(modifiers: Tile[], defl: number): number {
-            let currSeq: Tile[] = []
-            let first = true
-            let result: number = 0
-
-            for (const m of modifiers) {
-                const cat = getCategory(m)
-                // TODO: make the following a function
-                if (
-                    cat == "value_in" ||
-                    cat == "value_out" ||
-                    cat == "constant" ||
-                    cat == "line" ||
-                    cat == "on_off"
-                ) {
-                    if (this.breaksValSeq(m) && currSeq.length) {
-                        result = this.getAddSeq(result, currSeq, 0, first)
-                        currSeq = []
-                        first = false
-                    }
-                    currSeq.push(m)
-                }
-            }
-
-            if (currSeq.length) {
-                result = this.getAddSeq(result, currSeq, 0, first)
-                first = false
-            }
-
-            if (first) result = defl
-            return result
+            let tokens = modifiers.map(m => this.getExprValue(m))
+            return this.exprParser.evaluate(tokens)
         }
 
         private baseModifiers(rule: RuleDefn) {
