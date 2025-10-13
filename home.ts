@@ -10,6 +10,8 @@ namespace microcode {
     export class Home extends CursorScene {
         constructor(app: AppInterface) {
             super(app)
+            const parser = expr.createParser({})
+            console.logValue("expr", parser.evaluate(["1", "+", "2", "*", "3"]))
         }
 
         /* override */ startup(setup: () => void) {

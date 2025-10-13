@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 namespace expr {
-    export interface ParserState {
+    interface ParserState {
         tokens: string[]
         currentTokenIndex: number
         currentToken: string
@@ -30,12 +30,12 @@ namespace expr {
     }
 
     type ValueType = number | string | boolean | any[] | object
-    export type VariableMap = { [key: string]: ValueType }
-    export type FunctionMap = {
-        [key: string]: (state: ParserState, ...args: any[]) => any
+    type VariableMap = { [key: string]: ValueType }
+    type FunctionMap = {
+        [key: string]: (state: ParserState, args: any[]) => any
     }
-    export type OperatorMap = { [key: string]: (a: any, b: any) => any }
-    export type ExpressionParserConstructor = {
+    type OperatorMap = { [key: string]: (a: any, b: any) => any }
+    type ExpressionParserConstructor = {
         variables?: VariableMap
         regex?: RegExp
     }
@@ -46,7 +46,7 @@ namespace expr {
     // const stringRegex = /(?:"[^"]*")|(?:'[^']*')/;
     // const identifierRegex = /(?:\w+(?:\.\w+)*(?:\[\d+\])*|(?:\.\.\.\w+))/
 
-    export class Error {
+    class Error {
         constructor(message: string) {
             this.message = message
         }
@@ -62,17 +62,14 @@ namespace expr {
         return lastIndex >= 0 && src.indexOf(str, lastIndex) === lastIndex
     }
 
-    export class ExpressionParser {
+    class ExpressionParser {
         variables: VariableMap = {}
         functions: FunctionMap = {}
         operators: OperatorMap = {}
         regex: RegExp
 
         constructor({ variables, regex }: ExpressionParserConstructor = {}) {
-            this.variables = {
-                ...this.variables,
-                ...(variables || {}),
-            }
+            this.variables = variables || {}
         }
 
         private parseNumber(state: ParserState): number {
@@ -212,7 +209,7 @@ namespace expr {
 
             state.nextToken()
 
-            return func(state, ...args)
+            return func(state, args)
         }
 
         private parseFactor(state: ParserState): ValueType {
@@ -251,7 +248,7 @@ namespace expr {
                     if (
                         typeof objectValue !== "object" ||
                         objectValue === null ||
-                        !objectValue.hasOwnProperty(path)
+                        !objectValue[path]
                     ) {
                         objectValue = null as any
                         break
@@ -305,7 +302,7 @@ namespace expr {
 
             while (true) {
                 const token = state.currentToken
-                if (token in this.operators) {
+                if (this.operators[token]) {
                     const operator = token
                     state.nextToken()
                     const term = this.parseTerm(state)
@@ -319,7 +316,12 @@ namespace expr {
         }
 
         public evaluate(tokens: string[], variables?: VariableMap): any {
-            const tempVariables = { ...this.variables, ...(variables || {}) }
+            const tempVariables = this.variables
+            // if (variables) {
+            //     for (const key in variables) {
+            //         tempVariables[key] = variables[key]
+            //     }
+            // }
             const state: ParserState = {
                 tokens,
                 currentTokenIndex: 0,
@@ -344,17 +346,37 @@ namespace expr {
         }
 
         public setFunctions(functions: FunctionMap): void {
-            this.functions = {
-                ...this.functions,
-                ...functions,
-            }
+            this.functions = functions
         }
 
         public setOperators(operators: OperatorMap): void {
-            this.operators = {
-                ...this.operators,
-                ...operators,
-            }
+            this.operators = operators
         }
+    }
+
+    export function createParser(props: ExpressionParserConstructor) {
+        const parser = new ExpressionParser({
+            variables: props.variables || { pi: 3.141592653589793 },
+        })
+        const operators: OperatorMap = {
+            "+": (a, b) => a + b,
+            "-": (a, b) => a - b,
+            "*": (a, b) => a * b,
+            "/": (a, b) => a / b,
+            // "%": (a, b) => a % b,
+            // and: (a, b) => a && b,
+            // or: (a, b) => a || b,
+            ">": (a, b) => a > b,
+            ">=": (a, b) => a >= b,
+            "<": (a, b) => a < b,
+            "<=": (a, b) => a <= b,
+            "==": (a, b) => a === b,
+            "!=": (a, b) => a !== b,
+            // "^": (a, b) => Math.pow(a, b),
+        }
+        const functions: FunctionMap = {}
+        parser.setFunctions(functions)
+        parser.setOperators(operators)
+        return parser
     }
 }
