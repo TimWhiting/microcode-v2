@@ -308,8 +308,9 @@ namespace microcode {
         private runAction() {
             if (this.wakeTime > 0 || !this.actionRunning) return
             // execute one step
-            const action = this.rule.actuators[0]
-            switch (action) {
+            const actuator = this.rule.actuators[0]
+            const defl = defaultModifier(actuator)
+            switch (actuator) {
                 case Tid.TID_ACTUATOR_PAINT: {
                     this.interp.updateResource(
                         OutputResource.LEDScreen,
@@ -718,28 +719,9 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
 
         public getValue(modifiers: Tile[], defl: number): number {
-            // create state map
-            // deal with random-toss (create a function)
+            // TODO: deal with random-toss (inline or create a function)
             let tokens = modifiers.map(m => this.getExprValue(m))
             return this.exprParser.evaluate(tokens)
-        }
-
-        private baseModifiers(rule: RuleDefn) {
-            let modifiers = rule.modifiers
-            if (modifiers.length == 0) {
-                const actuator = rule.actuators[0]
-                const defl = defaultModifier(actuator)
-                if (defl != undefined) return [defl]
-            } else {
-                for (let i = 0; i < modifiers.length; ++i)
-                    if (modifiers[i] == Tid.TID_MODIFIER_LOOP)
-                        return modifiers.slice(0, i)
-            }
-            return modifiers
-        }
-
-        public getValueOut(rule: RuleDefn, defl: number) {
-            return this.getValue(this.baseModifiers(rule), defl)
         }
     }
 
