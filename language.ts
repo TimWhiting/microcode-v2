@@ -405,11 +405,14 @@ namespace microcode {
             index: number
         ): Tile[] {
             const tile = rule.getRuleRep()[name][index]
-            if (isComparisonOperator(getTid(tile))) name = "comparisonOperators"
-            else if (isMathOperator(getTid(tile))) name = "mathOperators"
+
+            let rangeName = name
+            if (isComparisonOperator(getTid(tile)))
+                rangeName = "comparisonOperators"
+            else if (isMathOperator(getTid(tile))) rangeName = "mathOperators"
 
             // based on the name, we have a range of tiles to choose from
-            const [lower, upper] = ranges[name]
+            const [lower, upper] = ranges[rangeName]
             let all: Tile[] = []
             for (let i = lower; i <= upper; ++i) {
                 const ed = getEditor(i)
@@ -420,13 +423,7 @@ namespace microcode {
                 .filter((tile: Tile) => isVisible(tile))
                 .sort((t1, t2) => priority(t1) - priority(t2))
 
-            if (
-                name === "sensors" ||
-                name === "actuators" ||
-                name == "mathOperators" ||
-                name == "comparisonOperators"
-            )
-                return all
+            if (name === "sensors" || name === "actuators") return all
 
             // Collect existing tiles up to index.
             let existing: Tile[] = []

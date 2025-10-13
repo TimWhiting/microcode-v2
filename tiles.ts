@@ -603,7 +603,10 @@ namespace microcode {
             case Tid.TID_MODIFIER_RADIO_VALUE:
                 return { requires: [Tid.TID_SENSOR_RADIO_RECEIVE] }
             case Tid.TID_MODIFIER_RANDOM_TOSS:
-                return { allow: ["constant"], disallow: ["value_out"] }
+                return {
+                    allow: ["constant"],
+                    disallow: ["value_out", "math_not_add"],
+                }
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
                 return { allow: ["on_off"] }
@@ -620,7 +623,7 @@ namespace microcode {
         if (isEmoji(tid)) return "sound_emoji"
         if (isFilterConstant(tid) || isFilterVariable(tid)) return "value_in"
         if (isModifierConstant(tid)) return "constant"
-        if (isModifierVariable(tid)) return "value_out"
+        if (isModifierVariable(tid) || isMathOperator(tid)) return "value_out"
         if (isPage(tid)) return "page"
         if (isCarModifier(tid)) return "car"
         if (isLedModifier(tid)) return "rgb_led"
@@ -650,6 +653,10 @@ namespace microcode {
             case Tid.TID_MODIFIER_TEMP_READ:
             case Tid.TID_MODIFIER_RADIO_VALUE:
                 return "value_out"
+            case Tid.TID_OPERATOR_DIVIDE:
+            case Tid.TID_OPERATOR_MINUS:
+            case Tid.TID_OPERATOR_MULTIPLY:
+                return "math_not_add"
         }
         return undefined
     }
