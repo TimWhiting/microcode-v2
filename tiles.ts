@@ -595,7 +595,7 @@ namespace microcode {
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
             case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
             case Tid.TID_MODIFIER_LOOP:
-                return { only: ["constant"] } // ahy only and not allow?
+                return { only: ["constant"] }
             case Tid.TID_ACTUATOR_SWITCH_PAGE:
                 return { allow: ["page"] }
             case Tid.TID_ACTUATOR_CAR:

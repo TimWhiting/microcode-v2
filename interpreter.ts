@@ -243,7 +243,7 @@ namespace microcode {
                         this.modifierIndex = 0
                     } else {
                         // get the loop bound
-                        const loopBound = this.interp.getValue(
+                        const loopBound = this.interp.constantFold(
                             this.rule.modifiers.slice(this.modifierIndex + 1),
                             0
                         )
@@ -708,7 +708,18 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             return result.toString()
         }
 
+        // this is for the special case of loops and random-toss
+        public constantFold(tiles: Tile[], defl: number) {
+            let result = defl
+            for (const t of tiles) {
+                if (getKind(t) == TileKind.Literal) result += getParam(t)
+            }
+            return result
+        }
+
         public getValue(modifiers: Tile[], defl: number): number {
+            // create state map
+            // deal with random-toss (create a function)
             let tokens = modifiers.map(m => this.getExprValue(m))
             return this.exprParser.evaluate(tokens)
         }
