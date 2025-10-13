@@ -358,7 +358,13 @@ namespace microcode {
         // everything else except some filters is not terminal
         if (!isFilter(tid)) return false
         // the following filters are not terminal
-        if (isFilterConstant(tid) || isTimespan(tid) || isFilterVariable(tid))
+        if (
+            isFilterConstant(tid) ||
+            isTimespan(tid) ||
+            isFilterVariable(tid) ||
+            isMathOperator(tid) ||
+            isComparisonOperator(tid)
+        )
             return false
         // all other filters are terminal
         return true

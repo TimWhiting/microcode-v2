@@ -7,11 +7,6 @@ namespace microcode {
         disallow?: (string | number)[]
     }
 
-    // TODO:
-    // - NO: should we allow random toss followed by math operator? can happen because of deletion
-    // - update of random toss to a number doesn't check following math operator
-    // - best way to fix is to do a full scan of the rule after any change
-
     function mergeConstraints(src: Constraints, dst: Constraints) {
         if (!src) {
             return
@@ -220,7 +215,15 @@ namespace microcode {
 
         public updateAt(name: string, index: number, tile: Tile) {
             const tiles = this.getRuleRep()[name]
+            const oldTile = tiles[index]
             tiles[index] = tile
+            if (oldTile != tile) {
+                if (
+                    oldTile == Tid.TID_MODIFIER_RANDOM_TOSS ||
+                    tile == Tid.TID_MODIFIER_RANDOM_TOSS
+                )
+                    tiles.splice(index + 1, tiles.length - (index + 1))
+            }
         }
 
         public toBuffer(bw: BufferWriter) {
@@ -430,15 +433,8 @@ namespace microcode {
             const ruleRep = rule.getRuleRep()
             for (let i = 0; i < index; ++i) {
                 const tile = ruleRep[name][i]
-                if (
-                    isMathOperator(getTid(tile)) ||
-                    isComparisonOperator(getTid(tile))
-                )
-                    continue
                 existing.push(tile)
             }
-
-            // TODO: need to deal with presence of math operators
 
             // Return empty set if the last existing tile is a "terminal".
             if (existing.length) {
