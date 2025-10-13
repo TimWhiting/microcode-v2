@@ -1,6 +1,10 @@
 namespace microcode {
     // an interpreter for ProgramDefn
 
+    // TODO: 1. generate token stream and parse it
+    // TODO: 2. deal with variables
+    // TODO: 3. deal with random-toss
+
     control.singleSimulator()
 
     // make sure we have V2 simulator
@@ -483,6 +487,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     }
 
     class Interpreter {
+        private exprParser: expr.ExpressionParser = undefined
         private hasErrors: boolean = false
         private running: boolean = false
         private currentPage: number = 0
@@ -496,6 +501,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         public state: StateMap = {}
 
         constructor(private program: ProgramDefn) {
+            this.exprParser = expr.createParser({})
             emitClearScreen()
             this.running = true
             this.switchPage(0)

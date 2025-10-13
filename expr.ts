@@ -71,7 +71,7 @@ namespace expr {
         return lastIndex >= 0 && src.indexOf(str, lastIndex) === lastIndex
     }
 
-    class ExpressionParser {
+    export class ExpressionParser {
         variables: VariableMap = {}
         functions: FunctionMap = {}
         operators: OperatorMap = {}
