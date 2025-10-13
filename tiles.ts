@@ -338,24 +338,7 @@ namespace microcode {
 
     export function isTerminal(tile: Tile) {
         const tid = getTid(tile)
-        // the following sensors and actuators are terminal
-        if (
-            tid == Tid.TID_SENSOR_CAR_WALL ||
-            tid == Tid.TID_SENSOR_SLIDER ||
-            tid == Tid.TID_ACTUATOR_SWITCH_PAGE ||
-            tid == Tid.TID_ACTUATOR_RELAY ||
-            tid == Tid.TID_SENSOR_LIGHT ||
-            tid == Tid.TID_SENSOR_LED_LIGHT ||
-            tid == Tid.TID_SENSOR_MICROPHONE ||
-            tid == Tid.TID_SENSOR_MAGNET ||
-            tid == Tid.TID_SENSOR_LINE ||
-            tid == Tid.TID_SENSOR_DISTANCE ||
-            tid == Tid.TID_SENSOR_REFLECTED ||
-            tid == Tid.TID_ACTUATOR_SERVO_POWER ||
-            tid == Tid.TID_SENSOR_MOISTURE
-        )
-            return true
-        // everything else except some filters is not terminal
+        // everything else except some filters are not terminal
         if (!isFilter(tid)) return false
         // the following filters are not terminal
         if (
