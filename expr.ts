@@ -38,22 +38,16 @@ namespace expr {
         }
     }
 
-    type ValueType = number | string | boolean | any[] | object
-    type VariableMap = { [key: string]: ValueType }
-    type FunctionMap = {
+    export type ValueType = number | string | boolean | any[] | object
+    export type VariableMap = { [key: string]: ValueType }
+    export type FunctionMap = {
         [key: string]: (state: ParserState, args: any[]) => any
     }
-    type OperatorMap = { [key: string]: (a: any, b: any) => any }
-    type ExpressionParserConstructor = {
+    export type OperatorMap = { [key: string]: (a: any, b: any) => any }
+    export type ExpressionParserConstructor = {
         variables?: VariableMap
         regex?: RegExp
     }
-
-    // const comparisonOperatorRegex = /([<>]=|==|!=)/;
-    // const specialCharacterRegex = /([-+*/():,<>!=%^\[\]\{\}])/;
-    // const numberRegex = /\b(?:\d+(\.\d+)?)/;
-    // const stringRegex = /(?:"[^"]*")|(?:'[^']*')/;
-    // const identifierRegex = /(?:\w+(?:\.\w+)*(?:\[\d+\])*|(?:\.\.\.\w+))/
 
     class Error {
         constructor(message: string) {
@@ -342,31 +336,5 @@ namespace expr {
         public setOperators(operators: OperatorMap): void {
             this.operators = operators
         }
-    }
-
-    export function createParser(props: ExpressionParserConstructor) {
-        const parser = new ExpressionParser({
-            variables: props.variables || { pi: 3.141592653589793 },
-        })
-        const operators: OperatorMap = {
-            "+": (a, b) => a + b,
-            "-": (a, b) => a - b,
-            "*": (a, b) => a * b,
-            "/": (a, b) => a / b,
-            // "%": (a, b) => a % b,
-            // and: (a, b) => a && b,
-            // or: (a, b) => a || b,
-            ">": (a, b) => a > b,
-            ">=": (a, b) => a >= b,
-            "<": (a, b) => a < b,
-            "<=": (a, b) => a <= b,
-            "==": (a, b) => a === b,
-            "!=": (a, b) => a !== b,
-            // "^": (a, b) => Math.pow(a, b),
-        }
-        const functions: FunctionMap = {}
-        parser.setFunctions(functions)
-        parser.setOperators(operators)
-        return parser
     }
 }

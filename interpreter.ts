@@ -1,8 +1,6 @@
 namespace microcode {
     // an interpreter for ProgramDefn
 
-    // TODO: 1. generate token stream and parse it
-    // TODO: 2. deal with variables (just substitution for now)
     // TODO: 3. deal with random-toss
     // TODO: 4. divide by zero -> NaN
     // TODO: 5. add comparison operators and math to filter expressions
@@ -75,6 +73,32 @@ namespace microcode {
         return "unknown"
     }
     */
+
+    export function createParser(props: expr.ExpressionParserConstructor) {
+        const parser = new expr.ExpressionParser({
+            variables: props.variables || { pi: 3.141592653589793 },
+        })
+        const operators: expr.OperatorMap = {
+            "+": (a, b) => a + b,
+            "-": (a, b) => a - b,
+            "*": (a, b) => a * b,
+            "/": (a, b) => a / b,
+            // "%": (a, b) => a % b,
+            // and: (a, b) => a && b,
+            // or: (a, b) => a || b,
+            ">": (a, b) => a > b,
+            ">=": (a, b) => a >= b,
+            "<": (a, b) => a < b,
+            "<=": (a, b) => a <= b,
+            "==": (a, b) => a === b,
+            "!=": (a, b) => a !== b,
+            // "^": (a, b) => Math.pow(a, b),
+        }
+        const functions: expr.FunctionMap = {}
+        parser.setFunctions(functions)
+        parser.setOperators(operators)
+        return parser
+    }
 
     enum OutputResource {
         LEDScreen = 1000,
@@ -497,7 +521,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         public state: StateMap = {}
 
         constructor(private program: ProgramDefn) {
-            this.exprParser = expr.createParser({})
+            this.exprParser = createParser({})
             emitClearScreen()
             this.running = true
             this.switchPage(0)
