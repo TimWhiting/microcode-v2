@@ -15,8 +15,6 @@ namespace microcode {
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
 
-    type StateMap = { [id: string]: number }
-
     function emitClearScreen() {
         const anim = hex`
                 0001000000
@@ -133,7 +131,9 @@ namespace microcode {
             if (getKind(sensor) == TileKind.Variable) {
                 const pipeId = getParam(sensor)
                 if (pipeId == sensorName)
-                    return this.filterValueIn(this.interp.state[pipeId])
+                    return this.filterValueIn(
+                        this.interp.state[pipeId] as number
+                    )
             } else if (getKind(sensor) == TileKind.Radio) {
                 const radioVal = this.getRadioVal()
                 if (
@@ -167,7 +167,9 @@ namespace microcode {
                     if (eventCode) {
                         return event == eventCode
                     } else {
-                        return this.filterValueIn(this.interp.state[sensorName])
+                        return this.filterValueIn(
+                            this.interp.state[sensorName] as number
+                        )
                     }
                 }
             } else if (typeof sensorName == "number") {
@@ -184,8 +186,8 @@ namespace microcode {
             return false
         }
 
-        private getRadioVal() {
-            return this.interp.state["Radio"]
+        private getRadioVal(): number {
+            return this.interp.state["Radio"] as number
         }
 
         private filterValueIn(f: number) {
@@ -221,7 +223,7 @@ namespace microcode {
                         basic.pause(this.wakeTime)
                         this.wakeTime = 0
                     }
-                    this.runAction()
+                    this.queueAction()
                     // TODO: runAction asks to run on a resource
                     // TODO: pause here and wait for permission
                     // TODO: if no, permission, stop running this action
@@ -269,22 +271,10 @@ namespace microcode {
             }
         }
 
-        private displayLEDImage() {
-            // extract the LED grid for the current modifier
-            if (this.rule.modifiers.length == 0) {
-                basic.showIcon(IconNames.Happy)
-            } else {
-                const mod = this.rule.modifiers[this.modifierIndex]
-                const fieldEditor = getFieldEditor(mod) as IconFieldEditor
-                const modEditor = mod as ModifierEditor
-                fieldEditor.toMicroBit(modEditor.getField())
-            }
-            basic.pause(200)
-        }
-
-        private askAction() {
+        private getOutputResource() {
             if (this.wakeTime > 0 || !this.actionRunning) return undefined
             const action = this.rule.actuators[0]
+            // TODO: move this out to tiles
             switch (action) {
                 case Tid.TID_ACTUATOR_PAINT:
                 case Tid.TID_ACTUATOR_SHOW_NUMBER:
@@ -305,101 +295,62 @@ namespace microcode {
             return undefined
         }
 
-        private runAction() {
+        private queueAction() {
             if (this.wakeTime > 0 || !this.actionRunning) return
-            // execute one step
             const actuator = this.rule.actuators[0]
-            const defl = defaultModifier(actuator)
-            switch (actuator) {
-                case Tid.TID_ACTUATOR_PAINT: {
-                    this.interp.updateResource(
-                        OutputResource.LEDScreen,
-                        this.index,
-                        () => this.displayLEDImage()
-                    )
-                    break
-                }
-                case Tid.TID_ACTUATOR_SHOW_NUMBER: {
-                    const v = this.interp.getValue(this.rule.modifiers, 0)
-                    this.interp.updateResource(
-                        OutputResource.LEDScreen,
-                        this.index,
-                        () => basic.showNumber(v)
-                    )
-                    this.actionRunning = false
-                    return
-                }
-                case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
-                case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
-                case Tid.TID_ACTUATOR_CUP_Z_ASSIGN: {
-                    control.waitMicros(ANTI_FREEZE_DELAY * 1000)
-                    const pipe = getParam(action)
-                    const v = this.interp.getValue(this.rule.modifiers, 0)
-                    this.interp.updateState(this.index, pipe, v)
-                    this.actionRunning = false
-                    return
-                }
-                case Tid.TID_ACTUATOR_RADIO_SEND: {
-                    const v = this.interp.getValue(this.rule.modifiers, 0)
-                    this.interp.updateResource(
-                        OutputResource.Radio,
-                        this.index,
-                        // TODO: need to put this stuff in RuntimeHost
-                        () => radio.sendNumber(v)
-                    )
-                    this.actionRunning = false
-                    return
-                }
-                case Tid.TID_ACTUATOR_RADIO_SET_GROUP: {
-                    const v = this.interp.getValue(this.rule.modifiers, 1)
-                    this.interp.updateResource(
-                        OutputResource.Radio,
-                        this.index,
-                        () => radio.setGroup(v)
-                    )
-                    this.actionRunning = false
-                    return
-                }
-                case Tid.TID_ACTUATOR_MUSIC: {
-                    // TODO
-                    // if no music, don't play anything
-                    // translate notes to scale names
-                    // music.play(music.stringPlayable("C D E F G F E D ", 120), music.PlaybackMode.UntilDone)
-                    break
-                }
-                case Tid.TID_ACTUATOR_SPEAKER: {
-                    if (this.rule.modifiers.length == 0) {
-                        music.play(
-                            music.builtinPlayableSoundEffect(
-                                soundExpression.giggle
-                            ),
-                            music.PlaybackMode.UntilDone
-                        )
-                        this.actionRunning = false
-                        return
-                    } else {
+            const resource = this.getOutputResource()
+
+            let param: any = undefined
+            let oneShot = true
+            if (this.rule.modifiers.length == 0) {
+                param = defaultModifier(actuator)
+            } else {
+                switch (actuator) {
+                    case Tid.TID_ACTUATOR_PAINT: {
                         const mod = this.rule.modifiers[this.modifierIndex]
-                        let sound = getParam(mod)
-                        music.play(
-                            music.builtinPlayableSoundEffect(sound),
-                            music.PlaybackMode.UntilDone
+                        const fieldEditor = getFieldEditor(
+                            mod
+                        ) as IconFieldEditor
+                        const modEditor = mod as ModifierEditor
+                        param = modEditor.getField()
+                        break
+                    }
+                    case Tid.TID_ACTUATOR_MUSIC: {
+                        // TODO
+                        // if no music, don't play anything
+                        // translate notes to scale names
+                        // music.play(music.stringPlayable("C D E F G F E D ", 120), music.PlaybackMode.UntilDone)
+                        break
+                    }
+                    case Tid.TID_ACTUATOR_SPEAKER: {
+                        param = getParam(
+                            this.rule.modifiers[this.modifierIndex]
                         )
                         break
                     }
-                }
-                case Tid.TID_ACTUATOR_SWITCH_PAGE: {
-                    let targetPage = 1
-                    for (const m of this.rule.modifiers)
-                        if (getKind(m) == TileKind.Page)
-                            targetPage = getParam(m)
-                    this.interp.switchPage(targetPage - 1)
-                    break
-                }
-                case Tid.TID_ACTUATOR_SERVO_SET_ANGLE: {
-                    break
+                    case Tid.TID_ACTUATOR_SHOW_NUMBER:
+                    case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
+                    case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
+                    case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
+                    case Tid.TID_ACTUATOR_RADIO_SEND:
+                    case Tid.TID_ACTUATOR_RADIO_SET_GROUP: {
+                        param = this.interp.getValue(this.rule.modifiers, 0)
+                        oneShot = true
+                        break
+                    }
+                    case Tid.TID_ACTUATOR_SWITCH_PAGE: {
+                        let targetPage = 1
+                        for (const m of this.rule.modifiers)
+                            if (getKind(m) == TileKind.Page)
+                                targetPage = getParam(m)
+                        param = targetPage
+                        oneShot = true
+                        break
+                    }
                 }
             }
-            this.modifierIndex++
+            if (!oneShot) this.modifierIndex++
+            this.interp.queueAction(this.index, resource, actuator, param)
         }
 
         /*
@@ -519,9 +470,9 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
 
         // state storage for variables and other temporary global state
         // (local per-rule state is kept in RuleClosure)
-        public state: StateMap = {}
+        public state: expr.VariableMap = {}
 
-        constructor(private program: ProgramDefn) {
+        constructor(private program: ProgramDefn, private host: RuntimeHost) {
             this.exprParser = createParser({})
             emitClearScreen()
             this.running = true
@@ -534,7 +485,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             this.ruleClosures = []
         }
 
-        public switchPage(page: number) {
+        private switchPage(page: number) {
             this.stopAllRules()
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             // set up new rule closures
@@ -549,21 +500,40 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             })
         }
 
+        public queueAction(
+            ruleIndex: number,
+            resource: number,
+            action: Tile,
+            param: any
+        ) {
+            this.checkForStepCompleted()
+            switch (action) {
+                case Tid.TID_ACTUATOR_PAINT:
+                    this.host.showIcon(param)
+                    return
+                case Tid.TID_ACTUATOR_SHOW_NUMBER:
+                    this.host.showNumber(param)
+                    return
+                case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
+                    this.host.setRadioGroup(param)
+                    return
+                case Tid.TID_ACTUATOR_RADIO_SEND:
+                    this.host.sendRadio(param)
+                    return
+                case Tid.TID_ACTUATOR_SPEAKER:
+                    this.host.playSound(param)
+                    return
+                case Tid.TID_ACTUATOR_MUSIC:
+                    this.host.playMusic(param)
+                    return
+            }
+        }
+
         // TODO: we need to have the notion of a round in which the various
         // TODO: active rules tell us what they want to update and then at the end
         // TODO: of the round, we decide what updates to actually do
 
-        public updateResource(
-            resource: OutputResource,
-            index: number,
-            handler: () => void
-        ) {
-            this.checkForStepCompleted()
-            handler()
-            // earliest in lexical order wins for a resource
-        }
-
-        public updateState(ruleIndex: number, pipe: string, v: number) {
+        private updateState(ruleIndex: number, pipe: string, v: number) {
             this.checkForStepCompleted()
             // earliest in lexical order wins for a resource
             this.state[pipe] = v
@@ -641,7 +611,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 while (this.running) {
                     // poll the sensors and check for change
                     this.sensors.forEach(s => {
-                        const oldReading = this.state[s.getName()]
+                        const oldReading = this.state[s.getName()] as number
                         const newReading = this.getSensorValue(s)
                         const normalized = sensorInfo[s.getName()].normalized
                         const delta = Math.abs(newReading - oldReading)
@@ -689,24 +659,19 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 }
             }
             const mKind = getKind(expr)
-            const mJdpararm = getParam(expr)
-            let result = 0
+            const mJdparam = getParam(expr)
             switch (mKind) {
                 case TileKind.Temperature:
-                    result = this.state["Temperature"] || 0
-                    break
+                    return "Temperature"
                 case TileKind.Literal:
-                    result = mJdpararm
-                    break
                 case TileKind.Variable:
-                    result = this.state[mJdpararm] || 0
+                    return mJdparam
                 case TileKind.RadioValue:
-                    result = this.state["Radio"] || 0
+                    return "Radio"
                 default:
                     this.error("can't emit kind: " + mKind)
-                    result = 0
+                    return undefined
             }
-            return result.toString()
         }
 
         // this is for the special case of loops and random-toss
@@ -719,16 +684,16 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
 
         public getValue(modifiers: Tile[], defl: number): number {
-            // TODO: deal with random-toss (inline or create a function)
+            // TODO: deal with random-toss (create a function)
             let tokens = modifiers.map(m => this.getExprValue(m))
-            return this.exprParser.evaluate(tokens)
+            return this.exprParser.evaluate(tokens, this.state)
         }
     }
 
     let theInterpreter: Interpreter = undefined
     export function runProgram(prog: ProgramDefn) {
         if (theInterpreter) theInterpreter.stop()
-        theInterpreter = new Interpreter(prog)
+        theInterpreter = new Interpreter(prog, new MicrobitHost())
     }
 
     export function stopProgram() {
@@ -742,15 +707,71 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     // - which will make it easier to do unit tests with a mock runtime
     // ----------------------------------------------------------------
     interface RuntimeHost {
-        // sensors (inputs)
-        // actuators (outputs)
         showIcon(led5x5: Bitmap): void
         showNumber(n: number): void
         sendRadio(n: number): void
         setRadioGroup(n: number): void
         playSound(sound: number): void
         playMusic(music: string): void
-        sendRoleCommand(role: string, cmd: number, data: number[]): void
+        // sendRoleCommand(role: string, cmd: number, data: number[]): void
+    }
+
+    class MicrobitHost implements RuntimeHost {
+        showIcon(img: Bitmap) {
+            let s: string[] = []
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 5; col++) {
+                    if (img.getPixel(col, row)) led.plot(col, row)
+                    else led.unplot(col, row)
+                }
+            }
+        }
+        showNumber(n: number): void {
+            basic.showNumber(n)
+        }
+        sendRadio(n: number): void {
+            radio.sendNumber(n)
+        }
+        setRadioGroup(n: number): void {
+            radio.setGroup(n)
+        }
+        private getSound(sound: Tid) {
+            switch (sound) {
+                case Tid.TID_MODIFIER_EMOJI_GIGGLE:
+                    return soundExpression.giggle
+                case Tid.TID_MODIFIER_EMOJI_HAPPY:
+                    return soundExpression.happy
+                case Tid.TID_MODIFIER_EMOJI_HELLO:
+                    return soundExpression.hello
+                case Tid.TID_MODIFIER_EMOJI_MYSTERIOUS:
+                    return soundExpression.mysterious
+                case Tid.TID_MODIFIER_EMOJI_SAD:
+                    return soundExpression.sad
+                case Tid.TID_MODIFIER_EMOJI_SLIDE:
+                    return soundExpression.slide
+                case Tid.TID_MODIFIER_EMOJI_SOARING:
+                    return soundExpression.soaring
+                case Tid.TID_MODIFIER_EMOJI_SPRING:
+                    return soundExpression.spring
+                case Tid.TID_MODIFIER_EMOJI_TWINKLE:
+                    return soundExpression.twinkle
+                case Tid.TID_MODIFIER_EMOJI_YAWN:
+                    return soundExpression.yawn
+            }
+            return soundExpression.giggle
+        }
+        playSound(sound: Tid): void {
+            music.play(
+                music.builtinPlayableSoundEffect(this.getSound(sound)),
+                music.PlaybackMode.InBackground
+            )
+        }
+        playMusic(notes: string): void {
+            music.play(
+                music.stringPlayable(notes, 120),
+                music.PlaybackMode.UntilDone
+            )
+        }
     }
 
     // mapping of micro:bit and DAL namespace into MicroCode tiles

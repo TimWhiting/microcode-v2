@@ -829,29 +829,8 @@ namespace microcode {
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
                 return jacs.NumFmt.U32
-            //
-            case Tid.TID_MODIFIER_EMOJI_GIGGLE:
-                return soundExpression.giggle
-            case Tid.TID_MODIFIER_EMOJI_HAPPY:
-                return soundExpression.happy
-            case Tid.TID_MODIFIER_EMOJI_HELLO:
-                return soundExpression.hello
-            case Tid.TID_MODIFIER_EMOJI_MYSTERIOUS:
-                return soundExpression.mysterious
-            case Tid.TID_MODIFIER_EMOJI_SAD:
-                return soundExpression.sad
-            case Tid.TID_MODIFIER_EMOJI_SLIDE:
-                return soundExpression.slide
-            case Tid.TID_MODIFIER_EMOJI_SOARING:
-                return soundExpression.soaring
-            case Tid.TID_MODIFIER_EMOJI_SPRING:
-                return soundExpression.spring
-            case Tid.TID_MODIFIER_EMOJI_TWINKLE:
-                return soundExpression.twinkle
-            case Tid.TID_MODIFIER_EMOJI_YAWN:
-                return soundExpression.yawn
         }
-        return undefined
+        return tid
     }
 
     export function getParam2(tile: Tile): number {

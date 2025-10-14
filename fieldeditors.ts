@@ -84,16 +84,6 @@ namespace microcode {
             }
             return ret
         }
-        // move to RuntimeHost
-        toMicroBit(img: Bitmap) {
-            let s: string[] = []
-            for (let row = 0; row < 5; row++) {
-                for (let col = 0; col < 5; col++) {
-                    if (img.getPixel(col, row)) led.plot(col, row)
-                    else led.unplot(col, row)
-                }
-            }
-        }
         fromBuffer(br: BufferReader) {
             const buf = br.readBuffer(4)
             const img = bitmaps.create(5, 5)
