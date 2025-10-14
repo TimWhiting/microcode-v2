@@ -1,38 +1,13 @@
 namespace microcode {
     // an interpreter for ProgramDefn
 
-    // TODO: 3. deal with random-toss
-    // TODO: 4. divide by zero -> NaN
-    // TODO: 5. add comparison operators and math to filter expressions
+    // TODO:
+    // 1. deal with random-toss
+    // 2. add comparison operators and math to filter expressions
+    // 3. music
 
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
-
-    /*
-        JACDAC
-
-    function scToName(sc: ServiceClass) {
-        if (sc == ServiceClass.Button) return "but"
-        if (sc == ServiceClass.DotMatrix) return "dot"
-        if (sc == ServiceClass.SoundLevel) return "snd"
-        if (sc == ServiceClass.Temperature) return "tmp"
-        if (sc == ServiceClass.SoundPlayer) return "mus"
-        if (sc == ServiceClass.Buzzer) return "buz"
-        if (sc == ServiceClass.Accelerometer) return "acc"
-        if (sc == ServiceClass.Radio) return "rad"
-        if (sc == ServiceClass.Potentiometer) return "pot"
-        if (sc == ServiceClass.LightLevel) return "lit"
-        if (sc == ServiceClass.MagneticFieldLevel) return "mag"
-        if (sc == ServiceClass.RotaryEncoder) return "rot"
-        if (sc == ServiceClass.Led) return "led"
-        if (sc == ServiceClass.Servo) return "srv"
-        if (sc == ServiceClass.Distance) return "dst"
-        if (sc == ServiceClass.Reflected) return "ref"
-        if (sc == ServiceClass.Moisture) return "moi"
-        if (sc == ServiceClass.Relay) return "rel"
-        return "unknown"
-    }
-    */
 
     export function createParser(props: expr.ExpressionParserConstructor) {
         const parser = new expr.ExpressionParser({
@@ -54,7 +29,9 @@ namespace microcode {
             "!=": (a, b) => a !== b,
             // "^": (a, b) => Math.pow(a, b),
         }
-        const functions: expr.FunctionMap = {}
+        const functions: expr.FunctionMap = {
+            rnd: (s, max: number[]) => Math.floor(Math.random() * max[0]) + 1,
+        }
         parser.setFunctions(functions)
         parser.setOperators(operators)
         return parser
@@ -396,6 +373,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
     }
 
+    // TODO: this should be part of RuntimeHost
+
     type SensorMap = { [id: string]: { normalized: boolean; tid: number } }
     const sensorInfo: SensorMap = {
         Light: { normalized: true, tid: Tid.TID_SENSOR_LED_LIGHT },
@@ -666,7 +645,34 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         public getValue(modifiers: Tile[], defl: number): number {
             // TODO: deal with random-toss (create a function)
             let tokens = modifiers.map(m => this.getExprValue(m))
+            console.log(`tokens = ${tokens.join(" ")}`)
             return this.exprParser.evaluate(tokens, this.state)
         }
     }
 }
+
+/*
+        JACDAC
+
+    function scToName(sc: ServiceClass) {
+        if (sc == ServiceClass.Button) return "but"
+        if (sc == ServiceClass.DotMatrix) return "dot"
+        if (sc == ServiceClass.SoundLevel) return "snd"
+        if (sc == ServiceClass.Temperature) return "tmp"
+        if (sc == ServiceClass.SoundPlayer) return "mus"
+        if (sc == ServiceClass.Buzzer) return "buz"
+        if (sc == ServiceClass.Accelerometer) return "acc"
+        if (sc == ServiceClass.Radio) return "rad"
+        if (sc == ServiceClass.Potentiometer) return "pot"
+        if (sc == ServiceClass.LightLevel) return "lit"
+        if (sc == ServiceClass.MagneticFieldLevel) return "mag"
+        if (sc == ServiceClass.RotaryEncoder) return "rot"
+        if (sc == ServiceClass.Led) return "led"
+        if (sc == ServiceClass.Servo) return "srv"
+        if (sc == ServiceClass.Distance) return "dst"
+        if (sc == ServiceClass.Reflected) return "ref"
+        if (sc == ServiceClass.Moisture) return "moi"
+        if (sc == ServiceClass.Relay) return "rel"
+        return "unknown"
+    }
+    */
