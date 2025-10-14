@@ -643,8 +643,20 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
 
         public getValue(modifiers: Tile[], defl: number): number {
-            // TODO: deal with random-toss (create a function)
-            let tokens = modifiers.map(m => this.getExprValue(m))
+            let tokens: string[] = []
+            for (let i = 0; i < modifiers.length; i++) {
+                const m = modifiers[i]
+                if (getTid(m) == Tid.TID_MODIFIER_RANDOM_TOSS) {
+                    const max =
+                        i == modifiers.length - 1
+                            ? 2
+                            : this.constantFold(modifiers.slice(i + 1), 0)
+                    const callRnd = ["rnd", "(", max.toString(), ")"]
+                    break
+                } else {
+                    tokens.push(this.getExprValue(m))
+                }
+            }
             console.log(`tokens = ${tokens.join(" ")}`)
             return this.exprParser.evaluate(tokens, this.state)
         }
