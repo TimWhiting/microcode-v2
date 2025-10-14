@@ -301,7 +301,7 @@ namespace microcode {
             const resource = this.getOutputResource()
 
             let param: any = undefined
-            let oneShot = true
+            let oneShot = false
             if (this.rule.modifiers.length == 0) {
                 param = defaultModifier(actuator)
             } else {
@@ -711,6 +711,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         registerOnSensorEvent(
             handler: (sensorTid: number, filter: number) => void
         ): void
+        // timing, yielding
         // outputs
         showIcon(led5x5: Bitmap): void
         showNumber(n: number): void
@@ -822,6 +823,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     else led.unplot(col, row)
                 }
             }
+            basic.pause(200)
         }
         showNumber(n: number): void {
             basic.showNumber(n)
