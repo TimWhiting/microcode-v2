@@ -436,7 +436,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         // sendRoleCommand(role: string, cmd: number, data: number[]): void
     }
 
-    class Interpreter {
+    export class Interpreter {
         private exprParser: expr.ExpressionParser = undefined
         private hasErrors: boolean = false
         private running: boolean = false
@@ -668,19 +668,5 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             let tokens = modifiers.map(m => this.getExprValue(m))
             return this.exprParser.evaluate(tokens, this.state)
         }
-    }
-
-    let runtimeHost: RuntimeHost = undefined
-    let theInterpreter: Interpreter = undefined
-
-    export function runProgram(prog: ProgramDefn) {
-        if (theInterpreter) theInterpreter.stop()
-        if (!runtimeHost) runtimeHost = new MicrobitHost()
-        theInterpreter = new Interpreter(prog, runtimeHost)
-    }
-
-    export function stopProgram() {
-        if (theInterpreter) theInterpreter.stop()
-        theInterpreter = undefined
     }
 }
