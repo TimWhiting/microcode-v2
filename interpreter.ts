@@ -652,13 +652,16 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                             ? 2
                             : this.constantFold(modifiers.slice(i + 1), 0)
                     const callRnd = ["rnd", "(", max.toString(), ")"]
+                    for (const t of callRnd) tokens.push(t)
                     break
                 } else {
                     tokens.push(this.getExprValue(m))
                 }
             }
             console.log(`tokens = ${tokens.join(" ")}`)
-            return this.exprParser.evaluate(tokens, this.state)
+            const result = this.exprParser.evaluate(tokens, this.state)
+            console.log(`result = ${result}`)
+            return result
         }
     }
 }
