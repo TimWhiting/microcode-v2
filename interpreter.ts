@@ -18,16 +18,12 @@ namespace microcode {
             "-": (a, b) => a - b,
             "*": (a, b) => a * b,
             "/": (a, b) => a / b,
-            // "%": (a, b) => a % b,
-            // and: (a, b) => a && b,
-            // or: (a, b) => a || b,
             ">": (a, b) => a > b,
             ">=": (a, b) => a >= b,
             "<": (a, b) => a < b,
             "<=": (a, b) => a <= b,
             "==": (a, b) => a === b,
             "!=": (a, b) => a !== b,
-            // "^": (a, b) => Math.pow(a, b),
         }
         const functions: expr.FunctionMap = {
             rnd: (s, max: number[]) => Math.floor(Math.random() * max[0]) + 1,
@@ -69,10 +65,12 @@ namespace microcode {
             const sensor = this.rule.sensor
             if (getKind(sensor) == TileKind.Variable) {
                 const pipeId = getParam(sensor)
-                if (pipeId == sensorName)
+                if (pipeId == sensorName) {
+                    console.log(`HERE1 ${pipeId}`)
                     return this.filterValueIn(
                         this.interp.state[pipeId] as number
                     )
+                }
             } else if (getKind(sensor) == TileKind.Radio) {
                 const radioVal = this.getRadioVal()
                 if (
@@ -114,7 +112,6 @@ namespace microcode {
             } else if (typeof sensorName == "number") {
                 if (sensorName == sensor) {
                     const eventCode = this.lookupEventCode()
-                    console.log(`match ${sensor} ${event} ${eventCode}`)
                     if (eventCode) {
                         return eventCode == -1 || event == eventCode
                     } else {
@@ -132,7 +129,10 @@ namespace microcode {
         private filterValueIn(f: number) {
             if (this.rule.filters.length) {
                 return f == this.interp.getValue(this.rule.filters, 0)
-            } else return true
+            } else {
+                // TODO: shouldn't there be a default value to check against?
+                return true
+            }
         }
 
         private lookupEventCode() {
@@ -289,6 +289,7 @@ namespace microcode {
                 }
             }
             if (!oneShot) this.modifierIndex++
+            else this.actionRunning = false // for now
             this.interp.queueAction(this.index, resource, actuator, param)
         }
 
@@ -466,6 +467,12 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         ) {
             this.checkForStepCompleted()
             switch (action) {
+                case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
+                case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
+                case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
+                    const varName = getParam(action)
+                    this.updateState(ruleIndex, varName, param)
+                    return
                 case Tid.TID_ACTUATOR_PAINT:
                     this.host.showIcon(param)
                     return
@@ -495,8 +502,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             this.checkForStepCompleted()
             // earliest in lexical order wins for a resource
             this.state[pipe] = v
-            console.log(`pipe ${pipe} = ${v}`)
-            if (!this.running) return
+            console.log(`update with ${pipe} = ${v}`)
+            control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             // see if any rule matches
             const activeRules: RuleClosure[] = []
             this.ruleClosures.forEach(rc => {
@@ -604,6 +611,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
 
         private getExprValue(expr: Tile): string {
+            console.log(`expr ${expr} ${typeof expr}`)
             if (isMathOperator(getTid(expr))) {
                 switch (getTid(expr)) {
                     case Tid.TID_OPERATOR_DIVIDE:
@@ -618,13 +626,15 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             }
             const mKind = getKind(expr)
             const mJdparam = getParam(expr)
+            console.log(`mKind = ${mKind} param = ${mJdparam}`)
             switch (mKind) {
                 // TODO: get rid of special casing for Temperature and Radio
                 case TileKind.Temperature:
                     return "Temperature"
                 case TileKind.Literal:
                 case TileKind.Variable:
-                    return mJdparam
+                    console.log(`param = ${mJdparam}`)
+                    return mJdparam.toString()
                 case TileKind.RadioValue:
                     return "Radio"
                 default:
@@ -642,17 +652,19 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             return result
         }
 
-        public getValue(modifiers: Tile[], defl: number): number {
+        public getValue(tiles: Tile[], defl: number): number {
             let tokens: string[] = []
-            for (let i = 0; i < modifiers.length; i++) {
-                const m = modifiers[i]
+            for (let i = 0; i < tiles.length; i++) {
+                const m = tiles[i]
                 if (getTid(m) == Tid.TID_MODIFIER_RANDOM_TOSS) {
                     const max =
-                        i == modifiers.length - 1
+                        i == tiles.length - 1
                             ? 2
-                            : this.constantFold(modifiers.slice(i + 1), 0)
+                            : this.constantFold(tiles.slice(i + 1), 0)
                     const callRnd = ["rnd", "(", max.toString(), ")"]
-                    for (const t of callRnd) tokens.push(t)
+                    for (const t of callRnd) {
+                        tokens.push(t)
+                    }
                     break
                 } else {
                     tokens.push(this.getExprValue(m))
