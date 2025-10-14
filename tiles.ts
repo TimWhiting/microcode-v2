@@ -666,7 +666,6 @@ namespace microcode {
         Variable, // value is variables[P]
         Page, // value is page[P]
         EventCode,
-        ServiceCommandArg, // argument of command sent will be set to P; P2 is duration in ms for Sequance
         Timespan,
         RadioValue,
         Temperature,
@@ -675,8 +674,6 @@ namespace microcode {
         Radio, // radio send/recv
         RandomToss, // random number
         NumFmt, // on actuator - P is numfmt
-
-        // for each modifier (defaults to [defaultModifier]), do ...
         Sequence,
     }
 
@@ -691,12 +688,6 @@ namespace microcode {
         )
             return TileKind.Literal
         if (isTimespan(tid)) return TileKind.Timespan
-        if (
-            isEmoji(tid) ||
-            tid == Tid.TID_MODIFIER_ICON_EDITOR ||
-            tid == Tid.TID_MODIFIER_MELODY_EDITOR
-        )
-            return TileKind.ServiceCommandArg
         if (isPage(tid)) return TileKind.Page
         if (isCarModifier(tid)) return TileKind.NumFmt
         switch (tid) {

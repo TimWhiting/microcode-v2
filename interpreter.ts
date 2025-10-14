@@ -473,6 +473,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         public state: expr.VariableMap = {}
 
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
+            this.host.registerOnSensorEvent((t, f) => this.onSensorEvent(t, f))
             this.exprParser = createParser({})
             emitClearScreen()
             this.running = true
@@ -661,6 +662,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             const mKind = getKind(expr)
             const mJdparam = getParam(expr)
             switch (mKind) {
+                // TODO: get rid of special casing for Temperature and Radio
                 case TileKind.Temperature:
                     return "Temperature"
                 case TileKind.Literal:
@@ -690,10 +692,13 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
     }
 
+    let runtimeHost: RuntimeHost = undefined
     let theInterpreter: Interpreter = undefined
+
     export function runProgram(prog: ProgramDefn) {
         if (theInterpreter) theInterpreter.stop()
-        theInterpreter = new Interpreter(prog, new MicrobitHost())
+        if (!runtimeHost) runtimeHost = new MicrobitHost()
+        theInterpreter = new Interpreter(prog, runtimeHost)
     }
 
     export function stopProgram() {
@@ -701,12 +706,12 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         theInterpreter = undefined
     }
 
-    // ----------------------------------------------------------------
-    // TODO: Runtime Host
-    // - we will want to have a Host interface for the runtime
-    // - which will make it easier to do unit tests with a mock runtime
-    // ----------------------------------------------------------------
     interface RuntimeHost {
+        // inputs
+        registerOnSensorEvent(
+            handler: (sensorTid: number, filter: number) => void
+        ): void
+        // outputs
         showIcon(led5x5: Bitmap): void
         showNumber(n: number): void
         sendRadio(n: number): void
@@ -716,7 +721,99 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         // sendRoleCommand(role: string, cmd: number, data: number[]): void
     }
 
+    // mapping of micro:bit and DAL namespace into MicroCode tiles
+
+    // see DAL for these values
+    const matchPressReleaseTable: IdMap = {
+        1: Tid.TID_FILTER_BUTTON_A, // DAL.DEVICE_ID_BUTTON_A
+        2: Tid.TID_FILTER_BUTTON_B, // DAL.DEVICE_ID_BUTTON_B
+        121: Tid.TID_FILTER_LOGO, // DAL.MICROBIT_ID_LOGO
+        100: Tid.TID_FILTER_PIN_0, // DAL.ID_PIN_P0
+        101: Tid.TID_FILTER_PIN_1, // DAL.ID_PIN_P1
+        102: Tid.TID_FILTER_PIN_2, // DAL.ID_PIN_P2
+    }
+
+    const matchAccelerometerTable: IdMap = {
+        11: Tid.TID_FILTER_ACCEL_SHAKE,
+        1: Tid.TID_FILTER_ACCEL_TILT_UP,
+        2: Tid.TID_FILTER_ACCEL_TILT_DOWN,
+        3: Tid.TID_FILTER_ACCEL_TILT_LEFT,
+        4: Tid.TID_FILTER_ACCEL_TILT_RIGHT,
+        5: Tid.TID_FILTER_ACCEL_FACE_UP,
+        6: Tid.TID_FILTER_ACCEL_FACE_DOWN,
+    }
+
+    const buttons = [
+        DAL.DEVICE_ID_BUTTON_A,
+        DAL.DEVICE_ID_BUTTON_B,
+        DAL.MICROBIT_ID_LOGO,
+        DAL.ID_PIN_P0,
+        DAL.ID_PIN_P1,
+        DAL.ID_PIN_P2,
+    ]
+
     class MicrobitHost implements RuntimeHost {
+        constructor() {
+            this._handler = (s: number, f: number) => {}
+
+            buttons.forEach(b => {
+                control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
+                    const ev = control.eventValue()
+                    this._handler(
+                        ev == DAL.DEVICE_BUTTON_EVT_DOWN
+                            ? Tid.TID_SENSOR_PRESS
+                            : ev == DAL.DEVICE_BUTTON_EVT_UP
+                            ? Tid.TID_SENSOR_RELEASE
+                            : undefined,
+                        matchPressReleaseTable[b]
+                    )
+                })
+            })
+            // need this only for the simulator
+            input.onGesture(Gesture.Shake, () => {
+                this._handler(
+                    Tid.TID_SENSOR_ACCELEROMETER,
+                    Tid.TID_FILTER_ACCEL_SHAKE
+                )
+            })
+            // handle all other accelerometer events
+            control.onEvent(
+                DAL.DEVICE_ID_ACCELEROMETER,
+                DAL.DEVICE_EVT_ANY,
+                () => {
+                    if (control.eventValue() != Gesture.Shake)
+                        this._handler(
+                            Tid.TID_SENSOR_ACCELEROMETER,
+                            matchAccelerometerTable[control.eventValue()]
+                        )
+                }
+            )
+            control.onEvent(
+                DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
+                DAL.DEVICE_EVT_ANY,
+                () => {
+                    const ev = control.eventValue()
+                    this._handler(
+                        Tid.TID_SENSOR_MICROPHONE,
+                        ev == DAL.LEVEL_THRESHOLD_HIGH
+                            ? Tid.TID_FILTER_LOUD
+                            : ev == DAL.LEVEL_THRESHOLD_LOW
+                            ? Tid.TID_FILTER_QUIET
+                            : undefined
+                    )
+                }
+            )
+            radio.onReceivedNumber(radioNum => {
+                this._handler(Tid.TID_SENSOR_RADIO_RECEIVE, radioNum)
+            })
+        }
+
+        private _handler: (sensorTid: number, filter: number) => void
+        registerOnSensorEvent(
+            handler: (sensorTid: number, filter: number) => void
+        ) {
+            this._handler = handler
+        }
         showIcon(img: Bitmap) {
             let s: string[] = []
             for (let row = 0; row < 5; row++) {
@@ -773,98 +870,4 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             )
         }
     }
-
-    // mapping of micro:bit and DAL namespace into MicroCode tiles
-
-    // see DAL for these values
-    const matchPressReleaseTable: IdMap = {
-        1: Tid.TID_FILTER_BUTTON_A, // DAL.DEVICE_ID_BUTTON_A
-        2: Tid.TID_FILTER_BUTTON_B, // DAL.DEVICE_ID_BUTTON_B
-        121: Tid.TID_FILTER_LOGO, // DAL.MICROBIT_ID_LOGO
-        100: Tid.TID_FILTER_PIN_0, // DAL.ID_PIN_P0
-        101: Tid.TID_FILTER_PIN_1, // DAL.ID_PIN_P1
-        102: Tid.TID_FILTER_PIN_2, // DAL.ID_PIN_P2
-    }
-
-    const matchAccelerometerTable: IdMap = {
-        11: Tid.TID_FILTER_ACCEL_SHAKE,
-        1: Tid.TID_FILTER_ACCEL_TILT_UP,
-        2: Tid.TID_FILTER_ACCEL_TILT_DOWN,
-        3: Tid.TID_FILTER_ACCEL_TILT_LEFT,
-        4: Tid.TID_FILTER_ACCEL_TILT_RIGHT,
-        5: Tid.TID_FILTER_ACCEL_FACE_UP,
-        6: Tid.TID_FILTER_ACCEL_FACE_DOWN,
-    }
-
-    const buttons = [
-        DAL.DEVICE_ID_BUTTON_A,
-        DAL.DEVICE_ID_BUTTON_B,
-        DAL.MICROBIT_ID_LOGO,
-        DAL.ID_PIN_P0,
-        DAL.ID_PIN_P1,
-        DAL.ID_PIN_P2,
-    ]
-
-    // wire up the micro:bit to the interpreter, outside to
-    // prevent accumulation of event handlers
-
-    buttons.forEach(b => {
-        control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
-            const ev = control.eventValue()
-            if (theInterpreter)
-                theInterpreter.onSensorEvent(
-                    ev == DAL.DEVICE_BUTTON_EVT_DOWN
-                        ? Tid.TID_SENSOR_PRESS
-                        : ev == DAL.DEVICE_BUTTON_EVT_UP
-                        ? Tid.TID_SENSOR_RELEASE
-                        : undefined,
-                    matchPressReleaseTable[b]
-                )
-        })
-    })
-
-    // need this only for the simulator
-    input.onGesture(Gesture.Shake, () => {
-        if (theInterpreter)
-            theInterpreter.onSensorEvent(
-                Tid.TID_SENSOR_ACCELEROMETER,
-                Tid.TID_FILTER_ACCEL_SHAKE
-            )
-    })
-
-    // handle all other accelerometer events
-    control.onEvent(DAL.DEVICE_ID_ACCELEROMETER, DAL.DEVICE_EVT_ANY, () => {
-        if (theInterpreter && control.eventValue() != Gesture.Shake)
-            theInterpreter.onSensorEvent(
-                Tid.TID_SENSOR_ACCELEROMETER,
-                matchAccelerometerTable[control.eventValue()]
-            )
-    })
-
-    // microphone events
-    // TODO: move logic out of Interpreter
-    control.onEvent(
-        DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
-        DAL.DEVICE_EVT_ANY,
-        () => {
-            if (theInterpreter) {
-                const ev = control.eventValue()
-                theInterpreter.onSensorEvent(
-                    Tid.TID_SENSOR_MICROPHONE,
-                    ev == DAL.LEVEL_THRESHOLD_HIGH
-                        ? Tid.TID_FILTER_LOUD
-                        : ev == DAL.LEVEL_THRESHOLD_LOW
-                        ? Tid.TID_FILTER_QUIET
-                        : undefined
-                )
-            }
-        }
-    )
-
-    radio.onReceivedNumber(radioNum => {
-        if (theInterpreter) {
-            theInterpreter.state["Radio"] = radioNum
-            theInterpreter.onSensorEvent(Tid.TID_SENSOR_RADIO_RECEIVE, radioNum)
-        }
-    })
 }
