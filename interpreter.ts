@@ -5,46 +5,8 @@ namespace microcode {
     // TODO: 4. divide by zero -> NaN
     // TODO: 5. add comparison operators and math to filter expressions
 
-    control.singleSimulator()
-
-    // make sure we have V2 simulator
-    input.onLogoEvent(TouchButtonEvent.Pressed, function () {})
-    // also enable accelerometer in sim
-    input.onGesture(Gesture.Shake, () => {})
-
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
-
-    function emitClearScreen() {
-        const anim = hex`
-                0001000000
-                0000010000
-                0000000100
-                0000000002
-                0000000004
-                0000000008
-                0000001000
-                0000100000
-                0010000000
-                0800000000
-                0400000000
-                0200000000
-                0000000000
-            `
-        let pos = 0
-        while (pos < anim.length) {
-            for (let col = 0; col < 5; col++) {
-                for (let row = 0; row < 5; row++) {
-                    const onOff =
-                        anim[pos + col + (row >> 3)] & (1 << (row & 7))
-                    if (onOff) led.plot(col, row)
-                    else led.unplot(col, row)
-                }
-            }
-            control.waitMicros(20000)
-            pos = pos + 5
-        }
-    }
 
     /*
         JACDAC
@@ -473,9 +435,9 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         public state: expr.VariableMap = {}
 
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
+            this.host.emitClearScreen()
             this.host.registerOnSensorEvent((t, f) => this.onSensorEvent(t, f))
             this.exprParser = createParser({})
-            emitClearScreen()
             this.running = true
             this.switchPage(0)
             this.startSensors()
@@ -707,6 +669,8 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     }
 
     interface RuntimeHost {
+        // notifications
+        emitClearScreen(): void
         // inputs
         registerOnSensorEvent(
             handler: (sensorTid: number, filter: number) => void
@@ -756,6 +720,10 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     class MicrobitHost implements RuntimeHost {
         constructor() {
             this._handler = (s: number, f: number) => {}
+
+            control.singleSimulator()
+            // make sure we have V2 simulator
+            input.onLogoEvent(TouchButtonEvent.Pressed, function () {})
 
             buttons.forEach(b => {
                 control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
@@ -815,6 +783,38 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         ) {
             this._handler = handler
         }
+
+        emitClearScreen() {
+            const anim = hex`
+                0001000000
+                0000010000
+                0000000100
+                0000000002
+                0000000004
+                0000000008
+                0000001000
+                0000100000
+                0010000000
+                0800000000
+                0400000000
+                0200000000
+                0000000000
+            `
+            let pos = 0
+            while (pos < anim.length) {
+                for (let col = 0; col < 5; col++) {
+                    for (let row = 0; row < 5; row++) {
+                        const onOff =
+                            anim[pos + col + (row >> 3)] & (1 << (row & 7))
+                        if (onOff) led.plot(col, row)
+                        else led.unplot(col, row)
+                    }
+                }
+                control.waitMicros(20000)
+                pos = pos + 5
+            }
+        }
+
         showIcon(img: Bitmap) {
             let s: string[] = []
             for (let row = 0; row < 5; row++) {
