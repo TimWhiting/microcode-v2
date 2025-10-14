@@ -396,8 +396,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
     }
 
-    type IdMap = { [id: number]: number }
-
     type SensorMap = { [id: string]: { normalized: boolean; tid: number } }
     const sensorInfo: SensorMap = {
         Light: { normalized: true, tid: Tid.TID_SENSOR_LED_LIGHT },
@@ -418,6 +416,24 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     export enum SensorChange {
         Up,
         Down,
+    }
+
+    export interface RuntimeHost {
+        // notifications
+        emitClearScreen(): void
+        // inputs
+        registerOnSensorEvent(
+            handler: (sensorTid: number, filter: number) => void
+        ): void
+        // timing, yielding
+        // outputs
+        showIcon(led5x5: Bitmap): void
+        showNumber(n: number): void
+        sendRadio(n: number): void
+        setRadioGroup(n: number): void
+        playSound(sound: number): void
+        playMusic(music: string): void
+        // sendRoleCommand(role: string, cmd: number, data: number[]): void
     }
 
     class Interpreter {
@@ -666,210 +682,5 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
     export function stopProgram() {
         if (theInterpreter) theInterpreter.stop()
         theInterpreter = undefined
-    }
-
-    interface RuntimeHost {
-        // notifications
-        emitClearScreen(): void
-        // inputs
-        registerOnSensorEvent(
-            handler: (sensorTid: number, filter: number) => void
-        ): void
-        // timing, yielding
-        // outputs
-        showIcon(led5x5: Bitmap): void
-        showNumber(n: number): void
-        sendRadio(n: number): void
-        setRadioGroup(n: number): void
-        playSound(sound: number): void
-        playMusic(music: string): void
-        // sendRoleCommand(role: string, cmd: number, data: number[]): void
-    }
-
-    // mapping of micro:bit and DAL namespace into MicroCode tiles
-
-    // see DAL for these values
-    const matchPressReleaseTable: IdMap = {
-        1: Tid.TID_FILTER_BUTTON_A, // DAL.DEVICE_ID_BUTTON_A
-        2: Tid.TID_FILTER_BUTTON_B, // DAL.DEVICE_ID_BUTTON_B
-        121: Tid.TID_FILTER_LOGO, // DAL.MICROBIT_ID_LOGO
-        100: Tid.TID_FILTER_PIN_0, // DAL.ID_PIN_P0
-        101: Tid.TID_FILTER_PIN_1, // DAL.ID_PIN_P1
-        102: Tid.TID_FILTER_PIN_2, // DAL.ID_PIN_P2
-    }
-
-    const matchAccelerometerTable: IdMap = {
-        11: Tid.TID_FILTER_ACCEL_SHAKE,
-        1: Tid.TID_FILTER_ACCEL_TILT_UP,
-        2: Tid.TID_FILTER_ACCEL_TILT_DOWN,
-        3: Tid.TID_FILTER_ACCEL_TILT_LEFT,
-        4: Tid.TID_FILTER_ACCEL_TILT_RIGHT,
-        5: Tid.TID_FILTER_ACCEL_FACE_UP,
-        6: Tid.TID_FILTER_ACCEL_FACE_DOWN,
-    }
-
-    const buttons = [
-        DAL.DEVICE_ID_BUTTON_A,
-        DAL.DEVICE_ID_BUTTON_B,
-        DAL.MICROBIT_ID_LOGO,
-        DAL.ID_PIN_P0,
-        DAL.ID_PIN_P1,
-        DAL.ID_PIN_P2,
-    ]
-
-    class MicrobitHost implements RuntimeHost {
-        constructor() {
-            this._handler = (s: number, f: number) => {}
-
-            control.singleSimulator()
-            // make sure we have V2 simulator
-            input.onLogoEvent(TouchButtonEvent.Pressed, function () {})
-
-            buttons.forEach(b => {
-                control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
-                    const ev = control.eventValue()
-                    this._handler(
-                        ev == DAL.DEVICE_BUTTON_EVT_DOWN
-                            ? Tid.TID_SENSOR_PRESS
-                            : ev == DAL.DEVICE_BUTTON_EVT_UP
-                            ? Tid.TID_SENSOR_RELEASE
-                            : undefined,
-                        matchPressReleaseTable[b]
-                    )
-                })
-            })
-            // need this only for the simulator
-            input.onGesture(Gesture.Shake, () => {
-                this._handler(
-                    Tid.TID_SENSOR_ACCELEROMETER,
-                    Tid.TID_FILTER_ACCEL_SHAKE
-                )
-            })
-            // handle all other accelerometer events
-            control.onEvent(
-                DAL.DEVICE_ID_ACCELEROMETER,
-                DAL.DEVICE_EVT_ANY,
-                () => {
-                    if (control.eventValue() != Gesture.Shake)
-                        this._handler(
-                            Tid.TID_SENSOR_ACCELEROMETER,
-                            matchAccelerometerTable[control.eventValue()]
-                        )
-                }
-            )
-            control.onEvent(
-                DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
-                DAL.DEVICE_EVT_ANY,
-                () => {
-                    const ev = control.eventValue()
-                    this._handler(
-                        Tid.TID_SENSOR_MICROPHONE,
-                        ev == DAL.LEVEL_THRESHOLD_HIGH
-                            ? Tid.TID_FILTER_LOUD
-                            : ev == DAL.LEVEL_THRESHOLD_LOW
-                            ? Tid.TID_FILTER_QUIET
-                            : undefined
-                    )
-                }
-            )
-            radio.onReceivedNumber(radioNum => {
-                this._handler(Tid.TID_SENSOR_RADIO_RECEIVE, radioNum)
-            })
-        }
-
-        private _handler: (sensorTid: number, filter: number) => void
-        registerOnSensorEvent(
-            handler: (sensorTid: number, filter: number) => void
-        ) {
-            this._handler = handler
-        }
-
-        emitClearScreen() {
-            const anim = hex`
-                0001000000
-                0000010000
-                0000000100
-                0000000002
-                0000000004
-                0000000008
-                0000001000
-                0000100000
-                0010000000
-                0800000000
-                0400000000
-                0200000000
-                0000000000
-            `
-            let pos = 0
-            while (pos < anim.length) {
-                for (let col = 0; col < 5; col++) {
-                    for (let row = 0; row < 5; row++) {
-                        const onOff =
-                            anim[pos + col + (row >> 3)] & (1 << (row & 7))
-                        if (onOff) led.plot(col, row)
-                        else led.unplot(col, row)
-                    }
-                }
-                control.waitMicros(20000)
-                pos = pos + 5
-            }
-        }
-
-        showIcon(img: Bitmap) {
-            let s: string[] = []
-            for (let row = 0; row < 5; row++) {
-                for (let col = 0; col < 5; col++) {
-                    if (img.getPixel(col, row)) led.plot(col, row)
-                    else led.unplot(col, row)
-                }
-            }
-            basic.pause(200)
-        }
-        showNumber(n: number): void {
-            basic.showNumber(n)
-        }
-        sendRadio(n: number): void {
-            radio.sendNumber(n)
-        }
-        setRadioGroup(n: number): void {
-            radio.setGroup(n)
-        }
-        private getSound(sound: Tid) {
-            switch (sound) {
-                case Tid.TID_MODIFIER_EMOJI_GIGGLE:
-                    return soundExpression.giggle
-                case Tid.TID_MODIFIER_EMOJI_HAPPY:
-                    return soundExpression.happy
-                case Tid.TID_MODIFIER_EMOJI_HELLO:
-                    return soundExpression.hello
-                case Tid.TID_MODIFIER_EMOJI_MYSTERIOUS:
-                    return soundExpression.mysterious
-                case Tid.TID_MODIFIER_EMOJI_SAD:
-                    return soundExpression.sad
-                case Tid.TID_MODIFIER_EMOJI_SLIDE:
-                    return soundExpression.slide
-                case Tid.TID_MODIFIER_EMOJI_SOARING:
-                    return soundExpression.soaring
-                case Tid.TID_MODIFIER_EMOJI_SPRING:
-                    return soundExpression.spring
-                case Tid.TID_MODIFIER_EMOJI_TWINKLE:
-                    return soundExpression.twinkle
-                case Tid.TID_MODIFIER_EMOJI_YAWN:
-                    return soundExpression.yawn
-            }
-            return soundExpression.giggle
-        }
-        playSound(sound: Tid): void {
-            music.play(
-                music.builtinPlayableSoundEffect(this.getSound(sound)),
-                music.PlaybackMode.InBackground
-            )
-        }
-        playMusic(notes: string): void {
-            music.play(
-                music.stringPlayable(notes, 120),
-                music.PlaybackMode.UntilDone
-            )
-        }
     }
 }
