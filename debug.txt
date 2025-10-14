@@ -1,4 +1,5 @@
 - on button A, x <-3
+- why are we getting everything below TWICE?
 
 expr 157 number
 
