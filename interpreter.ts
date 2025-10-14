@@ -624,21 +624,26 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                         return "+"
                 }
             }
-            const mKind = getKind(expr)
-            const mJdparam = getParam(expr)
-            console.log(`mKind = ${mKind} param = ${mJdparam}`)
-            switch (mKind) {
+            const kind = getKind(expr)
+            const param = getParam(expr)
+            console.log(`mKind = ${kind} param = ${param}`)
+            switch (kind) {
                 // TODO: get rid of special casing for Temperature and Radio
                 case TileKind.Temperature:
                     return "Temperature"
                 case TileKind.Literal:
+                    console.log(`literal `)
+                    if (typeof param == "number") return param.toString()
+                    else {
+                        console.log(`typeof(param) == ${typeof param}`)
+                        return "5"
+                    }
                 case TileKind.Variable:
-                    console.log(`param = ${mJdparam}`)
-                    return mJdparam.toString()
+                    return param
                 case TileKind.RadioValue:
                     return "Radio"
                 default:
-                    this.error("can't emit kind: " + mKind)
+                    this.error("can't emit kind: " + kind)
                     return undefined
             }
         }
@@ -667,6 +672,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     }
                     break
                 } else {
+                    console.log(`iteration ${i} ${m}`)
                     tokens.push(this.getExprValue(m))
                 }
             }
