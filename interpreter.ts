@@ -70,12 +70,10 @@ namespace microcode {
             const sensor = this.rule.sensor
             if (getKind(sensor) == TileKind.Variable) {
                 const pipeId = getParam(sensor)
-                if (pipeId == sensorName) {
-                    return this.filterValueIn(
-                        this.interp.state[pipeId] as number
-                    )
-                }
+                if (pipeId == sensorName) return this.filterViaCompare()
             } else if (getKind(sensor) == TileKind.Radio) {
+                // TODO: convert this to external sensor with events and values
+                // TODO: and lift out
                 const radioVal = this.getRadioVal()
                 if (
                     sensor == Tid.TID_SENSOR_CAR_WALL ||
@@ -87,7 +85,7 @@ namespace microcode {
                         radioVal
                     )
                         if (sensor == Tid.TID_SENSOR_CAR_WALL)
-                            return this.filterValueIn(
+                            return this.filterOnEvent(
                                 radioVal -
                                     robot.robots.RobotCompactCommand
                                         .ObstacleState
@@ -96,32 +94,23 @@ namespace microcode {
                             robot.robots.RobotCompactCommand.LineState <=
                             radioVal
                         )
-                            return this.filterValueIn(radioVal)
+                            return this.filterOnEvent(radioVal)
                 } else if (
                     radioVal < robot.robots.RobotCompactCommand.ObstacleState
                 )
-                    return this.filterValueIn(radioVal)
-            } else if (typeof sensorName == "string") {
-                // TODO: differentiate events (for which we only have =)
-                // TODO: from values (for which we have general compare)
-                const thisSensorName = tidToSensor(sensor)
-                if (sensorName == thisSensorName) {
-                    const eventCode = this.lookupEventCode()
-                    if (eventCode) {
-                        return event == eventCode
-                    } else {
-                        return this.filterValueIn(
-                            this.interp.state[sensorName] as number
-                        )
-                    }
-                }
-            } else if (typeof sensorName == "number") {
-                if (sensorName == sensor) {
+                    return this.filterOnEvent(radioVal)
+            } else {
+                const thisSensorName =
+                    typeof sensorName == "string" ? tidToSensor(sensor) : ""
+                if (
+                    sensorName == thisSensorName ||
+                    (typeof sensorName == "number" && sensorName == sensor)
+                ) {
                     const eventCode = this.lookupEventCode()
                     if (eventCode) {
                         return eventCode == -1 || event == eventCode
                     } else {
-                        return this.filterValueIn(event)
+                        return this.filterViaCompare()
                     }
                 }
             }
@@ -132,14 +121,22 @@ namespace microcode {
             return this.interp.state["Radio"] as number
         }
 
-        // TODO: this only does equality, and now filters may
-        // TODO: include equality test
-        private filterValueIn(f: number) {
+        private filterOnEvent(f: number) {
             if (this.rule.filters.length) {
                 return f == this.interp.getValue(this.rule.filters, 0)
             } else {
-                // TODO: shouldn't there be a default value to check against?
-                return true
+                return true // sensor changed value, but no constraint
+            }
+        }
+
+        private filterViaCompare(): boolean {
+            if (this.rule.filters.length) {
+                return this.interp.getValue(
+                    [this.rule.sensor].concat(this.rule.filters),
+                    0
+                ) as boolean
+            } else {
+                return true // sensor changed value, but no constraint
             }
         }
 
@@ -147,6 +144,7 @@ namespace microcode {
             const sensor = this.rule.sensor
             // get default event for sensor, if exists
             let evCode = defaultEventCode(sensor)
+            if (evCode == -1) return evCode // matches anything
             if (evCode) {
                 // override if user specifies event code
                 for (const m of this.rule.filters)
@@ -155,7 +153,7 @@ namespace microcode {
                     }
                 return evCode
             }
-            return null
+            return undefined
         }
 
         public runDoSection() {
@@ -218,10 +216,10 @@ namespace microcode {
             }
         }
 
-        private getOutputResource() {
-            if (this.wakeTime > 0 || !this.actionRunning) return undefined
+        // use this to determine conflicts between rules
+        public getOutputResource() {
+            if (this.rule.actuators.length == 0) return undefined
             const action = this.rule.actuators[0]
-            // TODO: move this out to tiles
             switch (action) {
                 case Tid.TID_ACTUATOR_PAINT:
                 case Tid.TID_ACTUATOR_SHOW_NUMBER:
@@ -590,8 +588,11 @@ namespace microcode {
                 case TileKind.Literal:
                     return (param as number).toString()
                 case TileKind.Variable:
-                    return param
+                    let name = param
+                    if (!name) name = tidToSensor(getTid(expr))
+                    return name
                 case TileKind.RadioValue:
+                case TileKind.Radio:
                     return "Radio"
                 default:
                     this.error("can't emit kind: " + kind)
@@ -608,7 +609,7 @@ namespace microcode {
             return result
         }
 
-        public getValue(tiles: Tile[], defl: number): number {
+        public getValue(tiles: Tile[], defl: number): number | boolean {
             let tokens: string[] = []
             for (let i = 0; i < tiles.length; i++) {
                 const m = tiles[i]

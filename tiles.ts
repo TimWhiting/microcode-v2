@@ -700,7 +700,6 @@ namespace microcode {
                 return TileKind.Radio
             case Tid.TID_MODIFIER_RADIO_VALUE:
                 return TileKind.RadioValue
-            case Tid.TID_SENSOR_TEMP:
             case Tid.TID_MODIFIER_TEMP_READ:
                 return TileKind.Temperature
             case Tid.TID_MODIFIER_RANDOM_TOSS:
@@ -739,6 +738,10 @@ namespace microcode {
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
                 return TileKind.NumFmt
+            case Tid.TID_SENSOR_LED_LIGHT:   
+            case Tid.TID_SENSOR_MICROPHONE:
+            case Tid.TID_SENSOR_MAGNET:
+            case Tid.TID_SENSOR_TEMP:
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
             case Tid.TID_SENSOR_CUP_Z_WRITTEN:

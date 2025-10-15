@@ -146,7 +146,6 @@ namespace microcode {
             const ruleTiles = this.getRuleRep()[name]
             const tile = ruleTiles[index]
             ruleTiles.splice(index, 1)
-            // TODO: random toss deleted, followed by a math operator
             if (name == "filters" || name == "modifiers") {
                 const newIndex = this.deleteIncompatibleTiles(name, index, tile)
                 return newIndex < index
@@ -179,9 +178,16 @@ namespace microcode {
                 }
                 return true
             }
-            // first, look to see if we should delete a math operator
+            // first, look to see if we should delete a comparison or math operator
             const ruleTiles = this.getRuleRep()[name]
-            if (index > 0) {
+            if (
+                name == "filters" &&
+                this.filters.length == 1 &&
+                isComparisonOperator(this.filters[0])
+            ) {
+                this.filters = []
+                return -1
+            } else if (index > 0) {
                 const tile = ruleTiles[index - 1]
                 if (isMathOperator(getTid(tile))) {
                     ruleTiles.splice(index - 1, 1)
