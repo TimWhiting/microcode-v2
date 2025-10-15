@@ -286,53 +286,6 @@ namespace microcode {
             this.interp.queueAction(this.index, resource, actuator, param)
         }
 
-        /*
-private emitRoleCommand(rule: microcode.RuleDefn) {
-            const actuator = rule.actuators.length ? rule.actuators[0] : null
-            const wr = this.writer
-            const currValue = () => this.currValue().read(wr)
-            if (actuator == null) return // do nothing
-            const aKind = microcode.jdKind(actuator)
-            const aJdparam = microcode.jdParam(actuator)
-
-
-            } else if (aKind == microcode.JdKind.NumFmt) {
-                const role = this.lookupActuatorRole(rule)
-                this.emitValueOut(rule, 1) // why 1?
-                const fmt: NumFmt = aJdparam
-                const sz = bitSize(fmt) >> 3
-                wr.emitStmt(Op.STMT1_SETUP_PKT_BUFFER, [literal(sz)])
-                if (actuator == microcode.Tid.TID_ACTUATOR_SERVO_SET_ANGLE) {
-                    // TODO no modulo yet in Jacs
-                    // if (curr >= 12) { curr -= 12 }
-                    wr.emitIf(
-                        wr.emitExpr(Op.EXPR2_LE, [literal(12), currValue()]),
-                        () => {
-                            this.currValue().write(
-                                wr,
-                                wr.emitExpr(Op.EXPR2_SUB, [
-                                    currValue(),
-                                    literal(12),
-                                ])
-                            )
-                        }
-                    )
-                    // curr = curr * ((360/12) << 16)
-                    this.currValue().write(
-                        wr,
-                        wr.emitExpr(Op.EXPR2_MUL, [
-                            currValue(),
-                            literal((360 / 12) << 16),
-                        ])
-                    )
-                }
-                wr.emitBufStore(currValue(), fmt, 0)
-                this.emitSendCmd(role, microcode.serviceCommand(actuator))
-
-            TODO: what do these refer to? jacdac services, for the most part
-
-        */
-
         public getWakeTime() {
             this.wakeTime = 0
             const sensor = this.rule.sensor
