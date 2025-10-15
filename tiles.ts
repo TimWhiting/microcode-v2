@@ -526,6 +526,14 @@ namespace microcode {
 
     export function getConstraints(tile: Tile): Constraints {
         const tid = getTid(tile)
+        if (isComparisonOperator(tid)) {
+            return {
+                allow: filterMath,
+                disallow: [
+                    (tid: number) => getKindTid(tid) == TileKind.EventCode,
+                ],
+            }
+        }
         switch (tid) {
             case Tid.TID_SENSOR_PRESS:
             case Tid.TID_SENSOR_RELEASE:
@@ -680,8 +688,11 @@ namespace microcode {
         Sequence,
     }
 
-    export function getKind(tile: Tile): TileKind {
-        const tid = getTid(tile)
+    export function getKind(tile: Tile) {
+        return getKindTid(getTid(tile))
+    }
+
+    export function getKindTid(tid: number): TileKind {
         if (
             isLineEvent(tid) ||
             isFilterConstant(tid) ||
@@ -738,7 +749,7 @@ namespace microcode {
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
                 return TileKind.NumFmt
-            case Tid.TID_SENSOR_LED_LIGHT:   
+            case Tid.TID_SENSOR_LED_LIGHT:
             case Tid.TID_SENSOR_MICROPHONE:
             case Tid.TID_SENSOR_MAGNET:
             case Tid.TID_SENSOR_TEMP:

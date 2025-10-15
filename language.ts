@@ -1,10 +1,12 @@
 namespace microcode {
+    export type TilePredicate = (tile: Tile) => boolean
+
     export interface Constraints {
         provides?: number[]
         requires?: number[]
         only?: (string | number)[]
         allow?: (string | number)[]
-        disallow?: (string | number)[]
+        disallow?: (string | number | TilePredicate)[]
     }
 
     function mergeConstraints(src: Constraints, dst: Constraints) {
@@ -54,7 +56,10 @@ namespace microcode {
         if (!allows) return false
 
         const disallows = !c.disallow.some(
-            cat => cat === category || cat === tid
+            cat =>
+                cat === category ||
+                cat === tid ||
+                (typeof cat == "function" && cat(tid))
         )
         if (!disallows) return false
 
