@@ -532,22 +532,22 @@ namespace microcode {
                 return { allow: ["timespan"] }
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
                 return {
-                    allow: ["value_in", "comparison"],
+                    allow: ["value_in", "comparison", "maths"],
                     disallow: [Tid.TID_FILTER_CUP_X_READ],
                 }
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
                 return {
-                    allow: ["value_in", "comparison"],
+                    allow: ["value_in", "comparison", "maths"],
                     disallow: [Tid.TID_FILTER_CUP_Y_READ],
                 }
             case Tid.TID_SENSOR_CUP_Z_WRITTEN:
                 return {
-                    allow: ["value_in", "comparison"],
+                    allow: ["value_in", "comparison", "maths"],
                     disallow: [Tid.TID_FILTER_CUP_Z_READ],
                 }
             case Tid.TID_SENSOR_RADIO_RECEIVE:
                 return {
-                    allow: ["value_in", "comparison"],
+                    allow: ["value_in", "comparison", "maths"],
                     provides: [Tid.TID_SENSOR_RADIO_RECEIVE],
                 }
             case Tid.TID_SENSOR_SLIDER:
@@ -589,7 +589,7 @@ namespace microcode {
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
-                return { allow: ["value_out", "constant"] }
+                return { allow: ["value_out", "maths", "constant"] }
             case Tid.TID_ACTUATOR_RGB_LED:
                 return { allow: ["rgb_led", "loop"] }
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
@@ -622,9 +622,10 @@ namespace microcode {
         if (isAccelerometerEvent(tid)) return "accel_event"
         if (isEmoji(tid)) return "sound_emoji"
         if (isComparisonOperator(tid)) return "comparison"
+        if (isMathOperator(tid)) return "maths"
         if (isFilterConstant(tid) || isFilterVariable(tid)) return "value_in"
         if (isModifierConstant(tid)) return "constant"
-        if (isModifierVariable(tid) || isMathOperator(tid)) return "value_out"
+        if (isModifierVariable(tid)) return "value_out"
         if (isPage(tid)) return "page"
         if (isCarModifier(tid)) return "car"
         if (isLedModifier(tid)) return "rgb_led"
