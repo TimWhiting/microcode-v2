@@ -73,30 +73,6 @@ namespace microcode {
         return tile
     }
 
-    /*  TODO: reimplement this
-                if (name == "filters" && index == 0) {
-                    const sensor = this.ruledef.sensors[0]
-                    // TODO: move this to language.ts as part of insertion
-                    if (
-                        (getKind(sensor) == TileKind.Radio &&
-                            sensor != Tid.TID_SENSOR_LINE) ||
-                        getKind(sensor) == TileKind.Variable
-                    ) {
-                        // TODO: add the comparison operator into the program
-                        const plus = new Button({
-                            parent: this,
-                            style: buttonStyle(tile),
-                            icon: "arith_equals",
-                            ariaId: "arith_equals",
-                            x: 0,
-                            y: 0,
-                        })
-                        this.ruleButtons[name].push(plus)
-                    }
-                }
-                
-    */
-
     export type RuleRep = { [name: string]: Tile[] }
     export class RuleDefn {
         sensors: number[]
@@ -132,19 +108,30 @@ namespace microcode {
         public push(tile: Tile, name: string): number {
             const tiles = this.getRuleRep()[name]
             tiles.push(tile)
-            const index = tiles.length - 2
             if (name == "filters" || name == "modifiers") {
-                if (index >= 0) {
-                    const secondLast = tiles[index]
+                if (name == "filters" && tiles.length == 1) {
                     if (
-                        (getKind(secondLast) == TileKind.Literal ||
-                            getKind(secondLast) == TileKind.Variable) &&
-                        (getKind(tile) == TileKind.Literal ||
-                            getKind(tile) == TileKind.Variable ||
-                            getKind(tile) == TileKind.RandomToss)
+                        (getKind(this.sensor) == TileKind.Radio &&
+                            this.sensor != Tid.TID_SENSOR_LINE) ||
+                        getKind(this.sensor) == TileKind.Variable
                     ) {
-                        tiles.insertAt(index + 1, Tid.TID_OPERATOR_PLUS)
+                        tiles.insertAt(0, Tid.TID_COMPARE_EQ)
                         return 2
+                    }
+                } else {
+                    const index = tiles.length - 2
+                    if (index >= 0) {
+                        const secondLast = tiles[index]
+                        if (
+                            (getKind(secondLast) == TileKind.Literal ||
+                                getKind(secondLast) == TileKind.Variable) &&
+                            (getKind(tile) == TileKind.Literal ||
+                                getKind(tile) == TileKind.Variable ||
+                                getKind(tile) == TileKind.RandomToss)
+                        ) {
+                            tiles.insertAt(index + 1, Tid.TID_OPERATOR_PLUS)
+                            return 2
+                        }
                     }
                 }
             }
@@ -251,7 +238,7 @@ namespace microcode {
             assert(!br.eof())
             while (isFilter(br.peekByte())) {
                 const filterEnum = br.readByte()
-                defn.filters.push(filterEnum)
+                defn.push(filterEnum, "filters")
                 assert(!br.eof())
             }
             assert(!br.eof())
