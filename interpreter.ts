@@ -66,7 +66,6 @@ namespace microcode {
             if (getKind(sensor) == TileKind.Variable) {
                 const pipeId = getParam(sensor)
                 if (pipeId == sensorName) {
-                    console.log(`HERE1 ${pipeId}`)
                     return this.filterValueIn(
                         this.interp.state[pipeId] as number
                     )
@@ -502,7 +501,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             this.checkForStepCompleted()
             // earliest in lexical order wins for a resource
             this.state[pipe] = v
-            console.log(`update with ${pipe} = ${v}`)
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             // see if any rule matches
             const activeRules: RuleClosure[] = []
@@ -546,7 +544,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             val: number,
             change: SensorChange
         ) {
-            console.log(`sensor ${name} = ${val}`)
             if (!this.running) return
             // see if any rule matches
             const activeRules: RuleClosure[] = []
@@ -611,7 +608,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
         }
 
         private getExprValue(expr: Tile): string {
-            console.log(`expr ${expr} ${typeof expr}`)
             if (isMathOperator(getTid(expr))) {
                 switch (getTid(expr)) {
                     case Tid.TID_OPERATOR_DIVIDE:
@@ -626,17 +622,17 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
             }
             const kind = getKind(expr)
             const param = getParam(expr)
-            console.log(`mKind = ${kind} param = ${param}`)
             switch (kind) {
                 // TODO: get rid of special casing for Temperature and Radio
                 case TileKind.Temperature:
                     return "Temperature"
                 case TileKind.Literal:
-                    console.log(`literal `)
+                    console.log(`param type = ${typeof param}`)
+                    // return param.toString()
                     if (typeof param == "number") return param.toString()
                     else {
-                        console.log(`typeof(param) == ${typeof param}`)
-                        return "5"
+                        this.error(`typeof(param) == ${typeof param}`)
+                        return undefined
                     }
                 case TileKind.Variable:
                     return param
@@ -672,7 +668,6 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                     }
                     break
                 } else {
-                    console.log(`iteration ${i} ${m}`)
                     tokens.push(this.getExprValue(m))
                 }
             }
