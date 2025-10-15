@@ -131,9 +131,9 @@ namespace microcode {
     export const MELODY_LENGTH = 4
     export const NUM_NOTES = 5
 
-    //export const noteNames = ["C", "D", "E", "F", "G", "A", "B", "C", "D"]
+    export const noteNames = ["C", "D", "E", "F", "G", "A", "B", "C5", "D5"]
 
-    class MelodyFieldEditor extends FieldEditor {
+    export class MelodyFieldEditor extends FieldEditor {
         init() {
             return { notes: `0240`, tempo: 120 }
         }
@@ -210,6 +210,16 @@ namespace microcode {
             return new MelodyEditor(
                 field ? field : this.fieldEditor.clone(this.field)
             )
+        }
+        // music.play(music.stringPlayable("C - E - G F E D ", 120), music.PlaybackMode.UntilDone)
+        getNoteSequence() {
+            const notes = this.field.notes.split("")
+            let result = ""
+            for (const n of notes) {
+                if (n == ".") result += "- "
+                else result += noteNames[parseInt(n)] + " "
+            }
+            return result
         }
     }
 

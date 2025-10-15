@@ -2,7 +2,6 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // TODO:
-    // 1. deal with random-toss
     // 2. add comparison operators and math to filter expressions
     // 3. music
 
@@ -246,18 +245,13 @@ namespace microcode {
                 switch (actuator) {
                     case Tid.TID_ACTUATOR_PAINT: {
                         const mod = this.rule.modifiers[this.modifierIndex]
-                        const fieldEditor = getFieldEditor(
-                            mod
-                        ) as IconFieldEditor
                         const modEditor = mod as ModifierEditor
                         param = modEditor.getField()
                         break
                     }
                     case Tid.TID_ACTUATOR_MUSIC: {
-                        // TODO
-                        // if no music, don't play anything
-                        // translate notes to scale names
-                        // music.play(music.stringPlayable("C D E F G F E D ", 120), music.PlaybackMode.UntilDone)
+                        const mod = this.rule.modifiers[this.modifierIndex]
+                        param = (mod as MelodyEditor).getNoteSequence()
                         break
                     }
                     case Tid.TID_ACTUATOR_SPEAKER: {
