@@ -532,22 +532,22 @@ namespace microcode {
                 return { allow: ["timespan"] }
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
                 return {
-                    allow: ["value_in"],
+                    allow: ["value_in", "comparison"],
                     disallow: [Tid.TID_FILTER_CUP_X_READ],
                 }
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
                 return {
-                    allow: ["value_in"],
+                    allow: ["value_in", "comparison"],
                     disallow: [Tid.TID_FILTER_CUP_Y_READ],
                 }
             case Tid.TID_SENSOR_CUP_Z_WRITTEN:
                 return {
-                    allow: ["value_in"],
+                    allow: ["value_in", "comparison"],
                     disallow: [Tid.TID_FILTER_CUP_Z_READ],
                 }
             case Tid.TID_SENSOR_RADIO_RECEIVE:
                 return {
-                    allow: ["value_in"],
+                    allow: ["value_in", "comparison"],
                     provides: [Tid.TID_SENSOR_RADIO_RECEIVE],
                 }
             case Tid.TID_SENSOR_SLIDER:
@@ -621,6 +621,7 @@ namespace microcode {
         if (isTimespan(tid)) return "timespan"
         if (isAccelerometerEvent(tid)) return "accel_event"
         if (isEmoji(tid)) return "sound_emoji"
+        if (isComparisonOperator(tid)) return "comparison"
         if (isFilterConstant(tid) || isFilterVariable(tid)) return "value_in"
         if (isModifierConstant(tid)) return "constant"
         if (isModifierVariable(tid) || isMathOperator(tid)) return "value_out"

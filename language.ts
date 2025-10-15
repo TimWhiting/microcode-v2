@@ -109,7 +109,11 @@ namespace microcode {
             const tiles = this.getRuleRep()[name]
             tiles.push(tile)
             if (name == "filters" || name == "modifiers") {
-                if (name == "filters" && tiles.length == 1) {
+                if (
+                    name == "filters" &&
+                    tiles.length == 1 &&
+                    !isComparisonOperator(getTid(tiles[0]))
+                ) {
                     if (
                         (getKind(this.sensor) == TileKind.Radio &&
                             this.sensor != Tid.TID_SENSOR_LINE) ||
