@@ -145,48 +145,11 @@ namespace microcode {
                     y: 0,
                     onClick: () => this.editTile(name, index),
                 })
-                if (name == "filters" && index == 0) {
-                    const sensor = this.ruledef.sensors[0]
-                    // TODO: this logic should be part of the SensorTileDefn
-                    if (
-                        (jdKind(sensor) == JdKind.Radio &&
-                            sensor != Tid.TID_SENSOR_LINE) ||
-                        jdKind(sensor) == JdKind.Variable
-                    ) {
-                        const plus = new Button({
-                            parent: this,
-                            style: buttonStyle(tile),
-                            icon: "arith_equals",
-                            ariaId: "arith_equals",
-                            x: 0,
-                            y: 0,
-                        })
-                        this.ruleButtons[name].push(plus)
-                    }
-                }
                 this.ruleButtons[name].push(button)
-                if (index < tiles.length - 1) {
-                    if (
-                        (jdKind(tile) == JdKind.Literal ||
-                            jdKind(tile) == JdKind.Variable) &&
-                        (jdKind(tiles[index + 1]) == JdKind.Literal ||
-                            jdKind(tiles[index + 1]) == JdKind.Variable ||
-                            jdKind(tiles[index + 1]) == JdKind.RandomToss)
-                    ) {
-                        const plus = new Button({
-                            parent: this,
-                            style: buttonStyle(tile),
-                            icon: "arith_plus",
-                            ariaId: "arith_plus",
-                            x: 0,
-                            y: 0,
-                        })
-                        this.ruleButtons[name].push(plus)
-                    }
-                }
             })
             return tiles.length > 0
         }
+
         private instantiateProgramTiles() {
             this.destroyProgramTiles()
             const rule = this.ruledef.getRuleRep()
@@ -237,61 +200,35 @@ namespace microcode {
             )
         }
 
-        private deleteIncompatibleTiles(name: string, index: number) {
-            const doit = (name: string, index: number) => {
-                const ruleTiles = this.ruledef.getRuleRep()[name]
-
-                while (index < ruleTiles.length) {
-                    const suggestions = this.getSuggestions(name, index)
-                    const compatible = suggestions.find(
-                        t => getTid(t) == getTid(ruleTiles[index])
-                    )
-                    if (compatible) index++
-                    else {
-                        ruleTiles.splice(index, ruleTiles.length - index)
-                        return false
-                    }
-                }
-                return true
-            }
-            doit(name, index)
-            if (name === "filters") {
-                // a change in the the when section may affect the do section
-                let ok = doit("actuators", 0)
-                if (ok) doit("modifiers", 0)
-                else this.ruledef.getRuleRep()["modifiers"] = []
-            }
-        }
-
         private editTile(name: string, index: number) {
             const ruleTiles = this.ruledef.getRuleRep()[name]
             const tileUpdated = (tile: Tile) => {
-                const editedAdded = !!tile
+                let numberAdded = 0
+                let deleted = false
                 if (tile) {
                     if (index >= ruleTiles.length) {
                         reportEvent("tile.add", { tid: getTid(tile) })
-                        ruleTiles.push(tile)
+                        numberAdded = this.ruledef.push(tile, name)
                     } else {
                         reportEvent("tile.update", { tid: getTid(tile) })
-                        ruleTiles[index] = tile
-                        if (name == "sensors")
-                            this.deleteIncompatibleTiles("filters", 0)
-                        else if (name == "actuators")
-                            this.deleteIncompatibleTiles("modifiers", 0)
-                        else this.deleteIncompatibleTiles(name, index + 1)
+                        this.ruledef.updateAt(name, index, tile)
                     }
                 } else {
-                    ruleTiles.splice(index, 1)
+                    deleted = this.ruledef.deleteAt(name, index)
                     reportEvent("tile.delete")
-                    if (name == "filters" || name == "modifiers")
-                        this.deleteIncompatibleTiles(name, index)
                 }
                 Language.ensureValid(this.ruledef)
                 this.editor.saveAndCompileProgram()
                 this.instantiateProgramTiles()
-                if (editedAdded && this.nextEmpty(name, index)) {
+                if (numberAdded == 1 && this.nextEmpty(name, index)) {
                     // Queue a move to the right
                     this.queuedCursorMove = CursorDir.Right
+                } else if (numberAdded == 2) {
+                    // Queue two moves to the right
+                    this.queuedCursorMove = CursorDir.Down
+                } else if (deleted) {
+                    // Queue a move to the left
+                    this.queuedCursorMove = CursorDir.Left
                 }
                 this.page.changed()
             }
@@ -342,11 +279,15 @@ namespace microcode {
             let onDelete = undefined
             let selectedButton = -1
             if (index < ruleTiles.length) {
-                onDelete = () => {
-                    tileUpdated(undefined)
-                }
+                const tile = ruleTiles[index]
+                // TODO: don't allow delete on operators
+                onDelete = filterModifierWithDelete(tile)
+                    ? () => {
+                          tileUpdated(undefined)
+                      }
+                    : undefined
                 const selected = btns.indexOf(
-                    btns.find(b => b.icon === getIcon(getTid(ruleTiles[index]))) // TODO
+                    btns.find(b => b.icon === getIcon(getTid(tile))) // TODO
                 )
                 if (selected >= 0) {
                     selectedButton = selected
@@ -431,9 +372,25 @@ namespace microcode {
         update() {
             if (this.queuedCursorMove) {
                 switch (this.queuedCursorMove) {
-                    case CursorDir.Right:
-                        // control.raiseEvent(KEY_DOWN, controller.right.id)
+                    case CursorDir.Down:
+                        control.raiseEvent(
+                            ControllerButtonEvent.Pressed,
+                            controller.right.id
+                        )
+                    case CursorDir.Right: {
+                        control.raiseEvent(
+                            ControllerButtonEvent.Pressed,
+                            controller.right.id
+                        )
                         break
+                    }
+                    case CursorDir.Left: {
+                        control.raiseEvent(
+                            ControllerButtonEvent.Pressed,
+                            controller.left.id
+                        )
+                        break
+                    }
                     // Add other cases as needed
                 }
                 this.queuedCursorMove = undefined

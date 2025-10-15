@@ -8,7 +8,7 @@
         "microphone": "*",
         "datalogger": "*",
         "settings": "*",
-        "user-interface-base": "github:microbit-apps/user-interface-base#v0.0.23"
+        "user-interface-base": "github:microbit-apps/user-interface-base#v0.0.24"
     },
     "files": [
         "analytics.ts",
@@ -28,13 +28,16 @@
         "fieldeditors.ts",
         "options.ts",
         "samples.ts",
-        "docs.ts",
         "gallery.ts",
         "pointerevents.ts",
         "utils.ts",
         "protocol.ts",
         "navigator.ts",
-        "tooltips.ts"
+        "tooltips.ts",
+        "expr.ts",
+        "host.ts",
+        "interpreter.ts",
+        "sensors.ts"
     ],
     "testFiles": [],
     "targetVersions": {

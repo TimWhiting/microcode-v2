@@ -1,0 +1,26 @@
+- on button A, x <-3
+- why are we getting everything below TWICE?
+
+expr 157 number
+
+expr 157 number
+
+Uncaught Cannot read properties of undefined (reading 'iface')
+   at getExprValue (interpreter.ts:613:9)
+   at getValue (interpreter.ts:655:9)
+   at queueAction (interpreter.ts:237:9)
+   at inline (interpreter.ts:159:37)
+
+Uncaught Cannot read properties of undefined (reading 'iface')
+   at getExprValue (interpreter.ts:613:9)
+   at getValue (interpreter.ts:655:9)
+   at queueAction (interpreter.ts:237:9)
+   at inline (interpreter.ts:159:37)
+
+mKind = 1 param = 3
+
+param = 3
+
+mKind = 1 param = 3
+
+param = 3

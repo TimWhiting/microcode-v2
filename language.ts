@@ -7,7 +7,7 @@ namespace microcode {
         disallow?: (string | number)[]
     }
 
-    export function mergeConstraints(src: Constraints, dst: Constraints) {
+    function mergeConstraints(src: Constraints, dst: Constraints) {
         if (!src) {
             return
         }
@@ -28,10 +28,7 @@ namespace microcode {
         }
     }
 
-    export function isCompatibleWith(
-        src: Constraints,
-        c: Constraints
-    ): boolean {
+    function isCompatibleWith(src: Constraints, c: Constraints): boolean {
         if (!src) return true
         if (src.requires) {
             let compat = false
@@ -43,7 +40,7 @@ namespace microcode {
         return true
     }
 
-    export function filterModifierCompat(
+    function filterModifierCompat(
         tile: Tile,
         category: string | number,
         c: Constraints
@@ -73,8 +70,32 @@ namespace microcode {
 
     export function getIcon(tile: Tile) {
         if (tile instanceof ModifierEditor) return tile.getIcon()
-        return tidToString(tile)
+        return tile
     }
+
+    /*  TODO: reimplement this
+                if (name == "filters" && index == 0) {
+                    const sensor = this.ruledef.sensors[0]
+                    // TODO: move this to language.ts as part of insertion
+                    if (
+                        (getKind(sensor) == TileKind.Radio &&
+                            sensor != Tid.TID_SENSOR_LINE) ||
+                        getKind(sensor) == TileKind.Variable
+                    ) {
+                        // TODO: add the comparison operator into the program
+                        const plus = new Button({
+                            parent: this,
+                            style: buttonStyle(tile),
+                            icon: "arith_equals",
+                            ariaId: "arith_equals",
+                            x: 0,
+                            y: 0,
+                        })
+                        this.ruleButtons[name].push(plus)
+                    }
+                }
+                
+    */
 
     export type RuleRep = { [name: string]: Tile[] }
     export class RuleDefn {
@@ -106,6 +127,103 @@ namespace microcode {
 
         public isEmpty(): boolean {
             return this.sensors.length === 0 && this.actuators.length === 0
+        }
+
+        public push(tile: Tile, name: string): number {
+            const tiles = this.getRuleRep()[name]
+            tiles.push(tile)
+            const index = tiles.length - 2
+            if (name == "filters" || name == "modifiers") {
+                if (index >= 0) {
+                    const secondLast = tiles[index]
+                    if (
+                        (getKind(secondLast) == TileKind.Literal ||
+                            getKind(secondLast) == TileKind.Variable) &&
+                        (getKind(tile) == TileKind.Literal ||
+                            getKind(tile) == TileKind.Variable ||
+                            getKind(tile) == TileKind.RandomToss)
+                    ) {
+                        tiles.insertAt(index + 1, Tid.TID_OPERATOR_PLUS)
+                        return 2
+                    }
+                }
+            }
+            return 1
+        }
+
+        public deleteAt(name: string, index: number) {
+            const ruleTiles = this.getRuleRep()[name]
+            const tile = ruleTiles[index]
+            ruleTiles.splice(index, 1)
+            // TODO: random toss deleted, followed by a math operator
+            if (name == "filters" || name == "modifiers") {
+                const newIndex = this.deleteIncompatibleTiles(name, index, tile)
+                return newIndex < index
+            }
+            return false
+        }
+
+        private getSuggestions(name: string, index: number) {
+            return Language.getTileSuggestions(this, name, index)
+        }
+
+        private deleteIncompatibleTiles(
+            name: string,
+            index: number,
+            tile: Tile
+        ): number {
+            const doit = (name: string, i: number) => {
+                const ruleTiles = this.getRuleRep()[name]
+
+                while (i < ruleTiles.length) {
+                    const suggestions = this.getSuggestions(name, i)
+                    const compatible = suggestions.find(
+                        t => getTid(t) == getTid(ruleTiles[i])
+                    )
+                    if (compatible) i++
+                    else {
+                        ruleTiles.splice(i, ruleTiles.length - i)
+                        return false
+                    }
+                }
+                return true
+            }
+            // first, look to see if we should delete a math operator
+            const ruleTiles = this.getRuleRep()[name]
+            if (index > 0) {
+                const tile = ruleTiles[index - 1]
+                if (isMathOperator(getTid(tile))) {
+                    ruleTiles.splice(index - 1, 1)
+                    index--
+                }
+            } else if (index == 0) {
+                const tile = ruleTiles[index]
+                if (isMathOperator(getTid(tile))) {
+                    ruleTiles.splice(index, 1)
+                }
+            }
+            // now delete incompatible tiles
+            doit(name, index)
+            if (name === "filters") {
+                // a change in the the when section may affect the do section
+                let ok = doit("actuators", 0)
+                if (ok) doit("modifiers", 0)
+                else this.getRuleRep()["modifiers"] = []
+            }
+            return index
+        }
+
+        public updateAt(name: string, index: number, tile: Tile) {
+            const tiles = this.getRuleRep()[name]
+            const oldTile = tiles[index]
+            tiles[index] = tile
+            if (oldTile != tile) {
+                if (
+                    oldTile == Tid.TID_MODIFIER_RANDOM_TOSS ||
+                    tile == Tid.TID_MODIFIER_RANDOM_TOSS
+                )
+                    tiles.splice(index + 1, tiles.length - (index + 1))
+            }
         }
 
         public toBuffer(bw: BufferWriter) {
@@ -152,7 +270,7 @@ namespace microcode {
                     const newOne = modifier.getNewInstance(field)
                     defn.modifiers.push(<any>newOne)
                 } else {
-                    defn.modifiers.push(modifierEnum)
+                    defn.push(modifierEnum, "modifiers")
                 }
                 assert(!br.eof())
             }
@@ -286,8 +404,15 @@ namespace microcode {
             name: string,
             index: number
         ): Tile[] {
+            const tile = rule.getRuleRep()[name][index]
+
+            let rangeName = name
+            if (isComparisonOperator(getTid(tile)))
+                rangeName = "comparisonOperators"
+            else if (isMathOperator(getTid(tile))) rangeName = "mathOperators"
+
             // based on the name, we have a range of tiles to choose from
-            const [lower, upper] = ranges[name]
+            const [lower, upper] = ranges[rangeName]
             let all: Tile[] = []
             for (let i = lower; i <= upper; ++i) {
                 const ed = getEditor(i)
@@ -304,7 +429,8 @@ namespace microcode {
             let existing: Tile[] = []
             const ruleRep = rule.getRuleRep()
             for (let i = 0; i < index; ++i) {
-                existing.push(ruleRep[name][i])
+                const tile = ruleRep[name][i]
+                existing.push(tile)
             }
 
             // Return empty set if the last existing tile is a "terminal".

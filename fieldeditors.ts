@@ -41,18 +41,15 @@ namespace microcode {
         getField(): any {
             return null
         }
-        getIcon(): string | Bitmap {
+        getIcon(): string | number | Bitmap {
             return null
         }
         getNewInstance(field: any = null): ModifierEditor {
             return null
         }
-        serviceCommandArg(): Buffer {
-            return null
-        }
     }
 
-    class IconFieldEditor extends FieldEditor {
+    export class IconFieldEditor extends FieldEditor {
         init() {
             return bmp`
         . . . . .
@@ -115,7 +112,7 @@ namespace microcode {
             return this.field
         }
 
-        getIcon(): string | Bitmap {
+        getIcon(): string | number | Bitmap {
             return this.firstInstance
                 ? getIcon(Tid.TID_MODIFIER_ICON_EDITOR)
                 : this.fieldEditor.toImage(this.field)
@@ -123,18 +120,6 @@ namespace microcode {
 
         getNewInstance(field: any = null) {
             return new IconEditor(field ? field : this.field.clone())
-        }
-
-        serviceCommandArg() {
-            const buf = Buffer.create(5)
-            for (let col = 0; col < 5; ++col) {
-                let v = 0
-                for (let row = 0; row < 5; ++row) {
-                    if (this.field.getPixel(col, row)) v |= 1 << row
-                }
-                buf[col] = v
-            }
-            return buf
         }
     }
 
@@ -147,27 +132,6 @@ namespace microcode {
     export const NUM_NOTES = 5
 
     //export const noteNames = ["C", "D", "E", "F", "G", "A", "B", "C", "D"]
-
-    function setNote(buf: Buffer, offset: number, note: string) {
-        const noteToFreq: { [note: string]: number } = {
-            "0": 261.63, // C4
-            "1": 293.66, // D4
-            "2": 329.63, // E4
-            "3": 349.23, // F4
-            "4": 392.0, // G4
-            "5": 440.0, // A4
-            "6": 493.88, // B4
-            "7": 523.25, // C5
-            "8": 587.33, // D5
-        }
-
-        const period = 1000000 / (note !== "." ? noteToFreq[note] : 1000)
-        const duty = note === "." ? 0 : (period * 0.5) / 2
-        const duration = 250
-        buf.setNumber(NumberFormat.UInt16LE, offset + 0, period)
-        buf.setNumber(NumberFormat.UInt16LE, offset + 2, duty)
-        buf.setNumber(NumberFormat.UInt16LE, offset + 4, duration)
-    }
 
     class MelodyFieldEditor extends FieldEditor {
         init() {
@@ -236,7 +200,7 @@ namespace microcode {
             return this.field
         }
 
-        getIcon(): string | Bitmap {
+        getIcon(): string | number | Bitmap {
             return this.firstInstance
                 ? getIcon(Tid.TID_MODIFIER_MELODY_EDITOR)
                 : this.fieldEditor.toImage(this.field)
@@ -246,14 +210,6 @@ namespace microcode {
             return new MelodyEditor(
                 field ? field : this.fieldEditor.clone(this.field)
             )
-        }
-
-        serviceCommandArg() {
-            const buf = Buffer.create(6 * 8)
-            for (let i = 0; i < MELODY_LENGTH; i++) {
-                setNote(buf, i * 6, this.field.notes[i])
-            }
-            return buf
         }
     }
 
@@ -303,7 +259,9 @@ namespace microcode {
         picker.show(
             {
                 width: 5,
-                title: accessibility.ariaToTooltip(TID_MODIFIER_ICON_EDITOR),
+                title: accessibility.ariaToTooltip(
+                    tidToString(Tid.TID_MODIFIER_ICON_EDITOR)
+                ),
                 onClick: (index: number) => {
                     let row = Math.idiv(index, 5)
                     let col = index % 5
@@ -350,14 +308,16 @@ namespace microcode {
         picker.show(
             {
                 width: MELODY_LENGTH,
-                title: accessibility.ariaToTooltip(TID_MODIFIER_MELODY_EDITOR),
+                title: accessibility.ariaToTooltip(
+                    tidToString(Tid.TID_MODIFIER_MELODY_EDITOR)
+                ),
                 onClick: index => {
                     let row = Math.idiv(index, MELODY_LENGTH)
                     let col = index % MELODY_LENGTH
                     if (getIcon(col, row) !== "note_on") {
                         const note = (NUM_NOTES - 1 - row).toString()
                         const buf = Buffer.create(6)
-                        setNote(buf, 0, note)
+                        // TODO: setNote(buf, 0, note)
                         // new jacs.TopWriter().deployFreq(buf)
                     }
                     melody.notes =

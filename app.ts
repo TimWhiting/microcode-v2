@@ -24,7 +24,10 @@ namespace microcode {
             user_interface_base.resolveTooltip = (ariaId: string) =>
                 resolveTooltip(ariaId)
 
-            //
+            const buf = this.load(SAVESLOT_AUTO)
+            const prog = ProgramDefn.fromBuffer(new BufferReader(buf))
+            runProgram(prog)
+
             controller.setRepeatDefault(250, 30)
             // keymap.setupKeys()
 
@@ -58,5 +61,19 @@ namespace microcode {
         public popScene() {
             this.sceneManager.popScene()
         }
+    }
+
+    let runtimeHost: RuntimeHost = undefined
+    let theInterpreter: Interpreter = undefined
+
+    export function runProgram(prog: ProgramDefn) {
+        if (theInterpreter) theInterpreter.stop()
+        if (!runtimeHost) runtimeHost = new MicrobitHost()
+        theInterpreter = new Interpreter(prog, runtimeHost)
+    }
+
+    export function stopProgram() {
+        if (theInterpreter) theInterpreter.stop()
+        theInterpreter = undefined
     }
 }
