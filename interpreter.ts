@@ -345,6 +345,14 @@ namespace microcode {
         Down,
     }
 
+    export type ActionTid =
+        | Tid.TID_ACTUATOR_PAINT
+        | Tid.TID_ACTUATOR_SHOW_NUMBER
+        | Tid.TID_ACTUATOR_SPEAKER
+        | Tid.TID_ACTUATOR_MUSIC
+        | Tid.TID_ACTUATOR_RADIO_SEND
+        | Tid.TID_ACTUATOR_RADIO_SET_GROUP
+
     export interface RuntimeHost {
         // notifications
         emitClearScreen(): void
@@ -354,13 +362,7 @@ namespace microcode {
         ): void
         // timing, yielding
         // outputs
-        showIcon(led5x5: Bitmap): void
-        showNumber(n: number): void
-        sendRadio(n: number): void
-        setRadioGroup(n: number): void
-        playSound(sound: number): void
-        playMusic(music: string): void
-        // sendRoleCommand(role: string, cmd: number, data: number[]): void
+        execute(tid: ActionTid, param: any): void
     }
 
     export class Interpreter {
@@ -420,24 +422,8 @@ namespace microcode {
                     const varName = getParam(action)
                     this.updateState(ruleIndex, varName, param)
                     return
-                case Tid.TID_ACTUATOR_PAINT:
-                    this.host.showIcon(param)
-                    return
-                case Tid.TID_ACTUATOR_SHOW_NUMBER:
-                    this.host.showNumber(param)
-                    return
-                case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
-                    this.host.setRadioGroup(param)
-                    return
-                case Tid.TID_ACTUATOR_RADIO_SEND:
-                    this.host.sendRadio(param)
-                    return
-                case Tid.TID_ACTUATOR_SPEAKER:
-                    this.host.playSound(param)
-                    return
-                case Tid.TID_ACTUATOR_MUSIC:
-                    this.host.playMusic(param)
-                    return
+                default:
+                    this.host.execute(action as ActionTid, param)
             }
         }
 

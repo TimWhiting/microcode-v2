@@ -67,7 +67,6 @@ namespace microcode {
     let theInterpreter: Interpreter = undefined
 
     export function runProgram(prog: ProgramDefn) {
-        return
         if (theInterpreter) theInterpreter.stop()
         if (!runtimeHost) runtimeHost = new MicrobitHost()
         theInterpreter = new Interpreter(prog, runtimeHost)

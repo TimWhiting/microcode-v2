@@ -130,7 +130,30 @@ namespace microcode {
             }
         }
 
-        showIcon(img: Bitmap) {
+        public execute(action: ActionTid, param: any) {
+            switch (action) {
+                case Tid.TID_ACTUATOR_PAINT:
+                    this.showIcon(param)
+                    return
+                case Tid.TID_ACTUATOR_SHOW_NUMBER:
+                    this.showNumber(param)
+                    return
+                case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
+                    this.setRadioGroup(param)
+                    return
+                case Tid.TID_ACTUATOR_RADIO_SEND:
+                    this.sendRadio(param)
+                    return
+                case Tid.TID_ACTUATOR_SPEAKER:
+                    this.playSound(param)
+                    return
+                case Tid.TID_ACTUATOR_MUSIC:
+                    this.playMusic(param)
+                    return
+            }
+        }
+
+        private showIcon(img: Bitmap) {
             let s: string[] = []
             for (let row = 0; row < 5; row++) {
                 for (let col = 0; col < 5; col++) {
@@ -140,13 +163,13 @@ namespace microcode {
             }
             basic.pause(200)
         }
-        showNumber(n: number): void {
+        private showNumber(n: number): void {
             basic.showNumber(n)
         }
-        sendRadio(n: number): void {
+        private sendRadio(n: number): void {
             radio.sendNumber(n)
         }
-        setRadioGroup(n: number): void {
+        private setRadioGroup(n: number): void {
             radio.setGroup(n)
         }
         private getSound(sound: Tid) {
@@ -174,13 +197,13 @@ namespace microcode {
             }
             return soundExpression.giggle
         }
-        playSound(sound: Tid): void {
+        private playSound(sound: Tid): void {
             music.play(
                 music.builtinPlayableSoundEffect(this.getSound(sound)),
                 music.PlaybackMode.InBackground
             )
         }
-        playMusic(notes: string): void {
+        private playMusic(notes: string): void {
             music.play(
                 music.stringPlayable(notes, 120),
                 music.PlaybackMode.UntilDone
