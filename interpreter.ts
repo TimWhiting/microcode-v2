@@ -3,6 +3,12 @@ namespace microcode {
 
     // TODO:
     // 2. add comparison operators and math to filter expressions
+
+    // TODO: still working on editing paradigm, to support sensors with both events and math
+    // TODO: after a comparison operator,  only math
+    // TODO: deletion of comparison operator?
+    // TODO: on update from event to math (comparison)
+
     // 3. round semantics
 
     // delay on sending stuff in pipes and changing pages
@@ -126,7 +132,8 @@ namespace microcode {
             return this.interp.state["Radio"] as number
         }
 
-        // TODO: this only does equality
+        // TODO: this only does equality, and now filters may
+        // TODO: include equality test
         private filterValueIn(f: number) {
             if (this.rule.filters.length) {
                 return f == this.interp.getValue(this.rule.filters, 0)
@@ -560,6 +567,18 @@ namespace microcode {
                         return "-"
                     case Tid.TID_OPERATOR_PLUS:
                         return "+"
+                    case Tid.TID_COMPARE_EQ:
+                        return "=="
+                    case Tid.TID_COMPARE_NEQ:
+                        return "!="
+                    case Tid.TID_COMPARE_GT:
+                        return ">"
+                    case Tid.TID_COMPARE_GTE:
+                        return ">="
+                    case Tid.TID_COMPARE_LT:
+                        return "<"
+                    case Tid.TID_COMPARE_LTE:
+                        return "<="
                 }
             }
             const kind = getKind(expr)
