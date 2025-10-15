@@ -3,7 +3,7 @@ namespace microcode {
 
     // TODO:
     // 2. add comparison operators and math to filter expressions
-    // 3. music
+    // 3. round semantics
 
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
@@ -124,6 +124,7 @@ namespace microcode {
             return this.interp.state["Radio"] as number
         }
 
+        // TODO: this only does equality
         private filterValueIn(f: number) {
             if (this.rule.filters.length) {
                 return f == this.interp.getValue(this.rule.filters, 0)
@@ -161,7 +162,7 @@ namespace microcode {
                         this.wakeTime = 0
                     }
                     this.queueAction()
-                    // TODO: runAction asks to run on a resource
+                    // TODO: queueAction asks to run on a resource
                     // TODO: pause here and wait for permission
                     // TODO: if no, permission, stop running this action
                     this.checkForLoopFinish()
@@ -619,29 +620,3 @@ namespace microcode {
         }
     }
 }
-
-/*
-        JACDAC
-
-    function scToName(sc: ServiceClass) {
-        if (sc == ServiceClass.Button) return "but"
-        if (sc == ServiceClass.DotMatrix) return "dot"
-        if (sc == ServiceClass.SoundLevel) return "snd"
-        if (sc == ServiceClass.Temperature) return "tmp"
-        if (sc == ServiceClass.SoundPlayer) return "mus"
-        if (sc == ServiceClass.Buzzer) return "buz"
-        if (sc == ServiceClass.Accelerometer) return "acc"
-        if (sc == ServiceClass.Radio) return "rad"
-        if (sc == ServiceClass.Potentiometer) return "pot"
-        if (sc == ServiceClass.LightLevel) return "lit"
-        if (sc == ServiceClass.MagneticFieldLevel) return "mag"
-        if (sc == ServiceClass.RotaryEncoder) return "rot"
-        if (sc == ServiceClass.Led) return "led"
-        if (sc == ServiceClass.Servo) return "srv"
-        if (sc == ServiceClass.Distance) return "dst"
-        if (sc == ServiceClass.Reflected) return "ref"
-        if (sc == ServiceClass.Moisture) return "moi"
-        if (sc == ServiceClass.Relay) return "rel"
-        return "unknown"
-    }
-    */
