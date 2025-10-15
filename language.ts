@@ -225,6 +225,13 @@ namespace microcode {
                     tile == Tid.TID_MODIFIER_RANDOM_TOSS
                 )
                     tiles.splice(index + 1, tiles.length - (index + 1))
+                else if (
+                    name == "filters" &&
+                    getKind(oldTile) == TileKind.EventCode &&
+                    this.supportsMath(tile)
+                ) {
+                    tiles.insertAt(0, Tid.TID_COMPARE_EQ)
+                }
             }
         }
 
