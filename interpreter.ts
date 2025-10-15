@@ -627,13 +627,7 @@ private emitRoleCommand(rule: microcode.RuleDefn) {
                 case TileKind.Temperature:
                     return "Temperature"
                 case TileKind.Literal:
-                    console.log(`param type = ${typeof param}`)
-                    // return param.toString()
-                    if (typeof param == "number") return param.toString()
-                    else {
-                        this.error(`typeof(param) == ${typeof param}`)
-                        return undefined
-                    }
+                    return (param as number).toString()
                 case TileKind.Variable:
                     return param
                 case TileKind.RadioValue:
