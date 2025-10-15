@@ -8,7 +8,7 @@ namespace microcode {
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
 
-    export function createParser(props: expr.ExpressionParserConstructor) {
+    function createParser(props: expr.ExpressionParserConstructor) {
         const parser = new expr.ExpressionParser({
             variables: props.variables || { pi: 3.141592653589793 },
         })
@@ -96,6 +96,8 @@ namespace microcode {
                 )
                     return this.filterValueIn(radioVal)
             } else if (typeof sensorName == "string") {
+                // TODO: differentiate events (for which we only have =)
+                // TODO: from values (for which we have general compare)
                 const thisSensorName = tidToSensor(sensor)
                 if (sensorName == thisSensorName) {
                     const eventCode = this.lookupEventCode()
@@ -344,6 +346,12 @@ namespace microcode {
         Up,
         Down,
     }
+
+    export type SensorTid =
+        | Tid.TID_SENSOR_ACCELEROMETER
+        | Tid.TID_SENSOR_PRESS
+        | Tid.TID_SENSOR_RELEASE
+        | Tid.TID_SENSOR_RADIO_RECEIVE
 
     export type ActionTid =
         | Tid.TID_ACTUATOR_PAINT

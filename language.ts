@@ -105,6 +105,13 @@ namespace microcode {
             return this.sensors.length === 0 && this.actuators.length === 0
         }
 
+        private supportsMath(tile: Tile) {
+            return (
+                getKind(tile) == TileKind.Literal ||
+                getKind(tile) == TileKind.Variable
+            )
+        }
+
         public push(tile: Tile, name: string): number {
             const tiles = this.getRuleRep()[name]
             tiles.push(tile)
@@ -112,25 +119,18 @@ namespace microcode {
                 if (
                     name == "filters" &&
                     tiles.length == 1 &&
-                    !isComparisonOperator(getTid(tiles[0]))
+                    !isComparisonOperator(getTid(tile)) &&
+                    this.supportsMath(tile)
                 ) {
-                    if (
-                        (getKind(this.sensor) == TileKind.Radio &&
-                            this.sensor != Tid.TID_SENSOR_LINE) ||
-                        getKind(this.sensor) == TileKind.Variable
-                    ) {
-                        tiles.insertAt(0, Tid.TID_COMPARE_EQ)
-                        return 2
-                    }
+                    tiles.insertAt(0, Tid.TID_COMPARE_EQ)
+                    return 2
                 } else {
                     const index = tiles.length - 2
                     if (index >= 0) {
                         const secondLast = tiles[index]
                         if (
-                            (getKind(secondLast) == TileKind.Literal ||
-                                getKind(secondLast) == TileKind.Variable) &&
-                            (getKind(tile) == TileKind.Literal ||
-                                getKind(tile) == TileKind.Variable ||
+                            this.supportsMath(secondLast) &&
+                            (this.supportsMath(tile) ||
                                 getKind(tile) == TileKind.RandomToss)
                         ) {
                             tiles.insertAt(index + 1, Tid.TID_OPERATOR_PLUS)

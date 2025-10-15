@@ -514,13 +514,15 @@ namespace microcode {
         return 1000
     }
 
-    const only5 = [
+    const only5: (string | number)[] = [
         Tid.TID_FILTER_COIN_1,
         Tid.TID_FILTER_COIN_2,
         Tid.TID_FILTER_COIN_3,
         Tid.TID_FILTER_COIN_4,
         Tid.TID_FILTER_COIN_5,
     ]
+
+    const filterMath = ["value_in", "comparison", "maths"]
 
     export function getConstraints(tile: Tile): Constraints {
         const tid = getTid(tile)
@@ -532,22 +534,22 @@ namespace microcode {
                 return { allow: ["timespan"] }
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
                 return {
-                    allow: ["value_in", "comparison", "maths"],
+                    allow: filterMath,
                     disallow: [Tid.TID_FILTER_CUP_X_READ],
                 }
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
                 return {
-                    allow: ["value_in", "comparison", "maths"],
+                    allow: filterMath,
                     disallow: [Tid.TID_FILTER_CUP_Y_READ],
                 }
             case Tid.TID_SENSOR_CUP_Z_WRITTEN:
                 return {
-                    allow: ["value_in", "comparison", "maths"],
+                    allow: filterMath,
                     disallow: [Tid.TID_FILTER_CUP_Z_READ],
                 }
             case Tid.TID_SENSOR_RADIO_RECEIVE:
                 return {
-                    allow: ["value_in", "comparison", "maths"],
+                    allow: filterMath,
                     provides: [Tid.TID_SENSOR_RADIO_RECEIVE],
                 }
             case Tid.TID_SENSOR_SLIDER:
@@ -557,9 +559,8 @@ namespace microcode {
             case Tid.TID_SENSOR_LED_LIGHT:
             case Tid.TID_SENSOR_DISTANCE:
             case Tid.TID_SENSOR_MOISTURE:
-                return { allow: only5 }
+                return { allow: only5.concat(["comparison"]) }
             case Tid.TID_SENSOR_REFLECTED:
-                // return { allow: only5 }
                 return { allow: ["on_off_event"] }
             case Tid.TID_SENSOR_MICROPHONE:
                 return {
@@ -569,7 +570,7 @@ namespace microcode {
                     ]),
                 }
             case Tid.TID_SENSOR_TEMP:
-                return { allow: ["temperature_event"] }
+                return { allow: ["temperature_event"].concat(filterMath) }
             case Tid.TID_SENSOR_ROTARY:
                 return { allow: ["rotary_event"] }
             case Tid.TID_SENSOR_LINE:
@@ -896,6 +897,7 @@ namespace microcode {
         }
     }
 
+    /*
     export function jdExternalClass(tile: Tile) {
         const tid = getTid(tile)
         switch (tid) {
@@ -981,7 +983,7 @@ namespace microcode {
         }
     }
 
-    /* TODO: don't need this low-level approach, but need to recall which JD we support
+    TODO: don't need this low-level approach, but need to recall which JD we support
     export function serviceCommand(tile: Tile) {
         const tid = getTid(tile)
         switch (tid) {
