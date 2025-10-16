@@ -114,7 +114,8 @@ namespace microcode {
             return (
                 getKind(tile) == TileKind.Literal ||
                 getKind(tile) == TileKind.Variable ||
-                getKind(tile) == TileKind.Temperature
+                getKind(tile) == TileKind.Temperature ||
+                getKind(tile) == TileKind.RadioValue
             )
         }
 
@@ -145,7 +146,7 @@ namespace microcode {
                     isMathOperator(getTid(tile1)) &&
                     !this.supportsMath(tile2)
                 ) {
-                    // TODO: can this occur?
+                    // TODO: can this ever occur?
                 }
             }
         }
@@ -214,6 +215,7 @@ namespace microcode {
             const oldTile = tiles[index]
             tiles[index] = tile
             if (oldTile != tile) {
+                // TODO: can this be subsumed by fixup/deleteIncompatible?
                 if (
                     oldTile == Tid.TID_MODIFIER_RANDOM_TOSS ||
                     tile == Tid.TID_MODIFIER_RANDOM_TOSS
