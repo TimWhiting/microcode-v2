@@ -258,12 +258,12 @@ namespace microcode {
             if (name == Tid.TID_OPERATOR_MULTIPLY)
                 return icondb.operatorIcon("*")
             if (name == Tid.TID_OPERATOR_PLUS) return icondb.operatorIcon("+")
-            if (name == Tid.TID_COMPARE_EQ) return icondb.operatorIcon("=")
-            if (name == Tid.TID_COMPARE_NEQ) return icondb.operatorIcon("<>")
-            if (name == Tid.TID_COMPARE_LT) return icondb.operatorIcon("<")
-            if (name == Tid.TID_COMPARE_LTE) return icondb.operatorIcon("<=")
-            if (name == Tid.TID_COMPARE_GT) return icondb.operatorIcon(">")
-            if (name == Tid.TID_COMPARE_GTE) return icondb.operatorIcon(">=")
+            if (name == Tid.TID_COMPARE_EQ) return icondb.eq
+            if (name == Tid.TID_COMPARE_NEQ) return icondb.neq
+            if (name == Tid.TID_COMPARE_LT) return icondb.lt
+            if (name == Tid.TID_COMPARE_LTE) return icondb.lte
+            if (name == Tid.TID_COMPARE_GT) return icondb.gt
+            if (name == Tid.TID_COMPARE_GTE) return icondb.gte
 
             // micro:bit car
             const car = carImages(name)
@@ -342,6 +342,28 @@ namespace microcode {
 }
 
 namespace icondb {
+    export const lt = bitmaps.create(11, 11)
+    lt.drawLine(2, 5, 8, 2, 15)
+    lt.drawLine(2, 5, 8, 8, 15)
+
+    export const gt = lt.clone()
+    gt.flipX()
+
+    export const lte = lt.clone()
+    lte.scroll(0, -1)
+    lte.drawLine(0, 10, 10, 10, 0)
+    lte.drawLine(2, 7, 8, 10, 15)
+
+    export const gte = lte.clone()
+    gte.flipX()
+
+    export const eq = bitmaps.create(11, 11)
+    eq.drawLine(2, 4, 8, 4, 15)
+    eq.drawLine(2, 6, 8, 6, 15)
+
+    export const neq = eq.clone()
+    neq.drawLine(8, 2, 3, 8, 15)
+
     // TODO: is it worth caching these?
     export function operatorIcon(op: string) {
         // the image should be 8x8 for single characters, 16x8 for two characters
