@@ -2,6 +2,7 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // TODO:
+    // 1. replacing action that doesn't use math
     // 2. add comparison operators and math to filter expressions
 
     // TODO: still working on editing paradigm, to support sensors with both events and math

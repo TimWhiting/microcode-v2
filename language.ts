@@ -183,6 +183,7 @@ namespace microcode {
                 }
                 return true
             }
+
             // first, look to see if we should delete a comparison or math operator
             const ruleTiles = this.getRuleRep()[name]
             if (
@@ -204,6 +205,7 @@ namespace microcode {
                     ruleTiles.splice(index, 1)
                 }
             }
+
             // now delete incompatible tiles
             doit(name, index)
             if (name === "filters") {
@@ -233,6 +235,11 @@ namespace microcode {
                     tiles.insertAt(0, Tid.TID_COMPARE_EQ)
                 }
             }
+            if (name == "sensors")
+                this.deleteIncompatibleTiles("filters", 0, tile)
+            else if (name == "actuators")
+                this.deleteIncompatibleTiles("modifiers", 0, tile)
+            else this.deleteIncompatibleTiles(name, index + 1, tile)
         }
 
         public toBuffer(bw: BufferWriter) {
