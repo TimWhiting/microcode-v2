@@ -2,15 +2,9 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // TODO:
-    // 1. replacing action that doesn't use math
-    // 2. add comparison operators and math to filter expressions
-
-    // TODO: still working on editing paradigm, to support sensors with both events and math
-    // TODO: after a comparison operator,  only math
-    // TODO: deletion of comparison operator?
-    // TODO: on update from event to math (comparison)
-
-    // 3. round semantics
+    // - tooltips in picker
+    // - treat sensors on RHS as values
+    // - round semantics
 
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50

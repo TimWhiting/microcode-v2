@@ -113,37 +113,65 @@ namespace microcode {
         private supportsMath(tile: Tile) {
             return (
                 getKind(tile) == TileKind.Literal ||
-                getKind(tile) == TileKind.Variable
+                getKind(tile) == TileKind.Variable ||
+                getKind(tile) == TileKind.Temperature
             )
+        }
+
+        private fixupMath(name: string) {
+            const tiles = this.getRuleRep()[name]
+            for (let i = 0; i < tiles.length - 1; i++) {
+                const tile1 = tiles[i]
+                const tile2 = tiles[i + 1]
+                if (
+                    this.supportsMath(tile1) &&
+                    (this.supportsMath(tile2) ||
+                        getKind(tile2) == TileKind.RandomToss)
+                ) {
+                    tiles.insertAt(i + 1, Tid.TID_OPERATOR_PLUS)
+                } else if (isMathOperator(getTid(tile1)) && i == 0) {
+                    tiles.splice(i, 1)
+                } else if (
+                    !this.supportsMath(tile1) &&
+                    isMathOperator(getTid(tile2))
+                ) {
+                    tiles.splice(i + 1, 1)
+                } else if (
+                    isMathOperator(getTid(tile2)) &&
+                    i == tiles.length - 2
+                ) {
+                    tiles.splice(i + 1, 1)
+                } else if (
+                    isMathOperator(getTid(tile1)) &&
+                    !this.supportsMath(tile2)
+                ) {
+                    // TODO: can this occur?
+                }
+            }
+        }
+
+        private fixup() {
+            // filter and comparison operators
+            if (this.filters.length == 1) {
+                const tile = this.filters[0]
+                if (
+                    !isComparisonOperator(getTid(tile)) &&
+                    this.supportsMath(tile)
+                )
+                    this.filters.insertAt(0, Tid.TID_COMPARE_EQ)
+                else if (isComparisonOperator(tile)) {
+                    this.filters = []
+                }
+            }
+            // math and math operators (both over filter and modifiers)
+            this.fixupMath("filters")
+            this.fixupMath("modifiers")
         }
 
         public push(tile: Tile, name: string): number {
             const tiles = this.getRuleRep()[name]
             tiles.push(tile)
-            if (name == "filters" || name == "modifiers") {
-                if (
-                    name == "filters" &&
-                    tiles.length == 1 &&
-                    !isComparisonOperator(getTid(tile)) &&
-                    this.supportsMath(tile)
-                ) {
-                    tiles.insertAt(0, Tid.TID_COMPARE_EQ)
-                    return 2
-                } else {
-                    const index = tiles.length - 2
-                    if (index >= 0) {
-                        const secondLast = tiles[index]
-                        if (
-                            this.supportsMath(secondLast) &&
-                            (this.supportsMath(tile) ||
-                                getKind(tile) == TileKind.RandomToss)
-                        ) {
-                            tiles.insertAt(index + 1, Tid.TID_OPERATOR_PLUS)
-                            return 2
-                        }
-                    }
-                }
-            }
+            this.fixup()
             return 1
         }
 
@@ -151,10 +179,8 @@ namespace microcode {
             const ruleTiles = this.getRuleRep()[name]
             const tile = ruleTiles[index]
             ruleTiles.splice(index, 1)
-            if (name == "filters" || name == "modifiers") {
-                const newIndex = this.deleteIncompatibleTiles(name, index, tile)
-                return newIndex < index
-            }
+            this.fixup()
+            this.deleteIncompatibleTiles()
             return false
         }
 
@@ -162,11 +188,7 @@ namespace microcode {
             return Language.getTileSuggestions(this, name, index)
         }
 
-        private deleteIncompatibleTiles(
-            name: string,
-            index: number,
-            tile: Tile
-        ): number {
+        private deleteIncompatibleTiles() {
             const doit = (name: string, i: number) => {
                 const ruleTiles = this.getRuleRep()[name]
 
@@ -183,38 +205,8 @@ namespace microcode {
                 }
                 return true
             }
-
-            // first, look to see if we should delete a comparison or math operator
-            const ruleTiles = this.getRuleRep()[name]
-            if (
-                name == "filters" &&
-                this.filters.length == 1 &&
-                isComparisonOperator(this.filters[0])
-            ) {
-                this.filters = []
-                return -1
-            } else if (index > 0) {
-                const tile = ruleTiles[index - 1]
-                if (isMathOperator(getTid(tile))) {
-                    ruleTiles.splice(index - 1, 1)
-                    index--
-                }
-            } else if (index == 0) {
-                const tile = ruleTiles[index]
-                if (isMathOperator(getTid(tile))) {
-                    ruleTiles.splice(index, 1)
-                }
-            }
-
-            // now delete incompatible tiles
-            doit(name, index)
-            if (name === "filters") {
-                // a change in the the when section may affect the do section
-                let ok = doit("actuators", 0)
-                if (ok) doit("modifiers", 0)
-                else this.getRuleRep()["modifiers"] = []
-            }
-            return index
+            doit("filters", 0)
+            doit("modifiers", 0)
         }
 
         public updateAt(name: string, index: number, tile: Tile) {
@@ -227,19 +219,9 @@ namespace microcode {
                     tile == Tid.TID_MODIFIER_RANDOM_TOSS
                 )
                     tiles.splice(index + 1, tiles.length - (index + 1))
-                else if (
-                    name == "filters" &&
-                    getKind(oldTile) == TileKind.EventCode &&
-                    this.supportsMath(tile)
-                ) {
-                    tiles.insertAt(0, Tid.TID_COMPARE_EQ)
-                }
             }
-            if (name == "sensors")
-                this.deleteIncompatibleTiles("filters", 0, tile)
-            else if (name == "actuators")
-                this.deleteIncompatibleTiles("modifiers", 0, tile)
-            else this.deleteIncompatibleTiles(name, index + 1, tile)
+            this.fixup()
+            this.deleteIncompatibleTiles()
         }
 
         public toBuffer(bw: BufferWriter) {
