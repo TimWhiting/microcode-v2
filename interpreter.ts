@@ -2,9 +2,12 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // TODO:
+    // - strange behavior in sim on coin-flip example
+    // - switch page not working
+    //  - shake events come very fast??? race dcondition
     // - no change in operator to right of random-toss (used to work)?
-    // - tooltips in picker
     // - cursor reposition on delete/update rule...
+    // - tooltips in picker
     // - round semantics
 
     // delay on sending stuff in pipes and changing pages
@@ -362,6 +365,7 @@ namespace microcode {
         }
 
         private switchPage(page: number) {
+            console.log(`switch to page ${page}`)
             this.stopAllRules()
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             // set up new rule closures
@@ -384,6 +388,9 @@ namespace microcode {
         ) {
             this.checkForStepCompleted()
             switch (action) {
+                case Tid.TID_ACTUATOR_SWITCH_PAGE:
+                    this.switchPage(param - 1)
+                    return
                 case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
