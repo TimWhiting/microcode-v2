@@ -85,18 +85,6 @@ namespace microcode {
             return false
         }
 
-        private getRadioVal(): number {
-            return this.interp.state["Radio"] as number
-        }
-
-        private filterOnEvent(f: number) {
-            if (this.rule.filters.length) {
-                return f == this.interp.getValue(this.rule.filters, 0)
-            } else {
-                return true // sensor changed value, but no constraint
-            }
-        }
-
         private filterViaCompare(): boolean {
             if (this.rule.filters.length) {
                 return this.interp.getValue(

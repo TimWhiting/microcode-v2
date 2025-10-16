@@ -167,7 +167,8 @@ namespace microcode {
                     else led.unplot(col, row)
                 }
             }
-            basic.pause(200)
+            // TODO: do want this here? do we really want to yield?
+            basic.pause(400)
         }
 
         private getSound(sound: Tid) {
@@ -227,5 +228,5 @@ namespace microcode {
                     radioVal < robot.robots.RobotCompactCommand.ObstacleState
                 )
                     return this.filterViaCompare()
-                    
+
 */
