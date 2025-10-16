@@ -111,7 +111,7 @@ namespace microcode {
             if (name == "delete") return icondb.btn_delete
             if (name == "plus") return icondb.btn_plus
             if (name == "arith_plus") return icondb.operatorIcon("+")
-            if (name == "arith_equals") return icondb.operatorIcon("=")
+            if (name == "arith_equals") return icondb.eq
             // TODO: add ops and comparisons
             if (name == "when_insertion_point")
                 return icondb.btn_when_insertion_point
@@ -366,19 +366,10 @@ namespace icondb {
 
     // TODO: is it worth caching these?
     export function operatorIcon(op: string) {
-        // the image should be 8x8 for single characters, 16x8 for two characters
-        // then print into image
-        if (op.length == 1) {
-            const img = bitmaps.create(8, 8)
-            img.fill(0)
-            img.print(op, 2, 0, 15)
-            return img
-        } else {
-            const img = bitmaps.create(16, 8)
-            img.fill(0)
-            img.print(op, 2, 0, 15)
-            return img
-        }
+        const img = bitmaps.create(11, 11)
+        img.fill(0)
+        img.print(op, 3, 1, 15)
+        return img
     }
 
     const note4x3 = bmp`
