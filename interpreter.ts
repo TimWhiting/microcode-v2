@@ -4,6 +4,7 @@ namespace microcode {
     // TODO:
     // - no change in operator to right of random-toss (used to work)?
     // - tooltips in picker
+    // - cursor reposition on delete/update rule...
     // - round semantics
 
     // delay on sending stuff in pipes and changing pages
@@ -139,7 +140,6 @@ namespace microcode {
             const sensor = this.rule.sensor
             // get default event for sensor, if exists
             let evCode = defaultEventCode(sensor)
-            if (evCode == -1) return evCode // matches anything
             if (evCode) {
                 // override if user specifies event code
                 for (const m of this.rule.filters)
