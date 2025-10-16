@@ -3,8 +3,10 @@ namespace microcode {
 
     // TODO:
     // - strange behavior in sim on coin-flip example
-    // - switch page not working
-    //  - shake events come very fast??? race dcondition
+    //  - shake events come very fast??? race condition?
+    // - microphone: event -> number doesn't work - number doesn't appear
+    //.   - note same behavior not present with temperature
+    // - firefly behavior looks wrong
     // - no change in operator to right of random-toss (used to work)?
     // - cursor reposition on delete/update rule...
     // - tooltips in picker
