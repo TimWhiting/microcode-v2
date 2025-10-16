@@ -197,3 +197,35 @@ namespace microcode {
         }
     }
 }
+
+/*
+
+                // TODO: convert this to external sensor with events and values
+                // TODO: and lift out
+                const radioVal = this.getRadioVal()
+                if (
+                    sensor == Tid.TID_SENSOR_CAR_WALL ||
+                    sensor == Tid.TID_SENSOR_LINE
+                ) {
+                    // this hack separates radio ranges used to communicate with robot car
+                    if (
+                        robot.robots.RobotCompactCommand.ObstacleState <
+                        radioVal
+                    )
+                        if (sensor == Tid.TID_SENSOR_CAR_WALL)
+                            return this.filterOnEvent(
+                                radioVal -
+                                    robot.robots.RobotCompactCommand
+                                        .ObstacleState
+                            )
+                        else if (
+                            robot.robots.RobotCompactCommand.LineState <=
+                            radioVal
+                        )
+                            return this.filterOnEvent(radioVal)
+                } else if (
+                    radioVal < robot.robots.RobotCompactCommand.ObstacleState
+                )
+                    return this.filterViaCompare()
+                    
+*/
