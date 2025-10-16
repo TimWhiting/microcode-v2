@@ -550,29 +550,27 @@ namespace microcode {
         }
 
         private getExprValue(expr: Tile): string {
-            if (isMathOperator(getTid(expr))) {
-                switch (getTid(expr)) {
-                    case Tid.TID_OPERATOR_DIVIDE:
-                        return "/"
-                    case Tid.TID_OPERATOR_MULTIPLY:
-                        return "*"
-                    case Tid.TID_OPERATOR_MINUS:
-                        return "-"
-                    case Tid.TID_OPERATOR_PLUS:
-                        return "+"
-                    case Tid.TID_COMPARE_EQ:
-                        return "=="
-                    case Tid.TID_COMPARE_NEQ:
-                        return "!="
-                    case Tid.TID_COMPARE_GT:
-                        return ">"
-                    case Tid.TID_COMPARE_GTE:
-                        return ">="
-                    case Tid.TID_COMPARE_LT:
-                        return "<"
-                    case Tid.TID_COMPARE_LTE:
-                        return "<="
-                }
+            switch (getTid(expr)) {
+                case Tid.TID_OPERATOR_DIVIDE:
+                    return "/"
+                case Tid.TID_OPERATOR_MULTIPLY:
+                    return "*"
+                case Tid.TID_OPERATOR_MINUS:
+                    return "-"
+                case Tid.TID_OPERATOR_PLUS:
+                    return "+"
+                case Tid.TID_COMPARE_EQ:
+                    return "=="
+                case Tid.TID_COMPARE_NEQ:
+                    return "!="
+                case Tid.TID_COMPARE_GT:
+                    return ">"
+                case Tid.TID_COMPARE_GTE:
+                    return ">="
+                case Tid.TID_COMPARE_LT:
+                    return "<"
+                case Tid.TID_COMPARE_LTE:
+                    return "<="
             }
             const kind = getKind(expr)
             const param = getParam(expr)
@@ -590,7 +588,7 @@ namespace microcode {
                 case TileKind.Radio:
                     return "Radio"
                 default:
-                    this.error("can't emit kind: " + kind)
+                    this.error(`can't emit kind ${kind} for ${getTid(expr)}`)
                     return undefined
             }
         }
