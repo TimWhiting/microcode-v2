@@ -2,8 +2,8 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // TODO:
+    // - no change in operator to right of random-toss (used to work)?
     // - tooltips in picker
-    // - treat sensors on RHS as values
     // - round semantics
 
     // delay on sending stuff in pipes and changing pages

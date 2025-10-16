@@ -2,6 +2,7 @@ namespace microcode {
     export type TilePredicate = (tile: Tile) => boolean
 
     export interface Constraints {
+        [index: string]: any[]
         provides?: number[]
         requires?: number[]
         only?: (string | number)[]
@@ -10,23 +11,9 @@ namespace microcode {
     }
 
     function mergeConstraints(src: Constraints, dst: Constraints) {
-        if (!src) {
-            return
-        }
-        if (src.provides) {
-            src.provides.forEach(item => dst.provides.push(item))
-        }
-        if (src.requires) {
-            src.requires.forEach(item => dst.requires.push(item))
-        }
-        if (src.only) {
-            src.only.forEach(item => dst.only.push(item))
-        }
-        if (src.allow) {
-            src.allow.forEach(item => dst.allow.push(item))
-        }
-        if (src.disallow) {
-            src.disallow.forEach(item => dst.disallow.push(item))
+        if (!src) return
+        for (const key of Object.keys(src)) {
+            dst[key] = dst[key].concat(src[key])
         }
     }
 
