@@ -20,6 +20,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/*. the parser only has two levels in its "grammar", but needs third level for comparisons, ala:
+
+        expression ::= equality-expression
+        equality-expression ::= additive-expression ( ( '==' | '!=' ) additive-expression ) *
+        additive-expression ::= multiplicative-expression ( ( '+' | '-' ) multiplicative-expression ) *
+        multiplicative-expression ::= primary ( ( '*' | '/' ) primary ) *
+        primary ::= '(' expression ')' | NUMBER | VARIABLE | '-' primary
+
+        for full generality, should we go to precedence-based parser?
+
+        https://en.wikipedia.org/wiki/Operator-precedence_parser
+
+        OR
+
+        https://www.less-bug.com/en/posts/pratt-parsing-introduction-and-implementation-in-typescript/
+
+*/
+
 namespace expr {
     class ParserState {
         private currentTokenIndex: number
@@ -300,8 +318,36 @@ namespace expr {
             return value
         }
 
+        private isComparison(t: string) {
+            return (
+                t === "==" ||
+                t === "!=" ||
+                t === "<" ||
+                t === ">" ||
+                t === "<=" ||
+                t === ">="
+            )
+        }
+
+        private parseComparison(state: ParserState): number {
+            let value = this.parseTerm(state) as any
+            while (true) {
+                const token = state.currentToken
+                if (this.isComparison(token)) {
+                    const operator = token
+                    state.nextToken()
+                    const factor = this.parseUnaryFactor(state)
+                    value = this.operators[operator](value, factor)
+                } else {
+                    break
+                }
+            }
+
+            return value
+        }
+
         private parseExpression(state: ParserState): any {
-            let value = this.parseTerm(state)
+            let value = this.parseComparison(state)
 
             while (true) {
                 const token = state.currentToken
