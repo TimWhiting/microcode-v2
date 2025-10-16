@@ -319,7 +319,7 @@ namespace expr {
         }
 
         public evaluate(tokens: string[], variables?: VariableMap): any {
-            const state = new ParserState(tokens, this.variables)
+            const state = new ParserState(tokens, variables || {})
             const result = this.parseExpression(state)
 
             if (state.currentToken !== undefined) {
