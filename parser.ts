@@ -25,12 +25,12 @@ namespace parser {
         "-": { fun: (a, b) => a - b, prec: 10 },
         "*": { fun: (a, b) => a * b, prec: 20 },
         "/": { fun: (a, b) => a / b, prec: 20 },
-        ">": { fun: (a, b) => a > b, prec: 30 },
-        ">=": { fun: (a, b) => a >= b, prec: 30 },
-        "<": { fun: (a, b) => a < b, prec: 30 },
-        "<=": { fun: (a, b) => a <= b, prec: 30 },
-        "==": { fun: (a, b) => a === b, prec: 30 },
-        "!=": { fun: (a, b) => a !== b, prec: 30 },
+        ">": { fun: (a, b) => a > b, prec: 5 },
+        ">=": { fun: (a, b) => a >= b, prec: 5 },
+        "<": { fun: (a, b) => a < b, prec: 5 },
+        "<=": { fun: (a, b) => a <= b, prec: 5 },
+        "==": { fun: (a, b) => a === b, prec: 5 },
+        "!=": { fun: (a, b) => a !== b, prec: 5 },
     }
 
     type PrefixFn = (token: string) => any
