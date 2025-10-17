@@ -23,7 +23,7 @@ namespace microcode {
     enum OutputResource {
         LEDScreen = 1000,
         Speaker,
-        Radio,
+        RadioGroup,
         PageCounter,
     }
 
@@ -169,9 +169,8 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
                     return action
-                case Tid.TID_ACTUATOR_RADIO_SEND:
                 case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
-                    return OutputResource.Radio
+                    return OutputResource.RadioGroup
                 case Tid.TID_ACTUATOR_MUSIC:
                 case Tid.TID_ACTUATOR_SPEAKER:
                     return OutputResource.Speaker
@@ -231,7 +230,7 @@ namespace microcode {
                 }
             }
             if (!oneShot) this.modifierIndex++
-            else this.actionRunning = false // for now
+            else this.modifierIndex = this.rule.modifiers.length
             this.interp.queueAction(this.index, resource, actuator, param)
         }
 
@@ -263,7 +262,6 @@ namespace microcode {
                 if (randomPeriod > 0)
                     period += Math.floor(Math.random() * randomPeriod)
                 this.wakeTime = period
-                console.log(`wakeTime = ${period}`)
                 return period
             }
             return 0
