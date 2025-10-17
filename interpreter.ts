@@ -17,29 +17,8 @@ namespace microcode {
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
 
-    function createParser(props: expr.ExpressionParserConstructor) {
-        const parser = new expr.ExpressionParser({
-            variables: props.variables || { pi: 3.141592653589793 },
-        })
-        const operators: expr.OperatorMap = {
-            "+": (a, b) => a + b,
-            "-": (a, b) => a - b,
-            "*": (a, b) => a * b,
-            "/": (a, b) => a / b,
-            ">": (a, b) => a > b,
-            ">=": (a, b) => a >= b,
-            "<": (a, b) => a < b,
-            "<=": (a, b) => a <= b,
-            "==": (a, b) => a === b,
-            "!=": (a, b) => a !== b,
-        }
-        const functions: expr.FunctionMap = {
-            rnd: (s, max: number[]) => Math.floor(Math.random() * max[0]) + 1,
-        }
-        parser.setFunctions(functions)
-        parser.setOperators(operators)
-        return parser
-    }
+    type ValueType = number | string | boolean | any[] | object
+    type VariableMap = { [key: string]: ValueType }
 
     enum OutputResource {
         LEDScreen = 1000,
@@ -341,7 +320,6 @@ namespace microcode {
     }
 
     export class Interpreter {
-        private exprParser: expr.ExpressionParser = undefined
         private hasErrors: boolean = false
         private running: boolean = false
         private currentPage: number = 0
@@ -352,12 +330,11 @@ namespace microcode {
 
         // state storage for variables and other temporary global state
         // (local per-rule state is kept in RuleClosure)
-        public state: expr.VariableMap = {}
+        public state: VariableMap = {}
 
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
             this.host.emitClearScreen()
             this.host.registerOnSensorEvent((t, f) => this.onSensorEvent(t, f))
-            this.exprParser = createParser({})
             this.running = true
             this.switchPage(0)
             this.startSensors()
@@ -554,7 +531,7 @@ namespace microcode {
                 case TileKind.Variable:
                     let name = param
                     if (!name) name = tidToSensor(getTid(expr))
-                    return name
+                    return (this.state[name] as number).toString()
                 case TileKind.RadioValue:
                 case TileKind.Radio:
                     return "Radio"
@@ -575,6 +552,7 @@ namespace microcode {
 
         public getValue(tiles: Tile[], defl: number): number | boolean {
             let tokens: string[] = []
+            const rnd = (max: number) => Math.floor(Math.random() * max) + 1
             for (let i = 0; i < tiles.length; i++) {
                 const m = tiles[i]
                 if (getTid(m) == Tid.TID_MODIFIER_RANDOM_TOSS) {
@@ -582,17 +560,14 @@ namespace microcode {
                         i == tiles.length - 1
                             ? 2
                             : this.constantFold(tiles.slice(i + 1), 0)
-                    const callRnd = ["rnd", "(", max.toString(), ")"]
-                    for (const t of callRnd) {
-                        tokens.push(t)
-                    }
+                    tokens.push(rnd(max).toString())
                     break
                 } else {
                     tokens.push(this.getExprValue(m))
                 }
             }
             console.log(`tokens = ${tokens.join(" ")}`)
-            const result = this.exprParser.evaluate(tokens, this.state)
+            const result = new parser.Parser(tokens).parse()
             console.log(`result = ${result}`)
             return result
         }

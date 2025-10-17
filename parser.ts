@@ -1,3 +1,5 @@
+// adapted from
+
 /**
  * Author: Zijing Zhang (Pluveto)
  * Date: 2023-01-11 15:28:00
@@ -33,32 +35,7 @@ namespace parser {
     type InfixFn = (lhs: any, token: string) => any
     type PostfixFn = (lhs: any, token: string) => any
 
-    // infix:
-    // [TokenType.Add]: (lhs: ExprNode, token: Token) => {
-
-    // public parsers() {
-    //     return {
-    //         prefix: {
-    //             [TokenType.Num]: (token: Token) => {
-    //                 return new ValueNode(parseInt(token.value))
-    //             },
-    //             [TokenType.LPa]: (token: Token) => {
-    //                 const expr = this.parse(0)
-    //                 const next = this.tokens.next()
-    //                 if (next.type !== TokenType.RPa) {
-    //                     throw new Error("Expected )")
-    //                 }
-    //                 return expr
-    //             },
-    //         } as { [k: number]: PrefixFn },
-    //         postfix: {
-    //             [TokenType.Fac]: (lhs: ExprNode, token: Token) => {
-    //                 return new PostfixOpNode("!", lhs)
-    //             },
-    //         } as { [k: number]: PostfixFn },
-    //     }
-
-    class Parser {
+    export class Parser {
         private index = 0
         private next() {
             return this.tokens[this.index++]
@@ -68,6 +45,19 @@ namespace parser {
         }
 
         private prefixParser(t: string): PrefixFn {
+            const num = parseFloat(t)
+            if (num) {
+                return t => num
+            } else if (t === "(") {
+                return t => {
+                    const expr = this.parse(0)
+                    const next = this.next()
+                    if (next !== ")") {
+                        throw new Error("expected )")
+                    }
+                    return expr
+                }
+            }
             return undefined
         }
 
@@ -80,13 +70,18 @@ namespace parser {
         }
 
         private postfixParser(t: string): PostfixFn {
+            //         postfix: {
+            //             [TokenType.Fac]: (lhs: ExprNode, token: Token) => {
+            //                 return new PostfixOpNode("!", lhs)
+            //             },
+            //         } as { [k: number]: PostfixFn },
             return undefined
         }
 
         constructor(public tokens: string[]) {}
 
         precOf(token: string): number {
-            return infixOps[token].prec || 0
+            return infixOps[token] ? infixOps[token].prec : 0
         }
 
         parse(prec: number = 0): any {
@@ -114,33 +109,4 @@ namespace parser {
             return lhs
         }
     }
-
-    let tokens = [
-        // - 1 + (2 - 3) * 6 / 3 ! - 2 ^ 3 ^ 4
-        "-",
-        "1",
-        "+",
-        "(",
-        "2",
-        "-",
-        "3",
-        ")",
-        "*",
-        "6",
-        "/",
-        "3",
-        "!",
-        "-",
-        "2",
-        "^",
-        "3",
-        "^",
-        "4",
-        "",
-    ]
-
-    let parser = new Parser(tokens)
-    let ast = parser.parse()
-
-    console.log(`Equivalent expression: ${ast.toString()}`)
 }
