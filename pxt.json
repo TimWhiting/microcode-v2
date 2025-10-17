@@ -34,10 +34,10 @@
         "protocol.ts",
         "navigator.ts",
         "tooltips.ts",
-        "expr.ts",
         "host.ts",
         "interpreter.ts",
-        "sensors.ts"
+        "sensors.ts",
+        "parser.ts"
     ],
     "testFiles": [],
     "targetVersions": {

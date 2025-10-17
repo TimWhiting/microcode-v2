@@ -6,7 +6,9 @@ namespace microcode {
     //  - shake events come very fast??? race condition?
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
-    // - firefly behavior looks wrong
+    // - firefly behavior is wrong - switching between pages too fast
+    //.    - tokens = cup_x == 3 + 5 (precedence seems wrong)
+    //     - result = 5, should be false
     // - no change in operator to right of random-toss (used to work)?
     // - cursor reposition on delete/update rule...
     // - tooltips in picker
@@ -15,29 +17,8 @@ namespace microcode {
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
 
-    function createParser(props: expr.ExpressionParserConstructor) {
-        const parser = new expr.ExpressionParser({
-            variables: props.variables || { pi: 3.141592653589793 },
-        })
-        const operators: expr.OperatorMap = {
-            "+": (a, b) => a + b,
-            "-": (a, b) => a - b,
-            "*": (a, b) => a * b,
-            "/": (a, b) => a / b,
-            ">": (a, b) => a > b,
-            ">=": (a, b) => a >= b,
-            "<": (a, b) => a < b,
-            "<=": (a, b) => a <= b,
-            "==": (a, b) => a === b,
-            "!=": (a, b) => a !== b,
-        }
-        const functions: expr.FunctionMap = {
-            rnd: (s, max: number[]) => Math.floor(Math.random() * max[0]) + 1,
-        }
-        parser.setFunctions(functions)
-        parser.setOperators(operators)
-        return parser
-    }
+    type ValueType = number | string | boolean | any[] | object
+    type VariableMap = { [key: string]: ValueType }
 
     enum OutputResource {
         LEDScreen = 1000,
@@ -338,8 +319,9 @@ namespace microcode {
         execute(tid: ActionTid, param: any): void
     }
 
+    const vars = ["cup_x", "cup_y", "cup_z"]
+
     export class Interpreter {
-        private exprParser: expr.ExpressionParser = undefined
         private hasErrors: boolean = false
         private running: boolean = false
         private currentPage: number = 0
@@ -350,12 +332,13 @@ namespace microcode {
 
         // state storage for variables and other temporary global state
         // (local per-rule state is kept in RuleClosure)
-        public state: expr.VariableMap = {}
+        public state: VariableMap = {}
 
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
             this.host.emitClearScreen()
             this.host.registerOnSensorEvent((t, f) => this.onSensorEvent(t, f))
-            this.exprParser = createParser({})
+            for (const v of vars) this.state[v] = 0
+            for (const v of Object.keys(sensorInfo)) this.state[v] = 0
             this.running = true
             this.switchPage(0)
             this.startSensors()
@@ -543,19 +526,22 @@ namespace microcode {
             }
             const kind = getKind(expr)
             const param = getParam(expr)
+            const lookupVar = (v: string) => {
+                return (this.state[v] as number).toString()
+            }
             switch (kind) {
                 // TODO: get rid of special casing for Temperature and Radio
                 case TileKind.Temperature:
-                    return "Temperature"
+                    return lookupVar("Temperature")
                 case TileKind.Literal:
                     return (param as number).toString()
                 case TileKind.Variable:
                     let name = param
                     if (!name) name = tidToSensor(getTid(expr))
-                    return name
+                    return lookupVar(name)
                 case TileKind.RadioValue:
                 case TileKind.Radio:
-                    return "Radio"
+                    return lookupVar(name)
                 default:
                     this.error(`can't emit kind ${kind} for ${getTid(expr)}`)
                     return undefined
@@ -573,6 +559,7 @@ namespace microcode {
 
         public getValue(tiles: Tile[], defl: number): number | boolean {
             let tokens: string[] = []
+            const rnd = (max: number) => Math.floor(Math.random() * max) + 1
             for (let i = 0; i < tiles.length; i++) {
                 const m = tiles[i]
                 if (getTid(m) == Tid.TID_MODIFIER_RANDOM_TOSS) {
@@ -580,17 +567,14 @@ namespace microcode {
                         i == tiles.length - 1
                             ? 2
                             : this.constantFold(tiles.slice(i + 1), 0)
-                    const callRnd = ["rnd", "(", max.toString(), ")"]
-                    for (const t of callRnd) {
-                        tokens.push(t)
-                    }
+                    tokens.push(rnd(max).toString())
                     break
                 } else {
                     tokens.push(this.getExprValue(m))
                 }
             }
             console.log(`tokens = ${tokens.join(" ")}`)
-            const result = this.exprParser.evaluate(tokens, this.state)
+            const result = new parser.Parser(tokens).parse()
             console.log(`result = ${result}`)
             return result
         }
