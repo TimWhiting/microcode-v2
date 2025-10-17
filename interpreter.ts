@@ -522,19 +522,22 @@ namespace microcode {
             }
             const kind = getKind(expr)
             const param = getParam(expr)
+            const lookupVar = (v: string) => {
+                return (this.state[v] as number).toString()
+            }
             switch (kind) {
                 // TODO: get rid of special casing for Temperature and Radio
                 case TileKind.Temperature:
-                    return "Temperature"
+                    return lookupVar("Temperature")
                 case TileKind.Literal:
                     return (param as number).toString()
                 case TileKind.Variable:
                     let name = param
                     if (!name) name = tidToSensor(getTid(expr))
-                    return (this.state[name] as number).toString()
+                    return lookupVar(name)
                 case TileKind.RadioValue:
                 case TileKind.Radio:
-                    return "Radio"
+                    return lookupVar(name)
                 default:
                     this.error(`can't emit kind ${kind} for ${getTid(expr)}`)
                     return undefined
