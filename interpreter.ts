@@ -319,6 +319,8 @@ namespace microcode {
         execute(tid: ActionTid, param: any): void
     }
 
+    const vars = ["cup_x", "cup_y", "cup_z"]
+
     export class Interpreter {
         private hasErrors: boolean = false
         private running: boolean = false
@@ -335,6 +337,8 @@ namespace microcode {
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
             this.host.emitClearScreen()
             this.host.registerOnSensorEvent((t, f) => this.onSensorEvent(t, f))
+            for (const v of vars) this.state[v] = 0
+            for (const v of Object.keys(sensorInfo)) this.state[v] = 0
             this.running = true
             this.switchPage(0)
             this.startSensors()
