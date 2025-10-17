@@ -8,7 +8,9 @@
 
 namespace parser {
     class Error {
-        constructor(public msg: string) {}
+        constructor(public msg: string) {
+            console.log(msg)
+        }
     }
 
     type OperatorInfo = {
@@ -46,7 +48,7 @@ namespace parser {
 
         private prefixParser(t: string): PrefixFn {
             const num = parseFloat(t)
-            if (num) {
+            if (!isNaN(num)) {
                 return t => num
             } else if (t === "(") {
                 return t => {
