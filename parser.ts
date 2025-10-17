@@ -21,16 +21,16 @@ namespace parser {
     }
 
     const infixOps: OperatorInfo = {
-        "+": { fun: (a, b) => a + b, prec: 10 },
-        "-": { fun: (a, b) => a - b, prec: 10 },
-        "*": { fun: (a, b) => a * b, prec: 20 },
-        "/": { fun: (a, b) => a / b, prec: 20 },
         ">": { fun: (a, b) => a > b, prec: 5 },
         ">=": { fun: (a, b) => a >= b, prec: 5 },
         "<": { fun: (a, b) => a < b, prec: 5 },
         "<=": { fun: (a, b) => a <= b, prec: 5 },
         "==": { fun: (a, b) => a === b, prec: 5 },
         "!=": { fun: (a, b) => a !== b, prec: 5 },
+        "+": { fun: (a, b) => a + b, prec: 10 },
+        "-": { fun: (a, b) => a - b, prec: 10 },
+        "*": { fun: (a, b) => a * b, prec: 20 },
+        "/": { fun: (a, b) => a / b, prec: 20 },
     }
 
     type PrefixFn = (token: string) => any
