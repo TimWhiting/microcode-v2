@@ -15,7 +15,7 @@ namespace microcode {
 
     const matchAccelerometerTable: IdMap = {
         11: Tid.TID_FILTER_ACCEL_SHAKE,
-        1: Tid.TID_FILTER_ACCEL_TILT_UP,
+        1: Tid.TID_FILTER_ACCEL_TILT_UP, // this aliases with ACCELEROMETER_EVT_DATA_UPDATE
         2: Tid.TID_FILTER_ACCEL_TILT_DOWN,
         3: Tid.TID_FILTER_ACCEL_TILT_LEFT,
         4: Tid.TID_FILTER_ACCEL_TILT_RIGHT,
@@ -62,14 +62,17 @@ namespace microcode {
             })
             // handle all other accelerometer events
             control.onEvent(
-                DAL.DEVICE_ID_ACCELEROMETER,
+                DAL.DEVICE_ID_GESTURE, // DEVICE_ID_GESTURE
                 DAL.DEVICE_EVT_ANY,
                 () => {
-                    if (control.eventValue() != Gesture.Shake)
-                        this._handler(
-                            Tid.TID_SENSOR_ACCELEROMETER,
-                            matchAccelerometerTable[control.eventValue()]
-                        )
+                    if (control.eventValue() != Gesture.Shake) {
+                        let ev = matchAccelerometerTable[control.eventValue()]
+                        if (ev)
+                            this._handler(
+                                Tid.TID_SENSOR_ACCELEROMETER,
+                                matchAccelerometerTable[control.eventValue()]
+                            )
+                    }
                 }
             )
             control.onEvent(

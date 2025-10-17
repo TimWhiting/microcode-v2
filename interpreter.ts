@@ -2,13 +2,9 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // TODO:
-    // - strange behavior in sim on coin-flip example
-    //  - shake events come very fast??? race condition?
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
-    // - firefly behavior is wrong - switching between pages too fast
-    //.    - tokens = cup_x == 3 + 5 (precedence seems wrong)
-    //     - result = 5, should be false
+    // - firefly: 1/4 timer not firing?
     // - no change in operator to right of random-toss (used to work)?
     // - cursor reposition on delete/update rule...
     // - tooltips in picker
