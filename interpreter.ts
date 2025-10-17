@@ -2,13 +2,17 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // TODO:
+
+    // Runtime:
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
     // - firefly: 1/4 timer not firing?
-    // - no change in operator to right of random-toss (used to work)?
+    //    - timer not getting restarted...
+    // - round semantics
+
+    // Editor: no change in operator to right of random-toss (used to work)?
     // - cursor reposition on delete/update rule...
     // - tooltips in picker
-    // - round semantics
 
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
@@ -259,6 +263,7 @@ namespace microcode {
                 if (randomPeriod > 0)
                     period += Math.floor(Math.random() * randomPeriod)
                 this.wakeTime = period
+                console.log(`wakeTime = ${period}`)
                 return period
             }
             return 0
