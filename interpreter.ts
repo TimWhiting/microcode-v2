@@ -133,6 +133,9 @@ namespace microcode {
             return undefined
         }
 
+        // NOTE: this method is only needed for executing
+        // NOTE: rules with a timer in When or Sequence in Do
+        // NOTE: it is not needed for Instant execution
         public runDoSection() {
             // make sure we have something to do
             if (this.rule.actuators.length == 0) return
@@ -210,7 +213,6 @@ namespace microcode {
             const resource = this.getOutputResource()
 
             let param: any = undefined
-            let oneShot = false
             if (this.rule.modifiers.length == 0) {
                 param = defaultModifier(actuator)
             } else {
@@ -239,7 +241,6 @@ namespace microcode {
                     case Tid.TID_ACTUATOR_RADIO_SEND:
                     case Tid.TID_ACTUATOR_RADIO_SET_GROUP: {
                         param = this.interp.getValue(this.rule.modifiers, 0)
-                        oneShot = true
                         break
                     }
                     case Tid.TID_ACTUATOR_SWITCH_PAGE: {
@@ -248,12 +249,12 @@ namespace microcode {
                             if (getKind(m) == TileKind.Page)
                                 targetPage = getParam(m)
                         param = targetPage
-                        oneShot = true
                         break
                     }
                 }
             }
-            if (!oneShot) this.modifierIndex++
+            if (this.getActionKind() === ActionKind.Sequence)
+                this.modifierIndex++
             else this.modifierIndex = this.rule.modifiers.length
             this.interp.queueAction(this.index, resource, actuator, param)
         }
