@@ -69,7 +69,7 @@ namespace microcode {
         private modifierIndex: number = 0
         private loopIndex: number = 0
         constructor(
-            private index: number,
+            public index: number,
             public rule: RuleDefn,
             private interp: Interpreter
         ) {}
@@ -199,7 +199,7 @@ namespace microcode {
             return getOutputResource(this.rule.actuators[0])
         }
 
-        public getActioKind() {
+        public getActionKind() {
             if (this.rule.actuators.length == 0) return undefined
             return getActionKind(this.rule.actuators[0])
         }
@@ -407,26 +407,80 @@ namespace microcode {
             }
         }
 
-        // TODO: we need to have the notion of a round in which the various
-        // TODO: active rules tell us what they want to update and then at the end
-        // TODO: of the round, we decide what updates to actually do
-
         private updateState(ruleIndex: number, pipe: string, v: number) {
             // earliest in lexical order wins for a resource
             this.state[pipe] = v
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             // see if any rule matches
-            const activeRules: RuleClosure[] = []
+            const newRules: RuleClosure[] = []
             this.ruleClosures.forEach(rc => {
-                if (rc.matchWhen(pipe)) activeRules.push(rc)
+                if (rc.matchWhen(pipe)) newRules.push(rc)
             })
-            this.processNewActiveRules(activeRules)
+            this.processNewRules(newRules)
         }
 
-        private processNewActiveRules(activeRules: RuleClosure[]) {
-            activeRules.forEach(r => {
-                r.kill()
-                r.runDoSection()
+        private processNewRules(newRules: RuleClosure[]) {
+            // first new rule (in lexical order) on a resource wins
+            const resourceWinner: { [resource: number]: number } = {}
+            for (const rc of newRules) {
+                const resource = rc.getOutputResource()
+                const currentWinner = resourceWinner[resource]
+                if (
+                    !currentWinner ||
+                    (currentWinner && rc.index < currentWinner)
+                )
+                    resourceWinner[resource] = rc.index
+            }
+
+            const liveIndices = Object.keys(resourceWinner).map(
+                k => resourceWinner[parseInt(k)]
+            )
+            const live = newRules.filter(rc =>
+                liveIndices.some(i => i === rc.index)
+            )
+
+            const dead = newRules.filter(rc => live.indexOf(rc) === -1)
+            dead.forEach(rc => rc.kill())
+
+            // partition the live into instant and sequence
+            const instant = live.filter(
+                rc => rc.getActionKind() === ActionKind.Instant
+            )
+
+            // execute the instant ones right now (guaranteed no conflict), other than switch page
+            // - note this may result in queueing new updates via variable assignment,
+            // - so we need to be careful about re-entrancy here
+            // TODO: set up a background fiber to look for state update, breaking the update cycle
+            instant.forEach(rc => {
+                if (rc.getOutputResource() != OutputResource.PageCounter) {
+                    // TODO: need execute command:
+                }
+            })
+
+            const switchPage = instant.find(
+                rc => rc.getOutputResource() == OutputResource.PageCounter
+            )
+            if (switchPage) {
+                // TODO: execute it, but via event queue
+            }
+
+            // start up the others, but notice that they be active already, so kill first
+            const sequence = live.filter(
+                rc => rc.getActionKind() === ActionKind.Sequence
+            )
+            sequence.forEach(rc => {
+                rc.kill()
+                rc.runDoSection()
+            })
+        }
+
+        private eventQueue: number[] = []
+        private processEventQueue() {
+            control.inBackground(() => {
+                while (this.running) {
+                    // TODO: check the event queue and process
+                    basic.pause(10)
+                }
             })
         }
 
@@ -434,11 +488,11 @@ namespace microcode {
         public onSensorEvent(sensorTid: number, filter: number = -1) {
             if (!sensorTid || !this.running) return
             // see if any rule matches
-            const activeRules: RuleClosure[] = []
+            const newRules: RuleClosure[] = []
             this.ruleClosures.forEach(rc => {
-                if (rc.matchWhen(sensorTid, filter)) activeRules.push(rc)
+                if (rc.matchWhen(sensorTid, filter)) newRules.push(rc)
             })
-            this.processNewActiveRules(activeRules)
+            this.processNewRules(newRules)
         }
 
         private notifySensorChange(
@@ -449,11 +503,11 @@ namespace microcode {
         ) {
             if (!this.running) return
             // see if any rule matches
-            const activeRules: RuleClosure[] = []
+            const newRules: RuleClosure[] = []
             this.ruleClosures.forEach(rc => {
-                if (rc.matchWhen(name, change)) activeRules.push(rc)
+                if (rc.matchWhen(name, change)) newRules.push(rc)
             })
-            this.processNewActiveRules(activeRules)
+            this.processNewRules(newRules)
         }
 
         private getSensorValue(sensor: Sensor) {
@@ -472,6 +526,7 @@ namespace microcode {
             this.sensors.forEach(s => {
                 this.state[s.getName()] = this.getSensorValue(s)
             })
+
             control.inBackground(() => {
                 while (this.running) {
                     // poll the sensors and check for change
