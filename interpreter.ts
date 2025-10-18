@@ -27,6 +27,42 @@ namespace microcode {
         PageCounter,
     }
 
+    function getOutputResource(action: Tid) {
+        switch (action) {
+            case Tid.TID_ACTUATOR_PAINT:
+            case Tid.TID_ACTUATOR_SHOW_NUMBER:
+                return OutputResource.LEDScreen
+            case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
+            case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
+            case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
+                return action
+            case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
+                return OutputResource.RadioGroup
+            case Tid.TID_ACTUATOR_MUSIC:
+            case Tid.TID_ACTUATOR_SPEAKER:
+                return OutputResource.Speaker
+            case Tid.TID_ACTUATOR_SWITCH_PAGE:
+                return OutputResource.PageCounter
+        }
+        return undefined
+    }
+
+    enum ActionKind {
+        Instant,
+        Sequence,
+    }
+
+    function getActionKind(action: Tid) {
+        switch (action) {
+            case Tid.TID_ACTUATOR_PAINT:
+            case Tid.TID_ACTUATOR_SHOW_NUMBER:
+            case Tid.TID_ACTUATOR_MUSIC:
+            case Tid.TID_ACTUATOR_SPEAKER:
+                return ActionKind.Sequence
+        }
+        return ActionKind.Instant
+    }
+
     class RuleClosure {
         private wakeTime: number = 0
         private actionRunning: boolean = false
@@ -160,24 +196,12 @@ namespace microcode {
         // use this to determine conflicts between rules
         public getOutputResource() {
             if (this.rule.actuators.length == 0) return undefined
-            const action = this.rule.actuators[0]
-            switch (action) {
-                case Tid.TID_ACTUATOR_PAINT:
-                case Tid.TID_ACTUATOR_SHOW_NUMBER:
-                    return OutputResource.LEDScreen
-                case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
-                case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
-                case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
-                    return action
-                case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
-                    return OutputResource.RadioGroup
-                case Tid.TID_ACTUATOR_MUSIC:
-                case Tid.TID_ACTUATOR_SPEAKER:
-                    return OutputResource.Speaker
-                case Tid.TID_ACTUATOR_SWITCH_PAGE:
-                    return OutputResource.PageCounter
-            }
-            return undefined
+            return getOutputResource(this.rule.actuators[0])
+        }
+
+        public getActioKind() {
+            if (this.rule.actuators.length == 0) return undefined
+            return getActionKind(this.rule.actuators[0])
         }
 
         private queueAction() {
@@ -325,8 +349,6 @@ namespace microcode {
         private running: boolean = false
         private currentPage: number = 0
         private ruleClosures: RuleClosure[] = []
-        private activeRuleStepped: number = 0
-        private activeRuleCount: number = 0
         private sensors: Sensor[] = []
 
         // state storage for variables and other temporary global state
@@ -370,7 +392,6 @@ namespace microcode {
             action: Tile,
             param: any
         ) {
-            this.checkForStepCompleted()
             switch (action) {
                 case Tid.TID_ACTUATOR_SWITCH_PAGE:
                     this.switchPage(param - 1)
@@ -391,7 +412,6 @@ namespace microcode {
         // TODO: of the round, we decide what updates to actually do
 
         private updateState(ruleIndex: number, pipe: string, v: number) {
-            this.checkForStepCompleted()
             // earliest in lexical order wins for a resource
             this.state[pipe] = v
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
@@ -403,17 +423,7 @@ namespace microcode {
             this.processNewActiveRules(activeRules)
         }
 
-        private checkForStepCompleted() {
-            this.activeRuleStepped++
-            if (this.activeRuleCount == this.activeRuleStepped) {
-            }
-        }
-
         private processNewActiveRules(activeRules: RuleClosure[]) {
-            this.activeRuleStepped = 0
-            this.activeRuleCount = this.ruleClosures.filter(rc =>
-                rc.active()
-            ).length
             activeRules.forEach(r => {
                 r.kill()
                 r.runDoSection()
