@@ -439,7 +439,6 @@ namespace microcode {
         }
 
         private switchPage(page: number) {
-            console.log(`switch to page ${page}`)
             this.stopAllRules()
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             // set up new rule closures
@@ -561,16 +560,33 @@ namespace microcode {
             control.inBackground(() => {
                 while (this.running) {
                     if (this.eventQueue.length) {
-                        const event = this.eventQueue[0]
+                        const ev = this.eventQueue[0]
                         this.eventQueue.removeAt(0)
-                        switch (event.kind) {
-                            case MicroCodeEventKind.StateUpdate:
-                            // map variables to tids
-                            case MicroCodeEventKind.SensorUpdate:
-                            case MicroCodeEventKind.PageChange:
-                            case MicroCodeEventKind.StartPage:
-                            case MicroCodeEventKind.TimerFire:
-                            // awaken the rule at the given index
+                        switch (ev.kind) {
+                            case MicroCodeEventKind.StateUpdate: {
+                                // map variables to tids
+                                break
+                            }
+                            case MicroCodeEventKind.SensorUpdate: {
+                                const event = ev as SensorUpdateEvent
+                                // see if any rule matches
+                                const newRules: RuleClosure[] =
+                                    this.ruleClosures.filter(rc =>
+                                        rc.matchWhen(event.sensor, event.filter)
+                                    )
+                                this.processNewRules(newRules)
+                                break
+                            }
+                            case MicroCodeEventKind.SwitchPage: {
+                                break
+                            }
+                            case MicroCodeEventKind.StartPage: {
+                                break
+                            }
+                            case MicroCodeEventKind.TimerFire: {
+                                // awaken the rule at the given index
+                                break
+                            }
                         }
                     }
                     basic.pause(10)
@@ -578,30 +594,12 @@ namespace microcode {
             })
         }
 
-        // the following two methods could be unified
-        public onSensorEvent(sensorTid: number, filter: number = -1) {
-            if (!sensorTid || !this.running) return
-            // see if any rule matches
-            const newRules: RuleClosure[] = []
-            this.ruleClosures.forEach(rc => {
-                if (rc.matchWhen(sensorTid, filter)) newRules.push(rc)
-            })
-            this.processNewRules(newRules)
-        }
-
-        private notifySensorChange(
-            tid: number,
-            name: string,
-            val: number,
-            change: SensorChange
-        ) {
-            if (!this.running) return
-            // see if any rule matches
-            const newRules: RuleClosure[] = []
-            this.ruleClosures.forEach(rc => {
-                if (rc.matchWhen(name, change)) newRules.push(rc)
-            })
-            this.processNewRules(newRules)
+        public onSensorEvent(sensorTid: number | string, filter: number = -1) {
+            this.addEvent({
+                kind: MicroCodeEventKind.SensorUpdate,
+                sensor: sensorTid,
+                filter: filter,
+            } as SensorUpdateEvent)
         }
 
         private getSensorValue(sensor: Sensor) {
@@ -634,10 +632,8 @@ namespace microcode {
                             (!normalized && delta >= 1)
                         ) {
                             this.state[s.getName()] = newReading
-                            this.notifySensorChange(
+                            this.onSensorEvent(
                                 sensorInfo[s.getName()].tid,
-                                s.getName(),
-                                newReading,
                                 newReading > oldReading
                                     ? SensorChange.Up
                                     : SensorChange.Down
