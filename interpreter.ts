@@ -218,7 +218,7 @@ namespace microcode {
             return getActionKind(this.rule.actuators[0])
         }
 
-        private getParamInstant() {
+        public getParamInstant() {
             const actuator = this.rule.actuators[0]
             if (this.rule.modifiers.length == 0)
                 return defaultModifier(actuator)
@@ -247,8 +247,7 @@ namespace microcode {
             const actuator = this.rule.actuators[0]
             const param = this.getParamInstant()
             this.modifierIndex = this.rule.modifiers.length
-            const resource = this.getOutputResource()
-            this.interp.runAction(this.index, resource, actuator, param)
+            this.interp.runAction(this.index, actuator, param)
         }
 
         private runAction() {
@@ -283,9 +282,7 @@ namespace microcode {
             if (this.getActionKind() === ActionKind.Sequence)
                 this.modifierIndex++
             else this.modifierIndex = this.rule.modifiers.length
-
-            const resource = this.getOutputResource()
-            this.interp.runAction(this.index, resource, actuator, param)
+            this.interp.runAction(this.index, actuator, param)
         }
 
         public getWakeTime() {
@@ -312,7 +309,6 @@ namespace microcode {
                 ) {
                     period = 1000 // reasonable default
                 }
-                if (period == 0) period = ANTI_FREEZE_DELAY
                 if (randomPeriod > 0)
                     period += Math.floor(Math.random() * randomPeriod)
                 this.wakeTime = period
@@ -361,14 +357,10 @@ namespace microcode {
         | Tid.TID_ACTUATOR_RADIO_SET_GROUP
 
     export interface RuntimeHost {
-        // notifications
         emitClearScreen(): void
-        // inputs
         registerOnSensorEvent(
             handler: (sensorTid: number, filter: number) => void
         ): void
-        // timing, yielding
-        // outputs
         execute(tid: ActionTid, param: any): void
     }
 
@@ -446,16 +438,12 @@ namespace microcode {
             this.program.pages[this.currentPage].rules.forEach((r, index) => {
                 this.ruleClosures.push(new RuleClosure(index, r, this))
             })
-            // start up rules
-            this.addEvent({ kind: MicroCodeEventKind.StartPage })
+            this.addEvent({
+                kind: MicroCodeEventKind.StartPage,
+            } as StartPageEvent)
         }
 
-        public runAction(
-            ruleIndex: number,
-            resource: number,
-            action: Tile,
-            param: any
-        ) {
+        public runAction(ruleIndex: number, action: Tile, param: any) {
             switch (action) {
                 case Tid.TID_ACTUATOR_SWITCH_PAGE:
                     this.switchPage(param - 1)
@@ -486,6 +474,13 @@ namespace microcode {
                     kind: MicroCodeEventKind.StateUpdate,
                     updatedVars: [varName],
                 } as StateUpdateEvent)
+        }
+
+        private copyState() {
+            Object.keys(this.newState).forEach(k => {
+                this.state[k] = this.newState[k]
+            })
+            this.newState = {}
         }
 
         private processNewRules(newRules: RuleClosure[]) {
@@ -529,6 +524,7 @@ namespace microcode {
                     rc.runInstant()
                 }
             })
+            this.copyState()
 
             const switchPage = instant.find(
                 rc => rc.getOutputResource() == OutputResource.PageCounter
@@ -536,16 +532,16 @@ namespace microcode {
             if (switchPage) {
                 this.eventQueue.insertAt(0, {
                     kind: MicroCodeEventKind.SwitchPage,
-                })
-                // TODO: put on the head of the event queue
+                    index: switchPage.getParamInstant(),
+                } as SwitchPageEvent)
                 return
             }
 
             // start up the others, but notice that they be active already, so kill first
-            const takesTime = live.filter(
+            const sequence = live.filter(
                 rc => rc.getActionKind() === ActionKind.Sequence
             )
-            takesTime.forEach(rc => {
+            sequence.forEach(rc => {
                 rc.kill()
                 rc.start()
             })
@@ -557,6 +553,11 @@ namespace microcode {
         }
 
         private processEventQueue() {
+            const newRules = (sensor: number | string, filter: number) => {
+                return this.ruleClosures.filter(rc =>
+                    rc.matchWhen(sensor, filter)
+                )
+            }
             control.inBackground(() => {
                 while (this.running) {
                     if (this.eventQueue.length) {
@@ -564,27 +565,36 @@ namespace microcode {
                         this.eventQueue.removeAt(0)
                         switch (ev.kind) {
                             case MicroCodeEventKind.StateUpdate: {
-                                // map variables to tids
+                                const event = ev as StateUpdateEvent
+                                const rules = event.updatedVars.map(v => {
+                                    // TODO: var to tid
+                                    // get rules for each variable
+                                })
+                                // flatten
                                 break
                             }
                             case MicroCodeEventKind.SensorUpdate: {
                                 const event = ev as SensorUpdateEvent
                                 // see if any rule matches
-                                const newRules: RuleClosure[] =
-                                    this.ruleClosures.filter(rc =>
-                                        rc.matchWhen(event.sensor, event.filter)
-                                    )
-                                this.processNewRules(newRules)
+                                this.processNewRules(
+                                    newRules(event.sensor, event.filter)
+                                )
                                 break
                             }
                             case MicroCodeEventKind.SwitchPage: {
+                                const event = ev as SwitchPageEvent
+                                this.switchPage(event.index - 1)
                                 break
                             }
                             case MicroCodeEventKind.StartPage: {
+                                this.processNewRules(
+                                    newRules(Tid.TID_SENSOR_START_PAGE, -1)
+                                )
                                 break
                             }
                             case MicroCodeEventKind.TimerFire: {
-                                // awaken the rule at the given index
+                                const event = ev as TimerFireEvent
+                                // TODO: awaken the rule at the given index
                                 break
                             }
                         }
