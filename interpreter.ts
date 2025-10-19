@@ -155,11 +155,14 @@ namespace microcode {
                     if (this.wakeTime > 0) {
                         basic.pause(this.wakeTime)
                         this.wakeTime = 0
+                        this.interp.addEvent({
+                            kind: MicroCodeEventKind.TimerFire,
+                            ruleIndex: this.index,
+                        } as TimerFireEvent)
+                        // TODO: wait for notification to go ahead
+                        // TODO: as the interp must kill conflicting rules
                     }
-                    this.queueAction()
-                    // TODO: queueAction asks to run on a resource
-                    // TODO: pause here and wait for permission
-                    // TODO: if no, permission, stop running this action
+                    this.runAction()
                     this.checkForLoopFinish()
                     // yield, otherwise the app will hang
                     basic.pause(0)
@@ -245,10 +248,10 @@ namespace microcode {
             const param = this.getParamInstant()
             this.modifierIndex = this.rule.modifiers.length
             const resource = this.getOutputResource()
-            this.interp.queueAction(this.index, resource, actuator, param)
+            this.interp.runAction(this.index, resource, actuator, param)
         }
 
-        private queueAction() {
+        private runAction() {
             if (this.wakeTime > 0 || !this.actionRunning) return
             const actuator = this.rule.actuators[0]
             let param: any = undefined
@@ -282,7 +285,7 @@ namespace microcode {
             else this.modifierIndex = this.rule.modifiers.length
 
             const resource = this.getOutputResource()
-            this.interp.queueAction(this.index, resource, actuator, param)
+            this.interp.runAction(this.index, resource, actuator, param)
         }
 
         public getWakeTime() {
@@ -374,7 +377,7 @@ namespace microcode {
     enum MicroCodeEventKind {
         StateUpdate,
         SensorUpdate,
-        PageChange,
+        SwitchPage,
         StartPage,
         TimerFire,
     }
@@ -394,8 +397,8 @@ namespace microcode {
         filter: number
     }
 
-    interface PageChangeEvent extends MicroCodeEvent {
-        kind: MicroCodeEventKind.PageChange
+    interface SwitchPageEvent extends MicroCodeEvent {
+        kind: MicroCodeEventKind.SwitchPage
         index: number
     }
 
@@ -448,7 +451,7 @@ namespace microcode {
             this.addEvent({ kind: MicroCodeEventKind.StartPage })
         }
 
-        public queueAction(
+        public runAction(
             ruleIndex: number,
             resource: number,
             action: Tile,
@@ -463,18 +466,29 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
                     const varName = getParam(action)
                     this.updateState(ruleIndex, varName, param)
+                    // TODO: current state gets new state
                     return
                 default:
                     this.host.execute(action as ActionTid, param)
             }
         }
 
-        // TODO: reset newState
-        private updateState(ruleIndex: number, pipe: string, v: number) {
+        private updateState(ruleIndex: number, varName: string, v: number) {
             if (!this.newState) this.newState = {}
-            this.newState[pipe] = v
+            this.newState[varName] = v
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
+            const ev: StateUpdateEvent = this.eventQueue.find(
+                ev => ev.kind == MicroCodeEventKind.StateUpdate
+            ) as StateUpdateEvent
+            if (ev) {
+                ev.updatedVars.push(varName)
+            } else
+                this.addEvent({
+                    kind: MicroCodeEventKind.StateUpdate,
+                    updatedVars: [varName],
+                } as StateUpdateEvent)
         }
+
         private processNewRules(newRules: RuleClosure[]) {
             // first new rule (in lexical order) on a resource wins
             const resourceWinner: { [resource: number]: number } = {}
@@ -521,6 +535,9 @@ namespace microcode {
                 rc => rc.getOutputResource() == OutputResource.PageCounter
             )
             if (switchPage) {
+                this.eventQueue.insertAt(0, {
+                    kind: MicroCodeEventKind.SwitchPage,
+                })
                 // TODO: put on the head of the event queue
                 return
             }
