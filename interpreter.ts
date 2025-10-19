@@ -91,7 +91,13 @@ namespace microcode {
 
         public matchWhen(sensorName: string | number, event = 0): boolean {
             const sensor = this.rule.sensor
-            if (getKind(sensor) == TileKind.Variable) {
+            if (
+                sensor == Tid.TID_SENSOR_START_PAGE &&
+                this.rule.filters.length == 0
+            ) {
+                // this rule immediately starts when we switch to its page
+                return true
+            } else if (getKind(sensor) == TileKind.Variable) {
                 const pipeId = getParam(sensor)
                 if (pipeId == sensorName) return this.filterViaCompare()
             } else {
@@ -365,7 +371,7 @@ namespace microcode {
 
     const vars = ["cup_x", "cup_y", "cup_z"]
 
-    enum EventKind {
+    enum MicroCodeEventKind {
         StateUpdate,
         SensorUpdate,
         PageChange,
@@ -374,32 +380,32 @@ namespace microcode {
     }
 
     interface MicroCodeEvent {
-        kind: EventKind
+        kind: MicroCodeEventKind
     }
 
     interface StateUpdateEvent extends MicroCodeEvent {
-        kind: EventKind.StateUpdate
+        kind: MicroCodeEventKind.StateUpdate
         updatedVars: string[]
     }
 
     interface SensorUpdateEvent extends MicroCodeEvent {
-        kind: EventKind.SensorUpdate
+        kind: MicroCodeEventKind.SensorUpdate
         sensor: string | number
-        param: any
+        filter: number
     }
 
     interface PageChangeEvent extends MicroCodeEvent {
-        kind: EventKind.PageChange
+        kind: MicroCodeEventKind.PageChange
         index: number
     }
 
     interface TimerFireEvent extends MicroCodeEvent {
-        kind: EventKind.TimerFire
+        kind: MicroCodeEventKind.TimerFire
         ruleIndex: number
     }
 
     interface StartPageEvent extends MicroCodeEvent {
-        kind: EventKind.StartPage
+        kind: MicroCodeEventKind.StartPage
     }
 
     export class Interpreter {
@@ -439,7 +445,7 @@ namespace microcode {
                 this.ruleClosures.push(new RuleClosure(index, r, this))
             })
             // start up rules
-            this.ruleClosures.forEach(rc => rc.start())
+            this.addEvent({ kind: MicroCodeEventKind.StartPage })
         }
 
         public queueAction(
@@ -469,7 +475,6 @@ namespace microcode {
             this.newState[pipe] = v
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
         }
-
         private processNewRules(newRules: RuleClosure[]) {
             // first new rule (in lexical order) on a resource wins
             const resourceWinner: { [resource: number]: number } = {}
@@ -490,7 +495,13 @@ namespace microcode {
                 liveIndices.some(i => i === rc.index)
             )
 
-            const dead = newRules.filter(rc => live.indexOf(rc) === -1)
+            const dead = this.ruleClosures.filter(rc => {
+                const resource = rc.getOutputResource()
+                return (
+                    live.indexOf(rc) === -1 &&
+                    resourceWinner[resource] != undefined
+                )
+            })
             dead.forEach(rc => rc.kill())
 
             // partition the live into instant and sequence
@@ -524,11 +535,27 @@ namespace microcode {
             })
         }
 
-        private eventQueue: number[] = []
+        private eventQueue: MicroCodeEvent[] = []
+        public addEvent(event: MicroCodeEvent) {
+            this.eventQueue.push(event)
+        }
+
         private processEventQueue() {
             control.inBackground(() => {
                 while (this.running) {
-                    // TODO: check the event queue and process
+                    if (this.eventQueue.length) {
+                        const event = this.eventQueue[0]
+                        this.eventQueue.removeAt(0)
+                        switch (event.kind) {
+                            case MicroCodeEventKind.StateUpdate:
+                            // map variables to tids
+                            case MicroCodeEventKind.SensorUpdate:
+                            case MicroCodeEventKind.PageChange:
+                            case MicroCodeEventKind.StartPage:
+                            case MicroCodeEventKind.TimerFire:
+                            // awaken the rule at the given index
+                        }
+                    }
                     basic.pause(10)
                 }
             })
