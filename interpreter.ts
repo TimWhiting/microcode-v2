@@ -55,7 +55,6 @@ namespace microcode {
     function getActionKind(action: Tid) {
         switch (action) {
             case Tid.TID_ACTUATOR_PAINT:
-            case Tid.TID_ACTUATOR_SHOW_NUMBER:
             case Tid.TID_ACTUATOR_MUSIC:
             case Tid.TID_ACTUATOR_SPEAKER:
                 return ActionKind.Sequence
@@ -73,6 +72,12 @@ namespace microcode {
             public rule: RuleDefn,
             private interp: Interpreter
         ) {}
+
+        public start() {
+            if (this.actionRunning) return
+            const wakeTime = this.getWakeTime()
+            if (wakeTime > 0) this.timerBasedRule()
+        }
 
         public active() {
             return this.actionRunning
@@ -133,10 +138,7 @@ namespace microcode {
             return undefined
         }
 
-        // NOTE: this method is only needed for executing
-        // NOTE: rules with a timer in When or Sequence in Do
-        // NOTE: it is not needed for Instant execution
-        public runDoSection() {
+        private timerBasedRule() {
             // make sure we have something to do
             if (this.rule.actuators.length == 0) return
             // prevent re-entrancy
@@ -207,11 +209,42 @@ namespace microcode {
             return getActionKind(this.rule.actuators[0])
         }
 
+        private getParamInstant() {
+            const actuator = this.rule.actuators[0]
+            if (this.rule.modifiers.length == 0)
+                return defaultModifier(actuator)
+
+            switch (actuator) {
+                case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
+                case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
+                case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
+                case Tid.TID_ACTUATOR_SHOW_NUMBER:
+                case Tid.TID_ACTUATOR_RADIO_SEND:
+                case Tid.TID_ACTUATOR_RADIO_SET_GROUP: {
+                    return this.interp.getValue(this.rule.modifiers, 0)
+                }
+                case Tid.TID_ACTUATOR_SWITCH_PAGE: {
+                    let targetPage = 1
+                    for (const m of this.rule.modifiers)
+                        if (getKind(m) == TileKind.Page)
+                            targetPage = getParam(m)
+                    return targetPage
+                }
+            }
+            return undefined
+        }
+
+        public runInstant() {
+            const actuator = this.rule.actuators[0]
+            const param = this.getParamInstant()
+            this.modifierIndex = this.rule.modifiers.length
+            const resource = this.getOutputResource()
+            this.interp.queueAction(this.index, resource, actuator, param)
+        }
+
         private queueAction() {
             if (this.wakeTime > 0 || !this.actionRunning) return
             const actuator = this.rule.actuators[0]
-            const resource = this.getOutputResource()
-
             let param: any = undefined
             if (this.rule.modifiers.length == 0) {
                 param = defaultModifier(actuator)
@@ -234,28 +267,15 @@ namespace microcode {
                         )
                         break
                     }
-                    case Tid.TID_ACTUATOR_SHOW_NUMBER:
-                    case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
-                    case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
-                    case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
-                    case Tid.TID_ACTUATOR_RADIO_SEND:
-                    case Tid.TID_ACTUATOR_RADIO_SET_GROUP: {
-                        param = this.interp.getValue(this.rule.modifiers, 0)
-                        break
-                    }
-                    case Tid.TID_ACTUATOR_SWITCH_PAGE: {
-                        let targetPage = 1
-                        for (const m of this.rule.modifiers)
-                            if (getKind(m) == TileKind.Page)
-                                targetPage = getParam(m)
-                        param = targetPage
-                        break
-                    }
+                    default:
+                        param = this.getParamInstant()
                 }
             }
             if (this.getActionKind() === ActionKind.Sequence)
                 this.modifierIndex++
             else this.modifierIndex = this.rule.modifiers.length
+
+            const resource = this.getOutputResource()
             this.interp.queueAction(this.index, resource, actuator, param)
         }
 
@@ -345,6 +365,43 @@ namespace microcode {
 
     const vars = ["cup_x", "cup_y", "cup_z"]
 
+    enum EventKind {
+        StateUpdate,
+        SensorUpdate,
+        PageChange,
+        StartPage,
+        TimerFire,
+    }
+
+    interface MicroCodeEvent {
+        kind: EventKind
+    }
+
+    interface StateUpdateEvent extends MicroCodeEvent {
+        kind: EventKind.StateUpdate
+        updatedVars: string[]
+    }
+
+    interface SensorUpdateEvent extends MicroCodeEvent {
+        kind: EventKind.SensorUpdate
+        sensor: string | number
+        param: any
+    }
+
+    interface PageChangeEvent extends MicroCodeEvent {
+        kind: EventKind.PageChange
+        index: number
+    }
+
+    interface TimerFireEvent extends MicroCodeEvent {
+        kind: EventKind.TimerFire
+        ruleIndex: number
+    }
+
+    interface StartPageEvent extends MicroCodeEvent {
+        kind: EventKind.StartPage
+    }
+
     export class Interpreter {
         private hasErrors: boolean = false
         private running: boolean = false
@@ -355,6 +412,7 @@ namespace microcode {
         // state storage for variables and other temporary global state
         // (local per-rule state is kept in RuleClosure)
         public state: VariableMap = {}
+        public newState: VariableMap = undefined
 
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
             this.host.emitClearScreen()
@@ -381,10 +439,7 @@ namespace microcode {
                 this.ruleClosures.push(new RuleClosure(index, r, this))
             })
             // start up rules
-            this.ruleClosures.forEach(rc => {
-                const wake = rc.getWakeTime()
-                if (wake > 0) rc.runDoSection()
-            })
+            this.ruleClosures.forEach(rc => rc.start())
         }
 
         public queueAction(
@@ -408,16 +463,11 @@ namespace microcode {
             }
         }
 
+        // TODO: reset newState
         private updateState(ruleIndex: number, pipe: string, v: number) {
-            // earliest in lexical order wins for a resource
-            this.state[pipe] = v
+            if (!this.newState) this.newState = {}
+            this.newState[pipe] = v
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
-            // see if any rule matches
-            const newRules: RuleClosure[] = []
-            this.ruleClosures.forEach(rc => {
-                if (rc.matchWhen(pipe)) newRules.push(rc)
-            })
-            this.processNewRules(newRules)
         }
 
         private processNewRules(newRules: RuleClosure[]) {
@@ -448,13 +498,11 @@ namespace microcode {
                 rc => rc.getActionKind() === ActionKind.Instant
             )
 
-            // execute the instant ones right now (guaranteed no conflict), other than switch page
-            // - note this may result in queueing new updates via variable assignment,
-            // - so we need to be careful about re-entrancy here
-            // TODO: set up a background fiber to look for state update, breaking the update cycle
+            // execute the instant ones right now (guaranteed no conflict)
             instant.forEach(rc => {
-                if (rc.getOutputResource() != OutputResource.PageCounter) {
-                    // TODO: need execute command:
+                const resource = rc.getOutputResource()
+                if (resource != OutputResource.PageCounter) {
+                    rc.runInstant()
                 }
             })
 
@@ -462,16 +510,17 @@ namespace microcode {
                 rc => rc.getOutputResource() == OutputResource.PageCounter
             )
             if (switchPage) {
-                // TODO: execute it, but via event queue
+                // TODO: put on the head of the event queue
+                return
             }
 
             // start up the others, but notice that they be active already, so kill first
-            const sequence = live.filter(
+            const takesTime = live.filter(
                 rc => rc.getActionKind() === ActionKind.Sequence
             )
-            sequence.forEach(rc => {
+            takesTime.forEach(rc => {
                 rc.kill()
-                rc.runDoSection()
+                rc.start()
             })
         }
 
