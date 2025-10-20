@@ -351,3 +351,25 @@ namespace microcode {
         )
     }
 }
+
+/*
+
+https://makecode.microbit.org/_i9X6j2F9F68T
+MicroGUI Numeric Keyboard 
+"microgui": "github:microbit-apps/MicroGUI#v0.0.21",
+ 
+const app = new microgui.App();
+
+const kb = new microgui.Keyboard({
+    app,
+    layout: microgui.KeyboardLayouts.NUMERIC,
+    cb: (txt: string) => basic.showNumber(+txt),
+    foregroundColor: 3, // optional arg
+    backgroundColor: 6, // optional arg
+    maxTxtLength: 5,    // optional arg
+})
+
+app.popScene()
+app.pushScene(kb)
+
+*/
