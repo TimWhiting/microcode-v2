@@ -150,7 +150,7 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_SPEAKER:
                     music.play(
                         music.builtinPlayableSoundEffect(this.getSound(param)),
-                        music.PlaybackMode.InBackground
+                        music.PlaybackMode.UntilDone
                     )
                     return
                 case Tid.TID_ACTUATOR_MUSIC:

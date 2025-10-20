@@ -356,12 +356,21 @@ namespace microcode {
     export function isVisible(tile: Tile) {
         const tid = getTid(tile)
         // these tids are dead
-        if (tid == Tid.TID_ACTUATOR_MICROPHONE || tid == Tid.TID_FILTER_ACCEL)
+        if (
+            tid == Tid.TID_ACTUATOR_MICROPHONE ||
+            tid == Tid.TID_FILTER_ACCEL ||
+            // TODO: no car for now
+            tid == Tid.TID_SENSOR_CAR_WALL ||
+            tid == Tid.TID_SENSOR_LINE ||
+            tid == Tid.TID_ACTUATOR_CAR
+        )
             return false
-        return true
+        // TODO: no jacdac for now
+        const ext = jdExternalClass(tile)
+        return ext == undefined
     }
 
-    export function defaultModifier(tid: Tid): Tile {
+    export function defaultModifier(tid: Tid) {
         switch (tid) {
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
@@ -373,10 +382,13 @@ namespace microcode {
             case Tid.TID_ACTUATOR_RGB_LED:
                 return Tid.TID_MODIFIER_RGB_LED_COLOR_RAINBOW
             case Tid.TID_ACTUATOR_PAINT: {
-                return getEditor(Tid.TID_MODIFIER_ICON_EDITOR)
+                const mod = getEditor(Tid.TID_MODIFIER_ICON_EDITOR)
+                const modEditor = mod as ModifierEditor
+                return modEditor.getField()
             }
             case Tid.TID_ACTUATOR_MUSIC: {
-                return getEditor(Tid.TID_MODIFIER_MELODY_EDITOR)
+                const mod = getEditor(Tid.TID_MODIFIER_MELODY_EDITOR)
+                return (mod as MelodyEditor).getNoteSequence()
             }
             default:
                 return undefined
@@ -911,7 +923,6 @@ namespace microcode {
         }
     }
 
-    /*
     export function jdExternalClass(tile: Tile) {
         const tid = getTid(tile)
         switch (tid) {
@@ -944,6 +955,7 @@ namespace microcode {
         }
     }
 
+    /*
     export function serviceClassName(tile: Tile): jacs.ServiceClass {
         const tid = getTid(tile)
         switch (tid) {
