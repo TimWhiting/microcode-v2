@@ -23,7 +23,7 @@ namespace microcode {
     enum OutputResource {
         LEDScreen = 1000,
         Speaker,
-        RadioGroup,
+        RadioGroup, // well radio group affects subsequent radio.send
         PageCounter,
     }
 
@@ -67,6 +67,7 @@ namespace microcode {
         private actionRunning: boolean = false
         private modifierIndex: number = 0
         private loopIndex: number = 0
+        private timerGoAhead: boolean = false
         constructor(
             public index: number,
             public rule: RuleDefn,
@@ -159,8 +160,10 @@ namespace microcode {
                             kind: MicroCodeEventKind.TimerFire,
                             ruleIndex: this.index,
                         } as TimerFireEvent)
-                        // TODO: wait for notification to go ahead
-                        // TODO: as the interp must kill conflicting rules
+                        this.timerGoAhead = false
+                        while (!this.timerGoAhead) {
+                            basic.pause(10)
+                        }
                     }
                     this.runAction()
                     this.checkForLoopFinish()
@@ -205,6 +208,10 @@ namespace microcode {
                     }
                 }
             }
+        }
+
+        public releaseTimer() {
+            this.timerGoAhead = true
         }
 
         // use this to determine conflicts between rules
@@ -283,6 +290,8 @@ namespace microcode {
                 this.modifierIndex++
             else this.modifierIndex = this.rule.modifiers.length
             this.interp.runAction(this.index, actuator, param)
+            if (this.getActionKind() === ActionKind.Instant)
+                this.interp.processNewState()
         }
 
         public getWakeTime() {
@@ -421,6 +430,8 @@ namespace microcode {
             for (const v of vars) this.state[v] = 0
             for (const v of Object.keys(sensorInfo)) this.state[v] = 0
             this.running = true
+            // get ready to receive events
+            this.processEventQueue()
             this.switchPage(0)
             this.startSensors()
         }
@@ -453,7 +464,6 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
                     const varName = getParam(action)
                     this.updateState(ruleIndex, varName, param)
-                    // TODO: current state gets new state
                     return
                 default:
                     this.host.execute(action as ActionTid, param)
@@ -464,22 +474,19 @@ namespace microcode {
             if (!this.newState) this.newState = {}
             this.newState[varName] = v
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
-            const ev: StateUpdateEvent = this.eventQueue.find(
-                ev => ev.kind == MicroCodeEventKind.StateUpdate
-            ) as StateUpdateEvent
-            if (ev) {
-                ev.updatedVars.push(varName)
-            } else
-                this.addEvent({
-                    kind: MicroCodeEventKind.StateUpdate,
-                    updatedVars: [varName],
-                } as StateUpdateEvent)
         }
 
-        private copyState() {
-            Object.keys(this.newState).forEach(k => {
-                this.state[k] = this.newState[k]
-            })
+        public processNewState() {
+            const updatedVars = Object.keys(this.newState)
+            if (updatedVars.length) {
+                updatedVars.forEach(k => {
+                    this.state[k] = this.newState[k]
+                })
+                this.addEvent({
+                    kind: MicroCodeEventKind.StateUpdate,
+                    updatedVars: updatedVars,
+                } as StateUpdateEvent)
+            }
             this.newState = {}
         }
 
@@ -524,7 +531,7 @@ namespace microcode {
                     rc.runInstant()
                 }
             })
-            this.copyState()
+            this.processNewState()
 
             const switchPage = instant.find(
                 rc => rc.getOutputResource() == OutputResource.PageCounter
@@ -537,7 +544,7 @@ namespace microcode {
                 return
             }
 
-            // start up the others, but notice that they be active already, so kill first
+            // start up the others, but as they be active already, so kill first
             const sequence = live.filter(
                 rc => rc.getActionKind() === ActionKind.Sequence
             )
@@ -560,6 +567,7 @@ namespace microcode {
             }
             control.inBackground(() => {
                 while (this.running) {
+                    // TODO: should we drain the whole queue at once, or one at a time
                     if (this.eventQueue.length) {
                         const ev = this.eventQueue[0]
                         this.eventQueue.removeAt(0)
@@ -594,7 +602,8 @@ namespace microcode {
                             }
                             case MicroCodeEventKind.TimerFire: {
                                 const event = ev as TimerFireEvent
-                                // TODO: awaken the rule at the given index
+                                const rc = this.ruleClosures[event.ruleIndex]
+                                rc.releaseTimer()
                                 break
                             }
                         }
