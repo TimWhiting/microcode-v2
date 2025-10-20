@@ -61,6 +61,7 @@ namespace microcode {
         return ActionKind.Instant
     }
 
+    // TODO: can a timer-based rule be killed? makes sense
     class RuleClosure {
         private wakeTime: number = 0
         private actionRunning: boolean = false
