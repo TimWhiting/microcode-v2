@@ -2,6 +2,7 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // Runtime:
+    // - resource content error
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
     // - firefly: 1/4 timer not firing?
@@ -499,15 +500,13 @@ namespace microcode {
 
         private processNewRules(newRules: RuleClosure[]) {
             if (newRules.length == 0) return
+            console.log(`newRules ${newRules.map(rc => rc.index).join(" ")}`)
             // first new rule (in lexical order) on a resource wins
             const resourceWinner: { [resource: number]: number } = {}
             for (const rc of newRules) {
                 const resource = rc.getOutputResource()
                 const currentWinner = resourceWinner[resource]
-                if (
-                    !currentWinner ||
-                    (currentWinner && rc.index < currentWinner)
-                )
+                if (currentWinner === undefined || rc.index < currentWinner)
                     resourceWinner[resource] = rc.index
             }
 
