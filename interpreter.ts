@@ -4,10 +4,10 @@ namespace microcode {
     // Runtime:
     // - reaction game issues
     //    1. race condition?
-    //    Uncaught TypeError: Expected type ModifierEditor but received type number
-    //    at runAction (interpreter.ts:262:9)
-    //    at inline (interpreter.ts:155:37)
-    //.   2. jumpy on loop with arrows
+    //      Uncaught TypeError: Expected type ModifierEditor but received type number
+    //      at runAction (interpreter.ts:262:9)
+    //      at inline (interpreter.ts:155:37)
+    //    2. uneven timing on LED sequence?
     // - resource content error
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
@@ -168,7 +168,7 @@ namespace microcode {
                         } as TimerFireEvent)
                         this.timerGoAhead = false
                         while (this.actionRunning && !this.timerGoAhead) {
-                            basic.pause(10)
+                            basic.pause(1)
                         }
                     }
                     if (!this.actionRunning) break
@@ -284,15 +284,14 @@ namespace microcode {
                         break
                     }
                     case Tid.TID_ACTUATOR_SPEAKER: {
-                        param = getParam(
-                            this.rule.modifiers[this.modifierIndex]
-                        )
+                        param = this.rule.modifiers[this.modifierIndex]
                         break
                     }
                     default:
                         param = this.getParamInstant()
                 }
             }
+            console.log(`action = ${actuator} param = ${param}`)
             if (this.getActionKind() === ActionKind.Sequence)
                 this.modifierIndex++
             else this.modifierIndex = this.rule.modifiers.length
@@ -486,12 +485,10 @@ namespace microcode {
         }
 
         public processNewState() {
-            console.log(`processNewState`)
             const updatedVars = Object.keys(this.newState)
             if (updatedVars.length) {
                 updatedVars.forEach(k => {
                     this.state[k] = this.newState[k]
-                    console.log(`${k} updated to ${this.state[k]} `)
                 })
                 this.addEvent({
                     kind: MicroCodeEventKind.StateUpdate,
@@ -503,7 +500,6 @@ namespace microcode {
 
         private processNewRules(newRules: RuleClosure[]) {
             if (newRules.length == 0) return
-            console.log(`newRules ${newRules.map(rc => rc.index).join(" ")}`)
             // first new rule (in lexical order) on a resource wins
             const resourceWinner: { [resource: number]: number } = {}
             for (const rc of newRules) {
@@ -519,7 +515,6 @@ namespace microcode {
             const live = newRules.filter(rc =>
                 liveIndices.some(i => i === rc.index)
             )
-            console.log(`live = ${liveIndices.join(" ")}`)
 
             const dead = this.ruleClosures.filter(rc => {
                 const resource = rc.getOutputResource()
@@ -529,7 +524,6 @@ namespace microcode {
                     resourceWinner[resource] != undefined
                 )
             })
-            console.log(`dead = ${dead.map(rc => rc.index).join(" ")}`)
             dead.forEach(rc => rc.kill())
 
             // partition the live into instant and sequence
@@ -544,14 +538,12 @@ namespace microcode {
                     rc.runInstant()
                 }
             })
-            console.log(`instant = ${instant.map(rc => rc.index).join(" ")}`)
             this.processNewState()
 
             const switchPage = instant.find(
                 rc => rc.getOutputResource() == OutputResource.PageCounter
             )
             if (switchPage) {
-                console.log(`switchPage`)
                 switchPage.runInstant()
                 return // others don't get chance to run
             }
@@ -559,7 +551,6 @@ namespace microcode {
             const sequence = live.filter(
                 rc => rc.getActionKind() === ActionKind.Sequence
             )
-            console.log(`sequence = ${sequence.map(rc => rc.index).join(" ")}`)
 
             sequence.forEach(rc => {
                 rc.kill()
@@ -594,7 +585,6 @@ namespace microcode {
                                 // flatten into one list
                                 let newOnes: RuleClosure[] = []
                                 rules.forEach(l => {
-                                    console.log(`l = ${l.length}`)
                                     newOnes = newOnes.concat(l)
                                 })
                                 this.processNewRules(newOnes)
@@ -766,9 +756,7 @@ namespace microcode {
                     tokens.push(this.getExprValue(m))
                 }
             }
-            console.log(`tokens = ${tokens.join(" ")}`)
             const result = new parser.Parser(tokens).parse()
-            console.log(`result = ${result}`)
             return result
         }
     }
