@@ -1,8 +1,6 @@
 namespace microcode {
     // an interpreter for ProgramDefn
 
-    // TODO:
-
     // Runtime:
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
@@ -76,8 +74,8 @@ namespace microcode {
 
         public start() {
             if (this.actionRunning) return
-            const wakeTime = this.getWakeTime()
-            if (wakeTime > 0) this.timerBasedRule()
+            this.getWakeTime()
+            this.timerBasedRule()
         }
 
         public active() {
@@ -346,6 +344,12 @@ namespace microcode {
         return result
     }
 
+    const var2tid: { [v: string]: Tid } = {
+        cup_x: Tid.TID_SENSOR_CUP_X_WRITTEN,
+        cup_y: Tid.TID_SENSOR_CUP_Y_WRITTEN,
+        cup_z: Tid.TID_SENSOR_CUP_X_WRITTEN,
+    }
+
     export enum SensorChange {
         Up,
         Down,
@@ -422,7 +426,7 @@ namespace microcode {
         // state storage for variables and other temporary global state
         // (local per-rule state is kept in RuleClosure)
         public state: VariableMap = {}
-        public newState: VariableMap = undefined
+        public newState: VariableMap = {}
 
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
             this.host.emitClearScreen()
@@ -431,7 +435,7 @@ namespace microcode {
             for (const v of Object.keys(sensorInfo)) this.state[v] = 0
             this.running = true
             // get ready to receive events
-            this.processEventQueue()
+            this.setupEventQueue()
             this.switchPage(0)
             this.startSensors()
         }
@@ -457,7 +461,10 @@ namespace microcode {
         public runAction(ruleIndex: number, action: Tile, param: any) {
             switch (action) {
                 case Tid.TID_ACTUATOR_SWITCH_PAGE:
-                    this.switchPage(param - 1)
+                    this.addEvent({
+                        kind: MicroCodeEventKind.SwitchPage,
+                        index: param,
+                    } as SwitchPageEvent)
                     return
                 case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
@@ -491,6 +498,7 @@ namespace microcode {
         }
 
         private processNewRules(newRules: RuleClosure[]) {
+            if (newRules.length == 0) return
             // first new rule (in lexical order) on a resource wins
             const resourceWinner: { [resource: number]: number } = {}
             for (const rc of newRules) {
@@ -509,14 +517,17 @@ namespace microcode {
             const live = newRules.filter(rc =>
                 liveIndices.some(i => i === rc.index)
             )
+            console.log(`live = ${liveIndices.join(" ")}`)
 
             const dead = this.ruleClosures.filter(rc => {
                 const resource = rc.getOutputResource()
                 return (
                     live.indexOf(rc) === -1 &&
+                    rc.active() &&
                     resourceWinner[resource] != undefined
                 )
             })
+            console.log(`dead = ${dead.map(rc => rc.index).join(" ")}`)
             dead.forEach(rc => rc.kill())
 
             // partition the live into instant and sequence
@@ -531,23 +542,24 @@ namespace microcode {
                     rc.runInstant()
                 }
             })
+            console.log(`instant = ${instant.map(rc => rc.index).join(" ")}`)
             this.processNewState()
 
             const switchPage = instant.find(
                 rc => rc.getOutputResource() == OutputResource.PageCounter
             )
             if (switchPage) {
-                this.eventQueue.insertAt(0, {
-                    kind: MicroCodeEventKind.SwitchPage,
-                    index: switchPage.getParamInstant(),
-                } as SwitchPageEvent)
-                return
+                console.log(`switchPage`)
+                switchPage.runInstant()
+                return // others don't get chance to run
             }
 
             // start up the others, but as they be active already, so kill first
             const sequence = live.filter(
                 rc => rc.getActionKind() === ActionKind.Sequence
             )
+            console.log(`sequence = ${sequence.map(rc => rc.index).join(" ")}`)
+
             sequence.forEach(rc => {
                 rc.kill()
                 rc.start()
@@ -559,7 +571,7 @@ namespace microcode {
             this.eventQueue.push(event)
         }
 
-        private processEventQueue() {
+        private setupEventQueue() {
             const newRules = (sensor: number | string, filter: number) => {
                 return this.ruleClosures.filter(rc =>
                     rc.matchWhen(sensor, filter)
@@ -574,11 +586,15 @@ namespace microcode {
                         switch (ev.kind) {
                             case MicroCodeEventKind.StateUpdate: {
                                 const event = ev as StateUpdateEvent
-                                const rules = event.updatedVars.map(v => {
-                                    // TODO: var to tid
-                                    // get rules for each variable
-                                })
-                                // flatten
+                                const rules = event.updatedVars.map(v =>
+                                    newRules(var2tid[v], -1)
+                                )
+                                // flatten into one list
+                                let newOnes: RuleClosure[] = []
+                                rules.forEach(
+                                    l => (newOnes = newOnes.concat(l))
+                                )
+                                this.processNewRules(newOnes)
                                 break
                             }
                             case MicroCodeEventKind.SensorUpdate: {
