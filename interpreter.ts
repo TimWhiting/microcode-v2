@@ -73,10 +73,10 @@ namespace microcode {
             private interp: Interpreter
         ) {}
 
-        public start() {
+        public start(timer = false) {
             if (this.actionRunning) return
-            this.getWakeTime()
-            this.timerBasedRule()
+            const time = this.getWakeTime()
+            if (!timer || time > 0) this.timerOrSequenceRule()
         }
 
         public active() {
@@ -144,7 +144,7 @@ namespace microcode {
             return undefined
         }
 
-        private timerBasedRule() {
+        private timerOrSequenceRule() {
             // make sure we have something to do
             if (this.rule.actuators.length == 0) return
             // prevent re-entrancy
@@ -160,10 +160,11 @@ namespace microcode {
                             ruleIndex: this.index,
                         } as TimerFireEvent)
                         this.timerGoAhead = false
-                        while (!this.timerGoAhead) {
+                        while (this.actionRunning && !this.timerGoAhead) {
                             basic.pause(10)
                         }
                     }
+                    if (!this.actionRunning) break
                     this.runAction()
                     this.checkForLoopFinish()
                     // yield, otherwise the app will hang
@@ -293,14 +294,13 @@ namespace microcode {
                 this.interp.processNewState()
         }
 
-        public getWakeTime() {
+        private getWakeTime() {
             this.wakeTime = 0
             const sensor = this.rule.sensor
             if (
                 sensor == Tid.TID_SENSOR_TIMER ||
                 sensor == Tid.TID_SENSOR_START_PAGE
             ) {
-                // const timer = this.addProc(name + "_timer")
                 let period = 0
                 let randomPeriod = 0
                 for (const m of this.rule.filters) {
@@ -457,6 +457,8 @@ namespace microcode {
             this.addEvent({
                 kind: MicroCodeEventKind.StartPage,
             } as StartPageEvent)
+            // start up timer-based rules
+            this.ruleClosures.forEach(rc => rc.start(true))
         }
 
         public runAction(ruleIndex: number, action: Tile, param: any) {
@@ -570,6 +572,12 @@ namespace microcode {
             this.eventQueue.push(event)
         }
 
+        private startTimers() {
+            this.ruleClosures.forEach(rc => {
+                rc.start(true)
+            })
+        }
+
         private setupEventQueue() {
             const newRules = (sensor: number | string, filter: number) => {
                 return this.ruleClosures.filter(rc =>
@@ -610,6 +618,7 @@ namespace microcode {
                                 break
                             }
                             case MicroCodeEventKind.StartPage: {
+                                // TODO: need to start rules that use timer
                                 this.processNewRules(
                                     newRules(Tid.TID_SENSOR_START_PAGE, -1)
                                 )
