@@ -2,6 +2,7 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // Runtime:
+    // - var update not working
     // - resource content error
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
@@ -346,12 +347,6 @@ namespace microcode {
         return result
     }
 
-    const var2tid: { [v: string]: Tid } = {
-        cup_x: Tid.TID_SENSOR_CUP_X_WRITTEN,
-        cup_y: Tid.TID_SENSOR_CUP_Y_WRITTEN,
-        cup_z: Tid.TID_SENSOR_CUP_X_WRITTEN,
-    }
-
     export enum SensorChange {
         Up,
         Down,
@@ -449,7 +444,6 @@ namespace microcode {
 
         private switchPage(page: number) {
             this.stopAllRules()
-            control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             // set up new rule closures
             this.currentPage = page
             this.program.pages[this.currentPage].rules.forEach((r, index) => {
@@ -484,15 +478,15 @@ namespace microcode {
         private updateState(ruleIndex: number, varName: string, v: number) {
             if (!this.newState) this.newState = {}
             this.newState[varName] = v
-            // TODO: move delays into event processing
-            control.waitMicros(ANTI_FREEZE_DELAY * 1000)
         }
 
         public processNewState() {
+            console.log(`processNewState`)
             const updatedVars = Object.keys(this.newState)
             if (updatedVars.length) {
                 updatedVars.forEach(k => {
                     this.state[k] = this.newState[k]
+                    console.log(`${k} updated to ${this.state[k]} `)
                 })
                 this.addEvent({
                     kind: MicroCodeEventKind.StateUpdate,
@@ -587,15 +581,17 @@ namespace microcode {
                         this.eventQueue.removeAt(0)
                         switch (ev.kind) {
                             case MicroCodeEventKind.StateUpdate: {
+                                control.waitMicros(ANTI_FREEZE_DELAY * 1000)
                                 const event = ev as StateUpdateEvent
-                                const rules = event.updatedVars.map(v =>
-                                    newRules(var2tid[v], -1)
-                                )
+                                const rules = event.updatedVars.map(v => {
+                                    return newRules(v, -1)
+                                })
                                 // flatten into one list
                                 let newOnes: RuleClosure[] = []
-                                rules.forEach(
-                                    l => (newOnes = newOnes.concat(l))
-                                )
+                                rules.forEach(l => {
+                                    console.log(`l = ${l.length}`)
+                                    newOnes = newOnes.concat(l)
+                                })
                                 this.processNewRules(newOnes)
                                 break
                             }
@@ -608,6 +604,7 @@ namespace microcode {
                                 break
                             }
                             case MicroCodeEventKind.SwitchPage: {
+                                control.waitMicros(ANTI_FREEZE_DELAY * 1000)
                                 const event = ev as SwitchPageEvent
                                 this.switchPage(event.index - 1)
                                 break
