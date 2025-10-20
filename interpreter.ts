@@ -484,6 +484,7 @@ namespace microcode {
         private updateState(ruleIndex: number, varName: string, v: number) {
             if (!this.newState) this.newState = {}
             this.newState[varName] = v
+            // TODO: move delays into event processing
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
         }
 
@@ -556,7 +557,6 @@ namespace microcode {
                 return // others don't get chance to run
             }
 
-            // start up the others, but as they be active already, so kill first
             const sequence = live.filter(
                 rc => rc.getActionKind() === ActionKind.Sequence
             )
@@ -571,12 +571,6 @@ namespace microcode {
         private eventQueue: MicroCodeEvent[] = []
         public addEvent(event: MicroCodeEvent) {
             this.eventQueue.push(event)
-        }
-
-        private startTimers() {
-            this.ruleClosures.forEach(rc => {
-                rc.start(true)
-            })
         }
 
         private setupEventQueue() {
@@ -619,7 +613,6 @@ namespace microcode {
                                 break
                             }
                             case MicroCodeEventKind.StartPage: {
-                                // TODO: need to start rules that use timer
                                 this.processNewRules(
                                     newRules(Tid.TID_SENSOR_START_PAGE, -1)
                                 )
