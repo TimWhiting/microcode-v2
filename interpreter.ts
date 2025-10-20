@@ -2,7 +2,12 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // Runtime:
-    // - var update not working
+    // - reaction game issues
+    //    1. race condition?
+    //    Uncaught TypeError: Expected type ModifierEditor but received type number
+    //    at runAction (interpreter.ts:262:9)
+    //    at inline (interpreter.ts:155:37)
+    //.   2. jumpy on loop with arrows
     // - resource content error
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
