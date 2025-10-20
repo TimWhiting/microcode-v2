@@ -7,6 +7,8 @@ namespace microcode {
     //      Uncaught TypeError: Expected type ModifierEditor but received type number
     //      at runAction (interpreter.ts:262:9)
     //      at inline (interpreter.ts:155:37)
+    //    TID_MODIFIER_LOOP = 178 - problem !!!
+
     //    2. uneven timing on LED sequence?
     // - resource content error
     // - microphone: event -> number doesn't work - number doesn't appear
@@ -173,20 +175,37 @@ namespace microcode {
                     }
                     if (!this.actionRunning) break
                     this.runAction()
+                    const actionKind = this.getActionKind()
+                    if (actionKind === ActionKind.Sequence) this.modifierIndex++
+                    else if (actionKind === ActionKind.Instant)
+                        this.modifierIndex = this.rule.modifiers.length
+                    else {
+                        console.log("NO KIND")
+                    }
+                    console.debug(`finish action`)
+                    if (!this.actionRunning) break
+                    console.log(`calling loop finish`)
                     this.checkForLoopFinish()
                     // yield, otherwise the app will hang
-                    basic.pause(0)
+                    basic.pause(5)
                 }
             })
         }
 
         private checkForLoopFinish() {
-            if (!this.actionRunning) return
+            console.log(`checkForLoopFinish`)
+            if (!this.actionRunning) {
+                console.log("NO")
+                return
+            }
+            console.log(`IN ${this.modifierIndex}`)
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             if (this.modifierIndex < this.rule.modifiers.length) {
                 const m = this.rule.modifiers[this.modifierIndex]
                 if (getTid(m) == Tid.TID_MODIFIER_LOOP) {
+                    console.log(`at loop modifier ${this.modifierIndex}`)
                     if (this.modifierIndex == this.rule.modifiers.length - 1) {
+                        console.log(`forever loop`)
                         // forever loop
                         this.modifierIndex = 0
                     } else {
@@ -260,8 +279,8 @@ namespace microcode {
         public runInstant() {
             const actuator = this.rule.actuators[0]
             const param = this.getParamInstant()
-            this.modifierIndex = this.rule.modifiers.length
             this.interp.runAction(this.index, actuator, param)
+            this.kill()
         }
 
         private runAction() {
@@ -275,6 +294,9 @@ namespace microcode {
                     case Tid.TID_ACTUATOR_PAINT: {
                         const mod = this.rule.modifiers[this.modifierIndex]
                         const modEditor = mod as ModifierEditor
+                        console.log(
+                            `modEditor len ${this.rule.modifiers.length} index ${this.modifierIndex} tid ${modEditor}`
+                        )
                         param = modEditor.getField()
                         break
                     }
@@ -291,10 +313,6 @@ namespace microcode {
                         param = this.getParamInstant()
                 }
             }
-            console.log(`action = ${actuator} param = ${param}`)
-            if (this.getActionKind() === ActionKind.Sequence)
-                this.modifierIndex++
-            else this.modifierIndex = this.rule.modifiers.length
             this.interp.runAction(this.index, actuator, param)
             if (this.getActionKind() === ActionKind.Instant)
                 this.interp.processNewState()
@@ -430,6 +448,7 @@ namespace microcode {
         public newState: VariableMap = {}
 
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
+            console.log("START PROGRAM")
             this.host.emitClearScreen()
             this.host.registerOnSensorEvent((t, f) => this.onSensorEvent(t, f))
             for (const v of vars) this.state[v] = 0
@@ -447,6 +466,7 @@ namespace microcode {
         }
 
         private switchPage(page: number) {
+            console.log(`switch from ${this.currentPage} to ${page}`)
             this.stopAllRules()
             // set up new rule closures
             this.currentPage = page
@@ -553,6 +573,7 @@ namespace microcode {
             )
 
             sequence.forEach(rc => {
+                console.log(`start sequence ${rc.index}`)
                 rc.kill()
                 rc.start()
             })
@@ -575,6 +596,7 @@ namespace microcode {
                     if (this.eventQueue.length) {
                         const ev = this.eventQueue[0]
                         this.eventQueue.removeAt(0)
+                        console.log(`processing event ${ev.kind}`)
                         switch (ev.kind) {
                             case MicroCodeEventKind.StateUpdate: {
                                 control.waitMicros(ANTI_FREEZE_DELAY * 1000)
@@ -612,6 +634,9 @@ namespace microcode {
                             }
                             case MicroCodeEventKind.TimerFire: {
                                 const event = ev as TimerFireEvent
+                                console.log(
+                                    `timer fire from ${event.ruleIndex}`
+                                )
                                 const rc = this.ruleClosures[event.ruleIndex]
                                 rc.releaseTimer()
                                 break
