@@ -284,7 +284,6 @@ namespace microcode {
         }
 
         private runAction() {
-            if (this.wakeTime > 0 || !this.actionRunning) return
             const actuator = this.rule.actuators[0]
             let param: any = undefined
             if (this.rule.modifiers.length == 0) {
