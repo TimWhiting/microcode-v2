@@ -25,8 +25,10 @@ namespace microcode {
                 resolveTooltip(ariaId)
 
             const buf = this.load(SAVESLOT_AUTO)
-            const prog = ProgramDefn.fromBuffer(new BufferReader(buf))
-            runProgram(prog)
+            if (buf) {
+                const prog = ProgramDefn.fromBuffer(new BufferReader(buf))
+                runProgram(prog)
+            }
 
             controller.setRepeatDefault(250, 30)
             // keymap.setupKeys()
