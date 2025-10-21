@@ -615,23 +615,26 @@ namespace microcode {
         }
 
         public moveRuleAt(index: number, up: boolean) {
-            const rule = this.ruleEditors[index]
             if (index > 0 && up) {
+                const deleted = this.pagedef.deleteRuleAt(index)
+                this.pagedef.insertRuleAt(index - 1, deleted)
+
+                const rule = this.ruleEditors[index]
                 this.ruleEditors.splice(index, 1)
                 this.ruleEditors.insertAt(index - 1, rule)
+
                 this.reassignIndices()
             }
         }
 
         public deleteRuleAt(index: number) {
-            const rule = this.ruleEditors[index]
             this.pagedef.deleteRuleAt(index)
             this.ruleEditors.splice(index, 1)
             this.reassignIndices()
         }
 
         public insertRuleAt(index: number) {
-            const newRule = this.pagedef.insertRuleAt(index)
+            const newRule = this.pagedef.insertRuleAt(index, undefined)
             if (newRule) {
                 this.ruleEditors.insertAt(
                     index,

@@ -163,6 +163,7 @@ namespace microcode {
         }
 
         private showRuleHandleMenu() {
+            // don't show up at index 0 or down at end
             const btns: PickerButtonDef[] = [
                 {
                     icon: "plus",
@@ -172,15 +173,19 @@ namespace microcode {
                     icon: "delete",
                     ariaId: "delete_rule",
                 },
-                {
+            ]
+            if (this.index > 0) {
+                btns.push({
                     icon: "rule_up",
                     ariaId: "rule_up",
-                },
-                {
-                    icon: "rule_down",
-                    ariaId: "rule_down",
-                },
-            ]
+                })
+            }
+            // if (this.index < this.editor) {
+            //     btns.push({
+            //         icon: "rule_down",
+            //         ariaId: "rule_down",
+            //     })
+            // }
             this.editor.picker.setGroup(btns)
             this.editor.picker.show({
                 onClick: index =>
@@ -328,10 +333,8 @@ namespace microcode {
 
         private handleRuleHandleMenuSelection(iconId: string) {
             if (iconId === "plus") {
-                reportEvent("rule.add")
                 this.page.insertRuleAt(this.index)
             } else if (iconId === "delete") {
-                reportEvent("rule.delete")
                 this.page.deleteRuleAt(this.index)
             } else if (iconId === "rule_up") {
                 this.page.moveRuleAt(this.index, true)

@@ -283,14 +283,17 @@ namespace microcode {
 
         public deleteRuleAt(index: number) {
             if (index >= 0 && index < this.rules.length) {
+                const deleted = this.rules[index]
                 this.rules.splice(index, 1)
+                return deleted
             }
+            return undefined
         }
 
-        public insertRuleAt(index: number) {
+        public insertRuleAt(index: number, newRule: RuleDefn) {
             if (index >= 0 && index < this.rules.length) {
-                const newRule = new RuleDefn()
-                this.rules.insertAt(index, newRule)
+                const insertRule = newRule ? newRule : new RuleDefn()
+                this.rules.insertAt(index, insertRule)
                 return newRule
             }
             return undefined
