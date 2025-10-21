@@ -10,7 +10,7 @@ namespace microcode {
     // - round semantics
 
     // Editor:
-    // - program not saving (divide operator)
+    // - program not saving (divide operator), or rather load is buggy!
     // - no change in operator to right of random-toss (used to work)?
     // - cursor reposition on delete/update rule...
     // - tooltips in picker
