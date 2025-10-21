@@ -21,6 +21,10 @@ namespace microcode {
     // - cursor reposition on delete/update rule...
     // - tooltips in picker
 
+    class Error {
+        constructor(public msg: string) {}
+    }
+
     // delay on sending stuff in pipes and changing pages
     const ANTI_FREEZE_DELAY = 50
 
@@ -70,6 +74,7 @@ namespace microcode {
     }
 
     class RuleClosure {
+        private backgroundActive = false
         private wakeTime: number = 0
         private actionRunning: boolean = false
         private modifierIndex: number = 0
@@ -81,15 +86,15 @@ namespace microcode {
             private interp: Interpreter
         ) {}
 
+        public active() {
+            return this.actionRunning
+        }
+
         public start(timer = false) {
             console.log(`START ${this.index}`)
             if (this.actionRunning) return
             const time = this.getWakeTime()
             if (!timer || time > 0) this.timerOrSequenceRule()
-        }
-
-        public active() {
-            return this.actionRunning
         }
 
         kill() {
@@ -98,7 +103,9 @@ namespace microcode {
             this.actionRunning = false
             this.modifierIndex = 0
             this.loopIndex = 0
-            basic.pause(0) // give the fiber chance to finish
+            // give the background fiber chance to finish
+            // otherwise may spawn second on start after kill
+            basic.pause(0)
         }
 
         public matchWhen(sensorName: string | number, event = 0): boolean {
@@ -159,12 +166,18 @@ namespace microcode {
         }
 
         private timerOrSequenceRule() {
+            if (this.backgroundActive) {
+                this.interp.error(
+                    `trying to spawn another background fiber for ${this.index}`
+                )
+            }
             // make sure we have something to do
             if (this.rule.actuators.length == 0) return
             // prevent re-entrancy
             if (this.actionRunning) return
             this.actionRunning = true
             control.runInBackground(() => {
+                this.backgroundActive = true
                 while (this.actionRunning) {
                     if (this.wakeTime > 0) {
                         basic.pause(this.wakeTime)
@@ -192,6 +205,7 @@ namespace microcode {
                     // yield, otherwise the app will hang
                     basic.pause(5)
                 }
+                this.backgroundActive = false
             })
         }
 
@@ -700,9 +714,9 @@ namespace microcode {
             this.running = false
         }
 
-        private error(msg: string) {
+        public error(msg: string) {
             this.hasErrors = true
-            console.error("Error: " + msg)
+            throw new Error("Error: " + msg)
         }
 
         private getExprValue(expr: Tile): string {
