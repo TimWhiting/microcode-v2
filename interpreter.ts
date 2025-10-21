@@ -98,7 +98,7 @@ namespace microcode {
             this.actionRunning = false
             this.modifierIndex = 0
             this.loopIndex = 0
-            basic.pause(0)          // give the fiber chance to finish
+            basic.pause(0) // give the fiber chance to finish
         }
 
         public matchWhen(sensorName: string | number, event = 0): boolean {
