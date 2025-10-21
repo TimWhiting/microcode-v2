@@ -172,6 +172,14 @@ namespace microcode {
                     icon: "delete",
                     ariaId: "delete_rule",
                 },
+                {
+                    icon: "rule_up",
+                    ariaId: "rule_up",
+                },
+                {
+                    icon: "rule_down",
+                    ariaId: "rule_down",
+                },
             ]
             this.editor.picker.setGroup(btns)
             this.editor.picker.show({
@@ -325,6 +333,10 @@ namespace microcode {
             } else if (iconId === "delete") {
                 reportEvent("rule.delete")
                 this.page.deleteRuleAt(this.index)
+            } else if (iconId === "rule_up") {
+                // TODO
+            } else if (iconId === "rule_down") {
+                // TODO
             }
         }
 
