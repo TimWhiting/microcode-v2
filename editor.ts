@@ -608,30 +608,36 @@ namespace microcode {
             this.editor.changed()
         }
 
-        public deleteRuleAt(index: number) {
-            const rule = this.ruleEditors[index]
-            this.pagedef.deleteRuleAt(index)
-            this.ruleEditors.splice(index, 1)
+        private reassignIndices() {
             this.ruleEditors.forEach((rule, index) => (rule.index = index))
             this.changed()
             this.editor.saveAndCompileProgram()
         }
 
+        public moveRuleAt(index: number, up: boolean) {
+            const rule = this.ruleEditors[index]
+            if (index > 0 && up) {
+                this.ruleEditors.splice(index, 1)
+                this.ruleEditors.insertAt(index - 1, rule)
+                this.reassignIndices()
+            }
+        }
+
+        public deleteRuleAt(index: number) {
+            const rule = this.ruleEditors[index]
+            this.pagedef.deleteRuleAt(index)
+            this.ruleEditors.splice(index, 1)
+            this.reassignIndices()
+        }
+
         public insertRuleAt(index: number) {
             const newRule = this.pagedef.insertRuleAt(index)
             if (newRule) {
-                this.editor.saveAndCompileProgram()
-                const rules: RuleEditor[] = []
-                for (let i = 0; i < index; ++i) {
-                    rules.push(this.ruleEditors[i])
-                }
-                rules.push(new RuleEditor(this.editor, this, newRule, index))
-                for (let i = index; i < this.ruleEditors.length; ++i) {
-                    rules.push(this.ruleEditors[i])
-                }
-                this.ruleEditors = rules
-                this.ruleEditors.forEach((rule, index) => (rule.index = index))
-                this.changed()
+                this.ruleEditors.insertAt(
+                    index,
+                    new RuleEditor(this.editor, this, newRule, index)
+                )
+                this.reassignIndices()
             }
         }
 

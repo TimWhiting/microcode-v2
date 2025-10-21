@@ -290,17 +290,7 @@ namespace microcode {
         public insertRuleAt(index: number) {
             if (index >= 0 && index < this.rules.length) {
                 const newRule = new RuleDefn()
-                // STS Array.splice doesn't support insert :(
-                // this.rules.splice(index, 0, new RuleDefn());
-                const newRules: RuleDefn[] = []
-                for (let i = 0; i < index; ++i) {
-                    newRules.push(this.rules[i])
-                }
-                newRules.push(newRule)
-                for (let i = index; i < this.rules.length; ++i) {
-                    newRules.push(this.rules[i])
-                }
-                this.rules = newRules
+                this.rules.insertAt(index, newRule)
                 return newRule
             }
             return undefined

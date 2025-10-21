@@ -334,9 +334,9 @@ namespace microcode {
                 reportEvent("rule.delete")
                 this.page.deleteRuleAt(this.index)
             } else if (iconId === "rule_up") {
-                // TODO
+                this.page.moveRuleAt(this.index, true)
             } else if (iconId === "rule_down") {
-                // TODO
+                this.page.moveRuleAt(this.index, false)
             }
         }
 
