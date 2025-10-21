@@ -2,14 +2,7 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // Runtime:
-    // - reaction game issues
-    //    1. race condition?
-    //      Uncaught TypeError: Expected type ModifierEditor but received type number
-    //      at runAction (interpreter.ts:262:9)
-    //      at inline (interpreter.ts:155:37)
-    //    TID_MODIFIER_LOOP = 178 - problem !!!
-
-    //    2. uneven timing on LED sequence?
+    // - program not saving (divide operator)
     // - resource content error
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
