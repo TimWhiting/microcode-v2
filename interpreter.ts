@@ -69,7 +69,6 @@ namespace microcode {
         return ActionKind.Instant
     }
 
-    // TODO: can a timer-based rule be killed? makes sense
     class RuleClosure {
         private wakeTime: number = 0
         private actionRunning: boolean = false
@@ -99,6 +98,7 @@ namespace microcode {
             this.actionRunning = false
             this.modifierIndex = 0
             this.loopIndex = 0
+            basic.pause(0)          // give the fiber chance to finish
         }
 
         public matchWhen(sensorName: string | number, event = 0): boolean {
