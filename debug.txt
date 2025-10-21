@@ -1,0 +1,4543 @@
+
+START PROGRAM
+
+START PROGRAM
+
+switch from 0 to 0
+
+switch from 0 to 0
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 3
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 3
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 3
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 3
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+switch from 0 to 1
+
+processing event 3
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+switch from 0 to 1
+
+processing event 3
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+processing event 2
+
+switch from 1 to 2
+
+processing event 3
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+processing event 2
+
+switch from 1 to 2
+
+processing event 3
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+switch from 2 to 0
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+switch from 2 to 0
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+processing event 4
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 3
+
+processing event 1
+
+processing event 2
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+switch from 0 to 3
+
+processing event 3
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 3
+
+processing event 1
+
+processing event 2
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+switch from 0 to 3
+
+processing event 3
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+switch from 3 to 0
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+switch from 3 to 0
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 3
+
+processing event 4
+
+timer fire from 1
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 3
+
+processing event 4
+
+timer fire from 1
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+processing event 1
+
+checkForLoopFinish
+
+IN 3
+
+processing event 2
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+switch from 0 to 2
+
+processing event 3
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+processing event 1
+
+checkForLoopFinish
+
+IN 3
+
+processing event 2
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+switch from 0 to 2
+
+processing event 3
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+processing event 4
+
+timer fire from 1
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+processing event 4
+
+timer fire from 1
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+switch from 2 to 0
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+switch from 2 to 0
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+checkForLoopFinish
+
+IN 2
+
+switch from 0 to 1
+
+processing event 3
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+checkForLoopFinish
+
+IN 2
+
+switch from 0 to 1
+
+processing event 3
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+processing event 1
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+processing event 2
+
+checkForLoopFinish
+
+IN 1
+
+switch from 1 to 3
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 3
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+processing event 2
+
+checkForLoopFinish
+
+IN 1
+
+switch from 1 to 3
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 3
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+checkForLoopFinish
+
+Uncaught TypeError: Expected type ModifierEditor but received type number
+   at runAction (interpreter.ts:277:9)
+   at inline (interpreter.ts:162:37)
+
+Uncaught TypeError: Expected type ModifierEditor but received type number
+   at runAction (interpreter.ts:277:9)
+   at inline (interpreter.ts:162:37)
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+--- how is there nothing between these?
+
+modEditor len 3 index 2 tid 178
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+--- how is there nothing between these?
+
+modEditor len 3 index 2 tid 178
+
+
+
+
+-=-------------
+
+
+--- how is there nothing between these?
+
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+finish action
+
+finish action
+
+Uncaught TypeError: Expected type ModifierEditor but received type number
+   at runAction (interpreter.ts:279:9)
+   at inline (interpreter.ts:162:37)
+
+Uncaught TypeError: Expected type ModifierEditor but received type number
+   at runAction (interpreter.ts:279:9)
+   at inline (interpreter.ts:162:37)
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+finish action
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+finish action
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+modEditor len 3 index 2 tid 178
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+finish action
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+finish action
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+modEditor len 3 index 2 tid 178
+
+
+
+-=-------------------
+
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+START PROGRAM
+
+START PROGRAM
+
+switch from 0 to 0
+
+switch from 0 to 0
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+modEditor len 4 index 1 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+at loop modifier 3
+
+forever loop
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 4
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 4
+
+processing event 1
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+switch from 0 to 1
+
+processing event 3
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+switch from 0 to 1
+
+processing event 3
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+processing event 1
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+start sequence 0
+
+start sequence 1
+
+modEditor len 1 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+processing event 2
+
+switch from 1 to 2
+
+processing event 3
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+processing event 2
+
+switch from 1 to 2
+
+processing event 3
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+processing event 1
+
+processing event 1
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+start sequence 0
+
+modEditor len 3 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+modEditor len 3 index 1 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+at loop modifier 2
+
+forever loop
+
+modEditor len 3 index 0 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 3 index 1 tid [object Object]
+
+processing event 4
+
+timer fire from 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+processing event 4
+
+timer fire from 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+processing event 2
+
+switch from 2 to 0
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+switch from 2 to 0
+
+processing event 3
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+modEditor len 4 index 1 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 2
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+checkForLoopFinish
+
+IN 1
+
+processing event 1
+
+start sequence 0
+
+modEditor len 4 index 0 tid [object Object]
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 1
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 2
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+modEditor len 4 index 2 tid [object Object]
+
+calling loop finish
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 3
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 4
+
+checkForLoopFinish
+
+IN 3
+
+calling loop finish
+
+checkForLoopFinish
+
+IN 4
+
+processing event 4
+
+processing event 4
+
+timer fire from 1
+
+timer fire from 1
+

@@ -2,6 +2,14 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // Runtime:
+    // - reaction game issues
+    //    1. race condition?
+    //      Uncaught TypeError: Expected type ModifierEditor but received type number
+    //      at runAction (interpreter.ts:262:9)
+    //      at inline (interpreter.ts:155:37)
+    //    TID_MODIFIER_LOOP = 178 - problem !!!
+
+    //    2. uneven timing on LED sequence?
     // - resource content error
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
@@ -73,10 +81,11 @@ namespace microcode {
             private interp: Interpreter
         ) {}
 
-        public start() {
+        public start(timer = false) {
+            console.log(`START ${this.index}`)
             if (this.actionRunning) return
-            this.getWakeTime()
-            this.timerBasedRule()
+            const time = this.getWakeTime()
+            if (!timer || time > 0) this.timerOrSequenceRule()
         }
 
         public active() {
@@ -84,14 +93,19 @@ namespace microcode {
         }
 
         kill() {
+            console.log(`KILL ${this.index}`)
+            this.wakeTime = 0
             this.actionRunning = false
             this.modifierIndex = 0
             this.loopIndex = 0
+            basic.pause(0) // give the fiber chance to finish
         }
 
         public matchWhen(sensorName: string | number, event = 0): boolean {
             const sensor = this.rule.sensor
             if (
+                typeof sensorName == "number" &&
+                sensorName == sensor &&
                 sensor == Tid.TID_SENSOR_START_PAGE &&
                 this.rule.filters.length == 0
             ) {
@@ -144,7 +158,7 @@ namespace microcode {
             return undefined
         }
 
-        private timerBasedRule() {
+        private timerOrSequenceRule() {
             // make sure we have something to do
             if (this.rule.actuators.length == 0) return
             // prevent re-entrancy
@@ -160,14 +174,23 @@ namespace microcode {
                             ruleIndex: this.index,
                         } as TimerFireEvent)
                         this.timerGoAhead = false
-                        while (!this.timerGoAhead) {
-                            basic.pause(10)
+                        while (this.actionRunning && !this.timerGoAhead) {
+                            basic.pause(1)
                         }
                     }
+
+                    if (!this.actionRunning) break
                     this.runAction()
+
+                    const actionKind = this.getActionKind()
+                    if (actionKind === ActionKind.Sequence) this.modifierIndex++
+                    else this.modifierIndex = this.rule.modifiers.length
+
+                    if (!this.actionRunning) break
                     this.checkForLoopFinish()
+
                     // yield, otherwise the app will hang
-                    basic.pause(0)
+                    basic.pause(5)
                 }
             })
         }
@@ -252,12 +275,11 @@ namespace microcode {
         public runInstant() {
             const actuator = this.rule.actuators[0]
             const param = this.getParamInstant()
-            this.modifierIndex = this.rule.modifiers.length
             this.interp.runAction(this.index, actuator, param)
+            this.kill()
         }
 
         private runAction() {
-            if (this.wakeTime > 0 || !this.actionRunning) return
             const actuator = this.rule.actuators[0]
             let param: any = undefined
             if (this.rule.modifiers.length == 0) {
@@ -267,6 +289,9 @@ namespace microcode {
                     case Tid.TID_ACTUATOR_PAINT: {
                         const mod = this.rule.modifiers[this.modifierIndex]
                         const modEditor = mod as ModifierEditor
+                        // console.log(
+                        //     `modEditor len ${this.rule.modifiers.length} index ${this.modifierIndex} tid ${modEditor}`
+                        // )
                         param = modEditor.getField()
                         break
                     }
@@ -276,31 +301,25 @@ namespace microcode {
                         break
                     }
                     case Tid.TID_ACTUATOR_SPEAKER: {
-                        param = getParam(
-                            this.rule.modifiers[this.modifierIndex]
-                        )
+                        param = this.rule.modifiers[this.modifierIndex]
                         break
                     }
                     default:
                         param = this.getParamInstant()
                 }
             }
-            if (this.getActionKind() === ActionKind.Sequence)
-                this.modifierIndex++
-            else this.modifierIndex = this.rule.modifiers.length
             this.interp.runAction(this.index, actuator, param)
             if (this.getActionKind() === ActionKind.Instant)
                 this.interp.processNewState()
         }
 
-        public getWakeTime() {
+        private getWakeTime() {
             this.wakeTime = 0
             const sensor = this.rule.sensor
             if (
                 sensor == Tid.TID_SENSOR_TIMER ||
                 sensor == Tid.TID_SENSOR_START_PAGE
             ) {
-                // const timer = this.addProc(name + "_timer")
                 let period = 0
                 let randomPeriod = 0
                 for (const m of this.rule.filters) {
@@ -343,12 +362,6 @@ namespace microcode {
             if (tid == keyTid) result = k
         })
         return result
-    }
-
-    const var2tid: { [v: string]: Tid } = {
-        cup_x: Tid.TID_SENSOR_CUP_X_WRITTEN,
-        cup_y: Tid.TID_SENSOR_CUP_Y_WRITTEN,
-        cup_z: Tid.TID_SENSOR_CUP_X_WRITTEN,
     }
 
     export enum SensorChange {
@@ -448,7 +461,6 @@ namespace microcode {
 
         private switchPage(page: number) {
             this.stopAllRules()
-            control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             // set up new rule closures
             this.currentPage = page
             this.program.pages[this.currentPage].rules.forEach((r, index) => {
@@ -457,6 +469,8 @@ namespace microcode {
             this.addEvent({
                 kind: MicroCodeEventKind.StartPage,
             } as StartPageEvent)
+            // start up timer-based rules
+            this.ruleClosures.forEach(rc => rc.start(true))
         }
 
         public runAction(ruleIndex: number, action: Tile, param: any) {
@@ -481,7 +495,6 @@ namespace microcode {
         private updateState(ruleIndex: number, varName: string, v: number) {
             if (!this.newState) this.newState = {}
             this.newState[varName] = v
-            control.waitMicros(ANTI_FREEZE_DELAY * 1000)
         }
 
         public processNewState() {
@@ -500,7 +513,8 @@ namespace microcode {
 
         private processNewRules(newRules: RuleClosure[]) {
             if (newRules.length == 0) return
-            console.log(`newRules ${newRules.map(rc => rc.index).join(" ")}`)
+            console.log(`new rules ${newRules.map(rc => rc.index).join(" ")}`)
+
             // first new rule (in lexical order) on a resource wins
             const resourceWinner: { [resource: number]: number } = {}
             for (const rc of newRules) {
@@ -516,17 +530,18 @@ namespace microcode {
             const live = newRules.filter(rc =>
                 liveIndices.some(i => i === rc.index)
             )
-            console.log(`live = ${liveIndices.join(" ")}`)
+            console.log(`live indices = ${liveIndices.join(" ")}`)
 
             const dead = this.ruleClosures.filter(rc => {
                 const resource = rc.getOutputResource()
-                return (
+                console.log(`rc ${rc.index} ${resource} ${rc.active()}`)
+                const res =
                     live.indexOf(rc) === -1 &&
                     rc.active() &&
                     resourceWinner[resource] != undefined
-                )
+                return res
             })
-            console.log(`dead = ${dead.map(rc => rc.index).join(" ")}`)
+            console.log(`dead ones ${dead.map(rc => rc.index).join(" ")}`)
             dead.forEach(rc => rc.kill())
 
             // partition the live into instant and sequence
@@ -541,25 +556,22 @@ namespace microcode {
                     rc.runInstant()
                 }
             })
-            console.log(`instant = ${instant.map(rc => rc.index).join(" ")}`)
             this.processNewState()
 
             const switchPage = instant.find(
                 rc => rc.getOutputResource() == OutputResource.PageCounter
             )
             if (switchPage) {
-                console.log(`switchPage`)
                 switchPage.runInstant()
                 return // others don't get chance to run
             }
 
-            // start up the others, but as they be active already, so kill first
             const sequence = live.filter(
                 rc => rc.getActionKind() === ActionKind.Sequence
             )
-            console.log(`sequence = ${sequence.map(rc => rc.index).join(" ")}`)
 
             sequence.forEach(rc => {
+                console.log(`seq ${rc.index}`)
                 rc.kill()
                 rc.start()
             })
@@ -584,15 +596,16 @@ namespace microcode {
                         this.eventQueue.removeAt(0)
                         switch (ev.kind) {
                             case MicroCodeEventKind.StateUpdate: {
+                                control.waitMicros(ANTI_FREEZE_DELAY * 1000)
                                 const event = ev as StateUpdateEvent
-                                const rules = event.updatedVars.map(v =>
-                                    newRules(var2tid[v], -1)
-                                )
+                                const rules = event.updatedVars.map(v => {
+                                    return newRules(v, -1)
+                                })
                                 // flatten into one list
                                 let newOnes: RuleClosure[] = []
-                                rules.forEach(
-                                    l => (newOnes = newOnes.concat(l))
-                                )
+                                rules.forEach(l => {
+                                    newOnes = newOnes.concat(l)
+                                })
                                 this.processNewRules(newOnes)
                                 break
                             }
@@ -605,6 +618,7 @@ namespace microcode {
                                 break
                             }
                             case MicroCodeEventKind.SwitchPage: {
+                                control.waitMicros(ANTI_FREEZE_DELAY * 1000)
                                 const event = ev as SwitchPageEvent
                                 this.switchPage(event.index - 1)
                                 break
@@ -618,6 +632,8 @@ namespace microcode {
                             case MicroCodeEventKind.TimerFire: {
                                 const event = ev as TimerFireEvent
                                 const rc = this.ruleClosures[event.ruleIndex]
+                                // TODO: this isn't good enough, we need to
+                                // TODO: kill rules that are conflicting
                                 rc.releaseTimer()
                                 break
                             }
@@ -761,9 +777,7 @@ namespace microcode {
                     tokens.push(this.getExprValue(m))
                 }
             }
-            console.log(`tokens = ${tokens.join(" ")}`)
             const result = new parser.Parser(tokens).parse()
-            console.log(`result = ${result}`)
             return result
         }
     }
