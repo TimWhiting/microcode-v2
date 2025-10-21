@@ -180,12 +180,12 @@ namespace microcode {
                     ariaId: "rule_up",
                 })
             }
-            // if (this.index < this.editor) {
-            //     btns.push({
-            //         icon: "rule_down",
-            //         ariaId: "rule_down",
-            //     })
-            // }
+            if (this.index < this.page.ruleEditors.length - 1) {
+                btns.push({
+                    icon: "rule_down",
+                    ariaId: "rule_down",
+                })
+            }
             this.editor.picker.setGroup(btns)
             this.editor.picker.show({
                 onClick: index =>
