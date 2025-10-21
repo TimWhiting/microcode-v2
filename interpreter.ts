@@ -83,6 +83,7 @@ namespace microcode {
         ) {}
 
         public start(timer = false) {
+            console.log(`START ${this.index}`)
             if (this.actionRunning) return
             const time = this.getWakeTime()
             if (!timer || time > 0) this.timerOrSequenceRule()
@@ -103,6 +104,8 @@ namespace microcode {
         public matchWhen(sensorName: string | number, event = 0): boolean {
             const sensor = this.rule.sensor
             if (
+                typeof sensorName == "number" &&
+                sensorName == sensor &&
                 sensor == Tid.TID_SENSOR_START_PAGE &&
                 this.rule.filters.length == 0
             ) {
@@ -510,6 +513,8 @@ namespace microcode {
 
         private processNewRules(newRules: RuleClosure[]) {
             if (newRules.length == 0) return
+            console.log(`new rules ${newRules.map(rc => rc.index).join(" ")}`)
+
             // first new rule (in lexical order) on a resource wins
             const resourceWinner: { [resource: number]: number } = {}
             for (const rc of newRules) {
@@ -566,6 +571,7 @@ namespace microcode {
             )
 
             sequence.forEach(rc => {
+                console.log(`seq ${rc.index}`)
                 rc.kill()
                 rc.start()
             })
