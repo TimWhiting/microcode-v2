@@ -93,6 +93,8 @@ namespace microcode {
         }
 
         kill() {
+            console.log(`KILL ${this.index}`)
+            this.wakeTime = 0
             this.actionRunning = false
             this.modifierIndex = 0
             this.loopIndex = 0
@@ -173,19 +175,17 @@ namespace microcode {
                             basic.pause(1)
                         }
                     }
+
                     if (!this.actionRunning) break
                     this.runAction()
+
                     const actionKind = this.getActionKind()
                     if (actionKind === ActionKind.Sequence) this.modifierIndex++
-                    else if (actionKind === ActionKind.Instant)
-                        this.modifierIndex = this.rule.modifiers.length
-                    else {
-                        console.log("NO KIND")
-                    }
-                    console.debug(`finish action`)
+                    else this.modifierIndex = this.rule.modifiers.length
+
                     if (!this.actionRunning) break
-                    console.log(`calling loop finish`)
                     this.checkForLoopFinish()
+
                     // yield, otherwise the app will hang
                     basic.pause(5)
                 }
@@ -193,19 +193,12 @@ namespace microcode {
         }
 
         private checkForLoopFinish() {
-            console.log(`checkForLoopFinish`)
-            if (!this.actionRunning) {
-                console.log("NO")
-                return
-            }
-            console.log(`IN ${this.modifierIndex}`)
+            if (!this.actionRunning) return
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             if (this.modifierIndex < this.rule.modifiers.length) {
                 const m = this.rule.modifiers[this.modifierIndex]
                 if (getTid(m) == Tid.TID_MODIFIER_LOOP) {
-                    console.log(`at loop modifier ${this.modifierIndex}`)
                     if (this.modifierIndex == this.rule.modifiers.length - 1) {
-                        console.log(`forever loop`)
                         // forever loop
                         this.modifierIndex = 0
                     } else {
@@ -294,9 +287,9 @@ namespace microcode {
                     case Tid.TID_ACTUATOR_PAINT: {
                         const mod = this.rule.modifiers[this.modifierIndex]
                         const modEditor = mod as ModifierEditor
-                        console.log(
-                            `modEditor len ${this.rule.modifiers.length} index ${this.modifierIndex} tid ${modEditor}`
-                        )
+                        // console.log(
+                        //     `modEditor len ${this.rule.modifiers.length} index ${this.modifierIndex} tid ${modEditor}`
+                        // )
                         param = modEditor.getField()
                         break
                     }
@@ -448,7 +441,6 @@ namespace microcode {
         public newState: VariableMap = {}
 
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
-            console.log("START PROGRAM")
             this.host.emitClearScreen()
             this.host.registerOnSensorEvent((t, f) => this.onSensorEvent(t, f))
             for (const v of vars) this.state[v] = 0
@@ -466,7 +458,6 @@ namespace microcode {
         }
 
         private switchPage(page: number) {
-            console.log(`switch from ${this.currentPage} to ${page}`)
             this.stopAllRules()
             // set up new rule closures
             this.currentPage = page
@@ -535,15 +526,18 @@ namespace microcode {
             const live = newRules.filter(rc =>
                 liveIndices.some(i => i === rc.index)
             )
+            console.log(`live indices = ${liveIndices.join(" ")}`)
 
             const dead = this.ruleClosures.filter(rc => {
                 const resource = rc.getOutputResource()
-                return (
+                console.log(`rc ${rc.index} ${resource} ${rc.active()}`)
+                const res =
                     live.indexOf(rc) === -1 &&
                     rc.active() &&
                     resourceWinner[resource] != undefined
-                )
+                return res
             })
+            console.log(`dead ones ${dead.map(rc => rc.index).join(" ")}`)
             dead.forEach(rc => rc.kill())
 
             // partition the live into instant and sequence
@@ -573,7 +567,6 @@ namespace microcode {
             )
 
             sequence.forEach(rc => {
-                console.log(`start sequence ${rc.index}`)
                 rc.kill()
                 rc.start()
             })
@@ -596,7 +589,6 @@ namespace microcode {
                     if (this.eventQueue.length) {
                         const ev = this.eventQueue[0]
                         this.eventQueue.removeAt(0)
-                        console.log(`processing event ${ev.kind}`)
                         switch (ev.kind) {
                             case MicroCodeEventKind.StateUpdate: {
                                 control.waitMicros(ANTI_FREEZE_DELAY * 1000)
@@ -634,10 +626,9 @@ namespace microcode {
                             }
                             case MicroCodeEventKind.TimerFire: {
                                 const event = ev as TimerFireEvent
-                                console.log(
-                                    `timer fire from ${event.ruleIndex}`
-                                )
                                 const rc = this.ruleClosures[event.ruleIndex]
+                                // TODO: this isn't good enough, we need to
+                                // TODO: kill rules that are conflicting
                                 rc.releaseTimer()
                                 break
                             }
