@@ -17,7 +17,6 @@ namespace microcode {
         constructor() {
             // One interval delay to ensure all static constructors have executed.
             basic.pause(500)
-            reportEvent("app.start")
 
             // Application configuration
             user_interface_base.getIcon = id => icons.get(id)
@@ -40,8 +39,7 @@ namespace microcode {
         }
 
         public save(slot: string, buf: Buffer) {
-            reportEvent("app.save", { slot: slot, size: buf.length })
-            console.log(`save to ${slot}: ${buf.length}b`)
+            // console.log(`save to ${slot}: ${buf.length}b`)
             profile()
             settings.writeBuffer(slot, buf)
             return true

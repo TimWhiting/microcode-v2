@@ -220,15 +220,12 @@ namespace microcode {
                 let deleted = false
                 if (tile) {
                     if (index >= ruleTiles.length) {
-                        reportEvent("tile.add", { tid: getTid(tile) })
                         numberAdded = this.ruledef.push(tile, name)
                     } else {
-                        reportEvent("tile.update", { tid: getTid(tile) })
                         this.ruledef.updateAt(name, index, tile)
                     }
                 } else {
                     deleted = this.ruledef.deleteAt(name, index)
-                    reportEvent("tile.delete")
                 }
                 Language.ensureValid(this.ruledef)
                 this.editor.saveAndCompileProgram()

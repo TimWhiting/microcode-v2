@@ -11,7 +11,6 @@
         "user-interface-base": "github:microbit-apps/user-interface-base#v0.0.24"
     },
     "files": [
-        "analytics.ts",
         "config.ts",
         "main.ts",
         "README.md",
@@ -22,14 +21,12 @@
         "editor.ts",
         "ruleeditor.ts",
         "home.ts",
-        "binlib.ts",
         "version.ts",
         "jacs.ts",
         "fieldeditors.ts",
         "options.ts",
         "samples.ts",
         "gallery.ts",
-        "pointerevents.ts",
         "utils.ts",
         "protocol.ts",
         "navigator.ts",
@@ -37,7 +34,9 @@
         "host.ts",
         "interpreter.ts",
         "sensors.ts",
-        "parser.ts"
+        "parser.ts",
+        "decimal.ts",
+        "settings.ts"
     ],
     "testFiles": [],
     "targetVersions": {
