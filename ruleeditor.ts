@@ -180,7 +180,7 @@ namespace microcode {
                     ariaId: "rule_up",
                 })
             }
-            if (this.index < this.page.ruleEditors.length - 1) {
+            if (this.index < this.page.ruleEditors.length - 2) {
                 btns.push({
                     icon: "rule_down",
                     ariaId: "rule_down",
