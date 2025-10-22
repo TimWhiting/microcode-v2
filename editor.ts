@@ -608,30 +608,38 @@ namespace microcode {
             this.editor.changed()
         }
 
-        public deleteRuleAt(index: number) {
-            const rule = this.ruleEditors[index]
-            this.pagedef.deleteRuleAt(index)
-            this.ruleEditors.splice(index, 1)
+        private reassignIndices() {
             this.ruleEditors.forEach((rule, index) => (rule.index = index))
             this.changed()
             this.editor.saveAndCompileProgram()
         }
 
+        public moveRuleAt(index: number, up: boolean) {
+            const delta = up ? -1 : 1
+            const deleted = this.pagedef.deleteRuleAt(index)
+            this.pagedef.insertRuleAt(index + delta, deleted)
+
+            const rule = this.ruleEditors[index]
+            this.ruleEditors.splice(index, 1)
+            this.ruleEditors.insertAt(index + delta, rule)
+
+            this.reassignIndices()
+        }
+
+        public deleteRuleAt(index: number) {
+            this.pagedef.deleteRuleAt(index)
+            this.ruleEditors.splice(index, 1)
+            this.reassignIndices()
+        }
+
         public insertRuleAt(index: number) {
-            const newRule = this.pagedef.insertRuleAt(index)
+            const newRule = this.pagedef.insertRuleAt(index, undefined)
             if (newRule) {
-                this.editor.saveAndCompileProgram()
-                const rules: RuleEditor[] = []
-                for (let i = 0; i < index; ++i) {
-                    rules.push(this.ruleEditors[i])
-                }
-                rules.push(new RuleEditor(this.editor, this, newRule, index))
-                for (let i = index; i < this.ruleEditors.length; ++i) {
-                    rules.push(this.ruleEditors[i])
-                }
-                this.ruleEditors = rules
-                this.ruleEditors.forEach((rule, index) => (rule.index = index))
-                this.changed()
+                this.ruleEditors.insertAt(
+                    index,
+                    new RuleEditor(this.editor, this, newRule, index)
+                )
+                this.reassignIndices()
             }
         }
 

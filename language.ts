@@ -283,25 +283,18 @@ namespace microcode {
 
         public deleteRuleAt(index: number) {
             if (index >= 0 && index < this.rules.length) {
+                const deleted = this.rules[index]
                 this.rules.splice(index, 1)
+                return deleted
             }
+            return undefined
         }
 
-        public insertRuleAt(index: number) {
+        public insertRuleAt(index: number, newRule: RuleDefn) {
             if (index >= 0 && index < this.rules.length) {
-                const newRule = new RuleDefn()
-                // STS Array.splice doesn't support insert :(
-                // this.rules.splice(index, 0, new RuleDefn());
-                const newRules: RuleDefn[] = []
-                for (let i = 0; i < index; ++i) {
-                    newRules.push(this.rules[i])
-                }
-                newRules.push(newRule)
-                for (let i = index; i < this.rules.length; ++i) {
-                    newRules.push(this.rules[i])
-                }
-                this.rules = newRules
-                return newRule
+                const insertRule = newRule ? newRule : new RuleDefn()
+                this.rules.insertAt(index, insertRule)
+                return insertRule
             }
             return undefined
         }

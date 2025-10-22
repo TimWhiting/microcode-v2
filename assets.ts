@@ -119,6 +119,8 @@ namespace microcode {
                 return icondb.btn_do_insertion_point
             if (name == "rule_arrow") return icondb.rule_arrow
             if (name == "rule_handle") return icondb.rule_handle
+            if (name == "rule_up") return icondb.temp_warmer
+            if (name == "rule_down") return icondb.temp_colder
             if (name == "edit_program") return icondb.largeEditIcon
             if (name == "new_program") return icondb.largeNewProgramIcon
             if (name == "MISSING") return icondb.MISSING
