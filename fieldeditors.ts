@@ -49,6 +49,57 @@ namespace microcode {
         }
     }
 
+    export class DecimalFieldEditor extends FieldEditor {
+        init() {
+            return 0.0
+        }
+        clone(i: number) {
+            return i
+        }
+        editor(
+            field: any,
+            picker: Picker,
+            onHide: () => void,
+            onDelete?: () => void
+        ) {
+            decimalEditor() //field, picker, onHide, onDelete)
+        }
+        toImage(field: any) {
+            return icondb.tile_page_1
+        }
+        toBuffer(i: number): Buffer {
+            return undefined
+        }
+        fromBuffer(br: BufferReader) {
+            return 0
+        }
+    }
+
+    export class DecimalEditor extends ModifierEditor {
+        field: number
+        constructor(field: number = 0) {
+            super(Tid.TID_MODIFIER_ICON_EDITOR)
+            this.fieldEditor = new DecimalFieldEditor()
+            this.field = this.fieldEditor.clone(
+                field ? field : this.fieldEditor.init()
+            )
+        }
+
+        getField() {
+            return this.field
+        }
+
+        getIcon(): string | number | Bitmap {
+            return this.firstInstance
+                ? getIcon(Tid.TID_MODIFIER_ICON_EDITOR)
+                : this.fieldEditor.toImage(this.field)
+        }
+
+        getNewInstance(field: any = null) {
+            return new DecimalEditor(field ? field : this.field)
+        }
+    }
+
     export class IconFieldEditor extends FieldEditor {
         init() {
             return bmp`
@@ -225,6 +276,7 @@ namespace microcode {
 
     let iconEditorTile: ModifierEditor = undefined
     let melodyEditorTile: ModifierEditor = undefined
+    let decimalEditorTile: ModifierEditor = undefined
     export function getEditor(tid: Tid): ModifierEditor {
         if (tid == Tid.TID_MODIFIER_ICON_EDITOR) {
             if (!iconEditorTile) {
@@ -238,8 +290,14 @@ namespace microcode {
                 melodyEditorTile.firstInstance = true
             }
             return melodyEditorTile
+        } else {
+            // TODO: decimal
         }
         return undefined
+    }
+
+    function decimalEditor() {
+        // TODO
     }
 
     function iconEditor(
