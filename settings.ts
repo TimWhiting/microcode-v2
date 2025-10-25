@@ -1,7 +1,10 @@
 namespace microcode {
+    enum EditorMode {
+        Classic,
+        Math,
+        Decimal,
+    }
 
-    // options
-    // - math operators and comparisons
-    // - decimal notation
-    // - jacdac
+    export let editorMode = EditorMode.Classic
+    export let jacdacEnabled = false
 }

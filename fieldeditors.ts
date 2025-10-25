@@ -62,16 +62,19 @@ namespace microcode {
             onHide: () => void,
             onDelete?: () => void
         ) {
+            // TODO: use of picker...
             decimalEditor() //field, picker, onHide, onDelete)
         }
         toImage(field: any) {
+            // TODO: print number into image, need to compute
+            // TODO: width of image
             return icondb.tile_page_1
         }
         toBuffer(i: number): Buffer {
-            return undefined
+            return undefined // TODO
         }
         fromBuffer(br: BufferReader) {
-            return 0
+            return 0 // TODO
         }
     }
 
