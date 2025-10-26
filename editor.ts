@@ -227,7 +227,7 @@ namespace microcode {
             this.moveTo(target)
         }
 
-        /* override */ startup(setup: () => void) {
+        /* override */ startup() {
             const makeOnEvent = (id: number, dir: CursorDir) => {
                 control.onEvent(ControllerButtonEvent.Pressed, id, () =>
                     this.scrollAndMove(dir)

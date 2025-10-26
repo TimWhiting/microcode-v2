@@ -12,7 +12,7 @@ namespace microcode {
             super(app)
         }
 
-        /* override */ startup(setup: () => void) {
+        /* override */ startup() {
             super.startup()
 
             this.navigator.setBtns([

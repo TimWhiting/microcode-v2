@@ -1268,6 +1268,7 @@ namespace icondb {
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
 `
+    /*
     export const microbit_logo_btn = bmp`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -1286,6 +1287,7 @@ namespace icondb {
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . .
 `
+*/
 
     export const finger_release = bmp`
         . . . . . . . . . . . . . . . .
