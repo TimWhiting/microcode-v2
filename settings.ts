@@ -1,10 +1,10 @@
 namespace microcode {
-    enum EditorMode {
+    export enum EditorMode {
         Classic,
         Math,
         Decimal,
     }
 
-    export let editorMode = EditorMode.Classic
+    export let editorMode = EditorMode.Decimal
     export let jacdacEnabled = false
 }

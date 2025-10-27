@@ -2741,9 +2741,18 @@ bffffffffffffffffffffffffffffffb
         icondb.blocks5,
     ]
 
+    function numberToDecimalImage(i: number) {
+        const str = i.toString()
+        const width = str.length * 8
+        const img = bitmaps.create(width + 8, 16)
+        img.print(str, 6, 4, 15)
+        return img
+    }
+
     export function numberToImage(i: number) {
-        console.log(`index = ${i} img = ${num2image[i]}`)
-        return num2image[i]
+        if (microcode.editorMode != microcode.EditorMode.Decimal)
+            return num2image[i]
+        else return numberToDecimalImage(i + 1)
     }
 
     export const kita_slider = bmp`
