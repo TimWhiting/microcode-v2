@@ -270,7 +270,7 @@ namespace microcode {
         return Tid.LINE_START <= tidEnum && tidEnum <= Tid.LINE_END
     }
 
-    function isFilterConstant(tidEnum: Tid) {
+    export function isFilterConstant(tidEnum: Tid) {
         return (
             Tid.TID_FILTER_COIN_1 <= tidEnum && tidEnum <= Tid.TID_FILTER_COIN_5
         )
@@ -283,7 +283,7 @@ namespace microcode {
         )
     }
 
-    function isModifierConstant(tidEnum: Tid) {
+    export function isModifierConstant(tidEnum: Tid) {
         return (
             Tid.TID_MODIFIER_COIN_1 <= tidEnum &&
             tidEnum <= Tid.TID_MODIFIER_COIN_5

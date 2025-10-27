@@ -139,8 +139,17 @@ namespace microcode {
             // sample icons
             if (name == "smiley_buttons") return icondb.sampleSmileyButtons
 
-            // pages
+            // math
+            if (typeof name == "number") {
+                if (
+                    microcode.isModifierConstant(name) ||
+                    microcode.isFilterConstant(name)
+                ) {
+                    return icondb.numberToImage(getParam(name) - 1)
+                }
+            }
 
+            // pages
             if (name == Tid.TID_SENSOR_START_PAGE) return icondb.tile_start_page
             if (name == Tid.TID_ACTUATOR_SWITCH_PAGE)
                 return icondb.tile_switch_page
@@ -168,19 +177,8 @@ namespace microcode {
             if (name == Tid.TID_MODIFIER_CUP_Y_READ) return icondb.cupYread
             if (name == Tid.TID_MODIFIER_CUP_Z_READ) return icondb.cupZread
 
-            // numbers
+            // function
             if (name == Tid.TID_MODIFIER_RANDOM_TOSS) return icondb.diceToss
-            if (name == Tid.TID_FILTER_COIN_1) return icondb.blocks1
-            if (name == Tid.TID_FILTER_COIN_2) return icondb.blocks2
-            if (name == Tid.TID_FILTER_COIN_3) return icondb.blocks3
-            if (name == Tid.TID_FILTER_COIN_4) return icondb.blocks4
-            if (name == Tid.TID_FILTER_COIN_5) return icondb.blocks5
-            if (name == Tid.TID_MODIFIER_COIN_1) return icondb.blocks1
-            if (name == Tid.TID_MODIFIER_COIN_2) return icondb.blocks2
-            if (name == Tid.TID_MODIFIER_COIN_3) return icondb.blocks3
-            if (name == Tid.TID_MODIFIER_COIN_4) return icondb.blocks4
-            if (name == Tid.TID_MODIFIER_COIN_5) return icondb.blocks5
-
             // micro:bit sensors
             if (name == Tid.TID_SENSOR_ACCELEROMETER)
                 return icondb.accelerometer
@@ -410,33 +408,11 @@ namespace icondb {
                 ret.setPixel(nrow + 1, ncol, color)
                 ret.setPixel(nrow, ncol + 1, color)
                 ret.setPixel(nrow + 1, ncol + 1, color)
-                // halo
-                /*
-                ret.setPixel(nrow - 1, ncol, halo)
-                ret.setPixel(nrow - 1, ncol + 1, halo)
-                ret.setPixel(nrow + 2, ncol, halo)
-                ret.setPixel(nrow + 2, ncol + 1, halo)
-                ret.setPixel(nrow, ncol - 1, halo)
-                ret.setPixel(nrow + 1, ncol - 1, halo)
-                ret.setPixel(nrow, ncol + 2, halo)
-                ret.setPixel(nrow + 1, ncol + 2, halo)
-                */
             }
         }
         return ret
     }
 
-    /*
-    export const iconEditor = renderMicrobitLEDs(
-        bmp`
-        . . . . .
-        . 1 . 1 .
-        . . . . . 
-        1 . . . 1
-        . 1 1 1 .
-        `
-    )
-    */
     export const iconEditor = bmp`
     f f f f f f f f f f f f f f f f 
     f f f f f f f f f f f f f f f f 
@@ -1268,26 +1244,6 @@ namespace icondb {
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
 `
-    /*
-    export const microbit_logo_btn = bmp`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . f f f f f f f f . . . . 
-    . . . f 1 1 1 1 1 1 1 1 f . . . 
-    . . f 1 1 1 1 1 1 1 1 1 1 f . . 
-    . . f 1 f f 1 1 1 1 f f 1 f . . 
-    . . f 1 f f 1 1 1 1 f f 1 f . . 
-    . . f 1 1 1 1 1 1 1 1 1 1 f . . 
-    . . . f 1 1 1 1 1 1 1 1 f . . . 
-    . . . . f f f f f f f f . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . .
-`
-*/
 
     export const finger_release = bmp`
         . . . . . . . . . . . . . . . .
@@ -1453,100 +1409,6 @@ namespace icondb {
     . . . . . . . . . . . . . . . .
     . . . . . . . . . . . . . . . .
     `
-
-    /*
-    export const tile_coin_1 = bmp`
-    . . . . . . . . . . . . . . . .
-    . . . . . 4 4 4 4 4 . . . . . .
-    . . . 4 4 5 5 5 5 5 4 4 . . . .
-    . . 4 5 5 1 1 1 1 1 5 5 4 . . .
-    . . 4 5 1 1 1 1 1 1 1 5 4 . . .
-    . 4 5 1 1 1 1 f 1 1 1 1 5 4 . .
-    . 4 5 1 1 1 f f 1 1 1 1 5 4 d .
-    . 4 5 1 1 1 1 f 1 1 1 1 5 4 d .
-    . 4 5 1 1 1 1 f 1 1 1 1 5 4 d .
-    . 4 5 1 1 1 f f f 1 1 1 5 4 d .
-    . . 4 5 1 1 1 1 1 1 1 5 4 d d .
-    . . 4 5 5 1 1 1 1 1 5 5 4 d . .
-    . . . 4 4 5 5 5 5 5 4 4 d . . .
-    . . . . . 4 4 4 4 4 d d . . . .
-    . . . . . . . . . . . . . . . .
-    . . . . . . . . . . . . . . . .
-`
-    export const tile_coin_2 = bmp`
-    . . . . . . . . . . . . . . . .
-    . . . . . 4 4 4 4 4 . . . . . .
-    . . . 4 4 5 5 5 5 5 4 4 . . . .
-    . . 4 5 5 1 1 1 1 1 5 5 4 . . .
-    . . 4 5 1 1 1 1 1 1 1 5 4 . . .
-    . 4 5 1 1 1 f f 1 1 1 1 5 4 . .
-    . 4 5 1 1 1 1 1 f 1 1 1 5 4 d .
-    . 4 5 1 1 1 1 f 1 1 1 1 5 4 d .
-    . 4 5 1 1 1 f 1 1 1 1 1 5 4 d .
-    . 4 5 1 1 1 f f f 1 1 1 5 4 d .
-    . . 4 5 1 1 1 1 1 1 1 5 4 d d .
-    . . 4 5 5 1 1 1 1 1 5 5 4 d . .
-    . . . 4 4 5 5 5 5 5 4 4 d . . .
-    . . . . . 4 4 4 4 4 d d . . . .
-    . . . . . . . . . . . . . . . .
-    . . . . . . . . . . . . . . . .
-`
-    export const tile_coin_3 = bmp`
-. . . . . . . . . . . . . . . .
-. . . . . 4 4 4 4 4 . . . . . .
-. . . 4 4 5 5 5 5 5 4 4 . . . .
-. . 4 5 5 1 1 1 1 1 5 5 4 . . .
-. . 4 5 1 1 1 1 1 1 1 5 4 . . .
-. 4 5 1 1 1 f f 1 1 1 1 5 4 . .
-. 4 5 1 1 1 1 1 f 1 1 1 5 4 d .
-. 4 5 1 1 1 1 f 1 1 1 1 5 4 d .
-. 4 5 1 1 1 1 1 f 1 1 1 5 4 d .
-. 4 5 1 1 1 f f 1 1 1 1 5 4 d .
-. . 4 5 1 1 1 1 1 1 1 5 4 d d .
-. . 4 5 5 1 1 1 1 1 5 5 4 d . .
-. . . 4 4 5 5 5 5 5 4 4 d . . .
-. . . . . 4 4 4 4 4 d d . . . .
-. . . . . . . . . . . . . . . .
-. . . . . . . . . . . . . . . .
-`
-
-    export const tile_coin_5 = bmp`
-    . . . . . . . . . . . . . . . .
-    . . . . . 4 4 4 4 4 . . . . . .
-    . . . 4 4 5 5 5 5 5 4 4 . . . .
-    . . 4 5 5 1 1 1 1 1 5 5 4 . . .
-    . . 4 5 1 1 1 1 1 1 1 5 4 . . .
-    . 4 5 1 1 1 f f f 1 1 1 5 4 . .
-    . 4 5 1 1 1 f 1 1 1 1 1 5 4 d .
-    . 4 5 1 1 1 f f 1 1 1 1 5 4 d .
-    . 4 5 1 1 1 1 1 f 1 1 1 5 4 d .
-    . 4 5 1 1 1 f f 1 1 1 1 5 4 d .
-    . . 4 5 1 1 1 1 1 1 1 5 4 d d .
-    . . 4 5 5 1 1 1 1 1 5 5 4 d . .
-    . . . 4 4 5 5 5 5 5 4 4 d . . .
-    . . . . . 4 4 4 4 4 d d . . . .
-    . . . . . . . . . . . . . . . .
-    . . . . . . . . . . . . . . . .`
-
-    export const tile_coin_4 = bmp`
-    . . . . . . . . . . . . . . . .
-    . . . . . 4 4 4 4 4 . . . . . .
-    . . . 4 4 5 5 5 5 5 4 4 . . . .
-    . . 4 5 5 1 1 1 1 1 5 5 4 . . .
-    . . 4 5 1 1 1 1 1 1 1 5 4 . . .
-    . 4 5 1 1 1 f 1 f 1 1 1 5 4 . .
-    . 4 5 1 1 1 f 1 f 1 1 1 5 4 d .
-    . 4 5 1 1 1 f f f 1 1 1 5 4 d .
-    . 4 5 1 1 1 1 1 f 1 1 1 5 4 d .
-    . 4 5 1 1 1 1 1 f 1 1 1 5 4 d .
-    . . 4 5 1 1 1 1 1 1 1 5 4 d d .
-    . . 4 5 5 1 1 1 1 1 5 5 4 d . .
-    . . . 4 4 5 5 5 5 5 4 4 d . . .
-    . . . . . 4 4 4 4 4 d d . . . .
-    . . . . . . . . . . . . . . . .
-    . . . . . . . . . . . . . . . .
-`
-*/
 
     export const rgbLed = bmp`
     . . . . f f f f f f f . . . . . 
@@ -2870,6 +2732,20 @@ bffffffffffffffffffffffffffffffb
         . . . . . . . . . . . . . . . .
         . . . . . . . . . . . . . . . .
     `
+
+    const num2image = [
+        icondb.blocks1,
+        icondb.blocks2,
+        icondb.blocks3,
+        icondb.blocks4,
+        icondb.blocks5,
+    ]
+
+    export function numberToImage(i: number) {
+        console.log(`index = ${i} img = ${num2image[i]}`)
+        return num2image[i]
+    }
+
     export const kita_slider = bmp`
         . . . . . . 6 6 6 6 6 . . . . .
         . . . . . 6 6 6 f 6 6 6 . . . .
