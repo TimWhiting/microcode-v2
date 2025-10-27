@@ -201,6 +201,8 @@ namespace microcode {
         TID_COMPARE_GT = 224,
         TID_COMPARE_GTE = 225,
         TID_COMPARE_END = 225,
+
+        TID_DECIMAL_EDITOR = 255, // both filter and modifier
     }
 
     type RangeMap = { [id: string]: [Tid, Tid] }
@@ -227,7 +229,8 @@ namespace microcode {
         return (
             (tid >= Tid.FILTER_START && tid <= Tid.FILTER_END) ||
             isMathOperator(tid) ||
-            isComparisonOperator(tid)
+            isComparisonOperator(tid) ||
+            tid == Tid.TID_DECIMAL_EDITOR
         )
     }
 
@@ -238,7 +241,8 @@ namespace microcode {
     export function isModifier(tid: Tid) {
         return (
             (tid >= Tid.MODIFIER_START && tid <= Tid.MODIFER_END) ||
-            isMathOperator(tid)
+            isMathOperator(tid) ||
+            tid == Tid.TID_DECIMAL_EDITOR
         )
     }
 

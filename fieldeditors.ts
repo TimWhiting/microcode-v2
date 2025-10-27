@@ -66,9 +66,7 @@ namespace microcode {
             decimalEditor() //field, picker, onHide, onDelete)
         }
         toImage(field: any) {
-            // TODO: print number into image, need to compute
-            // TODO: width of image
-            return icondb.tile_page_1
+            return icondb.numberToDecimalImage(field)
         }
         toBuffer(i: number): Buffer {
             return undefined // TODO
@@ -293,8 +291,15 @@ namespace microcode {
                 melodyEditorTile.firstInstance = true
             }
             return melodyEditorTile
-        } else {
-            // TODO: decimal
+        } else if (
+            isFilterConstant(tid) ||
+            isModifierConstant(tid) ||
+            tid == Tid.TID_DECIMAL_EDITOR
+        ) {
+            if (!decimalEditorTile) {
+                decimalEditorTile = new DecimalEditor()
+                decimalEditorTile.firstInstance = true
+            }
         }
         return undefined
     }

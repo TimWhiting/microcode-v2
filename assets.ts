@@ -2741,7 +2741,7 @@ bffffffffffffffffffffffffffffffb
         icondb.blocks5,
     ]
 
-    function numberToDecimalImage(i: number) {
+    export function numberToDecimalImage(i: number) {
         const str = i.toString()
         const width = str.length * 8
         const img = bitmaps.create(width + 8, 16)
