@@ -62,8 +62,8 @@ namespace microcode {
             onHide: () => void,
             onDelete?: () => void
         ) {
-            // TODO: use of picker...
-            decimalEditor() //field, picker, onHide, onDelete)
+            // TODO: constant tiles 
+            const newValue = decimalEditor(field) //field, picker, onHide, onDelete)
         }
         toImage(field: any) {
             return icondb.numberToDecimalImage(field)
@@ -304,8 +304,8 @@ namespace microcode {
         return undefined
     }
 
-    function decimalEditor() {
-        // TODO
+    function decimalEditor(init: number): number {
+        return undefined
     }
 
     function iconEditor(
