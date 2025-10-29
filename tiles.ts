@@ -614,7 +614,9 @@ namespace microcode {
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
-                return { allow: ["value_out", "maths", "constant"] }
+                return {
+                    allow: ["value_out", "maths", "constant", "decimal_editor"],
+                }
             case Tid.TID_ACTUATOR_RGB_LED:
                 return { allow: ["rgb_led", "loop"] }
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:

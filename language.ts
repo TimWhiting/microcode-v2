@@ -396,10 +396,14 @@ namespace microcode {
             const [lower, upper] = ranges[rangeName]
             let all: Tile[] = []
             for (let i = lower; i <= upper; ++i) {
-                const ed = getEditor(i) // TODO: can an editor give us a set of tiles?
+                const ed = getEditor(i)
                 if (ed) all.push(ed)
                 else all.push(i)
             }
+            // special case for decimal editor
+            if (rangeName == "filters" || rangeName == "modifiers")
+                all.push(getEditor(Tid.TID_DECIMAL_EDITOR))
+
             all = all
                 .filter((tile: Tile) => isVisible(tile))
                 .sort((t1, t2) => priority(t1) - priority(t2))
