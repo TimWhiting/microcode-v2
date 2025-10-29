@@ -539,7 +539,7 @@ namespace microcode {
         Tid.TID_FILTER_COIN_5,
     ]
 
-    const filterMath = ["value_in", "comparison", "maths"]
+    const filterMath = ["value_in", "comparison", "maths", "decimal_editor"]
 
     export function getConstraints(tile: Tile): Constraints {
         const tid = getTid(tile)
@@ -719,7 +719,8 @@ namespace microcode {
             isFilterConstant(tid) ||
             isModifierConstant(tid) ||
             tid == Tid.TID_MODIFIER_ON ||
-            tid == Tid.TID_MODIFIER_OFF
+            tid == Tid.TID_MODIFIER_OFF ||
+            tid == Tid.TID_DECIMAL_EDITOR
         )
             return TileKind.Literal
         if (isTimespan(tid)) return TileKind.Timespan
