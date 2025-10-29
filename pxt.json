@@ -36,7 +36,10 @@
         "sensors.ts",
         "parser.ts",
         "decimal.ts",
-        "settings.ts"
+        "settings.ts",
+        "microgui.ts",
+        "graphablefunction.ts",
+        "inputmethods.ts"
     ],
     "testFiles": [],
     "targetVersions": {

@@ -49,9 +49,10 @@ namespace microcode {
         }
     }
 
+    // TODO: conversion from constant to FieldEditor
     export class DecimalFieldEditor extends FieldEditor {
         init() {
-            return 0.0
+            return 1.0
         }
         clone(i: number) {
             return i
@@ -62,7 +63,6 @@ namespace microcode {
             onHide: () => void,
             onDelete?: () => void
         ) {
-            // TODO: constant tiles
             const newValue = decimalEditor(field) //field, picker, onHide, onDelete)
         }
         toImage(field: any) {
@@ -293,11 +293,7 @@ namespace microcode {
                 melodyEditorTile.firstInstance = true
             }
             return melodyEditorTile
-        } else if (
-            isFilterConstant(tid) ||
-            isModifierConstant(tid) ||
-            tid == Tid.TID_DECIMAL_EDITOR
-        ) {
+        } else if (tid == Tid.TID_DECIMAL_EDITOR) {
             if (!decimalEditorTile) {
                 decimalEditorTile = new DecimalEditor()
                 decimalEditorTile.firstInstance = true
@@ -307,7 +303,18 @@ namespace microcode {
     }
 
     function decimalEditor(init: number): number {
-        return undefined
+        const kb = new microgui.Keyboard({
+            app,
+            layout: microgui.KeyboardLayouts.NUMERIC,
+            cb: (txt: string) => basic.showNumber(+txt),
+            foregroundColor: 3, // optional arg
+            backgroundColor: 6, // optional arg
+            maxTxtLength: 5, // optional arg
+        })
+
+        app.popScene()
+        app.pushScene(kb)
+        return 0
     }
 
     function iconEditor(
@@ -428,16 +435,6 @@ MicroGUI Numeric Keyboard
  
 const app = new microgui.App();
 
-const kb = new microgui.Keyboard({
-    app,
-    layout: microgui.KeyboardLayouts.NUMERIC,
-    cb: (txt: string) => basic.showNumber(+txt),
-    foregroundColor: 3, // optional arg
-    backgroundColor: 6, // optional arg
-    maxTxtLength: 5,    // optional arg
-})
 
-app.popScene()
-app.pushScene(kb)
 
 */
