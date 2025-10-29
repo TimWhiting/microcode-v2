@@ -235,7 +235,7 @@ namespace microcode {
             if (name == Tid.TID_MODIFIER_ICON_EDITOR) return icondb.iconEditor
             if (name == Tid.TID_MODIFIER_MELODY_EDITOR)
                 return icondb.melodyEditor
-            // TODO: Tid.TID_DECIMAL_EDITOR
+            if (name == Tid.TID_DECIMAL_EDITOR) return icondb.decimalEditor
 
             if (name == Tid.TID_MODIFIER_EMOJI_GIGGLE) return icondb.soundGiggle
             if (name == Tid.TID_MODIFIER_EMOJI_HAPPY) return icondb.soundHappy
@@ -3260,79 +3260,22 @@ bffffffffffffffffffffffffffffffb
 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
 `
 
-    /* maybe use these later
-    export const rc_high = bmp`
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . f f f f f f f . . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . f 5 5 5 5 5 5 5 f . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . f 9 6 9 6 9 6 9 f . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . c f f f f f f f c . . . .
-        . . . . c c c c c c c . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-    `
-    export const rc_low = bmp`
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . f f f f f f f . . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . f 9 6 9 6 9 6 9 f . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . f 5 5 5 5 5 5 5 f . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . c f f f f f f f c . . . .
-        . . . . c c c c c c c . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-    `
-    export const rc_low_to_high = bmp`
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . f f f f f f f . . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . f 6 6 6 5 5 5 5 f . . . .
-        . . . f 6 6 6 5 6 6 6 f . . . .
-        . . . f 9 6 9 5 9 6 9 f . . . .
-        . . . f 6 6 6 5 6 6 6 f . . . .
-        . . . f 5 5 5 5 6 6 6 f . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . c f f f f f f f c . . . .
-        . . . . c c c c c c c . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-    `
-    export const rc_high_to_low = bmp`
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . f f f f f f f . . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . f 5 5 5 5 6 6 6 f . . . .
-        . . . f 6 6 6 5 6 6 6 f . . . .
-        . . . f 9 6 9 5 9 6 9 f . . . .
-        . . . f 6 6 6 5 6 6 6 f . . . .
-        . . . f 6 6 6 5 5 5 5 f . . . .
-        . . . f 6 6 6 6 6 6 6 f . . . .
-        . . . c f f f f f f f c . . . .
-        . . . . c c c c c c c . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-    `
-
-    */
+    export const decimalEditor = bmp`
+    . . . . . . . . . . . . . . . .
+    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . 4 4 4 . . .
+    . . . f . . f f f . . 4 . . . .
+    . . f f . . . . f . . 4 . . . .
+    . . . f . . . . f . . 4 . . . .
+    . . . f . . f f f . . 4 . . . .
+    . . . f . . f . . . . 4 . . . .
+    . . . f . . f . . . . 4 . . . .
+    . . f f f . f f f . . 4 . . . .
+    . . . . . . . . . . 4 4 4 . . .
+    . . . . . . . . . . . . . . . .
+    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+`
 }
