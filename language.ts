@@ -396,7 +396,7 @@ namespace microcode {
             const [lower, upper] = ranges[rangeName]
             let all: Tile[] = []
             for (let i = lower; i <= upper; ++i) {
-                const ed = getEditor(i)
+                const ed = getEditor(i) // TODO: can an editor give us a set of tiles?
                 if (ed) all.push(ed)
                 else all.push(i)
             }

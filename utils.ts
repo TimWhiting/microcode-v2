@@ -71,5 +71,11 @@ namespace microcode {
             for (let i = 0; i < len; ++i) b[i] = this.buf[this.ptr++]
             return b
         }
+
+        public readFloat() {
+            const ret = this.buf.getNumber(NumberFormat.Float32LE, this.ptr)
+            this.ptr += 4
+            return ret
+        }
     }
 }

@@ -62,17 +62,19 @@ namespace microcode {
             onHide: () => void,
             onDelete?: () => void
         ) {
-            // TODO: constant tiles 
+            // TODO: constant tiles
             const newValue = decimalEditor(field) //field, picker, onHide, onDelete)
         }
         toImage(field: any) {
             return icondb.numberToDecimalImage(field)
         }
-        toBuffer(i: number): Buffer {
-            return undefined // TODO
+        toBuffer(field: any): Buffer {
+            const buf = Buffer.create(4)
+            buf.setNumber(NumberFormat.Float32LE, 0, field)
+            return buf
         }
-        fromBuffer(br: BufferReader) {
-            return 0 // TODO
+        fromBuffer(buf: BufferReader): number {
+            return buf.readFloat()
         }
     }
 
