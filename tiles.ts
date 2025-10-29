@@ -350,7 +350,8 @@ namespace microcode {
             isTimespan(tid) ||
             isFilterVariable(tid) ||
             isMathOperator(tid) ||
-            isComparisonOperator(tid)
+            isComparisonOperator(tid) ||
+            tid == Tid.TID_DECIMAL_EDITOR
         )
             return false
         // all other filters are terminal

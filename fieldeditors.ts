@@ -81,7 +81,7 @@ namespace microcode {
     export class DecimalEditor extends ModifierEditor {
         field: number
         constructor(field: number = 0) {
-            super(Tid.TID_MODIFIER_ICON_EDITOR)
+            super(Tid.TID_DECIMAL_EDITOR)
             this.fieldEditor = new DecimalFieldEditor()
             this.field = this.fieldEditor.clone(
                 field ? field : this.fieldEditor.init()
@@ -94,7 +94,7 @@ namespace microcode {
 
         getIcon(): string | number | Bitmap {
             return this.firstInstance
-                ? getIcon(Tid.TID_MODIFIER_ICON_EDITOR)
+                ? getIcon(Tid.TID_DECIMAL_EDITOR)
                 : this.fieldEditor.toImage(this.field)
         }
 
