@@ -309,14 +309,15 @@ namespace microcode {
         return undefined
     }
 
-    function decimalEditor(init: number) {
+    function decimalEditor(bn: BoxedNumber) {
         const kb = new microgui.Keyboard({
             app,
             layout: microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
                 basic.showNumber(+txt)
+                bn.num = +txt
             },
-            init,
+            init: bn.num,
             foregroundColor: 3, // optional arg
             backgroundColor: 6, // optional arg
             maxTxtLength: 5, // optional arg
