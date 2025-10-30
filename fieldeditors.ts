@@ -298,6 +298,7 @@ namespace microcode {
                 decimalEditorTile = new DecimalEditor()
                 decimalEditorTile.firstInstance = true
             }
+            return decimalEditorTile
         }
         return undefined
     }
