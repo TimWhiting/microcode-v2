@@ -314,8 +314,9 @@ namespace microcode {
             app,
             layout: microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
-                basic.showNumber(+txt)
-                bn.num = +txt
+                const num = +txt
+                basic.showNumber(num)
+                bn.num = num
             },
             init: bn.num,
             foregroundColor: 3, // optional arg
