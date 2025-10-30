@@ -63,7 +63,8 @@ namespace microcode {
             onHide: () => void,
             onDelete?: () => void
         ) {
-            const newValue = decimalEditor(field) //field, picker, onHide, onDelete)
+            // TODO: need to pass something that can be updated
+            decimalEditor(field)
         }
         toImage(field: any) {
             return icondb.numberToDecimalImage(field)
@@ -303,19 +304,19 @@ namespace microcode {
         return undefined
     }
 
-    function decimalEditor(init: number): number {
+    function decimalEditor(init: number) {
         const kb = new microgui.Keyboard({
             app,
             layout: microgui.KeyboardLayouts.NUMERIC,
-            cb: (txt: string) => basic.showNumber(+txt),
+            cb: (txt: string) => {
+                basic.showNumber(+txt)
+            },
             foregroundColor: 3, // optional arg
             backgroundColor: 6, // optional arg
             maxTxtLength: 5, // optional arg
         })
-
-        app.popScene()
+        // app.popScene()
         app.pushScene(kb)
-        return 0
     }
 
     function iconEditor(

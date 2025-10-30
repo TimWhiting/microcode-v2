@@ -420,6 +420,8 @@ namespace microcode {
                 else return tid
             }
             switch (tid) {
+                case Tid.TID_DECIMAL_EDITOR:
+                    return -1
                 case Tid.TID_FILTER_BUTTON_A:
                     return 0
                 case Tid.TID_FILTER_BUTTON_B:
