@@ -3,12 +3,12 @@
     "version": "2.5.47",
     "description": "Physical computing library for micro:bit V2",
     "dependencies": {
-        "core": "file:../core",
-        "radio": "file:../radio",
-        "microphone": "file:../microphone",
-        "datalogger": "file:../datalogger",
-        "settings": "file:../settings",
-        "user-interface-base": "file:../user-interface-base"
+        "core": "*",
+        "radio": "*",
+        "microphone": "*",
+        "datalogger": "*",
+        "settings": "*",
+        "user-interface-base": "github:microbit-apps/user-interface-base#v0.0.29"
     },
     "files": [
         "analytics.ts",
