@@ -362,12 +362,13 @@ namespace microgui {
             app: AppInterface
             layout: KeyboardLayouts
             cb: (keyboardText: string) => void
+            init?: number
             foregroundColor?: number
             backgroundColor?: number
             maxTxtLength?: number
         }) {
             super(opts.app, new GridNavigator([[]])) // GridNavigator setup in startup()
-            this.text = ""
+            this.text = opts.init ? opts.init.toString() : ""
             this.isUpperCase = true
             this.maxTxtLength = opts.maxTxtLength
                 ? Math.min(opts.maxTxtLength, this.MAX_TEXT_LENGTH)

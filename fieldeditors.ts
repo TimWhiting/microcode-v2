@@ -311,6 +311,7 @@ namespace microcode {
             cb: (txt: string) => {
                 basic.showNumber(+txt)
             },
+            init,
             foregroundColor: 3, // optional arg
             backgroundColor: 6, // optional arg
             maxTxtLength: 5, // optional arg
