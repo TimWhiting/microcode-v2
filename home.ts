@@ -12,7 +12,7 @@ namespace microcode {
             super(app)
         }
 
-        /* override */ startup(setup: () => void) {
+        /* override */ startup() {
             super.startup()
 
             this.navigator.setBtns([
@@ -118,9 +118,9 @@ namespace microcode {
                 y + this.yOffset
             )
             Screen.drawTransparentImage(
-                microbitLogo,
+                icondb.microbitLogo,
                 Screen.LEFT_EDGE +
-                    ((Screen.WIDTH - microbitLogo.width) >> 1) +
+                    ((Screen.WIDTH - icondb.microbitLogo.width) >> 1) +
                     dy,
                 y - wordLogo.height + this.yOffset + margin
             )
