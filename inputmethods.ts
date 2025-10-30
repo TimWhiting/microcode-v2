@@ -2,7 +2,6 @@ namespace microgui {
     import AppInterface = user_interface_base.AppInterface
     import Scene = user_interface_base.Scene
     import CursorScene = user_interface_base.CursorScene
-    import CursorSceneWithPriorPage = user_interface_base.CursorSceneWithPriorPage
     import GridNavigator = user_interface_base.GridNavigator
     import ButtonStyles = user_interface_base.ButtonStyles
     import Screen = user_interface_base.Screen
@@ -335,8 +334,6 @@ namespace microgui {
         },
     }
 
-    // TODO: need exit on B or Enter
-
     export class Keyboard extends CursorScene implements IKeyboard {
         private btns: Button[][]
         private text: string
@@ -364,7 +361,7 @@ namespace microgui {
             app: AppInterface
             layout: KeyboardLayouts
             cb: (keyboardText: string) => void
-            init?: number
+            init: number,
             foregroundColor?: number
             backgroundColor?: number
             maxTxtLength?: number
@@ -654,7 +651,7 @@ namespace microgui {
     const KEYBOARD_FRAME_COUNTER_CURSOR_OFF = 40
     const KEYBOARD_MAX_TEXT_LENGTH = 20
 
-    export class KeyboardMenu extends CursorSceneWithPriorPage {
+    export class KeyboardMenu extends CursorScene {
         private static WIDTHS: number[] = [10, 10, 10, 10, 4]
         private btns: Button[][]
         private btnsText: string[][]
@@ -666,7 +663,7 @@ namespace microgui {
         private shakeTextCounter: number
 
         constructor(app: AppInterface, next: (arg0: string) => void) {
-            super(app, function () {}, new GridNavigator())
+            super(app, new GridNavigator())
             this.text = ""
             this.isUpperCase = true
 
@@ -907,7 +904,7 @@ namespace microgui {
         }
     }
 
-    export class CalculatorMenu extends CursorSceneWithPriorPage {
+    export class CalculatorMenu extends CursorScene {
         private static WIDTHS: number[] = [10, 5, 4]
         private btns: Button[]
         private btnText: string[]
@@ -921,7 +918,7 @@ namespace microgui {
             app: AppInterface,
             next: (arg0: GraphableFunction) => void
         ) {
-            super(app, function () {}, new GridNavigator()) // 3, 1, CalculatorMenu.WIDTHS
+            super(app, new GridNavigator()) // 3, 1, CalculatorMenu.WIDTHS
             this.text = ""
 
             this.btns = []
@@ -1191,7 +1188,7 @@ namespace microgui {
         }
     }
 
-    export class CallbackMenu extends CursorSceneWithPriorPage {
+    export class CallbackMenu extends CursorScene {
         private btns: Button[]
         private btnText: string[]
         private callbacks: ((btn: Button) => void)[][]
@@ -1203,7 +1200,6 @@ namespace microgui {
         ) {
             super(
                 app,
-                priorFn != null ? priorFn : function () {},
                 new GridNavigator()
                 // callbacks.length,
                 // (callbacks.length > 0) ? callbacks[0].length : 0
