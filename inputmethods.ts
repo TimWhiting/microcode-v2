@@ -335,6 +335,8 @@ namespace microgui {
         },
     }
 
+    // TODO: need exit on B or Enter
+
     export class Keyboard extends CursorScene implements IKeyboard {
         private btns: Button[][]
         private text: string

@@ -49,13 +49,17 @@ namespace microcode {
         }
     }
 
+    interface BoxedNumber {
+        num: number
+    }
+
     // TODO: conversion from constant to FieldEditor
     export class DecimalFieldEditor extends FieldEditor {
         init() {
-            return 1.0
+            return { num: 1.0 }
         }
-        clone(i: number) {
-            return i
+        clone(bn: BoxedNumber) {
+            return { num: bn.num }
         }
         editor(
             field: any,
@@ -63,25 +67,26 @@ namespace microcode {
             onHide: () => void,
             onDelete?: () => void
         ) {
-            // TODO: need to pass something that can be updated
+            // TODO: 1. need to pass something that can be updated
+            // TODO: 2. need a way to delete this tile
             decimalEditor(field)
         }
-        toImage(field: any) {
-            return icondb.numberToDecimalImage(field)
+        toImage(field: BoxedNumber) {
+            return icondb.numberToDecimalImage(field.num)
         }
-        toBuffer(field: any): Buffer {
+        toBuffer(field: BoxedNumber): Buffer {
             const buf = Buffer.create(4)
-            buf.setNumber(NumberFormat.Float32LE, 0, field)
+            buf.setNumber(NumberFormat.Float32LE, 0, field.num)
             return buf
         }
-        fromBuffer(buf: BufferReader): number {
-            return buf.readFloat()
+        fromBuffer(buf: BufferReader): BoxedNumber {
+            return { num: buf.readFloat() }
         }
     }
 
     export class DecimalEditor extends ModifierEditor {
-        field: number
-        constructor(field: number = 0) {
+        field: BoxedNumber
+        constructor(field: BoxedNumber) {
             super(Tid.TID_DECIMAL_EDITOR)
             this.fieldEditor = new DecimalFieldEditor()
             this.field = this.fieldEditor.clone(
@@ -96,7 +101,7 @@ namespace microcode {
         getIcon(): string | number | Bitmap {
             return this.firstInstance
                 ? getIcon(Tid.TID_DECIMAL_EDITOR)
-                : this.fieldEditor.toImage(this.field)
+                : this.fieldEditor.toImage(this.field.num)
         }
 
         getNewInstance(field: any = null) {
@@ -296,7 +301,7 @@ namespace microcode {
             return melodyEditorTile
         } else if (tid == Tid.TID_DECIMAL_EDITOR) {
             if (!decimalEditorTile) {
-                decimalEditorTile = new DecimalEditor()
+                decimalEditorTile = new DecimalEditor(undefined)
                 decimalEditorTile.firstInstance = true
             }
             return decimalEditorTile
