@@ -67,9 +67,7 @@ namespace microcode {
             onHide: () => void,
             onDelete?: () => void
         ) {
-            // TODO: 1. need to pass something that can be updated
-            // TODO: 2. need a way to delete this tile
-            decimalEditor(field)
+            decimalEditor(field, onHide, onDelete)
         }
         toImage(field: BoxedNumber) {
             return icondb.numberToDecimalImage(field.num)
@@ -309,21 +307,24 @@ namespace microcode {
         return undefined
     }
 
-    function decimalEditor(bn: BoxedNumber) {
+    function decimalEditor(
+        bn: BoxedNumber,
+        onHide: () => void,
+        onDelete?: () => void
+    ) {
         const kb = new microgui.Keyboard({
             app,
             layout: microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
-                const num = +txt
-                basic.showNumber(num)
-                bn.num = num
+                bn.num = +txt
+                app.popScene()
+                onHide()
             },
             init: bn.num,
             foregroundColor: 3, // optional arg
             backgroundColor: 6, // optional arg
             maxTxtLength: 5, // optional arg
         })
-        // app.popScene()
         app.pushScene(kb)
     }
 

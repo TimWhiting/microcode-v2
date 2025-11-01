@@ -67,13 +67,14 @@ namespace microcode {
     let theInterpreter: Interpreter = undefined
 
     export function runProgram(prog: ProgramDefn) {
-        // if (theInterpreter) theInterpreter.stop()
-        // if (!runtimeHost) runtimeHost = new MicrobitHost()
-        // theInterpreter = new Interpreter(prog, runtimeHost)
+        if (theInterpreter) theInterpreter.stop()
+        if (!runtimeHost) runtimeHost = new MicrobitHost()
+        theInterpreter = new Interpreter(prog, runtimeHost)
     }
 
     export function stopProgram() {
         if (theInterpreter) theInterpreter.stop()
         theInterpreter = undefined
     }
+    
 }
