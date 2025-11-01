@@ -139,6 +139,12 @@ namespace microcode {
             // sample icons
             if (name == "smiley_buttons") return icondb.sampleSmileyButtons
 
+            //TODO: I think this is actually the Jacdac logo?
+            // user-interface-base/coreAssets.ts has the real microbitLogo
+            // Use "microbitLogo" and at the end of this function it will check user-interface-base and fetch it.
+            if (name == "microbit_logo") return icondb.microbit_logo
+            if (name == "microbitLogoBtn") return icondb.microbit_logo_btn
+
             // math
             if (typeof name == "number") {
                 if (
@@ -275,6 +281,7 @@ namespace microcode {
             extraSamples(name) // only for web app
             if (extraImage) return extraImage
             if (nullIfMissing) return null
+            if (typeof(name) === "string") return user_interface_base.icons.get(name, nullIfMissing);
             return icondb.MISSING
         }
     }
@@ -303,24 +310,7 @@ namespace microcode {
     .bbbbbff.......bbbbbff.bbbbff...fbbbbbbbfff...bbbbff..........fbbbbbbbfff........fbbbbbbbfff.......fbbbbbbbfff.....fbbbbbbbbbbff...fbbbbbbbbff..
     ..fffff.........fffff...ffff......fffffff......ffff.............fffffff............fffffff...........fffffff.........ffffffffff......ffffffff...
     `
-    export const microbitLogo = bmp`
-        ............................
-        ......5555555555555555......
-        ....55555555555555555555....
-        ...5554444444444444444555...
-        ..5554.................555..
-        ..554...................554.
-        .554....55........55.....554
-        .55....5555......5555....554
-        .55....55554.....55554...554
-        .55.....5544......5544...554
-        ..55.....44........44...5544
-        ..555..................5554.
-        ...555................55544.
-        ....5555555555555555555544..
-        .....45555555555555555444...
-        .......4444444444444444.....
-    `
+
 
     export const editorBackground = bmp`
     8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
@@ -1227,6 +1217,9 @@ namespace icondb {
     . . . . . . . . . . . . . . . .
 `
 
+  //TODO: I think this is actually the Jacdac logo?
+  // user-interface-base/coreAssets.ts has the real microbitLogo
+  // Use "microbitLogo" and at the end of this function it will check user-interface-base and fetch it.
     export const microbit_logo = bmp`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
