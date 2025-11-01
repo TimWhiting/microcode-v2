@@ -214,31 +214,44 @@ namespace microcode {
         }
 
         public toBuffer(bw: BufferWriter) {
-            if (this.isEmpty()) return
-            bw.writeByte(this.sensor)
-            this.filters.forEach(filter => bw.writeByte(filter))
-            this.actuators.forEach(act => bw.writeByte(act))
-            this.modifiers.forEach(mod => {
-                bw.writeByte(getTid(mod))
-                const fieldEditor = getFieldEditor(mod)
+            const handleFieldEditors = (tile: Tile) => {
+                bw.writeByte(getTid(tile))
+                const fieldEditor = getFieldEditor(tile)
                 if (fieldEditor) {
                     bw.writeBuffer(
-                        fieldEditor.toBuffer((mod as ModifierEditor).getField())
+                        fieldEditor.toBuffer(
+                            (tile as ModifierEditor).getField()
+                        )
                     )
                 }
-            })
+            }
+            if (this.isEmpty()) return
+            bw.writeByte(this.sensor)
+            this.filters.forEach(handleFieldEditors)
+            this.actuators.forEach(act => bw.writeByte(act))
+            this.modifiers.forEach(handleFieldEditors)
         }
 
         public static fromBuffer(br: BufferReader) {
             const defn = new RuleDefn()
+            const handleFieldEditor = (which: string) => {
+                const by = br.readByte()
+                const tile = getEditor(by)
+                if (tile instanceof ModifierEditor) {
+                    const field = tile.fieldEditor.fromBuffer(br)
+                    const newOne = tile.getNewInstance(field)
+                    defn.push(<any>newOne, which)
+                } else {
+                    defn.push(by, which)
+                }
+            }
             assert(!br.eof())
             const sensorEnum = br.readByte()
             assert(isSensor(sensorEnum))
             defn.sensors.push(sensorEnum)
             assert(!br.eof())
             while (isFilter(br.peekByte())) {
-                const filterEnum = br.readByte()
-                defn.push(filterEnum, "filters")
+                handleFieldEditor("filters")
                 assert(!br.eof())
             }
             assert(!br.eof())
@@ -250,15 +263,7 @@ namespace microcode {
             defn.actuators.push(actuatorEnum)
             assert(!br.eof())
             while (isModifier(br.peekByte())) {
-                const modifierEnum = br.readByte()
-                const modifier = getEditor(modifierEnum)
-                if (modifier instanceof ModifierEditor) {
-                    const field = modifier.fieldEditor.fromBuffer(br)
-                    const newOne = modifier.getNewInstance(field)
-                    defn.modifiers.push(<any>newOne)
-                } else {
-                    defn.push(modifierEnum, "modifiers")
-                }
+                handleFieldEditor("modifiers")
                 assert(!br.eof())
             }
             return defn
