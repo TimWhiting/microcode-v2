@@ -5,158 +5,157 @@ namespace microcode {
     export function resolveTooltip(id: string) {
         let res: string = ""
         if (!id) return id
-        else if (id === "tagline") res = "for micro:bit V2"
-        else if (id === "sensors") res = "when..."
-        else if (id === "actuators") res = "do..."
-        else if (id === "when") res = "when"
-        else if (id === "do") res = "do"
-        else if (id === "connect") res = "connect"
-        else if (id === "T10") res = "page start"
-        else if (id === "T11") res = "press"
-        else if (id === "T12") res = "release"
-        else if (id === "T13") res = "move"
-        else if (id === "T14") res = "timer"
-        else if (id === "T15") res = "light"
-        else if (id === "T16") res = "temperature"
-        else if (id === "T17") res = "radio receive"
-        else if (id === "T18") res = "hear"
-        else if (id === "T19") res = "variable X set"
-        else if (id === "T20") res = "variable Y set"
-        else if (id === "T21") res = "variable Z set"
-        else if (id === "T22") res = "magnet"
-        else if (id === "T23") res = "slider"
-        else if (id === "T24") res = "dial"
-        else if (id === "T28") res = "moisture"
-        else if (id === "T29") res = "distance"
-        else if (id === "T30") res = "line"
-        else if (id === "rule") res = "rule"
-        else if (id === "add_rule") res = "add rule"
-        else if (id === "delete_rule") res = "delete rule"
-        else if (id === "arith_equals") res = "equals"
-        else if (id === "arith_plus") res = "plus"
-        else if (id === "disk") res = "save"
-        else if (id === "load") res = "load"
-        else if (id === "T70") res = "touch pin 0"
-        else if (id === "T71") res = "touch pin 1"
-        else if (id === "T72") res = "touch pin 2"
-        else if (id === "T73") res = "button A"
-        else if (id === "T74") res = "button B"
-        else if (id === "T75") res = "key 1"
-        else if (id === "T76") res = "key 2"
-        else if (id === "T77") res = "logo"
-        else if (id === "T78") res = "1"
-        else if (id === "T79") res = "2"
-        else if (id === "T80") res = "3"
-        else if (id === "T81") res = "4"
-        else if (id === "T82") res = "5"
-        else if (id === "T83") res = "1/4 second"
-        else if (id === "T84") res = "1 second"
-        else if (id === "T85") res = "1 random second"
-        else if (id === "T86") res = "5 seconds"
-        else if (id === "T87") res = "loud"
-        else if (id === "T88") res = "quiet"
-        else if (id === "T90") res = "shake"
-        else if (id === "T91") res = "tilt up"
-        else if (id === "T92") res = "tilt down"
-        else if (id === "T93") res = "tilt left"
-        else if (id === "T94") res = "tilt right"
-        else if (id === "T108") res = "face up"
-        else if (id === "T109") res = "face down"
-        else if (id === "T95") res = "variable X"
-        else if (id === "T96") res = "variable Y"
-        else if (id === "T97") res = "variable Z"
-        else if (id === "T98") res = "turn left"
-        else if (id === "T99") res = "turn right"
-        else if (id === "T100") res = "warmer"
-        else if (id === "T101") res = "colder"
-        else if (id === "C0") res = "edit"
-        else if (id === "C1") res = "samples"
-        else if (id === "T40") res = "switch page"
-        else if (id === "T41") res = "play sound"
-        else if (id === "A3") res = "microphone"
-        else if (id === "T43") res = "music"
-        else if (id === "T44") res = "show image"
-        else if (id === "T45") res = "radio send"
-        else if (id === "T46") res = "radio set group"
-        else if (id === "A7") res = "random number"
-        else if (id === "T51") res = "show number"
-        else if (id === "T150") res = "page 1"
-        else if (id === "T151") res = "page 2"
-        else if (id === "T152") res = "page 3"
-        else if (id === "T153") res = "page 4"
-        else if (id === "T154") res = "page 5"
-        else if (id === "T155") res = "1"
-        else if (id === "T156") res = "2"
-        else if (id === "T157") res = "3"
-        else if (id === "T158") res = "4"
-        else if (id === "T159") res = "5"
-        else if (id === "T160") res = "LED image"
-        else if (id === "M18") res = "music"
-        else if (id === "T163") res = "giggle"
-        else if (id === "T164") res = "happy"
-        else if (id === "T165") res = "hello"
-        else if (id === "T166") res = "mysterious"
-        else if (id === "T167") res = "sad"
-        else if (id === "T168") res = "slide"
-        else if (id === "T169") res = "soaring"
-        else if (id === "T170") res = "spring"
-        else if (id === "T171") res = "twinkle"
-        else if (id === "T172") res = "yawn"
-        else if (id === "T173") res = "variable X"
-        else if (id === "T174") res = "variable Y"
-        else if (id === "T175") res = "variable Z"
-        else if (id === "T176") res = "radio value"
-        else if (id === "T177") res = "dice"
-        else if (id === "T178") res = "repeat"
-        else if (id === "T179") res = "melody"
-        else if (id === "T180") res = "temperature"
-        else if (id === "T47") res = "LED"
-        else if (id === "T48") res = "set variable X"
-        else if (id === "T49") res = "set variable Y"
-        else if (id === "T50") res = "set variable Z"
-        else if (id === "T182") res = "red"
-        else if (id === "T183") res = "green"
-        else if (id === "T184") res = "blue"
-        else if (id === "T185") res = "purple"
-        else if (id === "T186") res = "yellow"
-        else if (id === "T187") res = "black"
-        else if (id === "T188") res = "rainbow"
-        else if (id === "T189") res = "sparkle"
-        else if (id === "T53") res = "servo set angle"
-        else if (id === "T54") res = "relay"
-        else if (id === "T55") res = "servo power"
-        else if (id === "SR_LED") res = "LED {x} {y} {state}"
-        else if (id === "SR_NOTE") res = "note {index} {state}"
-        else if (id === "SR_ON") res = "on"
-        else if (id === "SR_OFF") res = "off"
-        else if (id === "T204") res = "on"
-        else if (id === "T205") res = "off"
-        else if (id === "T110") res = "on"
-        else if (id === "T111") res = "off"
-        else if (id === "T52") res = "robot"
-        else if (id === "T190") res = "forward"
-        else if (id === "T191") res = "reverse"
-        else if (id === "T192") res = "turn left"
-        else if (id === "T193") res = "turn right"
-        else if (id === "T194") res = "stop"
-        else if (id === "T195") res = "fast forward"
-        else if (id === "T196") res = "spin left"
-        else if (id === "T197") res = "spin right"
-        else if (id === "T198") res = "LED red"
-        else if (id === "T199") res = "LED green"
-        else if (id === "T200") res = "LED blue"
-        else if (id === "T201") res = "LED OFF"
-        else if (id === "T202") res = "arm open"
-        else if (id === "T203") res = "arm close"
-        else if (id === "T25") res = "wall"
-        else if (id === "T26") res = "line"
-        else if (id === "T27") res = "light"
-        else if (id === "T102") res = "left"
-        else if (id === "T103") res = "right"
-        else if (id === "T104") res = "both"
-        else if (id === "T105") res = "none"
-        else if (id === "T106") res = "lost left"
-        else if (id === "T107") res = "lost right"
+        else if (id === "tagline") res = "for micro:bit V2";
+        else if (id === "sensors") res = "when...";
+        else if (id === "actuators") res = "do...";
+        else if (id === "when") res = "when";
+        else if (id === "do") res = "do";
+        else if (id === "connect") res = "connect";
+        else if (id === "T10") res = "page start";
+        else if (id === "T11") res = "press";
+        else if (id === "T12") res = "release";
+        else if (id === "T13") res = "move";
+        else if (id === "T14") res = "timer";
+        else if (id === "T15") res = "light";
+        else if (id === "T16") res = "temperature";
+        else if (id === "T17") res = "radio receive";
+        else if (id === "T18") res = "hear";
+        else if (id === "T19") res = "variable X set";
+        else if (id === "T20") res = "variable Y set";
+        else if (id === "T21") res = "variable Z set";
+        else if (id === "T22") res = "magnet";
+        else if (id === "T23") res = "slider";
+        else if (id === "T24") res = "dial";
+        else if (id === "T28") res = "moisture";
+        else if (id === "T29") res = "distance";
+        else if (id === "T30") res = "line";
+        else if (id === "rule") res = "rule";
+        else if (id === "add_rule") res = "add rule";
+        else if (id === "delete_rule") res = "delete rule";
+        else if (id === "arith_equals") res = "equals";
+        else if (id === "arith_plus") res = "plus";
+        else if (id === "disk") res = "save";
+        else if (id === "load") res = "load";
+        else if (id === "T70") res = "touch pin 0";
+        else if (id === "T71") res = "touch pin 1";
+        else if (id === "T72") res = "touch pin 2";
+        else if (id === "T73") res = "button A";
+        else if (id === "T74") res = "button B";
+        else if (id === "T75") res = "key 1";
+        else if (id === "T76") res = "key 2";
+        else if (id === "T77") res = "logo";
+        else if (id === "T78") res = "1";
+        else if (id === "T79") res = "2";
+        else if (id === "T80") res = "3";
+        else if (id === "T81") res = "4";
+        else if (id === "T82") res = "5";
+        else if (id === "T83") res = "1/4 second";
+        else if (id === "T84") res = "1 second";
+        else if (id === "T85") res = "1 random second";
+        else if (id === "T86") res = "5 seconds";
+        else if (id === "T87") res = "loud";
+        else if (id === "T88") res = "quiet";
+        else if (id === "T90") res = "shake";
+        else if (id === "T91") res = "tilt up";
+        else if (id === "T92") res = "tilt down";
+        else if (id === "T93") res = "tilt left";
+        else if (id === "T94") res = "tilt right";
+        else if (id === "T108") res = "face up";
+        else if (id === "T109") res = "face down";
+        else if (id === "T95") res = "variable X";
+        else if (id === "T96") res = "variable Y";
+        else if (id === "T97") res = "variable Z";
+        else if (id === "T98") res = "turn left";
+        else if (id === "T99") res = "turn right";
+        else if (id === "T100") res = "warmer";
+        else if (id === "T101") res = "colder";
+        else if (id === "C0") res = "edit";
+        else if (id === "C1") res = "samples";
+        else if (id === "T40") res = "switch page";
+        else if (id === "T41") res = "play sound";
+        else if (id === "A3") res = "microphone";
+        else if (id === "T43") res = "music";
+        else if (id === "T44") res = "show image";
+        else if (id === "T45") res = "radio send";
+        else if (id === "T46") res = "radio set group";
+        else if (id === "A7") res = "random number";
+        else if (id === "T51") res = "show number";
+        else if (id === "T150") res = "page 1";
+        else if (id === "T151") res = "page 2";
+        else if (id === "T152") res = "page 3";
+        else if (id === "T153") res = "page 4";
+        else if (id === "T154") res = "page 5";
+        else if (id === "T155") res = "1";
+        else if (id === "T156") res = "2";
+        else if (id === "T157") res = "3";
+        else if (id === "T158") res = "4";
+        else if (id === "T159") res = "5";
+        else if (id === "T160") res = "LED image";
+        else if (id === "T163") res = "giggle";
+        else if (id === "T164") res = "happy";
+        else if (id === "T165") res = "hello";
+        else if (id === "T166") res = "mysterious";
+        else if (id === "T167") res = "sad";
+        else if (id === "T168") res = "slide";
+        else if (id === "T169") res = "soaring";
+        else if (id === "T170") res = "spring";
+        else if (id === "T171") res = "twinkle";
+        else if (id === "T172") res = "yawn";
+        else if (id === "T173") res = "variable X";
+        else if (id === "T174") res = "variable Y";
+        else if (id === "T175") res = "variable Z";
+        else if (id === "T176") res = "radio value";
+        else if (id === "T177") res = "dice";
+        else if (id === "T178") res = "repeat";
+        else if (id === "T179") res = "melody";
+        else if (id === "T180") res = "temperature";
+        else if (id === "T47") res = "LED";
+        else if (id === "T48") res = "set variable X";
+        else if (id === "T49") res = "set variable Y";
+        else if (id === "T50") res = "set variable Z";
+        else if (id === "T182") res = "red";
+        else if (id === "T183") res = "green";
+        else if (id === "T184") res = "blue";
+        else if (id === "T185") res = "purple";
+        else if (id === "T186") res = "yellow";
+        else if (id === "T187") res = "black";
+        else if (id === "T188") res = "rainbow";
+        else if (id === "T189") res = "sparkle";
+        else if (id === "T53") res = "servo set angle";
+        else if (id === "T54") res = "relay";
+        else if (id === "T55") res = "servo power";
+        else if (id === "SR_LED") res = "LED {x} {y} {state}";
+        else if (id === "SR_NOTE") res = "note {index} {state}";
+        else if (id === "SR_ON") res = "on";
+        else if (id === "SR_OFF") res = "off";
+        else if (id === "T204") res = "on";
+        else if (id === "T205") res = "off";
+        else if (id === "T110") res = "on";
+        else if (id === "T111") res = "off";
+        else if (id === "T52") res = "robot";
+        else if (id === "T190") res = "forward";
+        else if (id === "T191") res = "reverse";
+        else if (id === "T192") res = "turn left";
+        else if (id === "T193") res = "turn right";
+        else if (id === "T194") res = "stop";
+        else if (id === "T195") res = "fast forward";
+        else if (id === "T196") res = "spin left";
+        else if (id === "T197") res = "spin right";
+        else if (id === "T198") res = "LED red";
+        else if (id === "T199") res = "LED green";
+        else if (id === "T200") res = "LED blue";
+        else if (id === "T201") res = "LED OFF";
+        else if (id === "T202") res = "arm open";
+        else if (id === "T203") res = "arm close";
+        else if (id === "T25") res = "wall";
+        else if (id === "T26") res = "line";
+        else if (id === "T27") res = "light";
+        else if (id === "T102") res = "left";
+        else if (id === "T103") res = "right";
+        else if (id === "T104") res = "both";
+        else if (id === "T105") res = "none";
+        else if (id === "T106") res = "lost left";
+        else if (id === "T107") res = "lost right";        
         return res
     }
 }
