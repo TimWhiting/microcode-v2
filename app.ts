@@ -40,7 +40,6 @@ namespace microcode {
         }
 
         public save(slot: string, buf: Buffer) {
-            reportEvent("app.save", { slot: slot, size: buf.length })
             console.log(`save to ${slot}: ${buf.length}b`)
             profile()
             settings.writeBuffer(slot, buf)

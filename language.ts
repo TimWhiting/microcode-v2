@@ -138,7 +138,7 @@ namespace microcode {
             }
         }
 
-        private fixup() {
+        public fixup() {
             // filter and comparison operators
             if (this.filters.length == 1) {
                 const tile = this.filters[0]
@@ -156,10 +156,10 @@ namespace microcode {
             this.fixupMath("modifiers")
         }
 
-        public push(tile: Tile, name: string): number {
+        public push(tile: Tile, name: string, fix = true): number {
             const tiles = this.getRuleRep()[name]
             tiles.push(tile)
-            this.fixup()
+            if (fix) this.fixup()
             return 1
         }
 
@@ -240,9 +240,9 @@ namespace microcode {
                 if (tile instanceof ModifierEditor) {
                     const field = tile.fieldEditor.fromBuffer(br)
                     const newOne = tile.getNewInstance(field)
-                    defn.push(<any>newOne, which)
+                    defn.push(<any>newOne, which, false)
                 } else {
-                    defn.push(by, which)
+                    defn.push(by, which, false)
                 }
             }
             assert(!br.eof())
@@ -266,6 +266,7 @@ namespace microcode {
                 handleFieldEditor("modifiers")
                 assert(!br.eof())
             }
+            defn.fixup()
             return defn
         }
     }
@@ -349,7 +350,6 @@ namespace microcode {
             bw.writeBuffer(magic)
             this.pages.forEach(page => page.toBuffer(bw))
             bw.writeByte(Tid.END_OF_PROG)
-            console.log(`toBuffer: ${bw.length}b`)
             return bw.buffer
         }
 
