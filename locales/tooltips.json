@@ -12,12 +12,15 @@
     "arith_plus": "plus",
     "disk": "save",
     "load": "load",
+
     "SR_LED": "LED {x} {y} {state}",
     "SR_NOTE": "note {index} {state}",
     "SR_ON": "on",
     "SR_OFF": "off",
+
     "C0": "edit",
     "C1": "samples",
+
     "N1": "new program",
     "N2": "flashing heart",
     "N3": "smiley buttons",
@@ -94,6 +97,7 @@
     "T86": "5 seconds",
     "T87": "loud",
     "T88": "quiet",
+    "T89": "NA",
 
     "T90": "shake",
     "T91": "tilt up",
@@ -131,6 +135,8 @@
     "T159": "5",
 
     "T160": "LED image",
+    "T161": "red",
+    "T162": "purple",
     "T163": "giggle",
     "T164": "happy",
     "T165": "hello",
@@ -151,6 +157,7 @@
     "T179": "melody",
 
     "T180": "temperature",
+    "T181": "NA",
     "T182": "red",
     "T183": "green",
     "T184": "blue",
@@ -176,5 +183,17 @@
     "T202": "arm open",
     "T203": "arm close",
     "T204": "on",
-    "T205": "off"
+    "T205": "off",
+
+    "T210": "plus",
+    "T211": "minus",
+    "T212": "multiply",
+    "T213": "divide",
+
+    "T220": "equal",
+    "T221": "not equal",
+    "T222": "less than ",
+    "T223": "less than or equal",
+    "T224": "greater than",
+    "T225": "greater than or equal"
 }
