@@ -56,10 +56,10 @@ namespace microcode {
     // TODO: conversion from constant to FieldEditor
     export class DecimalFieldEditor extends FieldEditor {
         init() {
-            return { num: "1.0" }
+            return { num: "" }
         }
         clone(bn: BoxedNumAsStr) {
-            return { num: bn.num }
+            return { num: bn.num.slice(0) }
         }
         editor(
             field: any,
@@ -102,7 +102,6 @@ namespace microcode {
         }
 
         getIcon(): string | number | Bitmap {
-            console.log(`fieldeditor = ${this.fieldEditor}`)
             return this.firstInstance
                 ? getIcon(Tid.TID_DECIMAL_EDITOR)
                 : this.fieldEditor.toImage(this.field)
@@ -322,7 +321,7 @@ namespace microcode {
             app,
             layout: microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
-                bn.num = txt
+                bn.num = txt == "" ? "0" : txt
                 app.popScene()
                 onHide()
             },
