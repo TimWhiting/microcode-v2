@@ -482,10 +482,13 @@ namespace microcode {
         public runAction(ruleIndex: number, action: Tile, param: any) {
             switch (action) {
                 case Tid.TID_ACTUATOR_SWITCH_PAGE:
-                    this.addEvent({
-                        kind: MicroCodeEventKind.SwitchPage,
-                        index: param,
-                    } as SwitchPageEvent)
+                    if (param) {
+                        // no switch if no param
+                        this.addEvent({
+                            kind: MicroCodeEventKind.SwitchPage,
+                            index: param,
+                        } as SwitchPageEvent)
+                    }
                     return
                 case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:

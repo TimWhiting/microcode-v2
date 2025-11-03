@@ -9,7 +9,7 @@ namespace microcode {
         END_OF_PAGE,
 
         SENSOR_START = 10,
-        
+
         TID_SENSOR_START_PAGE = 10,
         TID_SENSOR_PRESS = 11,
         TID_SENSOR_RELEASE = 12,
@@ -20,7 +20,7 @@ namespace microcode {
         TID_SENSOR_RADIO_RECEIVE = 17,
         TID_SENSOR_MICROPHONE = 18,
         TID_SENSOR_CUP_X_WRITTEN = 19,
-        
+
         TID_SENSOR_CUP_Y_WRITTEN = 20,
         TID_SENSOR_CUP_Z_WRITTEN = 21,
         TID_SENSOR_MAGNET = 22,
@@ -84,7 +84,7 @@ namespace microcode {
         //
         TID_FILTER_ACCEL = 89, // dead (AFAIK)
         ACCELEROMETER_START = 90,
-        
+
         TID_FILTER_ACCEL_SHAKE = 90,
         TID_FILTER_ACCEL_TILT_UP = 91,
         TID_FILTER_ACCEL_TILT_DOWN = 92,
@@ -147,7 +147,7 @@ namespace microcode {
         TID_MODIFIER_EMOJI_SAD = 167,
         TID_MODIFIER_EMOJI_SLIDE = 168,
         TID_MODIFIER_EMOJI_SOARING = 169,
-        
+
         TID_MODIFIER_EMOJI_SPRING = 170,
         TID_MODIFIER_EMOJI_TWINKLE = 171,
         TID_MODIFIER_EMOJI_YAWN = 172,
@@ -174,7 +174,7 @@ namespace microcode {
         TID_MODIFIER_RGB_LED_COLOR_SPARKLE = 189,
         //
         CAR_MODIFIER_BEGIN = 190,
-        TID_MODIFIER_CAR_FORWARD = 190, 
+        TID_MODIFIER_CAR_FORWARD = 190,
         TID_MODIFIER_CAR_REVERSE = 191,
         TID_MODIFIER_CAR_TURN_LEFT = 192,
         TID_MODIFIER_CAR_TURN_RIGHT = 193,
@@ -184,7 +184,7 @@ namespace microcode {
         TID_MODIFIER_CAR_SPIN_RIGHT = 197,
         TID_MODIFIER_CAR_LED_COLOR_1 = 198,
         TID_MODIFIER_CAR_LED_COLOR_2 = 199,
-        
+
         TID_MODIFIER_CAR_LED_COLOR_3 = 200,
         TID_MODIFIER_CAR_LED_COLOR_4 = 201,
         TID_MODIFIER_CAR_ARM_OPEN = 202,
