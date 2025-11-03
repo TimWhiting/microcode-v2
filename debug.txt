@@ -8,6 +8,7 @@ ncaught Cannot read properties of undefined (reading 'iface')
    at inline (ruleeditor.ts:157:39)
    at arrayForEach (pxt_modules/core/pxt-helpers.ts:255:5)
    at instantiateProgramTiles (ruleeditor.ts:153:9)
+
    at inline (ruleeditor.ts:218:33)
    at inline (ruleeditor.ts:252:21)
    at inline (fieldeditors.ts:318:17)
@@ -20,3 +21,30 @@ ncaught Cannot read properties of undefined (reading 'iface')
    at inline (pxt_modules/display-shield/eventcontext.ts:25:51)
 
 
+----------------------------------
+
+
+Uncaught Cannot read properties of undefined (reading 'iface')
+   at toImage (fieldeditors.ts:72:9)
+   at getIcon (fieldeditors.ts:99:9)
+   at getIcon (language.ts:63:5)
+   at inline (ruleeditor.ts:138:27)
+   at arrayForEach (pxt_modules/core/pxt-helpers.ts:255:5)
+   at processSection (ruleeditor.ts:136:9)
+   at inline (ruleeditor.ts:157:39)
+   at arrayForEach (pxt_modules/core/pxt-helpers.ts:255:5)
+   at instantiateProgramTiles (ruleeditor.ts:153:9)
+   at inline (ruleeditor.ts:38:9)
+   at inline (editor.ts:533:17)
+   at arrayMap (pxt_modules/core/pxt-helpers.ts:230:5)
+   at inline (editor.ts:525:9)
+   
+   at switchToPage (editor.ts:140:9)
+   at activate (editor.ts:430:24)
+   at pushScene (pxt_modules/user-interface-base/scene.ts:128:9)
+   at pushScene (app.ts:57:9)
+   at inline (home.ts:27:34)
+   at click (pxt_modules/user-interface-base/button.ts:367:5)
+   at click (pxt_modules/user-interface-base/cursor.ts:163:5)
+   at inline (pxt_modules/user-interface-base/cursorscene.ts:81:21)
+   at inline (pxt_modules/display-shield/eventcontext.ts:25:51)

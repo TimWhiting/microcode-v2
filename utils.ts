@@ -74,6 +74,7 @@ namespace microcode {
 
         public readFloat() {
             const ret = this.buf.getNumber(NumberFormat.Float32LE, this.ptr)
+            // TODO: number of digits of precision?
             this.ptr += 4
             return ret
         }

@@ -74,11 +74,14 @@ namespace microcode {
         }
         toBuffer(field: BoxedNumber): Buffer {
             const buf = Buffer.create(4)
+            // console.log(`toBuffer ${field.num}`)
             buf.setNumber(NumberFormat.Float32LE, 0, field.num)
             return buf
         }
         fromBuffer(buf: BufferReader): BoxedNumber {
-            return { num: buf.readFloat() }
+            const num = buf.readFloat()
+            // console.log(`fromBuffer ${num}`)
+            return { num }
         }
     }
 

@@ -812,6 +812,10 @@ namespace microcode {
         if (isCarModifier(tid)) return jacs.NumFmt.F64
         if (isAccelerometerEvent(tid) || isPressReleaseEvent(tid)) return tid
         switch (tid) {
+            case Tid.TID_DECIMAL_EDITOR: {
+                const modEditor = tile as DecimalEditor
+                return modEditor.getField().num
+            }
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
             case Tid.TID_FILTER_CUP_X_READ:

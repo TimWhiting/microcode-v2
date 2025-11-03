@@ -397,7 +397,6 @@ namespace microcode {
             else if (isMathOperator(getTid(tile))) rangeName = "mathOperators"
 
             // based on the name, we have a range of tiles to choose from
-            // TODO: Tid.TID_DECIMAL_EDITOR
             const [lower, upper] = ranges[rangeName]
             let all: Tile[] = []
             for (let i = lower; i <= upper; ++i) {
