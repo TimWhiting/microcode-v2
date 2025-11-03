@@ -53,7 +53,10 @@ namespace microcode {
         num: string
     }
 
-    // TODO: conversion from constant to FieldEditor
+    // TODO: - conversion from constant to FieldEditor
+    // TODO: - width computation with decimal point?
+    // TODO: - white background
+    // TODO: - integer vs. fixed point
     export class DecimalFieldEditor extends FieldEditor {
         init() {
             return { num: "" }
