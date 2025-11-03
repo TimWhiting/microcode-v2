@@ -110,8 +110,6 @@ namespace microcode {
             // editor icons
             if (name == "delete") return icondb.btn_delete
             if (name == "plus") return icondb.btn_plus
-            if (name == "arith_plus") return icondb.operatorIcon("+")
-            if (name == "arith_equals") return icondb.eq
             // TODO: add ops and comparisons
             if (name == "when_insertion_point")
                 return icondb.btn_when_insertion_point
@@ -281,7 +279,8 @@ namespace microcode {
             extraSamples(name) // only for web app
             if (extraImage) return extraImage
             if (nullIfMissing) return null
-            if (typeof(name) === "string") return user_interface_base.icons.get(name, nullIfMissing);
+            if (typeof name === "string")
+                return user_interface_base.icons.get(name, nullIfMissing)
             return icondb.MISSING
         }
     }
@@ -310,7 +309,6 @@ namespace microcode {
     .bbbbbff.......bbbbbff.bbbbff...fbbbbbbbfff...bbbbff..........fbbbbbbbfff........fbbbbbbbfff.......fbbbbbbbfff.....fbbbbbbbbbbff...fbbbbbbbbff..
     ..fffff.........fffff...ffff......fffffff......ffff.............fffffff............fffffff...........fffffff.........ffffffffff......ffffffff...
     `
-
 
     export const editorBackground = bmp`
     8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
@@ -1217,9 +1215,9 @@ namespace icondb {
     . . . . . . . . . . . . . . . .
 `
 
-  //TODO: I think this is actually the Jacdac logo?
-  // user-interface-base/coreAssets.ts has the real microbitLogo
-  // Use "microbitLogo" and at the end of this function it will check user-interface-base and fetch it.
+    //TODO: I think this is actually the Jacdac logo?
+    // user-interface-base/coreAssets.ts has the real microbitLogo
+    // Use "microbitLogo" and at the end of this function it will check user-interface-base and fetch it.
     export const microbit_logo = bmp`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 

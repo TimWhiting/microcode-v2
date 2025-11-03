@@ -272,6 +272,7 @@ namespace microcode {
             const btns: PickerButtonDef[] = suggestions.map(tile => {
                 return {
                     icon: <string>getIcon(tile),
+                    ariaId: tidToString(getTid(tile)),
                 }
             })
             // special case for field editor

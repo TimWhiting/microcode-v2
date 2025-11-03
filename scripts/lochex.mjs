@@ -25,6 +25,7 @@ languages.unshift("en")
 
 let singleFile = false
 if (process.argv[2]) {
+    console.log("HERE")
     singleFile = true
     languages = [process.argv[2]]
 }
@@ -76,16 +77,16 @@ for (const lang of languages.filter(l => l !== "pxt")) {
         { encoding: "utf-8" }
     )
 
-    for (const fn of ["dialogs", "legal"]) {
-        const dialogs = await (
-            await fetch(
-                `${cdn}content/${lang}/microcode/${fn}.html?timestamp=${timestamp}`
-            )
-        ).text()
-        writeFileSync(`./_includes/${fn}-${lang}.html`, dialogs, {
-            encoding: "utf-8",
-        })
-    }
+    // for (const fn of ["dialogs", "legal"]) {
+    //     const dialogs = await (
+    //         await fetch(
+    //             `${cdn}content/${lang}/microcode/${fn}.html?timestamp=${timestamp}`
+    //         )
+    //     ).text()
+    //     writeFileSync(`./_includes/${fn}-${lang}.html`, dialogs, {
+    //         encoding: "utf-8",
+    //     })
+    // }
 
     // merge translations
     Object.keys(tooltips)
@@ -95,7 +96,7 @@ for (const lang of languages.filter(l => l !== "pxt")) {
     const ts = `// auto-generated, run 'node scripts/lochex.mjs' to refresh
 namespace microcode {
     export const lang = "${lang}"
-    export const font = image.font${fonts[lang] || 8}
+    export const font = bitmaps.font${fonts[lang] || 8}
     export function resolveTooltip(id: string) {
         let res: string = ""
         if (!id) return id

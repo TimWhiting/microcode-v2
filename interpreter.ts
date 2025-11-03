@@ -85,14 +85,12 @@ namespace microcode {
         }
 
         public start(timer = false) {
-            console.log(`START ${this.index}`)
             if (this.actionRunning) return
             const time = this.getWakeTime()
             if (!timer || time > 0) this.timerOrSequenceRule()
         }
 
         kill() {
-            console.log(`KILL ${this.index}`)
             this.wakeTime = 0
             this.actionRunning = false
             this.modifierIndex = 0
@@ -484,10 +482,13 @@ namespace microcode {
         public runAction(ruleIndex: number, action: Tile, param: any) {
             switch (action) {
                 case Tid.TID_ACTUATOR_SWITCH_PAGE:
-                    this.addEvent({
-                        kind: MicroCodeEventKind.SwitchPage,
-                        index: param,
-                    } as SwitchPageEvent)
+                    if (param) {
+                        // no switch if no param
+                        this.addEvent({
+                            kind: MicroCodeEventKind.SwitchPage,
+                            index: param,
+                        } as SwitchPageEvent)
+                    }
                     return
                 case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
                 case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
@@ -521,8 +522,6 @@ namespace microcode {
 
         private processNewRules(newRules: RuleClosure[]) {
             if (newRules.length == 0) return
-            console.log(`new rules ${newRules.map(rc => rc.index).join(" ")}`)
-
             // first new rule (in lexical order) on a resource wins
             const resourceWinner: { [resource: number]: number } = {}
             for (const rc of newRules) {
@@ -538,18 +537,14 @@ namespace microcode {
             const live = newRules.filter(rc =>
                 liveIndices.some(i => i === rc.index)
             )
-            console.log(`live indices = ${liveIndices.join(" ")}`)
-
             const dead = this.ruleClosures.filter(rc => {
                 const resource = rc.getOutputResource()
-                console.log(`rc ${rc.index} ${resource} ${rc.active()}`)
                 const res =
                     live.indexOf(rc) === -1 &&
                     rc.active() &&
                     resourceWinner[resource] != undefined
                 return res
             })
-            console.log(`dead ones ${dead.map(rc => rc.index).join(" ")}`)
             dead.forEach(rc => rc.kill())
 
             // partition the live into instant and sequence
@@ -579,7 +574,6 @@ namespace microcode {
             )
 
             sequence.forEach(rc => {
-                console.log(`seq ${rc.index}`)
                 rc.kill()
                 rc.start()
             })
