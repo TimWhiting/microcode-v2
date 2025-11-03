@@ -14,8 +14,8 @@ namespace microcode {
         else if (id === "rule") res = "rule";
         else if (id === "add_rule") res = "add rule";
         else if (id === "delete_rule") res = "delete rule";
-        else if (id === "arith_equals") res = "equals";
-        else if (id === "arith_plus") res = "plus";
+        else if (id === "rule_up") res = "move rule up";
+        else if (id === "rule_down") res = "move rule down";
         else if (id === "disk") res = "save";
         else if (id === "load") res = "load";
         else if (id === "SR_LED") res = "LED {x} {y} {state}";
@@ -157,16 +157,16 @@ namespace microcode {
         else if (id === "T203") res = "arm close";
         else if (id === "T204") res = "on";
         else if (id === "T205") res = "off";
-        else if (id === "T210") res = "plus";
-        else if (id === "T211") res = "minus";
+        else if (id === "T210") res = "add";
+        else if (id === "T211") res = "subtract";
         else if (id === "T212") res = "multiply";
         else if (id === "T213") res = "divide";
-        else if (id === "T220") res = "equal";
-        else if (id === "T221") res = "not equal";
-        else if (id === "T222") res = "less than ";
-        else if (id === "T223") res = "less than or equal";
+        else if (id === "T220") res = "equals";
+        else if (id === "T221") res = "not equals";
+        else if (id === "T222") res = "less than";
+        else if (id === "T223") res = "less than or equals";
         else if (id === "T224") res = "greater than";
-        else if (id === "T225") res = "greater than or equal";        
+        else if (id === "T225") res = "greater than or equals";        
         return res
     }
 }
