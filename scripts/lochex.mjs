@@ -25,7 +25,6 @@ languages.unshift("en")
 
 let singleFile = false
 if (process.argv[2]) {
-    console.log("HERE")
     singleFile = true
     languages = [process.argv[2]]
 }
