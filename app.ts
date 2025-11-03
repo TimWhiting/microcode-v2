@@ -23,11 +23,11 @@ namespace microcode {
             user_interface_base.resolveTooltip = (ariaId: string) =>
                 resolveTooltip(ariaId)
 
-            const buf = this.load(SAVESLOT_AUTO)
-            if (buf) {
-                const prog = ProgramDefn.fromBuffer(new BufferReader(buf))
-                runProgram(prog)
-            }
+            // const buf = this.load(SAVESLOT_AUTO)
+            // if (buf) {
+            //     const prog = ProgramDefn.fromBuffer(new BufferReader(buf))
+            //     runProgram(prog)
+            // }
 
             controller.setRepeatDefault(250, 30)
             // keymap.setupKeys()
@@ -76,5 +76,4 @@ namespace microcode {
         if (theInterpreter) theInterpreter.stop()
         theInterpreter = undefined
     }
-    
 }

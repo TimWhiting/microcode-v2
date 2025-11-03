@@ -49,16 +49,16 @@ namespace microcode {
         }
     }
 
-    interface BoxedNumber {
-        num: number
+    interface BoxedNumAsStr {
+        num: string
     }
 
     // TODO: conversion from constant to FieldEditor
     export class DecimalFieldEditor extends FieldEditor {
         init() {
-            return { num: 1.0 }
+            return { num: "1.0" }
         }
-        clone(bn: BoxedNumber) {
+        clone(bn: BoxedNumAsStr) {
             return { num: bn.num }
         }
         editor(
@@ -69,25 +69,27 @@ namespace microcode {
         ) {
             decimalEditor(field, onHide, onDelete)
         }
-        toImage(field: BoxedNumber) {
+        toImage(field: BoxedNumAsStr) {
             return icondb.numberToDecimalImage(field.num)
         }
-        toBuffer(field: BoxedNumber): Buffer {
-            const buf = Buffer.create(4)
-            // console.log(`toBuffer ${field.num}`)
-            buf.setNumber(NumberFormat.Float32LE, 0, field.num)
+        toBuffer(field: BoxedNumAsStr): Buffer {
+            const str = field.num
+            const buf = Buffer.create(str.length + 1)
+            for (let i = 0; i < str.length; i++) {
+                buf.setUint8(i, str.charCodeAt(i))
+            }
+            buf.setUint8(str.length, 0)
             return buf
         }
-        fromBuffer(buf: BufferReader): BoxedNumber {
-            const num = buf.readFloat()
-            // console.log(`fromBuffer ${num}`)
-            return { num }
+        fromBuffer(buf: BufferReader): BoxedNumAsStr {
+            const str = buf.readString()
+            return { num: str }
         }
     }
 
     export class DecimalEditor extends ModifierEditor {
-        field: BoxedNumber
-        constructor(field: BoxedNumber) {
+        field: BoxedNumAsStr
+        constructor(field: BoxedNumAsStr) {
             super(Tid.TID_DECIMAL_EDITOR)
             this.fieldEditor = new DecimalFieldEditor()
             this.field = this.fieldEditor.clone(
@@ -100,9 +102,10 @@ namespace microcode {
         }
 
         getIcon(): string | number | Bitmap {
+            console.log(`fieldeditor = ${this.fieldEditor}`)
             return this.firstInstance
                 ? getIcon(Tid.TID_DECIMAL_EDITOR)
-                : this.fieldEditor.toImage(this.field.num)
+                : this.fieldEditor.toImage(this.field)
         }
 
         getNewInstance(field: any = null) {
@@ -311,7 +314,7 @@ namespace microcode {
     }
 
     function decimalEditor(
-        bn: BoxedNumber,
+        bn: BoxedNumAsStr,
         onHide: () => void,
         onDelete?: () => void
     ) {
@@ -319,7 +322,7 @@ namespace microcode {
             app,
             layout: microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
-                bn.num = +txt
+                bn.num = txt
                 app.popScene()
                 onHide()
             },

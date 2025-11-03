@@ -72,11 +72,12 @@ namespace microcode {
             return b
         }
 
-        public readFloat() {
-            const ret = this.buf.getNumber(NumberFormat.Float32LE, this.ptr)
-            // TODO: number of digits of precision?
-            this.ptr += 4
-            return ret
+        public readString() {
+            const start = this.ptr
+            while (this.buf[this.ptr++] != 0) {}
+            const strBuf = this.buf.slice(start, this.ptr - start + 1)
+            this.ptr++
+            return strBuf.toString()
         }
     }
 }
