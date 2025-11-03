@@ -12,37 +12,37 @@ namespace microgui {
      * Util function used within this file, useful for ensuring that prior bindings are not kept when using a new component.
      */
     function unbindShieldButtons() {
-        control.onEvent(
+        context.onEvent(
             ControllerButtonEvent.Pressed,
             controller.A.id,
             () => {}
         )
-        control.onEvent(
+        context.onEvent(
             ControllerButtonEvent.Pressed,
             controller.A.id + keymap.PLAYER_OFFSET,
             () => {}
         )
-        control.onEvent(
+        context.onEvent(
             ControllerButtonEvent.Pressed,
             controller.B.id,
             () => {}
         )
-        control.onEvent(
+        context.onEvent(
             ControllerButtonEvent.Pressed,
             controller.up.id,
             () => {}
         )
-        control.onEvent(
+        context.onEvent(
             ControllerButtonEvent.Pressed,
             controller.down.id,
             () => {}
         )
-        control.onEvent(
+        context.onEvent(
             ControllerButtonEvent.Pressed,
             controller.left.id,
             () => {}
         )
-        control.onEvent(
+        context.onEvent(
             ControllerButtonEvent.Pressed,
             controller.right.id,
             () => {}
@@ -546,12 +546,12 @@ namespace microgui {
                 (Math.abs(this.maximum) + Math.abs(this.minimum)) / 2,
             ]
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.up.id,
                 () => {
                     let tick = true
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.up.id,
                         () => (tick = false)
@@ -565,7 +565,7 @@ namespace microgui {
                         )
                         basic.pause(100)
                     }
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.up.id,
                         () => {}
@@ -573,12 +573,12 @@ namespace microgui {
                 }
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.down.id,
                 () => {
                     let tick = true
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.down.id,
                         () => (tick = false)
@@ -592,7 +592,7 @@ namespace microgui {
                         )
                         basic.pause(100)
                     }
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.down.id,
                         () => {}
@@ -1027,7 +1027,7 @@ namespace microgui {
         setupButtonBindings() {
             unbindShieldButtons()
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.A.id,
                 () => {
@@ -1037,12 +1037,12 @@ namespace microgui {
                 }
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.up.id,
                 () => {
                     let tick = true
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.up.id,
                         () => (tick = false)
@@ -1080,7 +1080,7 @@ namespace microgui {
                     }
 
                     // Reset binding
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.up.id,
                         () => {}
@@ -1088,12 +1088,12 @@ namespace microgui {
                 }
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.down.id,
                 () => {
                     let tick = true
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.down.id,
                         () => (tick = false)
@@ -1129,7 +1129,7 @@ namespace microgui {
                     }
 
                     // Reset binding
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.down.id,
                         () => {}
@@ -1312,7 +1312,7 @@ namespace microgui {
         setupButtonBindings() {
             unbindShieldButtons()
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.A.id,
                 () => {
@@ -1320,12 +1320,12 @@ namespace microgui {
                 }
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.up.id,
                 () => {
                     let tick = true
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.up.id,
                         () => (tick = false)
@@ -1344,7 +1344,7 @@ namespace microgui {
                     }
 
                     // Reset binding
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.up.id,
                         () => {}
@@ -1352,12 +1352,12 @@ namespace microgui {
                 }
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.down.id,
                 () => {
                     let tick = true
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.down.id,
                         () => (tick = false)
@@ -1373,7 +1373,7 @@ namespace microgui {
                     }
 
                     // Reset binding
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.down.id,
                         () => {}
@@ -1630,12 +1630,12 @@ namespace microgui {
         }
 
         bindShieldButtons() {
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.up.id,
                 () => {
                     let tick = true
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.up.id,
                         () => (tick = false)
@@ -1658,7 +1658,7 @@ namespace microgui {
                     }
 
                     // Reset binding
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.up.id,
                         () => {}
@@ -1666,12 +1666,12 @@ namespace microgui {
                 }
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.down.id,
                 () => {
                     let tick = true
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.down.id,
                         () => (tick = false)
@@ -1692,7 +1692,7 @@ namespace microgui {
                     }
 
                     // Reset binding
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.down.id,
                         () => {}
@@ -1700,12 +1700,12 @@ namespace microgui {
                 }
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.left.id,
                 () => {
                     let tick = true
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.left.id,
                         () => (tick = false)
@@ -1723,7 +1723,7 @@ namespace microgui {
                     }
 
                     // Reset binding
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.left.id,
                         () => {}
@@ -1731,12 +1731,12 @@ namespace microgui {
                 }
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.right.id,
                 () => {
                     let tick = true
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.right.id,
                         () => (tick = false)
@@ -1756,7 +1756,7 @@ namespace microgui {
                     }
 
                     // Reset binding
-                    control.onEvent(
+                    context.onEvent(
                         ControllerButtonEvent.Released,
                         controller.right.id,
                         () => {}
@@ -1766,17 +1766,17 @@ namespace microgui {
 
             // click
             const click = () => this.click()
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.A.id,
                 click
             )
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.A.id + keymap.PLAYER_OFFSET,
                 click
             )
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.B.id,
                 () => this.back()
@@ -1921,22 +1921,22 @@ namespace user_interface_base {
         }
 
         /* override */ startup() {
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.right.id,
                 () => this.moveCursor(CursorDir.Right)
             )
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.up.id,
                 () => this.moveCursor(CursorDir.Up)
             )
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.down.id,
                 () => this.moveCursor(CursorDir.Down)
             )
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.left.id,
                 () => this.moveCursor(CursorDir.Left)
@@ -1944,23 +1944,23 @@ namespace user_interface_base {
 
             // click
             const click = () => this.cursor.click()
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.A.id,
                 click
             )
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.A.id + keymap.PLAYER_OFFSET,
                 click
             )
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.B.id,
                 () => this.back()
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.B.id,
                 () => this.goBack1PageFn()

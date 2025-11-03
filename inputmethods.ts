@@ -60,37 +60,37 @@ namespace microgui {
             this.next = next
             this.back = back
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.left.id,
                 () => this.leftBtnPressed()
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.right.id,
                 () => this.rightBtnPressed()
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.up.id,
                 () => this.upBtnPressed()
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.down.id,
                 () => this.downBtnPressed()
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.A.id,
                 () => this.aBtnPressed()
             )
 
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.B.id,
                 () => this.bBtnPressed()
@@ -99,7 +99,7 @@ namespace microgui {
 
         upBtnPressed() {
             let tick = true
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Released,
                 controller.up.id,
                 () => (tick = false)
@@ -108,7 +108,7 @@ namespace microgui {
                 this.tickerValues[this.currentTickerIndex] += 1
                 basic.pause(100)
             }
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Released,
                 controller.up.id,
                 () => {}
@@ -117,7 +117,7 @@ namespace microgui {
 
         downBtnPressed() {
             let tick = true
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Released,
                 controller.down.id,
                 () => (tick = false)
@@ -126,7 +126,7 @@ namespace microgui {
                 this.tickerValues[this.currentTickerIndex] -= 1
                 basic.pause(100)
             }
-            control.onEvent(
+            context.onEvent(
                 ControllerButtonEvent.Released,
                 controller.down.id,
                 () => {}
@@ -361,7 +361,7 @@ namespace microgui {
             app: AppInterface
             layout: KeyboardLayouts
             cb: (keyboardText: string) => void
-            init: number,
+            init: number
             foregroundColor?: number
             backgroundColor?: number
             maxTxtLength?: number

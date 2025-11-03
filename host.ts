@@ -41,7 +41,7 @@ namespace microcode {
             input.onLogoEvent(TouchButtonEvent.Pressed, function () {})
 
             buttons.forEach(b => {
-                control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
+                context.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
                     const ev = control.eventValue()
                     this._handler(
                         ev == DAL.DEVICE_BUTTON_EVT_DOWN
@@ -61,7 +61,7 @@ namespace microcode {
                 )
             })
             // handle all other accelerometer events
-            control.onEvent(
+            context.onEvent(
                 DAL.DEVICE_ID_GESTURE, // DEVICE_ID_GESTURE
                 DAL.DEVICE_EVT_ANY,
                 () => {
@@ -76,7 +76,7 @@ namespace microcode {
                     }
                 }
             )
-            control.onEvent(
+            context.onEvent(
                 DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
                 DAL.DEVICE_EVT_ANY,
                 () => {
