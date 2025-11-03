@@ -37,7 +37,7 @@ namespace microcode {
                         x: 0,
                         y: 30,
                         onClick: () => {
-                            this.app.popScene()
+                            // this.app.popScene()
                             this.app.pushScene(new SamplesGallery(this.app))
                         },
                     }),
@@ -81,6 +81,7 @@ namespace microcode {
         }
 
         /* override */ activate() {
+            console.log("HERE")
             super.activate()
             this.backgroundColor = 15
             // docs.setup(this.app)

@@ -54,7 +54,7 @@ namespace microcode {
             if (dir == CursorDir.Back) {
                 // go back to home screen
                 this.app.popScene()
-                this.app.pushScene(new Home(this.app))
+                // this.app.pushScene(new Home(this.app))
             } else {
                 super.moveCursor(dir)
             }
