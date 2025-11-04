@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../display-shield"
+		},
+		{
+			"path": "../user-interface-base"
+		},
+		{
+			"path": "."
+		}
+	]
+}

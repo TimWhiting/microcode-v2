@@ -210,6 +210,8 @@ namespace microcode {
         TID_COMPARE_GT = 224,
         TID_COMPARE_GTE = 225,
         TID_COMPARE_END = 225,
+
+        TID_DECIMAL_EDITOR = 255, // both filter and modifier
     }
 
     type RangeMap = { [id: string]: [Tid, Tid] }
@@ -236,7 +238,8 @@ namespace microcode {
         return (
             (tid >= Tid.FILTER_START && tid <= Tid.FILTER_END) ||
             isMathOperator(tid) ||
-            isComparisonOperator(tid)
+            isComparisonOperator(tid) ||
+            tid == Tid.TID_DECIMAL_EDITOR
         )
     }
 
@@ -247,7 +250,8 @@ namespace microcode {
     export function isModifier(tid: Tid) {
         return (
             (tid >= Tid.MODIFIER_START && tid <= Tid.MODIFER_END) ||
-            isMathOperator(tid)
+            isMathOperator(tid) ||
+            tid == Tid.TID_DECIMAL_EDITOR
         )
     }
 
@@ -279,7 +283,7 @@ namespace microcode {
         return Tid.LINE_START <= tidEnum && tidEnum <= Tid.LINE_END
     }
 
-    function isFilterConstant(tidEnum: Tid) {
+    export function isFilterConstant(tidEnum: Tid) {
         return (
             Tid.TID_FILTER_COIN_1 <= tidEnum && tidEnum <= Tid.TID_FILTER_COIN_5
         )
@@ -292,7 +296,7 @@ namespace microcode {
         )
     }
 
-    function isModifierConstant(tidEnum: Tid) {
+    export function isModifierConstant(tidEnum: Tid) {
         return (
             Tid.TID_MODIFIER_COIN_1 <= tidEnum &&
             tidEnum <= Tid.TID_MODIFIER_COIN_5
@@ -355,7 +359,8 @@ namespace microcode {
             isTimespan(tid) ||
             isFilterVariable(tid) ||
             isMathOperator(tid) ||
-            isComparisonOperator(tid)
+            isComparisonOperator(tid) ||
+            tid == Tid.TID_DECIMAL_EDITOR
         )
             return false
         // all other filters are terminal
@@ -424,6 +429,8 @@ namespace microcode {
                 else return tid
             }
             switch (tid) {
+                case Tid.TID_DECIMAL_EDITOR:
+                    return -1
                 case Tid.TID_FILTER_BUTTON_A:
                     return 0
                 case Tid.TID_FILTER_BUTTON_B:
@@ -543,7 +550,7 @@ namespace microcode {
         Tid.TID_FILTER_COIN_5,
     ]
 
-    const filterMath = ["value_in", "comparison", "maths"]
+    const filterMath = ["value_in", "comparison", "maths", "decimal_editor"]
 
     export function getConstraints(tile: Tile): Constraints {
         const tid = getTid(tile)
@@ -619,7 +626,9 @@ namespace microcode {
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
-                return { allow: ["value_out", "maths", "constant"] }
+                return {
+                    allow: ["value_out", "maths", "constant", "decimal_editor"],
+                }
             case Tid.TID_ACTUATOR_RGB_LED:
                 return { allow: ["rgb_led", "loop"] }
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
@@ -681,6 +690,8 @@ namespace microcode {
                 return "icon_editor"
             case Tid.TID_MODIFIER_MELODY_EDITOR:
                 return "melody_editor"
+            case Tid.TID_DECIMAL_EDITOR:
+                return "decimal_editor"
             case Tid.TID_MODIFIER_RANDOM_TOSS:
             case Tid.TID_MODIFIER_TEMP_READ:
             case Tid.TID_MODIFIER_RADIO_VALUE:
@@ -719,7 +730,8 @@ namespace microcode {
             isFilterConstant(tid) ||
             isModifierConstant(tid) ||
             tid == Tid.TID_MODIFIER_ON ||
-            tid == Tid.TID_MODIFIER_OFF
+            tid == Tid.TID_MODIFIER_OFF ||
+            tid == Tid.TID_DECIMAL_EDITOR
         )
             return TileKind.Literal
         if (isTimespan(tid)) return TileKind.Timespan
@@ -800,6 +812,11 @@ namespace microcode {
         if (isCarModifier(tid)) return jacs.NumFmt.F64
         if (isAccelerometerEvent(tid) || isPressReleaseEvent(tid)) return tid
         switch (tid) {
+            case Tid.TID_DECIMAL_EDITOR: {
+                const modEditor = tile as DecimalEditor
+                const str = modEditor.getField().num
+                return str == "" ? 0 : parseFloat(str)
+            }
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
             case Tid.TID_FILTER_CUP_X_READ:

@@ -404,6 +404,10 @@ namespace microcode {
                 if (ed) all.push(ed)
                 else all.push(i)
             }
+            // special case for decimal editor
+            if (rangeName == "filters" || rangeName == "modifiers")
+                all.push(getEditor(Tid.TID_DECIMAL_EDITOR))
+
             all = all
                 .filter((tile: Tile) => isVisible(tile))
                 .sort((t1, t2) => priority(t1) - priority(t2))

@@ -1,32 +1,50 @@
-crowdin languages {
-  languages: [
-    'af',    'sq',    'ar',      'hy-AM', 'az',    'eu',
-    'bn',    'bi',    'bg',      'ca',    'zh-CN', 'zh-TW',
-    'zh-HK', 'hr',    'cs',      'da',    'nl',    'en',
-    'et',    'fo',    'fil',     'fi',    'fr',    'fr-CA',
-    'gl',    'ka',    'de',      'el',    'gu-IN', 'haw',
-    'he',    'hi',    'ja-hira', 'hu',    'is',    'id',
-    'it',    'ja',    'kab',     'kn',    'kk',    'km',
-    'ko',    'ku',    'kmr',     'lv',    'lt',    'ms',
-    'ml-IN', 'mr',    'no',      'nb',    'nn-NO', 'ps',
-    'fa',    'pl',    'pt-PT',   'pt-BR', 'pa-IN', 'ro',
-    'ru',    'sat',   'sr',      'si-LK', 'sk',    'sl',
-    'es-ES', 'es-MX', 'su',      'sw',    'sw-TZ', 'sv-SE',
-    'tl',    'ta',    'te',      'th',    'tr',    'uk',
-    'ur-IN', 'ur-PK', 'vi',      'cy',    'pxt'
-  ]
-}
-build hex for 'en'
-  found 165 translations
-  prep files
-  build js
-> makecode --java-script
-  build hw
-> makecode --hw n3
-using project: /Users/tball/github/microbit-apps/microcode-v2/pxt.json
-using config: /Users/tball/github/microbit-apps/microcode-v2/mkc.json
-using editor: https://makecode.microbit.org/beta v8.1.3
-Available hw:
+ncaught Cannot read properties of undefined (reading 'iface')
+   at toImage (fieldeditors.ts:72:9)
+   at getIcon (fieldeditors.ts:99:9)
+   at getIcon (language.ts:63:5)
+   at inline (ruleeditor.ts:138:27)
+   at arrayForEach (pxt_modules/core/pxt-helpers.ts:255:5)
+   at processSection (ruleeditor.ts:136:9)
+   at inline (ruleeditor.ts:157:39)
+   at arrayForEach (pxt_modules/core/pxt-helpers.ts:255:5)
+   at instantiateProgramTiles (ruleeditor.ts:153:9)
 
-No such HW id: n3
+   at inline (ruleeditor.ts:218:33)
+   at inline (ruleeditor.ts:252:21)
+   at inline (fieldeditors.ts:318:17)
+   at nextScene (inputmethods.ts:517:9)
+   at inline (inputmethods.ts:320:32)
+   at inline (inputmethods.ts:444:63)
+   at click (pxt_modules/user-interface-base/button.ts:367:5)
+   at click (pxt_modules/user-interface-base/cursor.ts:163:5)
+   at inline (pxt_modules/user-interface-base/cursorscene.ts:81:21)
+   at inline (pxt_modules/display-shield/eventcontext.ts:25:51)
 
+
+----------------------------------
+
+
+Uncaught Cannot read properties of undefined (reading 'iface')
+   at toImage (fieldeditors.ts:72:9)
+   at getIcon (fieldeditors.ts:99:9)
+   at getIcon (language.ts:63:5)
+   at inline (ruleeditor.ts:138:27)
+   at arrayForEach (pxt_modules/core/pxt-helpers.ts:255:5)
+   at processSection (ruleeditor.ts:136:9)
+   at inline (ruleeditor.ts:157:39)
+   at arrayForEach (pxt_modules/core/pxt-helpers.ts:255:5)
+   at instantiateProgramTiles (ruleeditor.ts:153:9)
+   at inline (ruleeditor.ts:38:9)
+   at inline (editor.ts:533:17)
+   at arrayMap (pxt_modules/core/pxt-helpers.ts:230:5)
+   at inline (editor.ts:525:9)
+   
+   at switchToPage (editor.ts:140:9)
+   at activate (editor.ts:430:24)
+   at pushScene (pxt_modules/user-interface-base/scene.ts:128:9)
+   at pushScene (app.ts:57:9)
+   at inline (home.ts:27:34)
+   at click (pxt_modules/user-interface-base/button.ts:367:5)
+   at click (pxt_modules/user-interface-base/cursor.ts:163:5)
+   at inline (pxt_modules/user-interface-base/cursorscene.ts:81:21)
+   at inline (pxt_modules/display-shield/eventcontext.ts:25:51)

@@ -71,5 +71,13 @@ namespace microcode {
             for (let i = 0; i < len; ++i) b[i] = this.buf[this.ptr++]
             return b
         }
+
+        public readString() {
+            const start = this.ptr
+            while (this.buf[this.ptr++] != 0) {}
+            const strBuf = this.buf.slice(start, this.ptr - start + 1)
+            this.ptr++
+            return strBuf.toString()
+        }
     }
 }

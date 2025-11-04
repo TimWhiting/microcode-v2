@@ -49,6 +49,75 @@ namespace microcode {
         }
     }
 
+    interface BoxedNumAsStr {
+        num: string
+    }
+
+    // TODO: - conversion from constant to FieldEditor
+    // TODO: - trailing spaces appended
+    // TODO: - width computation with decimal point?
+    // TODO: - white background
+    // TODO: - integer vs. fixed point
+    export class DecimalFieldEditor extends FieldEditor {
+        init() {
+            return { num: "1.0" }
+        }
+        clone(bn: BoxedNumAsStr) {
+            return { num: bn.num.slice(0) }
+        }
+        editor(
+            field: any,
+            picker: Picker,
+            onHide: () => void,
+            onDelete?: () => void
+        ) {
+            decimalEditor(field, onHide, onDelete)
+        }
+        toImage(field: BoxedNumAsStr) {
+            return icondb.numberToDecimalImage(field.num, false)
+        }
+
+        toBuffer(field: BoxedNumAsStr): Buffer {
+            const str = field.num
+            const buf = Buffer.create(str.length + 1)
+            for (let i = 0; i < str.length; i++) {
+                // TODO: issue -> UniCode conversion
+                buf.setUint8(i, str.charCodeAt(i))
+            }
+            buf.setUint8(str.length, 0)
+            return buf
+        }
+        fromBuffer(buf: BufferReader): BoxedNumAsStr {
+            const str = buf.readString()
+            return { num: str }
+        }
+    }
+
+    export class DecimalEditor extends ModifierEditor {
+        field: BoxedNumAsStr
+        constructor(field: BoxedNumAsStr) {
+            super(Tid.TID_DECIMAL_EDITOR)
+            this.fieldEditor = new DecimalFieldEditor()
+            this.field = this.fieldEditor.clone(
+                field ? field : this.fieldEditor.init()
+            )
+        }
+
+        getField() {
+            return this.field
+        }
+
+        getIcon(): string | number | Bitmap {
+            return this.firstInstance
+                ? getIcon(Tid.TID_DECIMAL_EDITOR)
+                : this.fieldEditor.toImage(this.field)
+        }
+
+        getNewInstance(field: any = null) {
+            return new DecimalEditor(field ? field : this.field)
+        }
+    }
+
     export class IconFieldEditor extends FieldEditor {
         init() {
             return bmp`
@@ -225,6 +294,7 @@ namespace microcode {
 
     let iconEditorTile: ModifierEditor = undefined
     let melodyEditorTile: ModifierEditor = undefined
+    let decimalEditorTile: ModifierEditor = undefined
     export function getEditor(tid: Tid): ModifierEditor {
         if (tid == Tid.TID_MODIFIER_ICON_EDITOR) {
             if (!iconEditorTile) {
@@ -238,8 +308,36 @@ namespace microcode {
                 melodyEditorTile.firstInstance = true
             }
             return melodyEditorTile
+        } else if (tid == Tid.TID_DECIMAL_EDITOR) {
+            if (!decimalEditorTile) {
+                decimalEditorTile = new DecimalEditor(undefined)
+                decimalEditorTile.firstInstance = true
+            }
+            return decimalEditorTile
         }
         return undefined
+    }
+
+    function decimalEditor(
+        bn: BoxedNumAsStr,
+        onHide: () => void,
+        onDelete?: () => void
+    ) {
+        const kb = new microgui.Keyboard({
+            app,
+            layout: microgui.KeyboardLayouts.NUMERIC,
+            cb: (txt: string) => {
+                txt.replace(" ", "")
+                bn.num = txt == "" ? "0" : txt // hack until we fix keyboard
+                app.popScene()
+                onHide()
+            },
+            init: bn.num,
+            foregroundColor: 3, // optional arg
+            backgroundColor: 6, // optional arg
+            maxTxtLength: 5, // optional arg
+        })
+        app.pushScene(kb)
     }
 
     function iconEditor(
@@ -360,16 +458,6 @@ MicroGUI Numeric Keyboard
  
 const app = new microgui.App();
 
-const kb = new microgui.Keyboard({
-    app,
-    layout: microgui.KeyboardLayouts.NUMERIC,
-    cb: (txt: string) => basic.showNumber(+txt),
-    foregroundColor: 3, // optional arg
-    backgroundColor: 6, // optional arg
-    maxTxtLength: 5,    // optional arg
-})
 
-app.popScene()
-app.pushScene(kb)
 
 */

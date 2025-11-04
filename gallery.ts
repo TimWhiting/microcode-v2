@@ -32,9 +32,6 @@ namespace microcode {
                         x: x + 16,
                         y: y + 16,
                         onClick: () => {
-                            reportEvent("samples.open", {
-                                name: sample.label,
-                            })
                             this.app.save(SAVESLOT_AUTO, sample.source)
                             this.app.popScene()
                             this.app.pushScene(new Editor(this.app))
@@ -57,7 +54,7 @@ namespace microcode {
             if (dir == CursorDir.Back) {
                 // go back to home screen
                 this.app.popScene()
-                this.app.pushScene(new Home(this.app))
+                // this.app.pushScene(new Home(this.app))
             } else {
                 super.moveCursor(dir)
             }
