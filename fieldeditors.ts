@@ -74,7 +74,7 @@ namespace microcode {
             decimalEditor(field, onHide, onDelete)
         }
         toImage(field: BoxedNumAsStr) {
-            return icondb.numberToDecimalImage(field.num)
+            return icondb.numberToDecimalImage(field.num, false)
         }
         toBuffer(field: BoxedNumAsStr): Buffer {
             const str = field.num
