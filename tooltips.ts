@@ -166,7 +166,8 @@ namespace microcode {
         else if (id === "T222") res = "less than";
         else if (id === "T223") res = "less than or equals";
         else if (id === "T224") res = "greater than";
-        else if (id === "T225") res = "greater than or equals";        
+        else if (id === "T225") res = "greater than or equals";
+        else if (id === "T255") res = "enter number";        
         return res
     }
 }

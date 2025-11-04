@@ -79,7 +79,6 @@ namespace microcode {
                 str += String.fromCharCode(this.buf[this.ptr++])
             }
             this.ptr++
-            // let newChar = String.fromCharCode(asciiCode);
             return str
         }
     }
