@@ -74,10 +74,13 @@ namespace microcode {
 
         public readString() {
             const start = this.ptr
-            while (this.buf[this.ptr++] != 0) {}
-            const strBuf = this.buf.slice(start, this.ptr - start + 1)
+            let str = ""
+            while (this.buf[this.ptr] != 0) {
+                str += String.fromCharCode(this.buf[this.ptr++])
+            }
             this.ptr++
-            return strBuf.toString()
+            // let newChar = String.fromCharCode(asciiCode);
+            return str
         }
     }
 }
