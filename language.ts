@@ -159,8 +159,9 @@ namespace microcode {
         public push(tile: Tile, name: string, fix = true): number {
             const tiles = this.getRuleRep()[name]
             tiles.push(tile)
+            const len = tiles.length
             if (fix) this.fixup()
-            return 1
+            return tiles.length > len ? 2 : 1
         }
 
         public deleteAt(name: string, index: number) {
@@ -169,7 +170,7 @@ namespace microcode {
             ruleTiles.splice(index, 1)
             this.fixup()
             this.deleteIncompatibleTiles()
-            return false
+            return index < ruleTiles.length ? 0 : index - ruleTiles.length
         }
 
         private getSuggestions(name: string, index: number) {

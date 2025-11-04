@@ -217,7 +217,7 @@ namespace microcode {
             const ruleTiles = this.ruledef.getRuleRep()[name]
             const tileUpdated = (tile: Tile) => {
                 let numberAdded = 0
-                let deleted = false
+                let deleted = 0
                 if (tile) {
                     if (index >= ruleTiles.length) {
                         numberAdded = this.ruledef.push(tile, name)
@@ -236,9 +236,10 @@ namespace microcode {
                 } else if (numberAdded == 2) {
                     // Queue two moves to the right
                     this.queuedCursorMove = CursorDir.Down
-                } else if (deleted) {
+                } else if (deleted > 0) {
                     // Queue a move to the left
-                    this.queuedCursorMove = CursorDir.Left
+                    this.queuedCursorMove =
+                        deleted == 1 ? CursorDir.Left : CursorDir.Back
                 }
                 this.page.changed()
             }
@@ -396,6 +397,12 @@ namespace microcode {
                             controller.right.id
                         )
                         break
+                    }
+                    case CursorDir.Back: {
+                        control.raiseEvent(
+                            ControllerButtonEvent.Pressed,
+                            controller.left.id
+                        )
                     }
                     case CursorDir.Left: {
                         control.raiseEvent(
