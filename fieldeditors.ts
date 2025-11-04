@@ -340,7 +340,7 @@ namespace microcode {
             defaultTxt: bn.num,
             maxTxtLength: 8,
             foregroundColor: 10,
-            backgroundColor: 6,  
+            backgroundColor: 0xc,
         })
         app.pushScene(kb)
     }
