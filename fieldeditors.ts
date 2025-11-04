@@ -339,8 +339,8 @@ namespace microcode {
             },
             defaultTxt: bn.num,
             maxTxtLength: 8,
-            foregroundColor: 3, // optional arg
-            backgroundColor: 6, // optional arg            maxTxtLength: 5, // optional arg
+            foregroundColor: 10,
+            backgroundColor: 6,  
         })
         app.pushScene(kb)
     }
