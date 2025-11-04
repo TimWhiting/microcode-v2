@@ -814,7 +814,8 @@ namespace microcode {
         switch (tid) {
             case Tid.TID_DECIMAL_EDITOR: {
                 const modEditor = tile as DecimalEditor
-                return modEditor.getField().num
+                const str = modEditor.getField().num
+                return str == "" ? 0 : parseFloat(str)
             }
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:

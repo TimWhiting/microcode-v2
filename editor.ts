@@ -433,7 +433,7 @@ namespace microcode {
             if (!this.pageEditor) {
                 this.switchToPage(this.currPage)
             }
-            this.saveAndCompileProgram()
+            // this.saveAndCompileProgram()
         }
 
         public addButtons(btns: Button[]) {

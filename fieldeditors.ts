@@ -54,12 +54,13 @@ namespace microcode {
     }
 
     // TODO: - conversion from constant to FieldEditor
+    // TODO: - trailing spaces appended
     // TODO: - width computation with decimal point?
     // TODO: - white background
     // TODO: - integer vs. fixed point
     export class DecimalFieldEditor extends FieldEditor {
         init() {
-            return { num: "" }
+            return { num: "1.0" }
         }
         clone(bn: BoxedNumAsStr) {
             return { num: bn.num.slice(0) }
@@ -324,7 +325,8 @@ namespace microcode {
             app,
             layout: microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
-                bn.num = txt == "" ? "0" : txt
+                txt.replace(" ", "")
+                bn.num = txt == "" ? "0" : txt // hack until we fix keyboard
                 app.popScene()
                 onHide()
             },
