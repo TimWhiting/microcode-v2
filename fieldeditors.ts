@@ -54,9 +54,11 @@ namespace microcode {
     }
 
     // TODO: - conversion from constant to FieldEditor
-    // TODO: - trailing spaces appended
-    // TODO: - width computation with decimal point?
-    // TODO: - white background
+    // TODO: - make sure tile updated when we return
+    // TODO: - why is tile being added twice? it is the same tile, duplicated (shared)
+    // TODO: - on app.popScene(), page icon is X
+
+    // TODO: - width computation with font
     // TODO: - integer vs. fixed point
     export class DecimalFieldEditor extends FieldEditor {
         init() {
@@ -76,12 +78,10 @@ namespace microcode {
         toImage(field: BoxedNumAsStr) {
             return icondb.numberToDecimalImage(field.num, false)
         }
-
         toBuffer(field: BoxedNumAsStr): Buffer {
             const str = field.num
             const buf = Buffer.create(str.length + 1)
             for (let i = 0; i < str.length; i++) {
-                // TODO: issue -> UniCode conversion
                 buf.setUint8(i, str.charCodeAt(i))
             }
             buf.setUint8(str.length, 0)
@@ -328,14 +328,14 @@ namespace microcode {
             layout: microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
                 txt.replace(" ", "")
-                bn.num = txt == "" ? "0" : txt // hack until we fix keyboard
+                bn.num = txt == "" ? "0" : txt
                 app.popScene()
+                // TODO: anything to do here?
                 onHide()
             },
-            init: bn.num,
+            defaultTxt: bn.num,
             foregroundColor: 3, // optional arg
-            backgroundColor: 6, // optional arg
-            maxTxtLength: 5, // optional arg
+            backgroundColor: 6, // optional arg            maxTxtLength: 5, // optional arg
         })
         app.pushScene(kb)
     }

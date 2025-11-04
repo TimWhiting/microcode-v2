@@ -8,7 +8,7 @@
         "microphone": "*",
         "datalogger": "*",
         "settings": "*",
-        "user-interface-base": "github:microbit-apps/user-interface-base#v0.0.30"
+        "microgui": "github:microbit-apps/microgui#v0.0.24"
     },
     "files": [
         "config.ts",
@@ -36,10 +36,7 @@
         "sensors.ts",
         "parser.ts",
         "decimal.ts",
-        "settings.ts",
-        "microgui.ts",
-        "graphablefunction.ts",
-        "inputmethods.ts"
+        "settings.ts"
     ],
     "testFiles": [],
     "targetVersions": {
