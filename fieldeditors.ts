@@ -333,6 +333,10 @@ namespace microcode {
                 // TODO: anything to do here?
                 onHide()
             },
+            deleteFn: () => {
+                app.popScene()
+                onDelete()
+            },
             defaultTxt: bn.num,
             foregroundColor: 3, // optional arg
             backgroundColor: 6, // optional arg            maxTxtLength: 5, // optional arg
