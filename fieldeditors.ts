@@ -76,10 +76,12 @@ namespace microcode {
         toImage(field: BoxedNumAsStr) {
             return icondb.numberToDecimalImage(field.num, false)
         }
+
         toBuffer(field: BoxedNumAsStr): Buffer {
             const str = field.num
             const buf = Buffer.create(str.length + 1)
             for (let i = 0; i < str.length; i++) {
+                // TODO: issue -> UniCode conversion
                 buf.setUint8(i, str.charCodeAt(i))
             }
             buf.setUint8(str.length, 0)
