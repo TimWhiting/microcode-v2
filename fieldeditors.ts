@@ -53,14 +53,9 @@ namespace microcode {
         num: string
     }
 
-    // TODO: - conversion from constant to FieldEditor
-    // TODO: - make sure tile updated when we return
-    // TODO: - on app.popScene(), page icon is X
-    // TODO: - width computation with font
-    // TODO: - integer vs. fixed point
     export class DecimalFieldEditor extends FieldEditor {
         init() {
-            return { num: "1.0" }
+            return { num: "10" }
         }
         clone(bn: BoxedNumAsStr) {
             return { num: bn.num.slice(0) }
@@ -452,15 +447,3 @@ namespace microcode {
         )
     }
 }
-
-/*
-
-https://makecode.microbit.org/_i9X6j2F9F68T
-MicroGUI Numeric Keyboard 
-"microgui": "github:microbit-apps/MicroGUI#v0.0.21",
- 
-const app = new microgui.App();
-
-
-
-*/
