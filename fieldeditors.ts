@@ -55,9 +55,7 @@ namespace microcode {
 
     // TODO: - conversion from constant to FieldEditor
     // TODO: - make sure tile updated when we return
-    // TODO: - why is tile being added twice? it is the same tile, duplicated (shared)
     // TODO: - on app.popScene(), page icon is X
-
     // TODO: - width computation with font
     // TODO: - integer vs. fixed point
     export class DecimalFieldEditor extends FieldEditor {
