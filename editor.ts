@@ -432,7 +432,7 @@ namespace microcode {
             if (!this.pageEditor) {
                 this.switchToPage(this.currPage)
             }
-            // this.saveAndCompileProgram()
+            this.saveAndCompileProgram()
         }
 
         public addButtons(btns: Button[]) {
@@ -610,7 +610,6 @@ namespace microcode {
         private reassignIndices() {
             this.ruleEditors.forEach((rule, index) => (rule.index = index))
             this.changed()
-            this.editor.saveAndCompileProgram()
         }
 
         public moveRuleAt(index: number, up: boolean) {

@@ -27,9 +27,13 @@ namespace microcode {
         DAL.DEVICE_ID_BUTTON_A,
         DAL.DEVICE_ID_BUTTON_B,
         DAL.MICROBIT_ID_LOGO,
-        DAL.ID_PIN_P0,
-        DAL.ID_PIN_P1,
-        DAL.ID_PIN_P2,
+    ]
+
+    const pins = [TouchPin.P0, TouchPin.P1, TouchPin.P2]
+    const pin2tid = [
+        Tid.TID_FILTER_PIN_0,
+        Tid.TID_FILTER_PIN_1,
+        Tid.TID_FILTER_PIN_2,
     ]
 
     export class MicrobitHost implements RuntimeHost {
@@ -51,6 +55,14 @@ namespace microcode {
                             : undefined,
                         matchPressReleaseTable[b]
                     )
+                })
+            })
+            pins.forEach((p, index) => {
+                input.onPinPressed(p, () => {
+                    this._handler(Tid.TID_SENSOR_PRESS, pin2tid[index])
+                })
+                input.onPinReleased(p, () => {
+                    this._handler(Tid.TID_SENSOR_RELEASE, pin2tid[index])
                 })
             })
             // need this only for the simulator
@@ -76,21 +88,21 @@ namespace microcode {
                     }
                 }
             )
-            context.onEvent(
-                DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
-                DAL.DEVICE_EVT_ANY,
-                () => {
-                    const ev = control.eventValue()
-                    this._handler(
-                        Tid.TID_SENSOR_MICROPHONE,
-                        ev == DAL.LEVEL_THRESHOLD_HIGH
-                            ? Tid.TID_FILTER_LOUD
-                            : ev == DAL.LEVEL_THRESHOLD_LOW
-                            ? Tid.TID_FILTER_QUIET
-                            : undefined
-                    )
-                }
-            )
+            // context.onEvent(
+            //     DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
+            //     DAL.DEVICE_EVT_ANY,
+            //     () => {
+            //         const ev = control.eventValue()
+            //         this._handler(
+            //             Tid.TID_SENSOR_MICROPHONE,
+            //             ev == DAL.LEVEL_THRESHOLD_HIGH
+            //                 ? Tid.TID_FILTER_LOUD
+            //                 : ev == DAL.LEVEL_THRESHOLD_LOW
+            //                 ? Tid.TID_FILTER_QUIET
+            //                 : undefined
+            //         )
+            //     }
+            // )
             radio.onReceivedNumber(radioNum => {
                 this._handler(Tid.TID_SENSOR_RADIO_RECEIVE, radioNum)
             })
