@@ -2,7 +2,7 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // Runtime:
-    // - press A stopped working - did interp change?
+    // - race condition
     // - resource content error
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
@@ -89,13 +89,19 @@ namespace microcode {
         }
 
         kill() {
+            console.log(`kill: ${this.index}`)
             this.wakeTime = 0
             this.actionRunning = false
             this.modifierIndex = 0
             this.loopIndex = 0
             // give the background fiber chance to finish
             // otherwise may spawn second on start after kill
-            basic.pause(0)
+            while (this.backgroundActive) {
+                console.log(
+                    `here ${this.backgroundActive} ${this.actionRunning}`
+                )
+                basic.pause(100)
+            }
         }
 
         public matchWhen(sensorName: string | number, event = 0): boolean {
@@ -156,6 +162,7 @@ namespace microcode {
         }
 
         private timerOrSequenceRule() {
+            console.log(`tosr `)
             if (this.backgroundActive) {
                 this.interp.error(
                     `trying to spawn another background fiber for ${this.index}`
@@ -169,6 +176,7 @@ namespace microcode {
             control.runInBackground(() => {
                 this.backgroundActive = true
                 while (this.actionRunning) {
+                    console.log("back")
                     if (this.wakeTime > 0) {
                         basic.pause(this.wakeTime)
                         this.wakeTime = 0
@@ -195,7 +203,16 @@ namespace microcode {
                     // yield, otherwise the app will hang
                     basic.pause(5)
                 }
+                console.log(`done`)
                 this.backgroundActive = false
+                // TODO: need a restart event to put on queue
+                // restart timer
+                // if (this.rule.sensor == Tid.TID_SENSOR_TIMER) {
+                //     const wake = this.getWakeTime()
+                //     if (wake > 0) {
+                //         this.actionRunning = true
+                //     }
+                // }
             })
         }
 
@@ -225,14 +242,7 @@ namespace microcode {
                     }
                 }
             } else {
-                this.kill()
-                // restart timer
-                if (this.rule.sensor == Tid.TID_SENSOR_TIMER) {
-                    const wake = this.getWakeTime()
-                    if (wake > 0) {
-                        this.actionRunning = true
-                    }
-                }
+                this.actionRunning = false
             }
         }
 
@@ -524,6 +534,7 @@ namespace microcode {
             // first new rule (in lexical order) on a resource wins
             const resourceWinner: { [resource: number]: number } = {}
             for (const rc of newRules) {
+                console.log(`new rule = ${rc.index}`)
                 const resource = rc.getOutputResource()
                 const currentWinner = resourceWinner[resource]
                 if (currentWinner === undefined || rc.index < currentWinner)
@@ -544,7 +555,10 @@ namespace microcode {
                     resourceWinner[resource] != undefined
                 return res
             })
-            dead.forEach(rc => rc.kill())
+            dead.forEach(rc => {
+                console.log(`dead = ${rc.index}`)
+                rc.kill()
+            })
 
             // partition the live into instant and sequence
             const instant = live.filter(
@@ -573,6 +587,7 @@ namespace microcode {
             )
 
             sequence.forEach(rc => {
+                console.log(`seq = ${rc.index}`)
                 rc.kill()
                 rc.start()
             })

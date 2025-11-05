@@ -79,6 +79,7 @@ namespace microcode {
 
             gestures.forEach((g, index) => {
                 input.onGesture(g, () => {
+                    console.log(`gesture: ${g}`)
                     this._handler(
                         Tid.TID_SENSOR_ACCELEROMETER,
                         gestures2tids[index]
