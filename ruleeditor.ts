@@ -262,6 +262,7 @@ namespace microcode {
                         : undefined
                 )
             }
+            // check for update or deletion of field editor
             if (
                 index < ruleTiles.length &&
                 ruleTiles[index] instanceof ModifierEditor
@@ -269,6 +270,7 @@ namespace microcode {
                 newFieldEditor(ruleTiles[index] as ModifierEditor, true)
                 return
             }
+            // instead, we are adding to the end of the rule
             const suggestions = this.getSuggestions(name, index)
             const btns: PickerButtonDef[] = suggestions.map(tile => {
                 return {
@@ -276,7 +278,8 @@ namespace microcode {
                     ariaId: tidToString(getTid(tile)),
                 }
             })
-            // special case for field editor
+            // special case for when we just have a field editor as
+            // the suggestion
             if (
                 suggestions.length == 1 &&
                 suggestions[0] instanceof ModifierEditor
@@ -288,6 +291,7 @@ namespace microcode {
                 newFieldEditor(theOne)
                 return
             }
+            // general case where we have multiple things to pick from
             let onDelete = undefined
             let selectedButton = -1
             if (index < ruleTiles.length) {
@@ -320,8 +324,9 @@ namespace microcode {
                                     ? (ruleTiles[index - 1] as ModifierEditor)
                                     : theOne
                             newFieldEditor(theOne)
+                        } else {
+                            tileUpdated(theOne)
                         }
-                        tileUpdated(theOne)
                     },
                     onDelete,
                     selected: selectedButton,
