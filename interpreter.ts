@@ -2,6 +2,7 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // Runtime:
+    // - press A stopped working - did interp change?
     // - resource content error
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
@@ -10,10 +11,7 @@ namespace microcode {
     // - round semantics
 
     // Editor:
-    // - program not saving (divide operator), or rather load is buggy!
     // - no change in operator to right of random-toss (used to work)?
-    // - cursor reposition on delete/update rule...
-    // - tooltips in picker
 
     class Error {
         constructor(public msg: string) {}

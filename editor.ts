@@ -429,7 +429,6 @@ namespace microcode {
 
         /* override */ activate() {
             super.activate()
-            this.pageBtn.setIcon(tidToString(PAGE_IDS()[this.currPage]))
             if (!this.pageEditor) {
                 this.switchToPage(this.currPage)
             }
