@@ -86,21 +86,6 @@ namespace microcode {
                 })
             })
 
-            // handle all other accelerometer events
-            // context.onEvent(
-            //     DAL.DEVICE_ID_GESTURE, // DEVICE_ID_GESTURE
-            //     DAL.DEVICE_EVT_ANY,
-            //     () => {
-            //         if (control.eventValue() != Gesture.Shake) {
-            //             let ev = matchAccelerometerTable[control.eventValue()]
-            //             if (ev)
-            //                 this._handler(
-            //                     Tid.TID_SENSOR_ACCELEROMETER,
-            //                     matchAccelerometerTable[control.eventValue()]
-            //                 )
-            //         }
-            //     }
-            // )
             // context.onEvent(
             //     DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
             //     DAL.DEVICE_EVT_ANY,
