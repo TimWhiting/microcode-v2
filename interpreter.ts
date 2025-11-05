@@ -96,10 +96,7 @@ namespace microcode {
             // give the background fiber chance to finish
             // otherwise may spawn second on start after kill
             while (this.backgroundActive) {
-                console.log(
-                    `here ${this.backgroundActive} ${this.actionRunning}`
-                )
-                basic.pause(100)
+                basic.pause(0)
             }
         }
 
@@ -699,7 +696,7 @@ namespace microcode {
                             )
                         }
                     })
-                    basic.pause(300)
+                    basic.pause(200)
                 }
             })
         }
