@@ -13,15 +13,25 @@ namespace microcode {
         102: Tid.TID_FILTER_PIN_2, // DAL.ID_PIN_P2
     }
 
-    const matchAccelerometerTable: IdMap = {
-        11: Tid.TID_FILTER_ACCEL_SHAKE,
-        // 1: Tid.TID_FILTER_ACCEL_TILT_UP, // this aliases with ACCELEROMETER_EVT_DATA_UPDATE
-        2: Tid.TID_FILTER_ACCEL_TILT_DOWN,
-        3: Tid.TID_FILTER_ACCEL_TILT_LEFT,
-        4: Tid.TID_FILTER_ACCEL_TILT_RIGHT,
-        5: Tid.TID_FILTER_ACCEL_FACE_UP,
-        6: Tid.TID_FILTER_ACCEL_FACE_DOWN,
-    }
+    const gestures = [
+        Gesture.Shake,
+        Gesture.LogoUp,
+        Gesture.LogoDown,
+        Gesture.TiltLeft,
+        Gesture.TiltRight,
+        Gesture.ScreenUp,
+        Gesture.ScreenDown,
+    ]
+
+    const gestures2tids = [
+        Tid.TID_FILTER_ACCEL_SHAKE,
+        Tid.TID_FILTER_ACCEL_TILT_UP,
+        Tid.TID_FILTER_ACCEL_TILT_DOWN,
+        Tid.TID_FILTER_ACCEL_TILT_LEFT,
+        Tid.TID_FILTER_ACCEL_TILT_RIGHT,
+        Tid.TID_FILTER_ACCEL_FACE_UP,
+        Tid.TID_FILTER_ACCEL_FACE_DOWN,
+    ]
 
     const buttons = [
         DAL.DEVICE_ID_BUTTON_A,
@@ -57,6 +67,7 @@ namespace microcode {
                     )
                 })
             })
+
             pins.forEach((p, index) => {
                 input.onPinPressed(p, () => {
                     this._handler(Tid.TID_SENSOR_PRESS, pin2tid[index])
@@ -65,29 +76,31 @@ namespace microcode {
                     this._handler(Tid.TID_SENSOR_RELEASE, pin2tid[index])
                 })
             })
-            // need this only for the simulator
-            input.onGesture(Gesture.Shake, () => {
-                this._handler(
-                    Tid.TID_SENSOR_ACCELEROMETER,
-                    Tid.TID_FILTER_ACCEL_SHAKE
-                )
+
+            gestures.forEach((g, index) => {
+                input.onGesture(g, () => {
+                    this._handler(
+                        Tid.TID_SENSOR_ACCELEROMETER,
+                        gestures2tids[index]
+                    )
+                })
             })
+
             // handle all other accelerometer events
-            context.onEvent(
-                DAL.DEVICE_ID_GESTURE, // DEVICE_ID_GESTURE
-                DAL.DEVICE_EVT_ANY,
-                () => {
-                    console.log(`gest evt = ${control.eventValue()}`)
-                    if (control.eventValue() != Gesture.Shake) {
-                        let ev = matchAccelerometerTable[control.eventValue()]
-                        if (ev)
-                            this._handler(
-                                Tid.TID_SENSOR_ACCELEROMETER,
-                                matchAccelerometerTable[control.eventValue()]
-                            )
-                    }
-                }
-            )
+            // context.onEvent(
+            //     DAL.DEVICE_ID_GESTURE, // DEVICE_ID_GESTURE
+            //     DAL.DEVICE_EVT_ANY,
+            //     () => {
+            //         if (control.eventValue() != Gesture.Shake) {
+            //             let ev = matchAccelerometerTable[control.eventValue()]
+            //             if (ev)
+            //                 this._handler(
+            //                     Tid.TID_SENSOR_ACCELEROMETER,
+            //                     matchAccelerometerTable[control.eventValue()]
+            //                 )
+            //         }
+            //     }
+            // )
             // context.onEvent(
             //     DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
             //     DAL.DEVICE_EVT_ANY,
