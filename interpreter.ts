@@ -89,7 +89,6 @@ namespace microcode {
         }
 
         kill() {
-            console.log(`kill: ${this.index}`)
             this.wakeTime = 0
             this.actionRunning = false
             this.modifierIndex = 0
@@ -162,7 +161,6 @@ namespace microcode {
         }
 
         private timerOrSequenceRule() {
-            console.log(`tosr `)
             if (this.backgroundActive) {
                 this.interp.error(
                     `trying to spawn another background fiber for ${this.index}`
@@ -176,14 +174,13 @@ namespace microcode {
             control.runInBackground(() => {
                 this.backgroundActive = true
                 while (this.actionRunning) {
-                    console.log("back")
                     if (this.wakeTime > 0) {
                         basic.pause(this.wakeTime)
                         this.wakeTime = 0
                         this.interp.addEvent({
                             kind: MicroCodeEventKind.TimerFire,
                             ruleIndex: this.index,
-                        } as TimerFireEvent)
+                        } as TimerEvent)
                         this.timerGoAhead = false
                         while (this.actionRunning && !this.timerGoAhead) {
                             basic.pause(1)
@@ -203,16 +200,14 @@ namespace microcode {
                     // yield, otherwise the app will hang
                     basic.pause(5)
                 }
-                console.log(`done`)
                 this.backgroundActive = false
-                // TODO: need a restart event to put on queue
                 // restart timer
-                // if (this.rule.sensor == Tid.TID_SENSOR_TIMER) {
-                //     const wake = this.getWakeTime()
-                //     if (wake > 0) {
-                //         this.actionRunning = true
-                //     }
-                // }
+                if (this.rule.sensor == Tid.TID_SENSOR_TIMER) {
+                    this.interp.addEvent({
+                        kind: MicroCodeEventKind.RestartTimer,
+                        ruleIndex: this.index,
+                    } as TimerEvent)
+                }
             })
         }
 
@@ -233,10 +228,8 @@ namespace microcode {
                         )
                         this.loopIndex++
                         if (this.loopIndex >= loopBound) {
-                            // end of loop
-                            this.kill()
+                            this.actionRunning = false
                         } else {
-                            // repeat
                             this.modifierIndex = 0
                         }
                     }
@@ -303,9 +296,6 @@ namespace microcode {
                     case Tid.TID_ACTUATOR_PAINT: {
                         const mod = this.rule.modifiers[this.modifierIndex]
                         const modEditor = mod as ModifierEditor
-                        // console.log(
-                        //     `modEditor len ${this.rule.modifiers.length} index ${this.modifierIndex} tid ${modEditor}`
-                        // )
                         param = modEditor.getField()
                         break
                     }
@@ -414,6 +404,7 @@ namespace microcode {
         SwitchPage,
         StartPage,
         TimerFire,
+        RestartTimer,
     }
 
     interface MicroCodeEvent {
@@ -436,8 +427,8 @@ namespace microcode {
         index: number
     }
 
-    interface TimerFireEvent extends MicroCodeEvent {
-        kind: MicroCodeEventKind.TimerFire
+    interface TimerEvent extends MicroCodeEvent {
+        kind: MicroCodeEventKind.TimerFire | MicroCodeEventKind.RestartTimer
         ruleIndex: number
     }
 
@@ -534,7 +525,6 @@ namespace microcode {
             // first new rule (in lexical order) on a resource wins
             const resourceWinner: { [resource: number]: number } = {}
             for (const rc of newRules) {
-                console.log(`new rule = ${rc.index}`)
                 const resource = rc.getOutputResource()
                 const currentWinner = resourceWinner[resource]
                 if (currentWinner === undefined || rc.index < currentWinner)
@@ -556,7 +546,6 @@ namespace microcode {
                 return res
             })
             dead.forEach(rc => {
-                console.log(`dead = ${rc.index}`)
                 rc.kill()
             })
 
@@ -587,7 +576,6 @@ namespace microcode {
             )
 
             sequence.forEach(rc => {
-                console.log(`seq = ${rc.index}`)
                 rc.kill()
                 rc.start()
             })
@@ -645,8 +633,13 @@ namespace microcode {
                                 )
                                 break
                             }
+                            case MicroCodeEventKind.RestartTimer: {
+                                const event = ev as TimerEvent
+                                const rc = this.ruleClosures[event.ruleIndex]
+                                rc.start()
+                            }
                             case MicroCodeEventKind.TimerFire: {
-                                const event = ev as TimerFireEvent
+                                const event = ev as TimerEvent
                                 const rc = this.ruleClosures[event.ruleIndex]
                                 // TODO: this isn't good enough, we need to
                                 // TODO: kill rules that are conflicting
