@@ -77,6 +77,8 @@ namespace microcode {
                 })
             })
 
+            // TODO: need to examine assembly with and without console.log to
+            // TODO: determine what's going on here
             gestures.forEach((g, index) => {
                 console.log(`gesture ${g}`) // remove this line and no events!!!!
                 input.onGesture(g, () => {
