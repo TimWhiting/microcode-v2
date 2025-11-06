@@ -634,7 +634,7 @@ namespace microcode {
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
             case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
             case Tid.TID_MODIFIER_LOOP:
-                return { only: ["constant"] }
+                return { only: ["constant", "maths"] }
             case Tid.TID_ACTUATOR_SWITCH_PAGE:
                 return { allow: ["page"] }
             case Tid.TID_ACTUATOR_CAR:
@@ -643,8 +643,17 @@ namespace microcode {
                 return { requires: [Tid.TID_SENSOR_RADIO_RECEIVE] }
             case Tid.TID_MODIFIER_RANDOM_TOSS:
                 return {
-                    allow: ["constant"],
-                    disallow: ["value_out", "math_not_add"],
+                    allow: [
+                        "constant",
+                        Tid.TID_OPERATOR_PLUS,
+                        Tid.TID_OPERATOR_MULTIPLY,
+                    ],
+                    disallow: [
+                        "value_out",
+                        "decimal_editor",
+                        Tid.TID_OPERATOR_DIVIDE,
+                        Tid.TID_OPERATOR_MINUS,
+                    ],
                 }
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
