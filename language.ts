@@ -13,7 +13,8 @@ namespace microcode {
     function mergeConstraints(src: Constraints, dst: Constraints) {
         if (!src) return
         for (const key of Object.keys(src)) {
-            dst[key] = dst[key].concat(src[key])
+            if (key == "only") dst[key] = src[key]
+            else dst[key] = dst[key].concat(src[key])
         }
     }
 
@@ -407,8 +408,8 @@ namespace microcode {
             }
             // special case for decimal editor
             // TODO: this is too aggressive
-            // if (rangeName == "filters" || rangeName == "modifiers")
-            //    all.push(getEditor(Tid.TID_DECIMAL_EDITOR))
+            if (rangeName == "filters" || rangeName == "modifiers")
+                all.push(getEditor(Tid.TID_DECIMAL_EDITOR))
 
             all = all
                 .filter((tile: Tile) => isVisible(tile))
@@ -442,8 +443,11 @@ namespace microcode {
                 const src = getConstraints(rule.actuators[0])
                 mergeConstraints(src, collect)
             }
-            if (rule.sensors.length) {
+            if (name == "filters" && rule.sensors.length) {
                 const src = getConstraints(rule.sensors[0])
+                mergeConstraints(src, collect)
+            } else if (name == "modifiers" && rule.actuators.length) {
+                const src = getConstraints(rule.actuators[0])
                 mergeConstraints(src, collect)
             }
 
