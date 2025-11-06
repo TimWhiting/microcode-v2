@@ -602,6 +602,7 @@ namespace microcode {
         private reassignIndices() {
             this.ruleEditors.forEach((rule, index) => (rule.index = index))
             this.changed()
+            this.editor.saveAndCompileProgram()
         }
 
         public moveRuleAt(index: number, up: boolean) {
