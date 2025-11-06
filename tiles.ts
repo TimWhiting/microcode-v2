@@ -351,6 +351,8 @@ namespace microcode {
 
     export function isTerminal(tile: Tile) {
         const tid = getTid(tile)
+        // the following modifiers are terminal
+        if (isPage(tid)) return true
         // everything else except some filters are not terminal
         if (!isFilter(tid)) return false
         // the following filters are not terminal
@@ -565,9 +567,9 @@ namespace microcode {
         switch (tid) {
             case Tid.TID_SENSOR_PRESS:
             case Tid.TID_SENSOR_RELEASE:
-                return { allow: ["press_event"] }
+                return { only: ["press_event"] }
             case Tid.TID_SENSOR_START_PAGE:
-                return { allow: ["timespan"] }
+                return { only: ["timespan"] }
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
                 return {
                     allow: filterMath,
@@ -597,7 +599,7 @@ namespace microcode {
             case Tid.TID_SENSOR_MOISTURE:
                 return { allow: only5.concat(["comparison"]) }
             case Tid.TID_SENSOR_REFLECTED:
-                return { allow: ["on_off_event"] }
+                return { only: ["on_off_event"] }
             case Tid.TID_SENSOR_MICROPHONE:
                 return {
                     allow: only5.concat([
@@ -608,29 +610,29 @@ namespace microcode {
             case Tid.TID_SENSOR_TEMP:
                 return { allow: ["temperature_event"].concat(filterMath) }
             case Tid.TID_SENSOR_ROTARY:
-                return { allow: ["rotary_event"] }
+                return { only: ["rotary_event"] }
             case Tid.TID_SENSOR_LINE:
-                return { allow: ["line"] }
+                return { only: ["line"] }
             case Tid.TID_SENSOR_TIMER:
-                return { allow: ["timespan"] }
+                return { only: ["timespan"] }
             case Tid.TID_SENSOR_ACCELEROMETER:
-                return { allow: ["accel_event"] }
+                return { only: ["accel_event"] }
             case Tid.TID_ACTUATOR_PAINT:
-                return { allow: ["icon_editor", "loop"] }
+                return { only: ["icon_editor", "loop"] }
             case Tid.TID_ACTUATOR_SPEAKER:
-                return { allow: ["sound_emoji", "loop"] }
+                return { only: ["sound_emoji", "loop"] }
             case Tid.TID_ACTUATOR_MUSIC:
-                return { allow: ["melody_editor", "loop"] }
+                return { only: ["melody_editor", "loop"] }
             case Tid.TID_ACTUATOR_RADIO_SEND:
             case Tid.TID_ACTUATOR_SHOW_NUMBER:
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
                 return {
-                    allow: ["value_out", "maths", "constant", "decimal_editor"],
+                    only: ["value_out", "maths", "constant", "decimal_editor"],
                 }
             case Tid.TID_ACTUATOR_RGB_LED:
-                return { allow: ["rgb_led", "loop"] }
+                return { only: ["rgb_led", "loop"] }
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
             case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
             case Tid.TID_MODIFIER_LOOP:
@@ -642,28 +644,22 @@ namespace microcode {
                     ],
                 }
             case Tid.TID_ACTUATOR_SWITCH_PAGE:
-                return { allow: ["page"] }
+                return { only: ["page"] }
             case Tid.TID_ACTUATOR_CAR:
-                return { allow: ["car"] }
+                return { only: ["car"] }
             case Tid.TID_MODIFIER_RADIO_VALUE:
                 return { requires: [Tid.TID_SENSOR_RADIO_RECEIVE] }
             case Tid.TID_MODIFIER_RANDOM_TOSS:
                 return {
-                    allow: [
+                    only: [
                         "constant",
                         Tid.TID_OPERATOR_PLUS,
                         Tid.TID_OPERATOR_MULTIPLY,
                     ],
-                    disallow: [
-                        "value_out",
-                        "decimal_editor",
-                        Tid.TID_OPERATOR_DIVIDE,
-                        Tid.TID_OPERATOR_MINUS,
-                    ],
                 }
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
-                return { allow: ["on_off"] }
+                return { only: ["on_off"] }
         }
         return undefined
     }

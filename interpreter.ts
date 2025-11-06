@@ -219,10 +219,10 @@ namespace microcode {
                         this.modifierIndex = 0
                     } else {
                         // get the loop bound
-                        const loopBound = this.interp.constantFold(
+                        const loopBound = this.interp.getValue(
                             this.rule.modifiers.slice(this.modifierIndex + 1),
                             0
-                        )
+                        ) as number
                         this.loopIndex++
                         if (this.loopIndex >= loopBound) {
                             this.actionRunning = false
@@ -763,15 +763,6 @@ namespace microcode {
             }
         }
 
-        // this is for the special case of loops and random-toss
-        public constantFold(tiles: Tile[], defl: number) {
-            let result = defl
-            for (const t of tiles) {
-                if (getKind(t) == TileKind.Literal) result += getParam(t)
-            }
-            return result
-        }
-
         public getValue(tiles: Tile[], defl: number): number | boolean {
             let tokens: string[] = []
             const rnd = (max: number) => Math.floor(Math.random() * max) + 1
@@ -781,7 +772,7 @@ namespace microcode {
                     const max =
                         i == tiles.length - 1
                             ? 2
-                            : this.constantFold(tiles.slice(i + 1), 0)
+                            : (this.getValue(tiles.slice(i + 1), 0) as number)
                     tokens.push(rnd(max).toString())
                     break
                 } else {
