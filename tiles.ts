@@ -351,6 +351,8 @@ namespace microcode {
 
     export function isTerminal(tile: Tile) {
         const tid = getTid(tile)
+        // the following modifiers are terminal
+        if (isPage(tid)) return true
         // everything else except some filters are not terminal
         if (!isFilter(tid)) return false
         // the following filters are not terminal
