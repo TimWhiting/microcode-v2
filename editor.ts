@@ -268,15 +268,6 @@ namespace microcode {
                 y: 8,
                 onClick: () => this.pickDiskSLot(),
             })
-            // this.connectBtn = new Button({
-            //     parent: this.hudroot,
-            //     style: ButtonStyles.BorderedPurple,
-            //     icon: icondb.microbit_logo_btn,
-            //     ariaId: "connect",
-            //     x: Screen.LEFT_EDGE + 36,
-            //     y: 8,
-            //     onClick: () => connectJacdac(),
-            // })
             this.pageBtn = new Button({
                 parent: this.hudroot,
                 style: ButtonStyles.BorderedPurple,
@@ -286,14 +277,15 @@ namespace microcode {
                 onClick: () => this.pickPage(),
             })
             const buf = this.app.load(SAVESLOT_AUTO)
-            this.progdef = ProgramDefn.fromBuffer(new BufferReader(buf))
-            if (!this.progdef) {
+            if (!buf) {
                 // onboarding experience
                 // load first sample if this is the first program being loaded
                 this.progdef = ProgramDefn.fromBuffer(
                     new BufferReader(samples(true)[1].source)
                 )
                 this.app.save(SAVESLOT_AUTO, this.progdef.toBuffer())
+            } else {
+                this.progdef = ProgramDefn.fromBuffer(new BufferReader(buf))
             }
             this.configureP1Keys()
             this.configureP2Keys()
