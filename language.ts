@@ -406,8 +406,9 @@ namespace microcode {
                 else all.push(i)
             }
             // special case for decimal editor
-            if (rangeName == "filters" || rangeName == "modifiers")
-                all.push(getEditor(Tid.TID_DECIMAL_EDITOR))
+            // TODO: this is too aggressive
+            // if (rangeName == "filters" || rangeName == "modifiers")
+            //    all.push(getEditor(Tid.TID_DECIMAL_EDITOR))
 
             all = all
                 .filter((tile: Tile) => isVisible(tile))
