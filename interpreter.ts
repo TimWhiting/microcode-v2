@@ -472,6 +472,11 @@ namespace microcode {
             this.addEvent({
                 kind: MicroCodeEventKind.StartPage,
             } as StartPageEvent)
+            // on start of each page, we allow checking of variables
+            this.addEvent({
+                kind: MicroCodeEventKind.StateUpdate,
+                updatedVars: vars,
+            } as StateUpdateEvent)
             // start up timer-based rules
             this.ruleClosures.forEach(rc => rc.start(true))
         }
@@ -591,7 +596,7 @@ namespace microcode {
             }
             control.inBackground(() => {
                 while (this.running) {
-                    // TODO: should we drain the whole queue at once, or one at a time
+                    // TODO: drain entire queue
                     if (this.eventQueue.length) {
                         const ev = this.eventQueue[0]
                         this.eventQueue.removeAt(0)
