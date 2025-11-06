@@ -320,15 +320,18 @@ namespace microcode {
             app,
             layout: microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
-                txt.replace(" ", "")
-                bn.num = txt == "" ? "0" : txt
+                bn.num = txt
                 app.popScene()
-                // TODO: anything to do here?
                 onHide()
             },
             deleteFn: () => {
                 app.popScene()
                 onDelete()
+            },
+            backBtn: (txt: string) => {
+                bn.num = txt
+                app.popScene()
+                onHide()
             },
             defaultTxt: bn.num,
             maxTxtLength: 8,
