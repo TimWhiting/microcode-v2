@@ -55,7 +55,7 @@ namespace microcode {
             input.onLogoEvent(TouchButtonEvent.Pressed, function () {})
 
             buttons.forEach(b => {
-                context.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
+                control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
                     const ev = control.eventValue()
                     this._handler(
                         ev == DAL.DEVICE_BUTTON_EVT_DOWN
@@ -78,8 +78,8 @@ namespace microcode {
             })
 
             gestures.forEach((g, index) => {
+                console.log(`gesture ${g}`) // remove this line and no events!!!!
                 input.onGesture(g, () => {
-                    console.log(`gesture: ${g}`)
                     this._handler(
                         Tid.TID_SENSOR_ACCELEROMETER,
                         gestures2tids[index]
@@ -212,6 +212,8 @@ namespace microcode {
             return soundExpression.giggle
         }
     }
+
+    export const runtimeHost: RuntimeHost = new MicrobitHost()
 }
 
 /*

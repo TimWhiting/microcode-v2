@@ -62,13 +62,11 @@ namespace microcode {
             this.sceneManager.popScene()
         }
     }
-
-    let runtimeHost: RuntimeHost = undefined
+    
     let theInterpreter: Interpreter = undefined
 
     export function runProgram(prog: ProgramDefn) {
         if (theInterpreter) theInterpreter.stop()
-        if (!runtimeHost) runtimeHost = new MicrobitHost()
         theInterpreter = new Interpreter(prog, runtimeHost)
     }
 
