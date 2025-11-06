@@ -2,7 +2,7 @@ namespace microcode {
     // an interpreter for ProgramDefn
 
     // Runtime:
-    // - press A stopped working - did interp change?
+    // - race condition
     // - resource content error
     // - microphone: event -> number doesn't work - number doesn't appear
     //.   - note same behavior not present with temperature
@@ -95,7 +95,9 @@ namespace microcode {
             this.loopIndex = 0
             // give the background fiber chance to finish
             // otherwise may spawn second on start after kill
-            basic.pause(0)
+            while (this.backgroundActive) {
+                basic.pause(0)
+            }
         }
 
         public matchWhen(sensorName: string | number, event = 0): boolean {
@@ -175,7 +177,7 @@ namespace microcode {
                         this.interp.addEvent({
                             kind: MicroCodeEventKind.TimerFire,
                             ruleIndex: this.index,
-                        } as TimerFireEvent)
+                        } as TimerEvent)
                         this.timerGoAhead = false
                         while (this.actionRunning && !this.timerGoAhead) {
                             basic.pause(1)
@@ -196,6 +198,13 @@ namespace microcode {
                     basic.pause(5)
                 }
                 this.backgroundActive = false
+                // restart timer
+                if (this.rule.sensor == Tid.TID_SENSOR_TIMER) {
+                    this.interp.addEvent({
+                        kind: MicroCodeEventKind.RestartTimer,
+                        ruleIndex: this.index,
+                    } as TimerEvent)
+                }
             })
         }
 
@@ -216,23 +225,14 @@ namespace microcode {
                         )
                         this.loopIndex++
                         if (this.loopIndex >= loopBound) {
-                            // end of loop
-                            this.kill()
+                            this.actionRunning = false
                         } else {
-                            // repeat
                             this.modifierIndex = 0
                         }
                     }
                 }
             } else {
-                this.kill()
-                // restart timer
-                if (this.rule.sensor == Tid.TID_SENSOR_TIMER) {
-                    const wake = this.getWakeTime()
-                    if (wake > 0) {
-                        this.actionRunning = true
-                    }
-                }
+                this.actionRunning = false
             }
         }
 
@@ -293,9 +293,6 @@ namespace microcode {
                     case Tid.TID_ACTUATOR_PAINT: {
                         const mod = this.rule.modifiers[this.modifierIndex]
                         const modEditor = mod as ModifierEditor
-                        // console.log(
-                        //     `modEditor len ${this.rule.modifiers.length} index ${this.modifierIndex} tid ${modEditor}`
-                        // )
                         param = modEditor.getField()
                         break
                     }
@@ -404,6 +401,7 @@ namespace microcode {
         SwitchPage,
         StartPage,
         TimerFire,
+        RestartTimer,
     }
 
     interface MicroCodeEvent {
@@ -426,8 +424,8 @@ namespace microcode {
         index: number
     }
 
-    interface TimerFireEvent extends MicroCodeEvent {
-        kind: MicroCodeEventKind.TimerFire
+    interface TimerEvent extends MicroCodeEvent {
+        kind: MicroCodeEventKind.TimerFire | MicroCodeEventKind.RestartTimer
         ruleIndex: number
     }
 
@@ -544,7 +542,9 @@ namespace microcode {
                     resourceWinner[resource] != undefined
                 return res
             })
-            dead.forEach(rc => rc.kill())
+            dead.forEach(rc => {
+                rc.kill()
+            })
 
             // partition the live into instant and sequence
             const instant = live.filter(
@@ -630,8 +630,13 @@ namespace microcode {
                                 )
                                 break
                             }
+                            case MicroCodeEventKind.RestartTimer: {
+                                const event = ev as TimerEvent
+                                const rc = this.ruleClosures[event.ruleIndex]
+                                rc.start()
+                            }
                             case MicroCodeEventKind.TimerFire: {
-                                const event = ev as TimerFireEvent
+                                const event = ev as TimerEvent
                                 const rc = this.ruleClosures[event.ruleIndex]
                                 // TODO: this isn't good enough, we need to
                                 // TODO: kill rules that are conflicting
@@ -691,7 +696,7 @@ namespace microcode {
                             )
                         }
                     })
-                    basic.pause(300)
+                    basic.pause(200)
                 }
             })
         }
