@@ -77,11 +77,12 @@ namespace microcode {
                 })
             })
 
-            // TODO: need to examine assembly with and without console.log to
-            // TODO: determine what's going on here
             gestures.forEach((g, index) => {
-                const g2 = g // remove this line and no events!!!!
-                input.onGesture(g2, () => {
+                //TODO: This is a hack to fix the onGesture events not working.
+                // In GDB we see that the CPP functions onGesture, MicrobitAccelerometer constructor and the LSM303Accelerometer constructor are invoked.
+                // In spite of this the __handler is not invoked. For some reason this basic.pause(0) fixes this issue (possibly because of it briefly yielding?)
+                basic.pause(0);
+                input.onGesture(g, () => {
                     this._handler(
                         Tid.TID_SENSOR_ACCELEROMETER,
                         gestures2tids[index]
