@@ -90,8 +90,8 @@ namespace microcode {
         else if (id === "T97") res = "variable Z";
         else if (id === "T98") res = "turn left";
         else if (id === "T99") res = "turn right";
-        else if (id === "T100") res = "warmer";
-        else if (id === "T101") res = "colder";
+        else if (id === "T100") res = "up";
+        else if (id === "T101") res = "down";
         else if (id === "T103") res = "right";
         else if (id === "T104") res = "both";
         else if (id === "T105") res = "none";
