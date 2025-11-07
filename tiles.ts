@@ -270,6 +270,18 @@ namespace microcode {
         )
     }
 
+    function isSensorEvent(tid: Tid) {
+        switch (tid) {
+            case Tid.TID_FILTER_TEMP_WARMER:
+            case Tid.TID_FILTER_LOUD:
+                return -10
+            case Tid.TID_FILTER_TEMP_COLDER:
+            case Tid.TID_FILTER_QUIET:
+                return -9
+        }
+        return 0
+    }
+
     function isAccelerometerEvent(tidEnum: Tid) {
         return (
             (Tid.ACCELEROMETER_START <= tidEnum &&
@@ -424,7 +436,9 @@ namespace microcode {
 
     export function priority(tile: Tile): number {
         const tid = getTid(tile)
+        if (isSensorEvent(tid)) return isSensorEvent(tid)
         if (isFilter(tid)) {
+            // TODO: if event, put it last
             if (isFilterConstant(tid)) return getParam(tid)
             if (isLineEvent(tid)) {
                 if (tid == Tid.TID_FILTER_LINE_BOTH) return 101
@@ -552,7 +566,12 @@ namespace microcode {
         Tid.TID_FILTER_COIN_5,
     ]
 
-    const filterMath = ["value_in", "comparison", "maths", "decimal_editor"]
+    const filterMath: (string | number)[] = [
+        "value_in",
+        "comparison",
+        "maths",
+        "decimal_editor",
+    ]
 
     export function getConstraints(tile: Tile): Constraints {
         const tid = getTid(tile)
@@ -570,6 +589,7 @@ namespace microcode {
                 return { only: ["press_event"] }
             case Tid.TID_SENSOR_START_PAGE:
                 return { only: ["timespan"] }
+
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
                 return {
                     allow: filterMath,
@@ -585,6 +605,7 @@ namespace microcode {
                     allow: filterMath,
                     disallow: [Tid.TID_FILTER_CUP_Z_READ],
                 }
+
             case Tid.TID_SENSOR_RADIO_RECEIVE:
                 return {
                     allow: filterMath,
@@ -597,18 +618,24 @@ namespace microcode {
             case Tid.TID_SENSOR_LED_LIGHT:
             case Tid.TID_SENSOR_DISTANCE:
             case Tid.TID_SENSOR_MOISTURE:
-                return { allow: only5.concat(["comparison"]) }
+            case Tid.TID_SENSOR_TEMP:
+                return {
+                    allow: filterMath.concat(["up_down_event"]),
+                }
+
+            // only5 is for microcode-classic
+
             case Tid.TID_SENSOR_REFLECTED:
                 return { only: ["on_off_event"] }
+
             case Tid.TID_SENSOR_MICROPHONE:
                 return {
-                    allow: only5.concat([
+                    allow: filterMath.concat([
                         Tid.TID_FILTER_LOUD,
                         Tid.TID_FILTER_QUIET,
                     ]),
                 }
-            case Tid.TID_SENSOR_TEMP:
-                return { allow: ["temperature_event"].concat(filterMath) }
+
             case Tid.TID_SENSOR_ROTARY:
                 return { only: ["rotary_event"] }
             case Tid.TID_SENSOR_LINE:
@@ -617,19 +644,25 @@ namespace microcode {
                 return { only: ["timespan"] }
             case Tid.TID_SENSOR_ACCELEROMETER:
                 return { only: ["accel_event"] }
+
             case Tid.TID_ACTUATOR_PAINT:
                 return { only: ["icon_editor", "loop"] }
             case Tid.TID_ACTUATOR_SPEAKER:
                 return { only: ["sound_emoji", "loop"] }
             case Tid.TID_ACTUATOR_MUSIC:
                 return { only: ["melody_editor", "loop"] }
+
             case Tid.TID_ACTUATOR_RADIO_SEND:
             case Tid.TID_ACTUATOR_SHOW_NUMBER:
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
                 return {
-                    only: ["value_out", "maths", "constant", "decimal_editor"],
+                    only: [
+                        "value_out",
+                        "maths", // "constant",
+                        "decimal_editor",
+                    ],
                 }
             case Tid.TID_ACTUATOR_RGB_LED:
                 return { only: ["rgb_led", "loop"] }
@@ -673,7 +706,11 @@ namespace microcode {
         if (isEmoji(tid)) return "sound_emoji"
         if (isComparisonOperator(tid)) return "comparison"
         if (isMathOperator(tid)) return "maths"
-        if (isFilterConstant(tid) || isFilterVariable(tid)) return "value_in"
+        if (
+            // isFilterConstant(tid) ||
+            isFilterVariable(tid)
+        )
+            return "value_in"
         if (isModifierConstant(tid)) return "constant"
         if (isModifierVariable(tid)) return "value_out"
         if (isPage(tid)) return "page"
@@ -691,7 +728,7 @@ namespace microcode {
                 return "rotary_event"
             case Tid.TID_FILTER_TEMP_WARMER:
             case Tid.TID_FILTER_TEMP_COLDER:
-                return "temperature_event"
+                return "up_down_event"
             case Tid.TID_FILTER_LOUD:
             case Tid.TID_FILTER_QUIET: // dead
                 return "sound_event"
