@@ -91,7 +91,7 @@ namespace microcode {
             }
         }
 
-        public matchWhen(tid: number, event = 0): boolean {
+        public matchWhen(tid: number, event: number = undefined): boolean {
             const sensor = this.rule.sensor
             if (tid != sensor) return false
             if (
@@ -103,7 +103,7 @@ namespace microcode {
                 return this.filterViaCompare()
             } else {
                 const eventCode = this.lookupEventCode()
-                if (eventCode) {
+                if (event && eventCode) {
                     return eventCode == -1 || event == eventCode
                 } else {
                     return this.filterViaCompare()
@@ -563,7 +563,7 @@ namespace microcode {
         }
 
         private setupEventQueue() {
-            const newRules = (sensor: number, filter: number) => {
+            const matchRule = (sensor: number, filter: number = undefined) => {
                 return this.ruleClosures.filter(rc =>
                     rc.matchWhen(sensor, filter)
                 )
@@ -580,7 +580,7 @@ namespace microcode {
                                 const event = ev as StateUpdateEvent
                                 const rules = event.updatedVars.map(v => {
                                     const tid = vars2tids[v] as number
-                                    return newRules(tid, -1)
+                                    return matchRule(tid)
                                 })
                                 // flatten into one list
                                 let newOnes: RuleClosure[] = []
@@ -594,7 +594,7 @@ namespace microcode {
                                 const event = ev as SensorUpdateEvent
                                 // see if any rule matches
                                 this.processNewRules(
-                                    newRules(event.sensor, event.filter)
+                                    matchRule(event.sensor, event.filter)
                                 )
                                 break
                             }
@@ -606,7 +606,7 @@ namespace microcode {
                             }
                             case MicroCodeEventKind.StartPage: {
                                 this.processNewRules(
-                                    newRules(Tid.TID_SENSOR_START_PAGE, -1)
+                                    matchRule(Tid.TID_SENSOR_START_PAGE)
                                 )
                                 break
                             }
