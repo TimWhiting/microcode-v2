@@ -765,11 +765,8 @@ namespace microcode {
 
     export function getKindTid(tid: number): TileKind {
         if (
-            isLineEvent(tid) ||
             isFilterConstant(tid) ||
             isModifierConstant(tid) ||
-            tid == Tid.TID_MODIFIER_ON ||
-            tid == Tid.TID_MODIFIER_OFF ||
             tid == Tid.TID_DECIMAL_EDITOR
         )
             return TileKind.Literal
@@ -828,7 +825,6 @@ namespace microcode {
         if (isModifierConstant(tid)) return tid - Tid.TID_MODIFIER_COIN_1 + 1
         if (isFilterConstant(tid)) return tid - Tid.TID_FILTER_COIN_1 + 1
         if (isPage(tid)) return tid - Tid.TID_MODIFIER_PAGE_1 + 1
-        if (isLedColor(tid)) return "led_solid"
         if (isAccelerometerEvent(tid) || isPressReleaseEvent(tid)) return tid
         switch (tid) {
             case Tid.TID_DECIMAL_EDITOR: {
@@ -851,6 +847,12 @@ namespace microcode {
             case Tid.TID_FILTER_CUP_Z_READ:
             case Tid.TID_MODIFIER_CUP_Z_READ:
                 return "cup_z"
+            // handle modifer by mapping to their corresponding sensor
+            // TODO: need to handle light sensor, microphone, magnetometer, etc
+            case Tid.TID_MODIFIER_TEMP_READ:
+                return Tid.TID_SENSOR_TEMP
+            case Tid.TID_MODIFIER_RADIO_VALUE:
+                return Tid.TID_SENSOR_RADIO_RECEIVE
             //
             case Tid.TID_FILTER_ROTARY_LEFT:
             case Tid.TID_FILTER_TEMP_COLDER:

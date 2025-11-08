@@ -563,7 +563,7 @@ namespace microcode {
         }
 
         private setupEventQueue() {
-            const matchRule = (sensor: number, filter: number = undefined) => {
+            const matchRule = (sensor: number, filter: number) => {
                 return this.ruleClosures.filter(rc =>
                     rc.matchWhen(sensor, filter)
                 )
@@ -580,7 +580,7 @@ namespace microcode {
                                 const event = ev as StateUpdateEvent
                                 const rules = event.updatedVars.map(v => {
                                     const tid = vars2tids[v] as number
-                                    return matchRule(tid)
+                                    return matchRule(tid, undefined)
                                 })
                                 // flatten into one list
                                 let newOnes: RuleClosure[] = []
@@ -606,7 +606,10 @@ namespace microcode {
                             }
                             case MicroCodeEventKind.StartPage: {
                                 this.processNewRules(
-                                    matchRule(Tid.TID_SENSOR_START_PAGE)
+                                    matchRule(
+                                        Tid.TID_SENSOR_START_PAGE,
+                                        undefined
+                                    )
                                 )
                                 break
                             }
