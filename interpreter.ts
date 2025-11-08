@@ -419,7 +419,9 @@ namespace microcode {
 
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
             this.host.emitClearScreen()
-            this.host.registerOnSensorEvent((t, f) => this.onSensorEvent(t, f))
+            this.host.registerOnSensorEvent((t, f) =>
+                this.onSensorEvent(t, f, f)
+            )
             for (const v of Object.keys(vars2tids)) this.state[v] = 0
             for (const tid of sensorTids)
                 this.sensors[tid] = this.getSensorValue(tid)
@@ -628,10 +630,11 @@ namespace microcode {
             })
         }
 
-        public onSensorEvent(sensorTid: number, filter: number = -1) {
+        public onSensorEvent(tid: number, newVal: number, filter: number = -1) {
+            this.state[tid] = newVal
             this.addEvent({
                 kind: MicroCodeEventKind.SensorUpdate,
-                sensor: sensorTid,
+                sensor: tid,
                 filter: filter,
             } as SensorUpdateEvent)
         }
@@ -659,9 +662,9 @@ namespace microcode {
                                 newReading != oldReading) ||
                             (!this.microcodeClassic && delta >= 1)
                         ) {
-                            this.state[tid] = newReading
                             this.onSensorEvent(
                                 tid,
+                                newReading,
                                 newReading > oldReading
                                     ? SensorChange.Up
                                     : SensorChange.Down
@@ -721,9 +724,6 @@ namespace microcode {
                 case TileKind.Literal:
                     return (param as number).toString()
                 case TileKind.Variable:
-                    return lookupVar(param)
-                case TileKind.RadioValue:
-                case TileKind.Radio:
                     return lookupVar(param)
                 default:
                     this.error(`can't emit kind ${kind} for ${getTid(expr)}`)

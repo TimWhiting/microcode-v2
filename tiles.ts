@@ -758,9 +758,7 @@ namespace microcode {
         Page,
         Timespan,
         EventCode,
-        RadioValue,
         Sensor,
-        Radio,
         RandomToss,
         NumFmt, // on actuator - P is numfmt (Jacdac stuff)
         Sequence,
@@ -784,12 +782,6 @@ namespace microcode {
         if (isPage(tid)) return TileKind.Page
         if (isCarModifier(tid)) return TileKind.NumFmt
         switch (tid) {
-            case Tid.TID_SENSOR_RADIO_RECEIVE:
-            case Tid.TID_SENSOR_CAR_WALL:
-            case Tid.TID_SENSOR_LINE:
-                return TileKind.Radio
-            case Tid.TID_MODIFIER_RADIO_VALUE:
-                return TileKind.RadioValue
             case Tid.TID_MODIFIER_RANDOM_TOSS:
                 return TileKind.RandomToss
             case Tid.TID_FILTER_ROTARY_LEFT:
@@ -831,6 +823,10 @@ namespace microcode {
             case Tid.TID_SENSOR_MAGNET:
             case Tid.TID_SENSOR_TEMP:
             case Tid.TID_MODIFIER_TEMP_READ:
+            case Tid.TID_SENSOR_RADIO_RECEIVE:
+            case Tid.TID_SENSOR_CAR_WALL:
+            case Tid.TID_SENSOR_LINE:
+            case Tid.TID_MODIFIER_RADIO_VALUE:
                 return TileKind.Sensor
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
