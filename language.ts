@@ -102,7 +102,7 @@ namespace microcode {
             return (
                 getKind(tile) == TileKind.Literal ||
                 getKind(tile) == TileKind.Variable ||
-                getKind(tile) == TileKind.Temperature ||
+                getKind(tile) == TileKind.Sensor ||
                 getKind(tile) == TileKind.RadioValue
             )
         }

@@ -753,18 +753,16 @@ namespace microcode {
     }
 
     export enum TileKind {
-        Literal = 1, // value is P
-        Variable, // value is variables[P]
-        Page, // value is page[P]
-        EventCode,
+        Literal = 1,
+        Variable,
+        Page,
         Timespan,
+        EventCode,
         RadioValue,
-        Temperature,
-
-        // Filter/actuator kinds
-        Radio, // radio send/recv
-        RandomToss, // random number
-        NumFmt, // on actuator - P is numfmt
+        Sensor,
+        Radio,
+        RandomToss,
+        NumFmt, // on actuator - P is numfmt (Jacdac stuff)
         Sequence,
     }
 
@@ -792,8 +790,6 @@ namespace microcode {
                 return TileKind.Radio
             case Tid.TID_MODIFIER_RADIO_VALUE:
                 return TileKind.RadioValue
-            case Tid.TID_MODIFIER_TEMP_READ:
-                return TileKind.Temperature
             case Tid.TID_MODIFIER_RANDOM_TOSS:
                 return TileKind.RandomToss
             case Tid.TID_FILTER_ROTARY_LEFT:
@@ -834,6 +830,8 @@ namespace microcode {
             case Tid.TID_SENSOR_MICROPHONE:
             case Tid.TID_SENSOR_MAGNET:
             case Tid.TID_SENSOR_TEMP:
+            case Tid.TID_MODIFIER_TEMP_READ:
+                return TileKind.Sensor
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
             case Tid.TID_SENSOR_CUP_Z_WRITTEN:

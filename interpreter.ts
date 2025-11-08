@@ -684,7 +684,8 @@ namespace microcode {
         }
 
         private getExprValue(expr: Tile): string {
-            switch (getTid(expr)) {
+            const tid = getTid(expr)
+            switch (tid) {
                 case Tid.TID_OPERATOR_DIVIDE:
                     return "/"
                 case Tid.TID_OPERATOR_MULTIPLY:
@@ -715,19 +716,15 @@ namespace microcode {
                 return (this.sensors[tid] as number).toString()
             }
             switch (kind) {
-                // TODO: get rid of special casing for Temperature and Radio
-                case TileKind.Temperature:
-                    return lookupVar("Temperature")
+                case TileKind.Sensor:
+                    return lookupSensor(tid)
                 case TileKind.Literal:
                     return (param as number).toString()
                 case TileKind.Variable:
-                    let name = param
-                    if (name) lookupVar(name)
-                    // name = tidToSensor(getTid(expr))
-                    return 0
+                    return lookupVar(param)
                 case TileKind.RadioValue:
                 case TileKind.Radio:
-                    return lookupVar(name)
+                    return lookupVar(param)
                 default:
                     this.error(`can't emit kind ${kind} for ${getTid(expr)}`)
                     return undefined
