@@ -755,13 +755,8 @@ namespace microcode {
     export enum TileKind {
         Literal = 1,
         Variable,
-        Page,
-        Timespan,
         EventCode,
         Sensor,
-        RandomToss,
-        NumFmt, // on actuator - P is numfmt (Jacdac stuff)
-        Sequence,
     }
 
     export function getKind(tile: Tile) {
@@ -778,12 +773,7 @@ namespace microcode {
             tid == Tid.TID_DECIMAL_EDITOR
         )
             return TileKind.Literal
-        if (isTimespan(tid)) return TileKind.Timespan
-        if (isPage(tid)) return TileKind.Page
-        if (isCarModifier(tid)) return TileKind.NumFmt
         switch (tid) {
-            case Tid.TID_MODIFIER_RANDOM_TOSS:
-                return TileKind.RandomToss
             case Tid.TID_FILTER_ROTARY_LEFT:
             case Tid.TID_FILTER_ROTARY_RIGHT:
             case Tid.TID_FILTER_TEMP_WARMER:
@@ -806,18 +796,6 @@ namespace microcode {
             case Tid.TID_FILTER_PIN_1:
             case Tid.TID_FILTER_PIN_2:
                 return TileKind.EventCode
-            case Tid.TID_ACTUATOR_PAINT:
-            case Tid.TID_ACTUATOR_SPEAKER:
-            case Tid.TID_ACTUATOR_MUSIC:
-            case Tid.TID_ACTUATOR_RGB_LED:
-            case Tid.TID_ACTUATOR_CAR:
-                return TileKind.Sequence
-            case Tid.TID_ACTUATOR_RADIO_SEND:
-            case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
-            case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
-            case Tid.TID_ACTUATOR_RELAY:
-            case Tid.TID_ACTUATOR_SERVO_POWER:
-                return TileKind.NumFmt
             case Tid.TID_SENSOR_LED_LIGHT:
             case Tid.TID_SENSOR_MICROPHONE:
             case Tid.TID_SENSOR_MAGNET:
@@ -851,7 +829,6 @@ namespace microcode {
         if (isFilterConstant(tid)) return tid - Tid.TID_FILTER_COIN_1 + 1
         if (isPage(tid)) return tid - Tid.TID_MODIFIER_PAGE_1 + 1
         if (isLedColor(tid)) return "led_solid"
-        if (isCarModifier(tid)) return jacs.NumFmt.F64
         if (isAccelerometerEvent(tid) || isPressReleaseEvent(tid)) return tid
         switch (tid) {
             case Tid.TID_DECIMAL_EDITOR: {
@@ -911,12 +888,6 @@ namespace microcode {
                 return 5000
             case Tid.TID_FILTER_TIMESPAN_RANDOM:
                 return -1000
-            //
-            case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
-                return jacs.NumFmt.I32
-            case Tid.TID_ACTUATOR_RELAY:
-            case Tid.TID_ACTUATOR_SERVO_POWER:
-                return jacs.NumFmt.U32
         }
         return tid
     }

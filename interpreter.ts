@@ -49,6 +49,8 @@ namespace microcode {
             case Tid.TID_ACTUATOR_PAINT:
             case Tid.TID_ACTUATOR_MUSIC:
             case Tid.TID_ACTUATOR_SPEAKER:
+            case Tid.TID_ACTUATOR_RGB_LED:
+            case Tid.TID_ACTUATOR_CAR:
                 return ActionKind.Sequence
         }
         return ActionKind.Instant
@@ -246,8 +248,7 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_SWITCH_PAGE: {
                     let targetPage = 1
                     for (const m of this.rule.modifiers)
-                        if (getKind(m) == TileKind.Page)
-                            targetPage = getParam(m)
+                        targetPage = getParam(m)
                     return targetPage
                 }
             }
@@ -303,11 +304,10 @@ namespace microcode {
                 let period = 0
                 let randomPeriod = 0
                 for (const m of this.rule.filters) {
-                    const mJdparam = getParam(m)
-                    if (getKind(m) == TileKind.Timespan) {
-                        if (mJdparam >= 0) period += mJdparam
-                        else randomPeriod += -mJdparam // see hack in jdParam
-                    }
+                    // assert isTimeSpan(m)
+                    const param = getParam(m)
+                    if (param >= 0) period += param
+                    else randomPeriod += -param // see hack in jdParam
                 }
                 if (
                     sensor == Tid.TID_SENSOR_TIMER &&
@@ -716,7 +716,8 @@ namespace microcode {
                 return (this.state[v] as number).toString()
             }
             const lookupSensor = (tid: number) => {
-                return (this.sensors[tid] as number).toString()
+                const val = this.sensors[tid] as number
+                return val !== undefined ? val.toString() : "0"
             }
             switch (kind) {
                 case TileKind.Sensor:
