@@ -425,6 +425,7 @@ namespace microcode {
             for (const v of Object.keys(vars2tids)) this.state[v] = 0
             for (const tid of sensorTids)
                 this.sensors[tid] = this.getSensorValue(tid)
+            this.startSensors()
             this.running = true
             // get ready to receive events
             this.setupEventQueue()

@@ -110,6 +110,8 @@ namespace microcode {
                 })
             })
 
+            this.startSensors()
+
             // context.onEvent(
             //     DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
             //     DAL.DEVICE_EVT_ANY,
@@ -142,7 +144,6 @@ namespace microcode {
 
         private startSensors() {
             // initialize sensors
-            // TODO: move this to RuntimeHost
             this.sensors.push(Sensor.getFromName("Light"))
             this.sensors.push(Sensor.getFromName("Temperature"))
             this.sensors.push(Sensor.getFromName("Magnet"))
