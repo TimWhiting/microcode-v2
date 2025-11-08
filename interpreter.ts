@@ -1,17 +1,6 @@
 namespace microcode {
     // an interpreter for ProgramDefn
 
-    // Runtime:
-    // - race condition
-    // - resource content error
-    // - microphone: event -> number doesn't work - number doesn't appear
-    //.   - note same behavior not present with temperature
-    // - firefly: 1/4 timer not firing?
-    //    - timer not getting restarted...
-    // - round semantics
-
-    // Editor:
-    // - no change in operator to right of random-toss (used to work)?
 
     class Error {
         constructor(public msg: string) {}
@@ -672,6 +661,7 @@ namespace microcode {
 
         private startSensors() {
             // initialize sensors
+            // TODO: move this to RuntimeHost
             this.sensors.push(Sensor.getFromName("Light"))
             this.sensors.push(Sensor.getFromName("Temperature"))
             this.sensors.push(Sensor.getFromName("Magnet"))
@@ -686,6 +676,8 @@ namespace microcode {
                     this.sensors.forEach(s => {
                         const oldReading = this.state[s.getName()] as number
                         const newReading = this.getSensorValue(s)
+                        // note: normalized is for 1-5 scale
+                        // note: for non-normalized, delta should be a function of range (min,max)
                         const normalized = sensorInfo[s.getName()].normalized
                         const delta = Math.abs(newReading - oldReading)
                         if (
