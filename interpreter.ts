@@ -1,7 +1,6 @@
 namespace microcode {
     // an interpreter for ProgramDefn
 
-
     class Error {
         constructor(public msg: string) {}
     }
