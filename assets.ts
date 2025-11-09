@@ -256,7 +256,12 @@ namespace microcode {
             if (name == Tid.TID_MODIFIER_EMOJI_YAWN) return icondb.soundYawn
 
             if (name == Tid.TID_MODIFIER_TEMP_READ) return icondb.thermometer
-            if (name == Tid.TID_MODIFIER_RADIO_VALUE) return icondb.radio_value
+            if (name == Tid.TID_MODIFIER_RADIO_READ) return icondb.radio_value
+            if (name == Tid.TID_MODIFIER_LIGHT_READ) return icondb.light_sensor
+            if (name == Tid.TID_MODIFIER_MAGNET_READ) return icondb.magnet
+            if (name == Tid.TID_MODIFIER_MIC_READ) return icondb.microphone
+
+            // operators
 
             if (name == Tid.TID_OPERATOR_DIVIDE) return icondb.operatorIcon("/")
             if (name == Tid.TID_OPERATOR_MINUS) return icondb.operatorIcon("-")

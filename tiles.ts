@@ -156,7 +156,7 @@ namespace microcode {
         TID_MODIFIER_CUP_X_READ = 173,
         TID_MODIFIER_CUP_Y_READ = 174,
         TID_MODIFIER_CUP_Z_READ = 175,
-        TID_MODIFIER_RADIO_VALUE = 176,
+        TID_MODIFIER_RADIO_READ = 176,
         TID_MODIFIER_RANDOM_TOSS = 177,
         TID_MODIFIER_LOOP = 178,
         TID_MODIFIER_MELODY_EDITOR = 179,
@@ -193,7 +193,10 @@ namespace microcode {
 
         TID_MODIFIER_ON = 204,
         TID_MODIFIER_OFF = 205,
-        MODIFER_END = 205,
+        TID_MODIFIER_LIGHT_READ = 206,
+        TID_MODIFIER_MAGNET_READ = 207,
+        TID_MODIFIER_MIC_READ = 208,
+        MODIFER_END = 208,
 
         TID_OPERATOR_START = 210,
         TID_OPERATOR_PLUS = 210,
@@ -740,7 +743,10 @@ namespace microcode {
                 return "decimal_editor"
             case Tid.TID_MODIFIER_RANDOM_TOSS:
             case Tid.TID_MODIFIER_TEMP_READ:
-            case Tid.TID_MODIFIER_RADIO_VALUE:
+            case Tid.TID_MODIFIER_RADIO_READ:
+            case Tid.TID_MODIFIER_MIC_READ:
+            case Tid.TID_MODIFIER_LIGHT_READ:
+            case Tid.TID_MODIFIER_MAGNET_READ:
                 return "value_out"
             case Tid.TID_OPERATOR_DIVIDE:
             case Tid.TID_OPERATOR_MINUS:
@@ -799,7 +805,7 @@ namespace microcode {
             case Tid.TID_SENSOR_RADIO_RECEIVE:
             case Tid.TID_SENSOR_CAR_WALL:
             case Tid.TID_SENSOR_LINE:
-            case Tid.TID_MODIFIER_RADIO_VALUE:
+            case Tid.TID_MODIFIER_RADIO_READ:
                 return TileKind.Sensor
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
@@ -849,7 +855,7 @@ namespace microcode {
             // TODO: need to handle light sensor, microphone, magnetometer, etc
             case Tid.TID_MODIFIER_TEMP_READ:
                 return Tid.TID_SENSOR_TEMP
-            case Tid.TID_MODIFIER_RADIO_VALUE:
+            case Tid.TID_MODIFIER_RADIO_READ:
                 return Tid.TID_SENSOR_RADIO_RECEIVE
             //
             case Tid.TID_FILTER_ROTARY_LEFT:
