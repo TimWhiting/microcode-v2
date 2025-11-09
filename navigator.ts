@@ -28,6 +28,7 @@ namespace microcode {
         }
 
         protected reportAria(ret: Button) {
+            if (!reportAria) return
             if (!ret) {
                 return
             }
@@ -68,6 +69,7 @@ namespace microcode {
             this.col = 2
         }
         protected reportAria() {
+            if (!reportAria) return
             super.reportAria()
             if (this.row == -1) return
             const on = true // TODO btn.getIcon() === "note_on"
@@ -91,6 +93,7 @@ namespace microcode {
             this.col = 2
         }
         protected reportAria() {
+            if (!reportAria) return
             super.reportAria()
             if (this.row == -1) return
             const on = true // TODO: btn.getIcon() == "solid_red"
