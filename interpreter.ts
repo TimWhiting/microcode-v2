@@ -486,6 +486,7 @@ namespace microcode {
 
         private updateState(ruleIndex: number, varName: string, v: number) {
             if (!this.newState) this.newState = {}
+            console.log(`rule ${ruleIndex} sets ${varName} = ${v}`)
             this.newState[varName] = v
         }
 
@@ -672,6 +673,9 @@ namespace microcode {
                             // TODO: adjust delta based on sensor range
                             (!this.microcodeClassic && delta >= 5)
                         ) {
+                            console.log(
+                                `sensor ${tid} changed ${oldReading} -> ${newReading}`
+                            )
                             basic.pause(1)
                             this.onSensorEvent(
                                 tid,
@@ -728,7 +732,8 @@ namespace microcode {
                 return (this.state[v] as number).toString()
             }
             const lookupSensor = (tid: number) => {
-                const val = this.sensors[tid] as number
+                const sensorTid = getParam(tid)
+                const val = this.sensors[sensorTid] as number
                 return val !== undefined ? val.toString() : "0"
             }
             switch (kind) {
