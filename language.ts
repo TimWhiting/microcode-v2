@@ -102,8 +102,7 @@ namespace microcode {
             return (
                 getKind(tile) == TileKind.Literal ||
                 getKind(tile) == TileKind.Variable ||
-                getKind(tile) == TileKind.Temperature ||
-                getKind(tile) == TileKind.RadioValue
+                getKind(tile) == TileKind.Sensor
             )
         }
 
@@ -115,7 +114,7 @@ namespace microcode {
                 if (
                     this.supportsMath(tile1) &&
                     (this.supportsMath(tile2) ||
-                        getKind(tile2) == TileKind.RandomToss)
+                        getTid(tile2) == Tid.TID_MODIFIER_RANDOM_TOSS)
                 ) {
                     tiles.insertAt(i + 1, Tid.TID_OPERATOR_PLUS)
                 } else if (isMathOperator(getTid(tile1)) && i == 0) {

@@ -256,7 +256,12 @@ namespace microcode {
             if (name == Tid.TID_MODIFIER_EMOJI_YAWN) return icondb.soundYawn
 
             if (name == Tid.TID_MODIFIER_TEMP_READ) return icondb.thermometer
-            if (name == Tid.TID_MODIFIER_RADIO_VALUE) return icondb.radio_value
+            if (name == Tid.TID_MODIFIER_RADIO_READ) return icondb.radio_value
+            if (name == Tid.TID_MODIFIER_LIGHT_READ) return icondb.light_sensor
+            if (name == Tid.TID_MODIFIER_MAGNET_READ) return icondb.magnet
+            if (name == Tid.TID_MODIFIER_MIC_READ) return icondb.microphone
+
+            // operators
 
             if (name == Tid.TID_OPERATOR_DIVIDE) return icondb.operatorIcon("/")
             if (name == Tid.TID_OPERATOR_MINUS) return icondb.operatorIcon("-")
@@ -1472,10 +1477,10 @@ namespace icondb {
 . . 8 8 5 8 8 5 8 8 5 8 8 . . .
 . . 8 5 8 8 8 8 8 8 8 5 8 . . .
 . . 8 8 8 8 8 5 8 8 8 8 8 . . .
-. . 8 8 8 8 8 8 8 8 8 8 8 5 5 5
-. . 8 8 8 2 2 2 2 2 8 8 8 5 5 5
-. . 8 f f f f f f f f f 8 5 5 4
-. . . . . . . . . . . . . 4 4 .
+. . 8 8 8 8 8 8 8 8 8 8 8 . . .
+. . 8 8 8 2 2 2 2 2 8 8 8 . . .
+. . 8 f f f f f f f f f 8 . . .
+. . . . . . . . . . . . . . . .
 `
 
     export const speakerSoft = bmp`
@@ -2746,7 +2751,7 @@ bffffffffffffffffffffffffffffffb
     }
 
     export function numberToImage(i: number) {
-        if (microcode.editorMode != microcode.EditorMode.Decimal)
+        if (microcode.microcodeClassic)
             return num2image[i]
         else return numberToDecimalImage(i + 1)
     }

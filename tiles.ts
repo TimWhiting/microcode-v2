@@ -156,7 +156,7 @@ namespace microcode {
         TID_MODIFIER_CUP_X_READ = 173,
         TID_MODIFIER_CUP_Y_READ = 174,
         TID_MODIFIER_CUP_Z_READ = 175,
-        TID_MODIFIER_RADIO_VALUE = 176,
+        TID_MODIFIER_RADIO_READ = 176,
         TID_MODIFIER_RANDOM_TOSS = 177,
         TID_MODIFIER_LOOP = 178,
         TID_MODIFIER_MELODY_EDITOR = 179,
@@ -193,7 +193,10 @@ namespace microcode {
 
         TID_MODIFIER_ON = 204,
         TID_MODIFIER_OFF = 205,
-        MODIFER_END = 205,
+        TID_MODIFIER_LIGHT_READ = 206,
+        TID_MODIFIER_MAGNET_READ = 207,
+        TID_MODIFIER_MIC_READ = 208,
+        MODIFER_END = 208,
 
         TID_OPERATOR_START = 210,
         TID_OPERATOR_PLUS = 210,
@@ -268,6 +271,18 @@ namespace microcode {
             Tid.PRESS_RELEASE_START <= tidEnum &&
             tidEnum <= Tid.PRESS_RELEASE_END
         )
+    }
+
+    function isSensorEvent(tid: Tid) {
+        switch (tid) {
+            case Tid.TID_FILTER_TEMP_WARMER:
+            case Tid.TID_FILTER_LOUD:
+                return -10
+            case Tid.TID_FILTER_TEMP_COLDER:
+            case Tid.TID_FILTER_QUIET:
+                return -9
+        }
+        return 0
     }
 
     function isAccelerometerEvent(tidEnum: Tid) {
@@ -424,7 +439,9 @@ namespace microcode {
 
     export function priority(tile: Tile): number {
         const tid = getTid(tile)
+        if (isSensorEvent(tid)) return isSensorEvent(tid)
         if (isFilter(tid)) {
+            // TODO: if event, put it last
             if (isFilterConstant(tid)) return getParam(tid)
             if (isLineEvent(tid)) {
                 if (tid == Tid.TID_FILTER_LINE_BOTH) return 101
@@ -552,7 +569,12 @@ namespace microcode {
         Tid.TID_FILTER_COIN_5,
     ]
 
-    const filterMath = ["value_in", "comparison", "maths", "decimal_editor"]
+    const filterMath: (string | number)[] = [
+        "value_in",
+        "comparison",
+        "maths",
+        "decimal_editor",
+    ]
 
     export function getConstraints(tile: Tile): Constraints {
         const tid = getTid(tile)
@@ -570,6 +592,7 @@ namespace microcode {
                 return { only: ["press_event"] }
             case Tid.TID_SENSOR_START_PAGE:
                 return { only: ["timespan"] }
+
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
                 return {
                     allow: filterMath,
@@ -585,6 +608,7 @@ namespace microcode {
                     allow: filterMath,
                     disallow: [Tid.TID_FILTER_CUP_Z_READ],
                 }
+
             case Tid.TID_SENSOR_RADIO_RECEIVE:
                 return {
                     allow: filterMath,
@@ -597,18 +621,24 @@ namespace microcode {
             case Tid.TID_SENSOR_LED_LIGHT:
             case Tid.TID_SENSOR_DISTANCE:
             case Tid.TID_SENSOR_MOISTURE:
-                return { allow: only5.concat(["comparison"]) }
+            case Tid.TID_SENSOR_TEMP:
+                return {
+                    allow: filterMath.concat(["up_down_event"]),
+                }
+
+            // only5 is for microcode-classic
+
             case Tid.TID_SENSOR_REFLECTED:
                 return { only: ["on_off_event"] }
+
             case Tid.TID_SENSOR_MICROPHONE:
                 return {
-                    allow: only5.concat([
+                    allow: filterMath.concat([
                         Tid.TID_FILTER_LOUD,
                         Tid.TID_FILTER_QUIET,
                     ]),
                 }
-            case Tid.TID_SENSOR_TEMP:
-                return { allow: ["temperature_event"].concat(filterMath) }
+
             case Tid.TID_SENSOR_ROTARY:
                 return { only: ["rotary_event"] }
             case Tid.TID_SENSOR_LINE:
@@ -617,19 +647,25 @@ namespace microcode {
                 return { only: ["timespan"] }
             case Tid.TID_SENSOR_ACCELEROMETER:
                 return { only: ["accel_event"] }
+
             case Tid.TID_ACTUATOR_PAINT:
                 return { only: ["icon_editor", "loop"] }
             case Tid.TID_ACTUATOR_SPEAKER:
                 return { only: ["sound_emoji", "loop"] }
             case Tid.TID_ACTUATOR_MUSIC:
                 return { only: ["melody_editor", "loop"] }
+
             case Tid.TID_ACTUATOR_RADIO_SEND:
             case Tid.TID_ACTUATOR_SHOW_NUMBER:
             case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
                 return {
-                    only: ["value_out", "maths", "constant", "decimal_editor"],
+                    only: [
+                        "value_out",
+                        "maths", // "constant",
+                        "decimal_editor",
+                    ],
                 }
             case Tid.TID_ACTUATOR_RGB_LED:
                 return { only: ["rgb_led", "loop"] }
@@ -647,8 +683,6 @@ namespace microcode {
                 return { only: ["page"] }
             case Tid.TID_ACTUATOR_CAR:
                 return { only: ["car"] }
-            case Tid.TID_MODIFIER_RADIO_VALUE:
-                return { requires: [Tid.TID_SENSOR_RADIO_RECEIVE] }
             case Tid.TID_MODIFIER_RANDOM_TOSS:
                 return {
                     only: [
@@ -673,7 +707,11 @@ namespace microcode {
         if (isEmoji(tid)) return "sound_emoji"
         if (isComparisonOperator(tid)) return "comparison"
         if (isMathOperator(tid)) return "maths"
-        if (isFilterConstant(tid) || isFilterVariable(tid)) return "value_in"
+        if (
+            // isFilterConstant(tid) ||
+            isFilterVariable(tid)
+        )
+            return "value_in"
         if (isModifierConstant(tid)) return "constant"
         if (isModifierVariable(tid)) return "value_out"
         if (isPage(tid)) return "page"
@@ -691,7 +729,7 @@ namespace microcode {
                 return "rotary_event"
             case Tid.TID_FILTER_TEMP_WARMER:
             case Tid.TID_FILTER_TEMP_COLDER:
-                return "temperature_event"
+                return "up_down_event"
             case Tid.TID_FILTER_LOUD:
             case Tid.TID_FILTER_QUIET: // dead
                 return "sound_event"
@@ -705,7 +743,10 @@ namespace microcode {
                 return "decimal_editor"
             case Tid.TID_MODIFIER_RANDOM_TOSS:
             case Tid.TID_MODIFIER_TEMP_READ:
-            case Tid.TID_MODIFIER_RADIO_VALUE:
+            case Tid.TID_MODIFIER_RADIO_READ:
+            case Tid.TID_MODIFIER_MIC_READ:
+            case Tid.TID_MODIFIER_LIGHT_READ:
+            case Tid.TID_MODIFIER_MAGNET_READ:
                 return "value_out"
             case Tid.TID_OPERATOR_DIVIDE:
             case Tid.TID_OPERATOR_MINUS:
@@ -716,19 +757,10 @@ namespace microcode {
     }
 
     export enum TileKind {
-        Literal = 1, // value is P
-        Variable, // value is variables[P]
-        Page, // value is page[P]
+        Literal = 1,
+        Variable,
         EventCode,
-        Timespan,
-        RadioValue,
-        Temperature,
-
-        // Filter/actuator kinds
-        Radio, // radio send/recv
-        RandomToss, // random number
-        NumFmt, // on actuator - P is numfmt
-        Sequence,
+        Sensor,
     }
 
     export function getKind(tile: Tile) {
@@ -737,28 +769,12 @@ namespace microcode {
 
     export function getKindTid(tid: number): TileKind {
         if (
-            isLineEvent(tid) ||
             isFilterConstant(tid) ||
             isModifierConstant(tid) ||
-            tid == Tid.TID_MODIFIER_ON ||
-            tid == Tid.TID_MODIFIER_OFF ||
             tid == Tid.TID_DECIMAL_EDITOR
         )
             return TileKind.Literal
-        if (isTimespan(tid)) return TileKind.Timespan
-        if (isPage(tid)) return TileKind.Page
-        if (isCarModifier(tid)) return TileKind.NumFmt
         switch (tid) {
-            case Tid.TID_SENSOR_RADIO_RECEIVE:
-            case Tid.TID_SENSOR_CAR_WALL:
-            case Tid.TID_SENSOR_LINE:
-                return TileKind.Radio
-            case Tid.TID_MODIFIER_RADIO_VALUE:
-                return TileKind.RadioValue
-            case Tid.TID_MODIFIER_TEMP_READ:
-                return TileKind.Temperature
-            case Tid.TID_MODIFIER_RANDOM_TOSS:
-                return TileKind.RandomToss
             case Tid.TID_FILTER_ROTARY_LEFT:
             case Tid.TID_FILTER_ROTARY_RIGHT:
             case Tid.TID_FILTER_TEMP_WARMER:
@@ -781,22 +797,22 @@ namespace microcode {
             case Tid.TID_FILTER_PIN_1:
             case Tid.TID_FILTER_PIN_2:
                 return TileKind.EventCode
-            case Tid.TID_ACTUATOR_PAINT:
-            case Tid.TID_ACTUATOR_SPEAKER:
-            case Tid.TID_ACTUATOR_MUSIC:
-            case Tid.TID_ACTUATOR_RGB_LED:
-            case Tid.TID_ACTUATOR_CAR:
-                return TileKind.Sequence
-            case Tid.TID_ACTUATOR_RADIO_SEND:
-            case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
-            case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
-            case Tid.TID_ACTUATOR_RELAY:
-            case Tid.TID_ACTUATOR_SERVO_POWER:
-                return TileKind.NumFmt
+
             case Tid.TID_SENSOR_LED_LIGHT:
             case Tid.TID_SENSOR_MICROPHONE:
             case Tid.TID_SENSOR_MAGNET:
             case Tid.TID_SENSOR_TEMP:
+            case Tid.TID_SENSOR_RADIO_RECEIVE:
+            case Tid.TID_SENSOR_CAR_WALL:
+            case Tid.TID_SENSOR_LINE:
+
+            case Tid.TID_MODIFIER_RADIO_READ:
+            case Tid.TID_MODIFIER_TEMP_READ:
+            case Tid.TID_MODIFIER_LIGHT_READ:
+            case Tid.TID_MODIFIER_MAGNET_READ:
+            case Tid.TID_MODIFIER_MIC_READ:
+                return TileKind.Sensor
+
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
             case Tid.TID_SENSOR_CUP_Z_WRITTEN:
@@ -819,8 +835,6 @@ namespace microcode {
         if (isModifierConstant(tid)) return tid - Tid.TID_MODIFIER_COIN_1 + 1
         if (isFilterConstant(tid)) return tid - Tid.TID_FILTER_COIN_1 + 1
         if (isPage(tid)) return tid - Tid.TID_MODIFIER_PAGE_1 + 1
-        if (isLedColor(tid)) return "led_solid"
-        if (isCarModifier(tid)) return jacs.NumFmt.F64
         if (isAccelerometerEvent(tid) || isPressReleaseEvent(tid)) return tid
         switch (tid) {
             case Tid.TID_DECIMAL_EDITOR: {
@@ -843,6 +857,17 @@ namespace microcode {
             case Tid.TID_FILTER_CUP_Z_READ:
             case Tid.TID_MODIFIER_CUP_Z_READ:
                 return "cup_z"
+            // handle modifer by mapping to their corresponding sensor
+            case Tid.TID_MODIFIER_TEMP_READ:
+                return Tid.TID_SENSOR_TEMP
+            case Tid.TID_MODIFIER_RADIO_READ:
+                return Tid.TID_SENSOR_RADIO_RECEIVE
+            case Tid.TID_MODIFIER_LIGHT_READ:
+                return Tid.TID_SENSOR_LED_LIGHT
+            case Tid.TID_MODIFIER_MAGNET_READ:
+                return Tid.TID_SENSOR_MAGNET
+            case Tid.TID_MODIFIER_MIC_READ:
+                return Tid.TID_SENSOR_MICROPHONE
             //
             case Tid.TID_FILTER_ROTARY_LEFT:
             case Tid.TID_FILTER_TEMP_COLDER:
@@ -880,12 +905,6 @@ namespace microcode {
                 return 5000
             case Tid.TID_FILTER_TIMESPAN_RANDOM:
                 return -1000
-            //
-            case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
-                return jacs.NumFmt.I32
-            case Tid.TID_ACTUATOR_RELAY:
-            case Tid.TID_ACTUATOR_SERVO_POWER:
-                return jacs.NumFmt.U32
         }
         return tid
     }
@@ -949,6 +968,7 @@ namespace microcode {
             case Tid.TID_SENSOR_LINE: // TODO: generalize from Jacdac
             case Tid.TID_SENSOR_REFLECTED:
             case Tid.TID_SENSOR_MICROPHONE:
+            case Tid.TID_SENSOR_LED_LIGHT:
                 return SensorChange.Up
             case Tid.TID_SENSOR_ACCELEROMETER:
             case Tid.TID_SENSOR_PRESS:

@@ -1,18 +1,6 @@
 namespace microcode {
     // an interpreter for ProgramDefn
 
-    // Runtime:
-    // - race condition
-    // - resource content error
-    // - microphone: event -> number doesn't work - number doesn't appear
-    //.   - note same behavior not present with temperature
-    // - firefly: 1/4 timer not firing?
-    //    - timer not getting restarted...
-    // - round semantics
-
-    // Editor:
-    // - no change in operator to right of random-toss (used to work)?
-
     class Error {
         constructor(public msg: string) {}
     }
@@ -22,6 +10,7 @@ namespace microcode {
 
     type ValueType = number | string | boolean | any[] | object
     type VariableMap = { [key: string]: ValueType }
+    type SensorMap = { [key: number]: number }
 
     enum OutputResource {
         LEDScreen = 1000,
@@ -60,6 +49,8 @@ namespace microcode {
             case Tid.TID_ACTUATOR_PAINT:
             case Tid.TID_ACTUATOR_MUSIC:
             case Tid.TID_ACTUATOR_SPEAKER:
+            case Tid.TID_ACTUATOR_RGB_LED:
+            case Tid.TID_ACTUATOR_CAR:
                 return ActionKind.Sequence
         }
         return ActionKind.Instant
@@ -100,45 +91,27 @@ namespace microcode {
             }
         }
 
-        public matchWhen(sensorName: string | number, event = 0): boolean {
+        public matchWhen(tid: number, filter: number = undefined): boolean {
             const sensor = this.rule.sensor
+            if (tid != sensor) return false
             if (
-                typeof sensorName == "number" &&
-                sensorName == sensor &&
                 sensor == Tid.TID_SENSOR_START_PAGE &&
                 this.rule.filters.length == 0
             ) {
-                // this rule immediately starts when we switch to its page
                 return true
             } else if (getKind(sensor) == TileKind.Variable) {
-                const pipeId = getParam(sensor)
-                if (pipeId == sensorName) return this.filterViaCompare()
+                return this.filterViaCompare()
             } else {
-                const thisSensorName =
-                    typeof sensorName == "string" ? tidToSensor(sensor) : ""
                 if (
-                    sensorName == thisSensorName ||
-                    (typeof sensorName == "number" && sensorName == sensor)
+                    this.rule.filters.length == 0 ||
+                    getKind(this.rule.filters[0]) == TileKind.EventCode
                 ) {
                     const eventCode = this.lookupEventCode()
-                    if (eventCode) {
-                        return eventCode == -1 || event == eventCode
-                    } else {
-                        return this.filterViaCompare()
-                    }
+                    // console.log(`matched event code ${eventCode} vs ${filter}`)
+                    return eventCode == -1 || filter == eventCode
+                } else {
+                    return this.filterViaCompare()
                 }
-            }
-            return false
-        }
-
-        private filterViaCompare(): boolean {
-            if (this.rule.filters.length) {
-                return this.interp.getValue(
-                    [this.rule.sensor].concat(this.rule.filters),
-                    0
-                ) as boolean
-            } else {
-                return true // sensor changed value, but no constraint
             }
         }
 
@@ -155,6 +128,17 @@ namespace microcode {
                 return evCode
             }
             return undefined
+        }
+
+        private filterViaCompare(): boolean {
+            if (this.rule.filters.length) {
+                return this.interp.getValue(
+                    [this.rule.sensor].concat(this.rule.filters),
+                    0
+                ) as boolean
+            } else {
+                return true // sensor changed value, but no constraint
+            }
         }
 
         private timerOrSequenceRule() {
@@ -268,8 +252,7 @@ namespace microcode {
                 case Tid.TID_ACTUATOR_SWITCH_PAGE: {
                     let targetPage = 1
                     for (const m of this.rule.modifiers)
-                        if (getKind(m) == TileKind.Page)
-                            targetPage = getParam(m)
+                        targetPage = getParam(m)
                     return targetPage
                 }
             }
@@ -325,11 +308,10 @@ namespace microcode {
                 let period = 0
                 let randomPeriod = 0
                 for (const m of this.rule.filters) {
-                    const mJdparam = getParam(m)
-                    if (getKind(m) == TileKind.Timespan) {
-                        if (mJdparam >= 0) period += mJdparam
-                        else randomPeriod += -mJdparam // see hack in jdParam
-                    }
+                    // assert isTimeSpan(m)
+                    const param = getParam(m)
+                    if (param >= 0) period += param
+                    else randomPeriod += -param // see hack in jdParam
                 }
                 if (
                     sensor == Tid.TID_SENSOR_TIMER &&
@@ -347,27 +329,8 @@ namespace microcode {
         }
     }
 
-    // TODO: this should be part of RuntimeHost
-
-    type SensorMap = { [id: string]: { normalized: boolean; tid: number } }
-    const sensorInfo: SensorMap = {
-        Light: { normalized: true, tid: Tid.TID_SENSOR_LED_LIGHT },
-        Microphone: { normalized: true, tid: Tid.TID_SENSOR_MICROPHONE },
-        Temperature: { normalized: false, tid: Tid.TID_SENSOR_TEMP },
-        Magnet: { normalized: true, tid: Tid.TID_SENSOR_MAGNET },
-    }
-
-    function tidToSensor(tid: number): string {
-        let result: string = undefined
-        Object.keys(sensorInfo).forEach(k => {
-            const keyTid = sensorInfo[k].tid
-            if (tid == keyTid) result = k
-        })
-        return result
-    }
-
     export enum SensorChange {
-        Up,
+        Up = 1,
         Down,
     }
 
@@ -388,12 +351,17 @@ namespace microcode {
     export interface RuntimeHost {
         emitClearScreen(): void
         registerOnSensorEvent(
-            handler: (sensorTid: number, filter: number) => void
+            handler: (tid: number, filter: number) => void
         ): void
+        getSensorValue(tid: number, normalized: boolean): number
         execute(tid: ActionTid, param: any): void
     }
 
-    const vars = ["cup_x", "cup_y", "cup_z"]
+    const vars2tids: VariableMap = {
+        cup_x: Tid.TID_SENSOR_CUP_X_WRITTEN,
+        cup_y: Tid.TID_SENSOR_CUP_Y_WRITTEN,
+        cup_z: Tid.TID_SENSOR_CUP_Z_WRITTEN,
+    }
 
     enum MicroCodeEventKind {
         StateUpdate,
@@ -415,7 +383,7 @@ namespace microcode {
 
     interface SensorUpdateEvent extends MicroCodeEvent {
         kind: MicroCodeEventKind.SensorUpdate
-        sensor: string | number
+        sensor: number
         filter: number
     }
 
@@ -433,28 +401,53 @@ namespace microcode {
         kind: MicroCodeEventKind.StartPage
     }
 
+    type SensorInfo = {
+        delta: number
+        classicNormalized: boolean
+    }
+
+    const sensorTids = [
+        Tid.TID_SENSOR_LED_LIGHT,
+        Tid.TID_SENSOR_MICROPHONE,
+        Tid.TID_SENSOR_TEMP,
+        Tid.TID_SENSOR_MAGNET,
+    ]
+
+    const sensorInfo: SensorInfo[] = [
+        { delta: 5, classicNormalized: true },
+        { delta: 5, classicNormalized: true },
+        { delta: 1, classicNormalized: false },
+        { delta: 1, classicNormalized: true }, // what about magnet?
+    ]
+
     export class Interpreter {
         private hasErrors: boolean = false
         private running: boolean = false
         private currentPage: number = 0
         private ruleClosures: RuleClosure[] = []
-        private sensors: Sensor[] = []
 
         // state storage for variables and other temporary global state
         // (local per-rule state is kept in RuleClosure)
         public state: VariableMap = {}
         public newState: VariableMap = {}
+        // state storage for sensor values
+        public sensors: SensorMap = {}
 
         constructor(private program: ProgramDefn, private host: RuntimeHost) {
             this.host.emitClearScreen()
-            this.host.registerOnSensorEvent((t, f) => this.onSensorEvent(t, f))
-            for (const v of vars) this.state[v] = 0
-            for (const v of Object.keys(sensorInfo)) this.state[v] = 0
+            this.host.registerOnSensorEvent((t, f) =>
+                this.onSensorEvent(t, f, f)
+            )
+            for (const v of Object.keys(vars2tids)) this.state[v] = 0
+            for (const tid of sensorTids) {
+                this.sensors[tid] = this.getSensorValue(tid)
+            }
+            this.sensors[Tid.TID_SENSOR_RADIO_RECEIVE] = 0
+            this.startSensors()
             this.running = true
             // get ready to receive events
             this.setupEventQueue()
             this.switchPage(0)
-            this.startSensors()
         }
 
         private stopAllRules() {
@@ -475,7 +468,7 @@ namespace microcode {
             // on start of each page, we allow checking of variables
             this.addEvent({
                 kind: MicroCodeEventKind.StateUpdate,
-                updatedVars: vars,
+                updatedVars: Object.keys(vars2tids),
             } as StateUpdateEvent)
             // start up timer-based rules
             this.ruleClosures.forEach(rc => rc.start(true))
@@ -505,6 +498,7 @@ namespace microcode {
 
         private updateState(ruleIndex: number, varName: string, v: number) {
             if (!this.newState) this.newState = {}
+            // console.log(`rule ${ruleIndex} sets ${varName} = ${v}`)
             this.newState[varName] = v
         }
 
@@ -589,7 +583,7 @@ namespace microcode {
         }
 
         private setupEventQueue() {
-            const newRules = (sensor: number | string, filter: number) => {
+            const matchingRules = (sensor: number, filter: number) => {
                 return this.ruleClosures.filter(rc =>
                     rc.matchWhen(sensor, filter)
                 )
@@ -605,7 +599,8 @@ namespace microcode {
                                 control.waitMicros(ANTI_FREEZE_DELAY * 1000)
                                 const event = ev as StateUpdateEvent
                                 const rules = event.updatedVars.map(v => {
-                                    return newRules(v, -1)
+                                    const tid = vars2tids[v] as number
+                                    return matchingRules(tid, undefined)
                                 })
                                 // flatten into one list
                                 let newOnes: RuleClosure[] = []
@@ -619,7 +614,7 @@ namespace microcode {
                                 const event = ev as SensorUpdateEvent
                                 // see if any rule matches
                                 this.processNewRules(
-                                    newRules(event.sensor, event.filter)
+                                    matchingRules(event.sensor, event.filter)
                                 )
                                 break
                             }
@@ -631,7 +626,10 @@ namespace microcode {
                             }
                             case MicroCodeEventKind.StartPage: {
                                 this.processNewRules(
-                                    newRules(Tid.TID_SENSOR_START_PAGE, -1)
+                                    matchingRules(
+                                        Tid.TID_SENSOR_START_PAGE,
+                                        undefined
+                                    )
                                 )
                                 break
                             }
@@ -655,46 +653,43 @@ namespace microcode {
             })
         }
 
-        public onSensorEvent(sensorTid: number | string, filter: number = -1) {
+        public onSensorEvent(tid: number, newVal: number, filter: number = -1) {
+            this.sensors[tid] = newVal
             this.addEvent({
                 kind: MicroCodeEventKind.SensorUpdate,
-                sensor: sensorTid,
+                sensor: tid,
                 filter: filter,
             } as SensorUpdateEvent)
         }
 
-        private getSensorValue(sensor: Sensor) {
+        private getSensorValue(tid: number): number {
             const gen1to5 = (v: number) => Math.round(4 * v) + 1
-            return sensorInfo[sensor.getName()].normalized
-                ? gen1to5(sensor.getNormalisedReading())
-                : sensor.getReading()
+            return microcodeClassic
+                ? gen1to5(this.host.getSensorValue(tid, true))
+                : this.host.getSensorValue(tid, false)
         }
 
+        // note that radio is not polled as a sensor
         private startSensors() {
-            // initialize sensors
-            this.sensors.push(Sensor.getFromName("Light"))
-            this.sensors.push(Sensor.getFromName("Temperature"))
-            this.sensors.push(Sensor.getFromName("Magnet"))
-            // this.sensors.push(Sensor.getFromName("Microphone"))
-            this.sensors.forEach(s => {
-                this.state[s.getName()] = this.getSensorValue(s)
-            })
-
             control.inBackground(() => {
                 while (this.running) {
                     // poll the sensors and check for change
-                    this.sensors.forEach(s => {
-                        const oldReading = this.state[s.getName()] as number
-                        const newReading = this.getSensorValue(s)
-                        const normalized = sensorInfo[s.getName()].normalized
+                    sensorTids.forEach((tid, index) => {
+                        const oldReading = this.sensors[tid]
+                        const newReading = this.getSensorValue(tid)
                         const delta = Math.abs(newReading - oldReading)
                         if (
-                            (normalized && newReading != oldReading) ||
-                            (!normalized && delta >= 1)
+                            (microcodeClassic && newReading != oldReading) ||
+                            (!microcodeClassic &&
+                                delta >= sensorInfo[index].delta)
                         ) {
-                            this.state[s.getName()] = newReading
+                            // console.log(
+                            //     `sensor ${tid} changed ${oldReading} -> ${newReading}`
+                            // )
+                            basic.pause(1)
                             this.onSensorEvent(
-                                sensorInfo[s.getName()].tid,
+                                tid,
+                                newReading,
                                 newReading > oldReading
                                     ? SensorChange.Up
                                     : SensorChange.Down
@@ -713,11 +708,13 @@ namespace microcode {
 
         public error(msg: string) {
             this.hasErrors = true
+            console.log(msg)
             throw new Error("Error: " + msg)
         }
 
         private getExprValue(expr: Tile): string {
-            switch (getTid(expr)) {
+            const tid = getTid(expr)
+            switch (tid) {
                 case Tid.TID_OPERATOR_DIVIDE:
                     return "/"
                 case Tid.TID_OPERATOR_MULTIPLY:
@@ -744,19 +741,18 @@ namespace microcode {
             const lookupVar = (v: string) => {
                 return (this.state[v] as number).toString()
             }
+            const lookupSensor = (tid: number) => {
+                const sensorTid = getParam(tid)
+                const val = this.sensors[sensorTid] as number
+                return val !== undefined ? val.toString() : "0"
+            }
             switch (kind) {
-                // TODO: get rid of special casing for Temperature and Radio
-                case TileKind.Temperature:
-                    return lookupVar("Temperature")
+                case TileKind.Sensor:
+                    return lookupSensor(tid)
                 case TileKind.Literal:
                     return (param as number).toString()
                 case TileKind.Variable:
-                    let name = param
-                    if (!name) name = tidToSensor(getTid(expr))
-                    return lookupVar(name)
-                case TileKind.RadioValue:
-                case TileKind.Radio:
-                    return lookupVar(name)
+                    return lookupVar(param)
                 default:
                     this.error(`can't emit kind ${kind} for ${getTid(expr)}`)
                     return undefined

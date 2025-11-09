@@ -1,6 +1,24 @@
 namespace microcode {
     // mapping of micro:bit and DAL namespace into MicroCode tiles
 
+    type SensorInfo = { [id: string]: { tid: number } }
+
+    const sensorInfo: SensorInfo = {
+        Light: { tid: Tid.TID_SENSOR_LED_LIGHT },
+        Microphone: { tid: Tid.TID_SENSOR_MICROPHONE },
+        Temperature: { tid: Tid.TID_SENSOR_TEMP },
+        Magnet: { tid: Tid.TID_SENSOR_MAGNET },
+    }
+
+    function tidToSensor(tid: number): string {
+        let result: string = undefined
+        Object.keys(sensorInfo).forEach(k => {
+            const keyTid = sensorInfo[k].tid
+            if (tid == keyTid) result = k
+        })
+        return result
+    }
+
     type IdMap = { [id: number]: number }
 
     // see DAL for these values
@@ -47,6 +65,8 @@ namespace microcode {
     ]
 
     export class MicrobitHost implements RuntimeHost {
+        private sensors: Sensor[] = []
+
         constructor() {
             this._handler = (s: number, f: number) => {}
 
@@ -81,7 +101,7 @@ namespace microcode {
                 //TODO: This is a hack to fix the onGesture events not working.
                 // In GDB we see that the CPP functions onGesture, MicrobitAccelerometer constructor and the LSM303Accelerometer constructor are invoked.
                 // In spite of this the __handler is not invoked. For some reason this basic.pause(0) fixes this issue (possibly because of it briefly yielding?)
-                basic.pause(0);
+                basic.pause(0)
                 input.onGesture(g, () => {
                     this._handler(
                         Tid.TID_SENSOR_ACCELEROMETER,
@@ -90,24 +110,36 @@ namespace microcode {
                 })
             })
 
-            // context.onEvent(
-            //     DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
-            //     DAL.DEVICE_EVT_ANY,
-            //     () => {
-            //         const ev = control.eventValue()
-            //         this._handler(
-            //             Tid.TID_SENSOR_MICROPHONE,
-            //             ev == DAL.LEVEL_THRESHOLD_HIGH
-            //                 ? Tid.TID_FILTER_LOUD
-            //                 : ev == DAL.LEVEL_THRESHOLD_LOW
-            //                 ? Tid.TID_FILTER_QUIET
-            //                 : undefined
-            //         )
-            //     }
-            // )
+            this.startSensors()
+
             radio.onReceivedNumber(radioNum => {
                 this._handler(Tid.TID_SENSOR_RADIO_RECEIVE, radioNum)
             })
+
+            input.onSound(DetectedSound.Loud, () => {
+                this._handler(Tid.TID_SENSOR_MICROPHONE, Tid.TID_FILTER_LOUD)
+            })
+            input.onSound(DetectedSound.Quiet, () => {
+                this._handler(Tid.TID_SENSOR_MICROPHONE, Tid.TID_FILTER_QUIET)
+            })
+        }
+
+        public getSensorValue(tid: number, normalized: boolean): number {
+            const sensorName = tidToSensor(tid)
+            const sensor = this.sensors.find(s => s.getName() == sensorName)
+            if (sensor)
+                return normalized
+                    ? sensor.getNormalisedReading()
+                    : sensor.getReading()
+            return 0
+        }
+
+        private startSensors() {
+            // initialize sensors
+            this.sensors.push(Sensor.getFromName("Light"))
+            this.sensors.push(Sensor.getFromName("Temperature"))
+            this.sensors.push(Sensor.getFromName("Magnet"))
+            this.sensors.push(Sensor.getFromName("Microphone"))
         }
 
         private _handler: (sensorTid: number, filter: number) => void
