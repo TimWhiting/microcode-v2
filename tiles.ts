@@ -797,16 +797,22 @@ namespace microcode {
             case Tid.TID_FILTER_PIN_1:
             case Tid.TID_FILTER_PIN_2:
                 return TileKind.EventCode
+
             case Tid.TID_SENSOR_LED_LIGHT:
             case Tid.TID_SENSOR_MICROPHONE:
             case Tid.TID_SENSOR_MAGNET:
             case Tid.TID_SENSOR_TEMP:
-            case Tid.TID_MODIFIER_TEMP_READ:
             case Tid.TID_SENSOR_RADIO_RECEIVE:
             case Tid.TID_SENSOR_CAR_WALL:
             case Tid.TID_SENSOR_LINE:
+
             case Tid.TID_MODIFIER_RADIO_READ:
+            case Tid.TID_MODIFIER_TEMP_READ:
+            case Tid.TID_MODIFIER_LIGHT_READ:
+            case Tid.TID_MODIFIER_MAGNET_READ:
+            case Tid.TID_MODIFIER_MIC_READ:
                 return TileKind.Sensor
+
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
             case Tid.TID_SENSOR_CUP_Z_WRITTEN:
@@ -852,11 +858,16 @@ namespace microcode {
             case Tid.TID_MODIFIER_CUP_Z_READ:
                 return "cup_z"
             // handle modifer by mapping to their corresponding sensor
-            // TODO: need to handle light sensor, microphone, magnetometer, etc
             case Tid.TID_MODIFIER_TEMP_READ:
                 return Tid.TID_SENSOR_TEMP
             case Tid.TID_MODIFIER_RADIO_READ:
                 return Tid.TID_SENSOR_RADIO_RECEIVE
+            case Tid.TID_MODIFIER_LIGHT_READ:
+                return Tid.TID_SENSOR_LED_LIGHT
+            case Tid.TID_MODIFIER_MAGNET_READ:
+                return Tid.TID_SENSOR_MAGNET
+            case Tid.TID_MODIFIER_MIC_READ:
+                return Tid.TID_SENSOR_MICROPHONE
             //
             case Tid.TID_FILTER_ROTARY_LEFT:
             case Tid.TID_FILTER_TEMP_COLDER:
