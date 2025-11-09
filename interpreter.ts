@@ -107,7 +107,7 @@ namespace microcode {
                     getKind(this.rule.filters[0]) == TileKind.EventCode
                 ) {
                     const eventCode = this.lookupEventCode()
-                    console.log(`matched event code ${eventCode} vs ${filter}`)
+                    // console.log(`matched event code ${eventCode} vs ${filter}`)
                     return eventCode == -1 || filter == eventCode
                 } else {
                     return this.filterViaCompare()
@@ -403,7 +403,7 @@ namespace microcode {
 
     const sensorTids = [
         Tid.TID_SENSOR_LED_LIGHT,
-        // Tid.TID_SENSOR_MICROPHONE,
+        Tid.TID_SENSOR_MICROPHONE,
         Tid.TID_SENSOR_TEMP,
         Tid.TID_SENSOR_MAGNET,
     ]
@@ -427,8 +427,10 @@ namespace microcode {
                 this.onSensorEvent(t, f, f)
             )
             for (const v of Object.keys(vars2tids)) this.state[v] = 0
-            for (const tid of sensorTids)
+            for (const tid of sensorTids) {
                 this.sensors[tid] = this.getSensorValue(tid)
+            }
+            this.sensors[Tid.TID_SENSOR_RADIO_RECEIVE] = 0
             this.startSensors()
             this.running = true
             // get ready to receive events
@@ -639,7 +641,7 @@ namespace microcode {
         }
 
         public onSensorEvent(tid: number, newVal: number, filter: number = -1) {
-            this.state[tid] = newVal
+            this.sensors[tid] = newVal
             this.addEvent({
                 kind: MicroCodeEventKind.SensorUpdate,
                 sensor: tid,
@@ -655,6 +657,7 @@ namespace microcode {
                 : this.host.getSensorValue(tid, false)
         }
 
+        // note that radio is not polled as a sensor
         private startSensors() {
             control.inBackground(() => {
                 while (this.running) {
@@ -669,10 +672,7 @@ namespace microcode {
                             // TODO: adjust delta based on sensor range
                             (!this.microcodeClassic && delta >= 5)
                         ) {
-                            // console.log(
-                            //     `sensor ${tid} changed from ${oldReading} to ${newReading}`
                             basic.pause(1)
-                            this.sensors[tid] = newReading
                             this.onSensorEvent(
                                 tid,
                                 newReading,

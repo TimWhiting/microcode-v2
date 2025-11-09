@@ -139,7 +139,7 @@ namespace microcode {
             this.sensors.push(Sensor.getFromName("Light"))
             this.sensors.push(Sensor.getFromName("Temperature"))
             this.sensors.push(Sensor.getFromName("Magnet"))
-            // this.sensors.push(Sensor.getFromName("Microphone"))
+            this.sensors.push(Sensor.getFromName("Microphone"))
         }
 
         private _handler: (sensorTid: number, filter: number) => void
