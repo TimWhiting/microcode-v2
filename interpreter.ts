@@ -330,7 +330,7 @@ namespace microcode {
     }
 
     export enum SensorChange {
-        Up,
+        Up = 1,
         Down,
     }
 
