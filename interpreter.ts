@@ -662,14 +662,17 @@ namespace microcode {
                     sensorTids.forEach(tid => {
                         const oldReading = this.sensors[tid]
                         const newReading = this.getSensorValue(tid)
-                        // note: normalized is for 1-5 scale
-                        // note: for non-normalized, delta should be a function of range (min,max)
                         const delta = Math.abs(newReading - oldReading)
                         if (
                             (this.microcodeClassic &&
                                 newReading != oldReading) ||
-                            (!this.microcodeClassic && delta >= 1)
+                            // TODO: adjust delta based on sensor range
+                            (!this.microcodeClassic && delta >= 5)
                         ) {
+                            // console.log(
+                            //     `sensor ${tid} changed from ${oldReading} to ${newReading}`
+                            basic.pause(1)
+                            this.sensors[tid] = newReading
                             this.onSensorEvent(
                                 tid,
                                 newReading,

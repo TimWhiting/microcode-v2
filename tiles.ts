@@ -680,8 +680,6 @@ namespace microcode {
                 return { only: ["page"] }
             case Tid.TID_ACTUATOR_CAR:
                 return { only: ["car"] }
-            case Tid.TID_MODIFIER_RADIO_VALUE:
-                return { requires: [Tid.TID_SENSOR_RADIO_RECEIVE] }
             case Tid.TID_MODIFIER_RANDOM_TOSS:
                 return {
                     only: [
@@ -953,6 +951,7 @@ namespace microcode {
             case Tid.TID_SENSOR_LINE: // TODO: generalize from Jacdac
             case Tid.TID_SENSOR_REFLECTED:
             case Tid.TID_SENSOR_MICROPHONE:
+            case Tid.TID_SENSOR_LED_LIGHT:
                 return SensorChange.Up
             case Tid.TID_SENSOR_ACCELEROMETER:
             case Tid.TID_SENSOR_PRESS:
