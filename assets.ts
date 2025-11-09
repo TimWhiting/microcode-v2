@@ -2751,7 +2751,7 @@ bffffffffffffffffffffffffffffffb
     }
 
     export function numberToImage(i: number) {
-        if (microcode.editorMode != microcode.EditorMode.Decimal)
+        if (microcode.microcodeClassic)
             return num2image[i]
         else return numberToDecimalImage(i + 1)
     }

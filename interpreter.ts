@@ -401,11 +401,23 @@ namespace microcode {
         kind: MicroCodeEventKind.StartPage
     }
 
+    type SensorInfo = {
+        delta: number
+        classicNormalized: boolean
+    }
+
     const sensorTids = [
         Tid.TID_SENSOR_LED_LIGHT,
         Tid.TID_SENSOR_MICROPHONE,
         Tid.TID_SENSOR_TEMP,
         Tid.TID_SENSOR_MAGNET,
+    ]
+
+    const sensorInfo: SensorInfo[] = [
+        { delta: 5, classicNormalized: true },
+        { delta: 5, classicNormalized: true },
+        { delta: 1, classicNormalized: false },
+        { delta: 1, classicNormalized: true }, // what about magnet?
     ]
 
     export class Interpreter {
@@ -650,10 +662,9 @@ namespace microcode {
             } as SensorUpdateEvent)
         }
 
-        private microcodeClassic = false
         private getSensorValue(tid: number): number {
             const gen1to5 = (v: number) => Math.round(4 * v) + 1
-            return this.microcodeClassic
+            return microcodeClassic
                 ? gen1to5(this.host.getSensorValue(tid, true))
                 : this.host.getSensorValue(tid, false)
         }
@@ -663,15 +674,14 @@ namespace microcode {
             control.inBackground(() => {
                 while (this.running) {
                     // poll the sensors and check for change
-                    sensorTids.forEach(tid => {
+                    sensorTids.forEach((tid, index) => {
                         const oldReading = this.sensors[tid]
                         const newReading = this.getSensorValue(tid)
                         const delta = Math.abs(newReading - oldReading)
                         if (
-                            (this.microcodeClassic &&
-                                newReading != oldReading) ||
-                            // TODO: adjust delta based on sensor range
-                            (!this.microcodeClassic && delta >= 5)
+                            (microcodeClassic && newReading != oldReading) ||
+                            (!microcodeClassic &&
+                                delta >= sensorInfo[index].delta)
                         ) {
                             // console.log(
                             //     `sensor ${tid} changed ${oldReading} -> ${newReading}`
