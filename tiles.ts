@@ -578,8 +578,13 @@ namespace microcode {
         "decimal_editor",
     ]
 
+    function getMath() {
+        return microcodeClassic ? only5 : filterMath
+    }
+
     export function getConstraints(tile: Tile): Constraints {
         const tid = getTid(tile)
+        // TODO: we need to handle equality separately for microcode-classic
         if (isComparisonOperator(tid)) {
             return {
                 allow: filterMath,
@@ -597,23 +602,23 @@ namespace microcode {
 
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
                 return {
-                    allow: filterMath,
+                    allow: getMath(),
                     disallow: [Tid.TID_FILTER_CUP_X_READ],
                 }
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
                 return {
-                    allow: filterMath,
+                    allow: getMath(),
                     disallow: [Tid.TID_FILTER_CUP_Y_READ],
                 }
             case Tid.TID_SENSOR_CUP_Z_WRITTEN:
                 return {
-                    allow: filterMath,
+                    allow: getMath(),
                     disallow: [Tid.TID_FILTER_CUP_Z_READ],
                 }
 
             case Tid.TID_SENSOR_RADIO_RECEIVE:
                 return {
-                    allow: filterMath,
+                    allow: getMath(),
                     provides: [Tid.TID_SENSOR_RADIO_RECEIVE],
                 }
             case Tid.TID_SENSOR_SLIDER:
@@ -625,7 +630,7 @@ namespace microcode {
             case Tid.TID_SENSOR_MOISTURE:
             case Tid.TID_SENSOR_TEMP:
                 return {
-                    allow: filterMath.concat(["up_down_event"]),
+                    allow: getMath().concat(["up_down_event"]),
                 }
 
             // only5 is for microcode-classic
@@ -635,7 +640,7 @@ namespace microcode {
 
             case Tid.TID_SENSOR_MICROPHONE:
                 return {
-                    allow: filterMath.concat([
+                    allow: getMath().concat([
                         Tid.TID_FILTER_LOUD,
                         Tid.TID_FILTER_QUIET,
                     ]),
