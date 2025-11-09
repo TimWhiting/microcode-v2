@@ -102,23 +102,15 @@ namespace microcode {
             } else if (getKind(sensor) == TileKind.Variable) {
                 return this.filterViaCompare()
             } else {
-                const eventCode = this.lookupEventCode()
-                if (event && eventCode) {
+                if (
+                    this.rule.filters.length == 0 ||
+                    getKind(this.rule.filters[0]) == TileKind.EventCode
+                ) {
+                    const eventCode = this.lookupEventCode()
                     return eventCode == -1 || event == eventCode
                 } else {
                     return this.filterViaCompare()
                 }
-            }
-        }
-
-        private filterViaCompare(): boolean {
-            if (this.rule.filters.length) {
-                return this.interp.getValue(
-                    [this.rule.sensor].concat(this.rule.filters),
-                    0
-                ) as boolean
-            } else {
-                return true // sensor changed value, but no constraint
             }
         }
 
@@ -135,6 +127,17 @@ namespace microcode {
                 return evCode
             }
             return undefined
+        }
+
+        private filterViaCompare(): boolean {
+            if (this.rule.filters.length) {
+                return this.interp.getValue(
+                    [this.rule.sensor].concat(this.rule.filters),
+                    0
+                ) as boolean
+            } else {
+                return true // sensor changed value, but no constraint
+            }
         }
 
         private timerOrSequenceRule() {
@@ -687,6 +690,7 @@ namespace microcode {
 
         public error(msg: string) {
             this.hasErrors = true
+            console.log(msg)
             throw new Error("Error: " + msg)
         }
 
