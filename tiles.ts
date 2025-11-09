@@ -492,6 +492,8 @@ namespace microcode {
                 return 40
             case Tid.TID_SENSOR_LED_LIGHT:
                 return 50
+            case Tid.TID_SENSOR_MAGNET:
+                return 60
             case Tid.TID_SENSOR_RADIO_RECEIVE:
                 return 100
             case Tid.TID_SENSOR_TIMER:
@@ -988,8 +990,9 @@ namespace microcode {
                 return jacs.ServiceClass.Button
             case Tid.TID_SENSOR_SLIDER:
                 return jacs.ServiceClass.Potentiometer
-            case Tid.TID_SENSOR_MAGNET:
-                return jacs.ServiceClass.MagneticFieldLevel
+            // Using this for micro:bit sensor now
+            // case Tid.TID_SENSOR_MAGNET:
+            //     return jacs.ServiceClass.MagneticFieldLevel
             case Tid.TID_SENSOR_LIGHT:
                 return jacs.ServiceClass.LightLevel
             case Tid.TID_SENSOR_ROTARY:

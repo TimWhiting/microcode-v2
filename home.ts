@@ -45,7 +45,7 @@ namespace microcode {
                         parent: null,
                         style: ButtonStyles.Transparent,
                         icon: "largeDisk",
-                        ariaId: "Load program",
+                        ariaId: "load",
                         x: 50,
                         y: 30,
                         onClick: () => {

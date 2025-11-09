@@ -32,7 +32,7 @@ namespace microcode {
         else if (id === "T15") res = "light";
         else if (id === "T16") res = "temperature";
         else if (id === "T17") res = "radio receive";
-        else if (id === "T18") res = "hear";
+        else if (id === "T18") res = "sound";
         else if (id === "T19") res = "variable X set";
         else if (id === "T20") res = "variable Y set";
         else if (id === "T21") res = "variable Z set";
@@ -157,6 +157,9 @@ namespace microcode {
         else if (id === "T203") res = "arm close";
         else if (id === "T204") res = "on";
         else if (id === "T205") res = "off";
+        else if (id === "T206") res = "light value";
+        else if (id === "T207") res = "magnet value";
+        else if (id === "T208") res = "sound value";
         else if (id === "T210") res = "add";
         else if (id === "T211") res = "subtract";
         else if (id === "T212") res = "multiply";

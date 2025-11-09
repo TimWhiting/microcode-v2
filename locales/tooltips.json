@@ -44,7 +44,7 @@
     "T15": "light",
     "T16": "temperature",
     "T17": "radio receive",
-    "T18": "hear",
+    "T18": "sound",
     "T19": "variable X set",
 
     "T20": "variable Y set",
@@ -184,6 +184,9 @@
     "T203": "arm close",
     "T204": "on",
     "T205": "off",
+    "T206": "light value",
+    "T207": "magnet value",
+    "T208": "sound value",
 
     "T210": "add",
     "T211": "subtract",
