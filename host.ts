@@ -5,7 +5,7 @@ namespace microcode {
 
     const sensorInfo: SensorInfo = {
         Light: { tid: Tid.TID_SENSOR_LED_LIGHT },
-        // Microphone: { tid: Tid.TID_SENSOR_MICROPHONE },
+        Microphone: { tid: Tid.TID_SENSOR_MICROPHONE },
         Temperature: { tid: Tid.TID_SENSOR_TEMP },
         Magnet: { tid: Tid.TID_SENSOR_MAGNET },
     }
@@ -112,23 +112,15 @@ namespace microcode {
 
             this.startSensors()
 
-            // context.onEvent(
-            //     DAL.DEVICE_ID_SYSTEM_LEVEL_DETECTOR,
-            //     DAL.DEVICE_EVT_ANY,
-            //     () => {
-            //         const ev = control.eventValue()
-            //         this._handler(
-            //             Tid.TID_SENSOR_MICROPHONE,
-            //             ev == DAL.LEVEL_THRESHOLD_HIGH
-            //                 ? Tid.TID_FILTER_LOUD
-            //                 : ev == DAL.LEVEL_THRESHOLD_LOW
-            //                 ? Tid.TID_FILTER_QUIET
-            //                 : undefined
-            //         )
-            //     }
-            // )
             radio.onReceivedNumber(radioNum => {
                 this._handler(Tid.TID_SENSOR_RADIO_RECEIVE, radioNum)
+            })
+
+            input.onSound(DetectedSound.Loud, () => {
+                this._handler(Tid.TID_SENSOR_MICROPHONE, Tid.TID_FILTER_LOUD)
+            })
+            input.onSound(DetectedSound.Quiet, () => {
+                this._handler(Tid.TID_SENSOR_MICROPHONE, Tid.TID_FILTER_QUIET)
             })
         }
 
