@@ -350,6 +350,7 @@ namespace microcode {
 
     export interface RuntimeHost {
         emitClearScreen(): void
+        stopOngoingActions(): void
         registerOnSensorEvent(
             handler: (tid: number, filter: number) => void
         ): void
@@ -703,7 +704,10 @@ namespace microcode {
         }
 
         stop() {
+            this.running = false
+            basic.pause(1)
             this.stopAllRules()
+            this.host.stopOngoingActions()
             this.running = false
         }
 

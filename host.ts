@@ -180,6 +180,13 @@ namespace microcode {
             }
         }
 
+        public stopOngoingActions() {
+            music.stopAllSounds()
+            led.stopAnimation()
+            music.stopMelody(MelodyStopOptions.All)
+            basic.clearScreen()
+        }
+
         public execute(action: ActionTid, param: any) {
             switch (action) {
                 case Tid.TID_ACTUATOR_PAINT:
