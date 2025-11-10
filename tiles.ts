@@ -587,7 +587,7 @@ namespace microcode {
         // TODO: we need to handle equality separately for microcode-classic
         if (isComparisonOperator(tid)) {
             return {
-                allow: filterMath,
+                allow: getMath(),
                 disallow: [
                     (tid: number) => getKindTid(tid) == TileKind.EventCode,
                 ],
