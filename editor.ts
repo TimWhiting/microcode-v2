@@ -55,7 +55,7 @@ namespace microcode {
         public picker: Picker
         public rendering = false
         private dirty = false
-        public programChanged = true
+        public programChanged = false
 
         constructor(app: AppInterface) {
             super(app, "editor")
@@ -105,9 +105,10 @@ namespace microcode {
         }
 
         public saveAndCompileProgram() {
-            if (!this.programChanged) return
-            this.programChanged = false
-            this.app.save(SAVESLOT_AUTO, this.progdef.toBuffer())
+            if (this.programChanged) {
+                this.programChanged = false
+                this.app.save(SAVESLOT_AUTO, this.progdef.toBuffer())
+            }
             runProgram(this.progdef)
         }
 
