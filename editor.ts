@@ -451,6 +451,7 @@ namespace microcode {
             }
             if (this._changed) {
                 this._changed = false
+                this.dirty = true
                 this.rebuildNavigator()
             }
             // TODO: need this anymore???
