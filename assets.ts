@@ -2744,9 +2744,15 @@ bffffffffffffffffffffffffffffffb
     ) {
         const str = typeof i == "number" ? i.toString() : i
         const width = str.length * 8
-        const img = bitmaps.create(width + 8, 16)
-        if (!transparent) img.fill(1)
-        img.print(str, 6, 4, 15)
+        const img = bitmaps.create(width + 8, 18)
+        if (!transparent) {
+            img.fill(1)
+            img.setPixel(0, 0, 0)
+            img.setPixel(width + 7, 0, 0)
+            img.setPixel(0, 17, 0)
+            img.setPixel(width + 7, 17, 0)
+        }
+        img.print(str, 6, 5, 15)
         return img
     }
 
