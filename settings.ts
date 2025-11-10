@@ -1,5 +1,5 @@
 namespace microcode {
-    export let microcodeClassic = false
+    export let microcodeClassic = true
     export let jacdacEnabled = false
     export let reportAria = false
 }

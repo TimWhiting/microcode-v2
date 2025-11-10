@@ -149,7 +149,7 @@ namespace microcode {
                     microcode.isModifierConstant(name) ||
                     microcode.isFilterConstant(name)
                 ) {
-                    return icondb.numberToImage(getParam(name) - 1)
+                    return icondb.numberToImage(getParam(name))
                 }
             }
 
@@ -2752,10 +2752,11 @@ bffffffffffffffffffffffffffffffb
 
     export function numberToImage(i: number) {
         if (microcode.microcodeClassic) {
-            if (i == 1 || i == 2 || i == 3 || i == 4 || i == 5)
-                return num2image[i]
+            const index = Math.floor(i - 1)
+            if (index == i - 1 && index >= 0 && index < 5)
+                return num2image[index]
         }
-        return numberToDecimalImage(i + 1)
+        return numberToDecimalImage(i)
     }
 
     export const kita_slider = bmp`
