@@ -454,7 +454,6 @@ namespace microcode {
                 this.dirty = true
                 this.rebuildNavigator()
             }
-            // TODO: need this anymore???
             this.cursor.update()
         }
 
