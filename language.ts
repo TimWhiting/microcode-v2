@@ -393,13 +393,12 @@ namespace microcode {
             const tile = rule.getRuleRep()[name][index]
 
             let rangeName = name
-            // TODO: don't allow editing of comparison and
-            // TODO: math operators
-            if (!microcodeClassic) {
-                if (isComparisonOperator(getTid(tile)))
-                    rangeName = "comparisonOperators"
-                else if (isMathOperator(getTid(tile)))
-                    rangeName = "mathOperators"
+            if (isComparisonOperator(getTid(tile))) {
+                if (microcodeClassic) return []
+                rangeName = "comparisonOperators"
+            } else if (isMathOperator(getTid(tile))) {
+                if (microcodeClassic) return []
+                rangeName = "mathOperators"
             }
 
             // based on the name, we have a range of tiles to choose from
