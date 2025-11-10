@@ -72,6 +72,8 @@ namespace microcode {
 
     export function stopProgram() {
         if (theInterpreter) theInterpreter.stop()
+        led.stopAnimation()
+        // TODO: stop other things... move this to host
         basic.clearScreen()
         theInterpreter = undefined
     }
