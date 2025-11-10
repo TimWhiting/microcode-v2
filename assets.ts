@@ -2751,9 +2751,11 @@ bffffffffffffffffffffffffffffffb
     }
 
     export function numberToImage(i: number) {
-        if (microcode.microcodeClassic)
-            return num2image[i]
-        else return numberToDecimalImage(i + 1)
+        if (microcode.microcodeClassic) {
+            if (i == 1 || i == 2 || i == 3 || i == 4 || i == 5)
+                return num2image[i]
+        }
+        return numberToDecimalImage(i + 1)
     }
 
     export const kita_slider = bmp`
