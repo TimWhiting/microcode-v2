@@ -216,6 +216,7 @@ namespace microcode {
         private editTile(name: string, index: number) {
             const ruleTiles = this.ruledef.getRuleRep()[name]
             const tileUpdated = (tile: Tile) => {
+                stopProgram()
                 let numberAdded = 0
                 let deleted = 0
                 if (tile) {

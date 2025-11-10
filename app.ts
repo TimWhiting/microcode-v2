@@ -62,7 +62,7 @@ namespace microcode {
             this.sceneManager.popScene()
         }
     }
-    
+
     let theInterpreter: Interpreter = undefined
 
     export function runProgram(prog: ProgramDefn) {
@@ -72,6 +72,7 @@ namespace microcode {
 
     export function stopProgram() {
         if (theInterpreter) theInterpreter.stop()
+        basic.clearScreen()
         theInterpreter = undefined
     }
 }
