@@ -698,7 +698,7 @@ namespace microcode {
                             )
                         }
                     })
-                    basic.pause(200)
+                    basic.pause(50)
                 }
             })
         }
