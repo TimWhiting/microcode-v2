@@ -1,3 +1,5 @@
+import font = user_interface_base.font
+
 namespace microcode {
     let extraImage: Bitmap = null
 
@@ -2743,16 +2745,16 @@ bffffffffffffffffffffffffffffffb
         transparent = true
     ) {
         const str = typeof i == "number" ? i.toString() : i
-        const width = str.length * 8
-        const img = bitmaps.create(width + 8, 18)
+        const width = (str.length + 1) * font.charWidth
+        const img = bitmaps.create(width, 18)
         if (!transparent) {
             img.fill(1)
             img.setPixel(0, 0, 0)
-            img.setPixel(width + 7, 0, 0)
+            img.setPixel(width -1, 0, 0)
             img.setPixel(0, 17, 0)
-            img.setPixel(width + 7, 17, 0)
+            img.setPixel(width -1, 17, 0)
         }
-        img.print(str, 6, 5, 15)
+        img.print(str, font.charWidth >> 1, 5, 15)
         return img
     }
 
