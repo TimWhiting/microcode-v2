@@ -55,7 +55,7 @@ namespace microcode {
         public picker: Picker
         public rendering = false
         private dirty = false
-        public programChanged = false
+        public programChanged = true
 
         constructor(app: AppInterface) {
             super(app, "editor")
