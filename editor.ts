@@ -370,8 +370,6 @@ namespace microcode {
                     } else {
                         this.app.popScene()
                         this.app.pushScene(new Home(this.app))
-                        // back to home screen from editor, stop program
-                        stopProgram()
                     }
                 } else {
                     if (this.navigator.atRuleStart()) {
