@@ -440,7 +440,7 @@ namespace microcode {
             )
             for (const v of Object.keys(vars2tids)) this.state[v] = 0
             for (const tid of sensorTids) {
-                this.sensors[tid] = this.getSensorValue(tid)
+                this.sensors[tid] = undefined
             }
             this.sensors[Tid.TID_SENSOR_RADIO_RECEIVE] = 0
             this.startSensors()
@@ -679,6 +679,7 @@ namespace microcode {
                         const newReading = this.getSensorValue(tid)
                         const delta = Math.abs(newReading - oldReading)
                         if (
+                            oldReading === undefined ||
                             (microcodeClassic && newReading != oldReading) ||
                             (!microcodeClassic &&
                                 delta >= sensorInfo[index].delta)
