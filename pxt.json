@@ -8,7 +8,7 @@
         "microphone": "*",
         "datalogger": "*",
         "settings": "*",
-        "microgui": "github:microbit-apps/microgui#v0.0.30"
+        "microgui": "github:microbit-apps/microgui#v0.0.33"
     },
     "files": [
         "config.ts",

@@ -393,9 +393,13 @@ namespace microcode {
             const tile = rule.getRuleRep()[name][index]
 
             let rangeName = name
-            if (isComparisonOperator(getTid(tile)))
+            if (isComparisonOperator(getTid(tile))) {
+                if (microcodeClassic) return []
                 rangeName = "comparisonOperators"
-            else if (isMathOperator(getTid(tile))) rangeName = "mathOperators"
+            } else if (isMathOperator(getTid(tile))) {
+                if (microcodeClassic) return []
+                rangeName = "mathOperators"
+            }
 
             // based on the name, we have a range of tiles to choose from
             const [lower, upper] = ranges[rangeName]
@@ -406,7 +410,10 @@ namespace microcode {
                 else all.push(i)
             }
             // special case for decimal editor
-            if (rangeName == "filters" || rangeName == "modifiers")
+            if (
+                !microcodeClassic &&
+                (rangeName == "filters" || rangeName == "modifiers")
+            )
                 all.push(getEditor(Tid.TID_DECIMAL_EDITOR))
 
             all = all
