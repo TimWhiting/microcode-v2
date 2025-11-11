@@ -12,6 +12,7 @@
   "rule_down": "move rule down",
   "disk": "save",
   "load": "load",
+  "settings": "settings",
   "SR_LED": "LED {x} {y} {state}",
   "SR_NOTE": "note {index} {state}",
   "SR_ON": "on",
