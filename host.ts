@@ -5,7 +5,7 @@ namespace microcode {
 
     const sensorInfo: SensorInfo = {
         Light: { tid: Tid.TID_SENSOR_LED_LIGHT },
-        Microphone: { tid: Tid.TID_SENSOR_MICROPHONE },
+        // Microphone: { tid: Tid.TID_SENSOR_MICROPHONE },
         Temperature: { tid: Tid.TID_SENSOR_TEMP },
         Magnet: { tid: Tid.TID_SENSOR_MAGNET },
     }
