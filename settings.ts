@@ -14,38 +14,20 @@ namespace microcode {
         alignment: GUIComponentAlignment.CENTRE, // Change to move around, use xOffset and yOffset for small shifts.
         btns: [
             new RadioButton({
-                text: "hi",
+                text: "Classic: 1 - 5",
                 onClick: () => {
                     basic.showString("a")
                 },
             }),
             new RadioButton({
-                text: "hiyaaaaaaaaaa",
+                text: "Decimal: base 10",
                 onClick: () => {
                     basic.showString("b")
                 },
             }),
-            new RadioButton({
-                text: "hello",
-                onClick: () => {
-                    basic.showString("c")
-                },
-            }),
-            new RadioButton({
-                text: "a",
-                onClick: () => {
-                    basic.showString("d")
-                },
-            }),
-            new RadioButton({
-                text: "b",
-                onClick: () => {
-                    basic.showString("e")
-                },
-            }),
         ],
         isActive: true,
-        title: "The title", // Optional
+        title: "Select Mode", // Optional
         colour: 3, // Optional
         xOffset: 0, // Optional small shift in X
         yOffset: 0, // Optional small shift in Y
