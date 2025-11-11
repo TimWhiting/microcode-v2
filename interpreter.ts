@@ -409,9 +409,9 @@ namespace microcode {
 
     const sensorTids = [
         Tid.TID_SENSOR_LED_LIGHT,
-        Tid.TID_SENSOR_MICROPHONE,
+        Tid.TID_SENSOR_MICROPHONE, // more CPU intensive
         Tid.TID_SENSOR_TEMP,
-        Tid.TID_SENSOR_MAGNET,
+        Tid.TID_SENSOR_MAGNET, // i2c
     ]
 
     const sensorInfo: SensorInfo[] = [
