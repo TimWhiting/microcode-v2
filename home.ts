@@ -61,7 +61,11 @@ namespace microcode {
                         y: 30,
                         onClick: () => {
                             this.app.popScene()
-                            this.app.pushScene(new Settings(this.app))
+                            const gcs = new microgui.GUIComponentScene({
+                                app,
+                                components: [selectMode],
+                            })
+                            this.app.pushScene(gcs)
                         },
                     }),
                 ],

@@ -5,80 +5,51 @@ namespace microcode {
 
     // screen for selecting from samples
 
-    import Screen = user_interface_base.Screen
-    import CursorScene = user_interface_base.CursorScene
-    import CursorDir = user_interface_base.CursorDir
-    import Button = user_interface_base.Button
-    import ButtonStyles = user_interface_base.ButtonStyles
+    import GUIComponentAlignment = microgui.GUIComponentAlignment
+    import RadioButtonCollection = microgui.RadioButtonCollection
+    import RadioButton = microgui.RadioButton
+    import GUIComponentScene = microgui.GUIComponentScene
 
-    export class Settings extends CursorScene {
-        sampleButtons: Button[]
-
-        /* override */ shutdown() {
-            super.shutdown()
-        }
-
-        /* override */ startup() {
-            super.startup()
-
-            let x = -72,
-                y = -55
-            this.sampleButtons = []
-            let rowButtons: Button[] = []
-            samples(true)
-                .filter(sample => !!sample.icon)
-                .forEach(sample => {
-                    const btn = new Button({
-                        parent: null,
-                        style: ButtonStyles.Transparent,
-                        icon: sample.icon,
-                        ariaId: sample.ariaId,
-                        x: x + 16,
-                        y: y + 16,
-                        onClick: () => {
-                            this.app.save(SAVESLOT_AUTO, sample.source)
-                            this.app.popScene()
-                            this.app.pushScene(new Editor(this.app))
-                        },
-                    })
-                    this.sampleButtons.push(btn)
-                    rowButtons.push(btn)
-                    x += 38
-                    if (x + 32 > 75) {
-                        this.navigator.addRow(rowButtons)
-                        rowButtons = []
-                        y += 38
-                        x = -72
-                    }
-                })
-            if (rowButtons.length > 0) this.navigator.addRow(rowButtons)
-        }
-
-        public moveCursor(dir: CursorDir) {
-            if (dir == CursorDir.Back) {
-                // go back to home screen
-                this.app.popScene()
-                // this.app.pushScene(new Home(this.app))
-            } else {
-                super.moveCursor(dir)
-            }
-        }
-        /* override */ activate() {
-            super.activate()
-            this.backgroundColor = 15
-        }
-
-        /* override */ draw() {
-            Screen.fillRect(
-                Screen.LEFT_EDGE,
-                Screen.TOP_EDGE,
-                Screen.WIDTH,
-                Screen.HEIGHT,
-                0xc
-            )
-            this.sampleButtons.forEach(s => s.draw())
-            super.draw()
-        }
-    }
+    export const selectMode = new RadioButtonCollection({
+        alignment: GUIComponentAlignment.CENTRE, // Change to move around, use xOffset and yOffset for small shifts.
+        btns: [
+            new RadioButton({
+                text: "hi",
+                onClick: () => {
+                    basic.showString("a")
+                },
+            }),
+            new RadioButton({
+                text: "hiyaaaaaaaaaa",
+                onClick: () => {
+                    basic.showString("b")
+                },
+            }),
+            new RadioButton({
+                text: "hello",
+                onClick: () => {
+                    basic.showString("c")
+                },
+            }),
+            new RadioButton({
+                text: "a",
+                onClick: () => {
+                    basic.showString("d")
+                },
+            }),
+            new RadioButton({
+                text: "b",
+                onClick: () => {
+                    basic.showString("e")
+                },
+            }),
+        ],
+        isActive: true,
+        title: "The title", // Optional
+        colour: 3, // Optional
+        xOffset: 0, // Optional small shift in X
+        yOffset: 0, // Optional small shift in Y
+        xScaling: 1.0, // Optional Scaling; if you want to make it wider or thinner.
+        yScaling: 1.0, // Optional Scaling; if you want to make it taller or shorter.
+    })
 }
-
