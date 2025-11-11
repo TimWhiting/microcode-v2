@@ -22,7 +22,7 @@ namespace microcode {
                         style: ButtonStyles.Transparent,
                         icon: "edit_program",
                         ariaId: "C0",
-                        x: -50,
+                        x: -60,
                         y: 30,
                         onClick: () => {
                             this.app.popScene()
@@ -34,7 +34,7 @@ namespace microcode {
                         style: ButtonStyles.Transparent,
                         icon: "smiley_buttons",
                         ariaId: "C1",
-                        x: 0,
+                        x: -20,
                         y: 30,
                         onClick: () => {
                             // this.app.popScene()
@@ -46,7 +46,18 @@ namespace microcode {
                         style: ButtonStyles.Transparent,
                         icon: "largeDisk",
                         ariaId: "load",
-                        x: 50,
+                        x: 20,
+                        y: 30,
+                        onClick: () => {
+                            this.pickDiskSLot()
+                        },
+                    }),
+                    new Button({
+                        parent: null,
+                        style: ButtonStyles.Transparent,
+                        icon: "largeSettingsGear",
+                        ariaId: "settings",
+                        x: 60,
                         y: 30,
                         onClick: () => {
                             this.pickDiskSLot()
