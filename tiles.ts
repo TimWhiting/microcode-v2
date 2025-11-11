@@ -578,16 +578,15 @@ namespace microcode {
         "decimal_editor",
     ]
 
-    function getMath() {
+    function getFilterMath() {
         return microcodeClassic ? only5 : filterMath
     }
 
     export function getConstraints(tile: Tile): Constraints {
         const tid = getTid(tile)
-        // TODO: we need to handle equality separately for microcode-classic
         if (isComparisonOperator(tid)) {
             return {
-                allow: getMath(),
+                allow: getFilterMath(),
                 disallow: [
                     (tid: number) => getKindTid(tid) == TileKind.EventCode,
                 ],
@@ -602,23 +601,23 @@ namespace microcode {
 
             case Tid.TID_SENSOR_CUP_X_WRITTEN:
                 return {
-                    allow: getMath(),
+                    allow: getFilterMath(),
                     disallow: [Tid.TID_FILTER_CUP_X_READ],
                 }
             case Tid.TID_SENSOR_CUP_Y_WRITTEN:
                 return {
-                    allow: getMath(),
+                    allow: getFilterMath(),
                     disallow: [Tid.TID_FILTER_CUP_Y_READ],
                 }
             case Tid.TID_SENSOR_CUP_Z_WRITTEN:
                 return {
-                    allow: getMath(),
+                    allow: getFilterMath(),
                     disallow: [Tid.TID_FILTER_CUP_Z_READ],
                 }
 
             case Tid.TID_SENSOR_RADIO_RECEIVE:
                 return {
-                    allow: getMath(),
+                    allow: getFilterMath(),
                     provides: [Tid.TID_SENSOR_RADIO_RECEIVE],
                 }
             case Tid.TID_SENSOR_SLIDER:
@@ -630,7 +629,7 @@ namespace microcode {
             case Tid.TID_SENSOR_MOISTURE:
             case Tid.TID_SENSOR_TEMP:
                 return {
-                    allow: getMath().concat(["up_down_event"]),
+                    allow: getFilterMath().concat(["up_down_event"]),
                 }
 
             // only5 is for microcode-classic
@@ -640,7 +639,7 @@ namespace microcode {
 
             case Tid.TID_SENSOR_MICROPHONE:
                 return {
-                    allow: getMath().concat([
+                    allow: getFilterMath().concat([
                         Tid.TID_FILTER_LOUD,
                         Tid.TID_FILTER_QUIET,
                     ]),
@@ -668,11 +667,9 @@ namespace microcode {
             case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
             case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
                 return {
-                    only: [
-                        "value_out",
-                        "maths", // "constant",
-                        "decimal_editor",
-                    ],
+                    only: microcodeClassic
+                        ? ["value_out", "constant"]
+                        : ["value_out", "maths", "decimal_editor"],
                 }
             case Tid.TID_ACTUATOR_RGB_LED:
                 return { only: ["rgb_led", "loop"] }

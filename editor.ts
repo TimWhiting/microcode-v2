@@ -280,6 +280,7 @@ namespace microcode {
                 y: 8,
                 onClick: () => this.pickPage(),
             })
+            stopProgram()
             const buf = this.app.load(SAVESLOT_AUTO)
             if (!buf) {
                 // onboarding experience
@@ -609,6 +610,7 @@ namespace microcode {
         }
 
         public moveRuleAt(index: number, up: boolean) {
+            stopProgram()
             const delta = up ? -1 : 1
             const deleted = this.pagedef.deleteRuleAt(index)
             this.pagedef.insertRuleAt(index + delta, deleted)
@@ -621,12 +623,14 @@ namespace microcode {
         }
 
         public deleteRuleAt(index: number) {
+            stopProgram()
             this.pagedef.deleteRuleAt(index)
             this.ruleEditors.splice(index, 1)
             this.reassignIndices()
         }
 
         public insertRuleAt(index: number) {
+            stopProgram()
             const newRule = this.pagedef.insertRuleAt(index, undefined)
             if (newRule) {
                 this.ruleEditors.insertAt(
