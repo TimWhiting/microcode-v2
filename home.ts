@@ -60,7 +60,8 @@ namespace microcode {
                         x: 60,
                         y: 30,
                         onClick: () => {
-                            this.pickDiskSLot()
+                            this.app.popScene()
+                            this.app.pushScene(new Settings(this.app))
                         },
                     }),
                 ],
