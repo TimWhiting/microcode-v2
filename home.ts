@@ -60,7 +60,6 @@ namespace microcode {
                         x: 60,
                         y: 30,
                         onClick: () => {
-                            this.app.popScene()
                             const gcs = new MicroCodeSettings(this.app)
                             this.app.pushScene(gcs)
                         },
