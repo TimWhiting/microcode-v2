@@ -41,6 +41,13 @@ namespace microcode {
     export class MicroCodeSettings extends microgui.GUIComponentScene {
         constructor(app: AppInterface) {
             super({ app, components: [selectMode] })
+            context.onEvent(
+                ControllerButtonEvent.Pressed,
+                controller.B.id,
+                () => {
+                    console.log("B")
+                }
+            )
         }
     }
 }
