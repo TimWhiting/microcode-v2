@@ -699,7 +699,7 @@ namespace microcode {
                         }
                     })
                     // DANGER: if this is too fast, the editor has issues!
-                    basic.pause(200)
+                    basic.pause(50)
                 }
             })
         }

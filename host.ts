@@ -5,7 +5,7 @@ namespace microcode {
 
     const sensorInfo: SensorInfo = {
         Light: { tid: Tid.TID_SENSOR_LED_LIGHT },
-        // Microphone: { tid: Tid.TID_SENSOR_MICROPHONE },
+        Microphone: { tid: Tid.TID_SENSOR_MICROPHONE },
         Temperature: { tid: Tid.TID_SENSOR_TEMP },
         Magnet: { tid: Tid.TID_SENSOR_MAGNET },
     }
@@ -116,12 +116,13 @@ namespace microcode {
                 this._handler(Tid.TID_SENSOR_RADIO_RECEIVE, radioNum)
             })
 
-            // input.onSound(DetectedSound.Loud, () => {
-            //     this._handler(Tid.TID_SENSOR_MICROPHONE, Tid.TID_FILTER_LOUD)
-            // })
-            // input.onSound(DetectedSound.Quiet, () => {
-            //     this._handler(Tid.TID_SENSOR_MICROPHONE, Tid.TID_FILTER_QUIET)
-            // })
+            input.onSound(DetectedSound.Loud, () => {
+                this._handler(Tid.TID_SENSOR_MICROPHONE, Tid.TID_FILTER_LOUD)
+            })
+
+            input.onSound(DetectedSound.Quiet, () => {
+                this._handler(Tid.TID_SENSOR_MICROPHONE, Tid.TID_FILTER_QUIET)
+            })
         }
 
         public getSensorValue(tid: number, normalized: boolean): number {
