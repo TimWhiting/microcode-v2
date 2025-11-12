@@ -36,18 +36,15 @@ namespace microcode {
         yOffset: 0, // Optional small shift in Y
         xScaling: 1.0, // Optional Scaling; if you want to make it wider or thinner.
         yScaling: 1.0, // Optional Scaling; if you want to make it taller or shorter.
+        backBtn: () => app.popScene(), // Optional
     })
 
     export class MicroCodeSettings extends microgui.GUIComponentScene {
         constructor(app: AppInterface) {
-            super({ app, components: [selectMode] })
-            context.onEvent(
-                ControllerButtonEvent.Pressed,
-                controller.B.id,
-                () => {
-                    console.log("B")
-                }
-            )
+            super({
+                app,
+                components: [selectMode],
+            })
         }
     }
 }
