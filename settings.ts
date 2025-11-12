@@ -8,21 +8,24 @@ namespace microcode {
     import GUIComponentAlignment = microgui.GUIComponentAlignment
     import RadioButtonCollection = microgui.RadioButtonCollection
     import RadioButton = microgui.RadioButton
-    import GUIComponentScene = microgui.GUIComponentScene
+    import AppInterface = user_interface_base.AppInterface
 
-    export const selectMode = new RadioButtonCollection({
+    // TODO: back button
+    // TODO: store in settings
+
+    const selectMode = new RadioButtonCollection({
         alignment: GUIComponentAlignment.CENTRE, // Change to move around, use xOffset and yOffset for small shifts.
         btns: [
             new RadioButton({
-                text: "Classic: 1 - 5",
+                text: "Classic: 1-5 dots",
                 onClick: () => {
-                    basic.showString("a")
+                    microcodeClassic = true
                 },
             }),
             new RadioButton({
                 text: "Decimal: base 10",
                 onClick: () => {
-                    basic.showString("b")
+                    microcodeClassic = false
                 },
             }),
         ],
@@ -34,4 +37,10 @@ namespace microcode {
         xScaling: 1.0, // Optional Scaling; if you want to make it wider or thinner.
         yScaling: 1.0, // Optional Scaling; if you want to make it taller or shorter.
     })
+
+    export class MicroCodeSettings extends microgui.GUIComponentScene {
+        constructor(app: AppInterface) {
+            super({ app, components: [selectMode] })
+        }
+    }
 }
