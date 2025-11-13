@@ -420,8 +420,8 @@ namespace microcode {
     ]
 
     const sensorInfo: SensorInfo[] = [
-        { delta: 5, classicNormalized: true },
-        { delta: 5, classicNormalized: true },
+        { delta: 10, classicNormalized: true },
+        { delta: 10, classicNormalized: true },
         { delta: 1, classicNormalized: false },
         { delta: 1, classicNormalized: true }, // what about magnet?
     ]
