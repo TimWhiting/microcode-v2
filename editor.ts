@@ -55,6 +55,7 @@ namespace microcode {
         public picker: Picker
         private dirty = false
         public programChanged = false
+        public queuedCursorMove: CursorDir = undefined
 
         constructor(app: AppInterface) {
             super(app, "editor")
@@ -448,8 +449,29 @@ namespace microcode {
 
             this.navigator.setBtns([[this.diskBtn, this.pageBtn]])
             this.pageEditor.addToNavigator()
-            this.navigator.initialCursor(row, col)
             this.cursor.navigator = this.navigator
+            // TODO: replace this logic with direct address via
+            // TODO: row and col and move to editor?
+            if (this.queuedCursorMove) {
+                switch (this.queuedCursorMove) {
+                    case CursorDir.Down:
+                        col++
+                    case CursorDir.Right: {
+                        col++
+                        break
+                    }
+                    case CursorDir.Back: {
+                        col--
+                    }
+                    case CursorDir.Left: {
+                        col--
+                        break
+                    }
+                    // Add other cases as needed
+                }
+                this.queuedCursorMove = undefined
+            }
+            this.navigator.initialCursor(row, col)
             this.moveTo(this.navigator.getCurrent())
         }
 

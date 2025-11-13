@@ -28,7 +28,6 @@ namespace microcode {
         ruleButtons: ButtonRuleRep
         bounds: Bounds
         whenBounds: Bounds
-        queuedCursorMove: CursorDir
 
         //% blockCombine block="xfrm" callInDebugger
         public get xfrm() {
@@ -234,13 +233,13 @@ namespace microcode {
                 this.instantiateProgramTiles()
                 if (numberAdded == 1 && this.nextEmpty(name, index)) {
                     // Queue a move to the right
-                    this.queuedCursorMove = CursorDir.Right
+                    this.editor.queuedCursorMove = CursorDir.Right
                 } else if (numberAdded == 2) {
                     // Queue two moves to the right
-                    this.queuedCursorMove = CursorDir.Down
+                    this.editor.queuedCursorMove = CursorDir.Down
                 } else if (deleted > 0) {
                     // Queue a move to the left
-                    this.queuedCursorMove =
+                    this.editor.queuedCursorMove =
                         deleted == 1 ? CursorDir.Left : CursorDir.Back
                 }
                 this.page.changed()
@@ -392,39 +391,7 @@ namespace microcode {
             return this.ruledef.isEmpty()
         }
 
-        update() {
-            if (this.queuedCursorMove) {
-                switch (this.queuedCursorMove) {
-                    case CursorDir.Down:
-                        control.raiseEvent(
-                            ControllerButtonEvent.Pressed,
-                            controller.right.id
-                        )
-                    case CursorDir.Right: {
-                        control.raiseEvent(
-                            ControllerButtonEvent.Pressed,
-                            controller.right.id
-                        )
-                        break
-                    }
-                    case CursorDir.Back: {
-                        control.raiseEvent(
-                            ControllerButtonEvent.Pressed,
-                            controller.left.id
-                        )
-                    }
-                    case CursorDir.Left: {
-                        control.raiseEvent(
-                            ControllerButtonEvent.Pressed,
-                            controller.left.id
-                        )
-                        break
-                    }
-                    // Add other cases as needed
-                }
-                this.queuedCursorMove = undefined
-            }
-        }
+        public update() {}
 
         public layout() {
             const ruleRep = this.ruleButtons
