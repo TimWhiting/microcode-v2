@@ -7,6 +7,8 @@ namespace microcode {
     import AppInterface = user_interface_base.AppInterface
     import font = user_interface_base.font
 
+    const addSettings = false
+    const buttonStart = addSettings ? -60 : -40
     export class Home extends CursorScene {
         constructor(app: AppInterface) {
             super(app)
@@ -22,7 +24,7 @@ namespace microcode {
                         style: ButtonStyles.Transparent,
                         icon: "edit_program",
                         ariaId: "C0",
-                        x: -60,
+                        x: buttonStart,
                         y: 30,
                         onClick: () => {
                             this.app.popScene()
@@ -34,7 +36,7 @@ namespace microcode {
                         style: ButtonStyles.Transparent,
                         icon: "smiley_buttons",
                         ariaId: "C1",
-                        x: -20,
+                        x: buttonStart + 40,
                         y: 30,
                         onClick: () => {
                             // this.app.popScene()
@@ -46,25 +48,32 @@ namespace microcode {
                         style: ButtonStyles.Transparent,
                         icon: "largeDisk",
                         ariaId: "load",
-                        x: 20,
+                        x: buttonStart + 80,
                         y: 30,
                         onClick: () => {
                             this.pickDiskSLot()
                         },
                     }),
-                    new Button({
-                        parent: null,
-                        style: ButtonStyles.Transparent,
-                        icon: "largeSettingsGear",
-                        ariaId: "settings",
-                        x: 60,
-                        y: 30,
-                        onClick: () => {
-                            const gcs = new MicroCodeSettings(this.app)
-                            this.app.pushScene(gcs)
-                        },
-                    }),
-                ],
+                ].concat(
+                    addSettings
+                        ? [
+                              new Button({
+                                  parent: null,
+                                  style: ButtonStyles.Transparent,
+                                  icon: "largeSettingsGear",
+                                  ariaId: "settings",
+                                  x: buttonStart + 120,
+                                  y: 30,
+                                  onClick: () => {
+                                      const gcs = new MicroCodeSettings(
+                                          this.app
+                                      )
+                                      this.app.pushScene(gcs)
+                                  },
+                              }),
+                          ]
+                        : []
+                ),
             ])
         }
 
