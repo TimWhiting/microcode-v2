@@ -233,14 +233,13 @@ namespace microcode {
                 this.instantiateProgramTiles()
                 if (numberAdded == 1 && this.nextEmpty(name, index)) {
                     // Queue a move to the right
-                    this.editor.queuedCursorMove = CursorDir.Right
+                    this.editor.queuedCursorMove = 1
                 } else if (numberAdded == 2) {
                     // Queue two moves to the right
-                    this.editor.queuedCursorMove = CursorDir.Down
+                    this.editor.queuedCursorMove = 2
                 } else if (deleted > 0) {
                     // Queue a move to the left
-                    this.editor.queuedCursorMove =
-                        deleted == 1 ? CursorDir.Left : CursorDir.Back
+                    this.editor.queuedCursorMove = deleted == 1 ? -1 : -2
                 }
                 this.page.changed()
             }
