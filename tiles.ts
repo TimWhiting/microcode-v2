@@ -441,6 +441,11 @@ namespace microcode {
                 const mod = getEditor(Tid.TID_MODIFIER_MELODY_EDITOR)
                 return (mod as MelodyEditor).getNoteSequence()
             }
+            case Tid.TID_ACTUATOR_SHOW_NUMBER:
+            case Tid.TID_ACTUATOR_CUP_X_ASSIGN:
+            case Tid.TID_ACTUATOR_CUP_Y_ASSIGN:
+            case Tid.TID_ACTUATOR_CUP_Z_ASSIGN:
+                return 0
             default:
                 return undefined
         }
