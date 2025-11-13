@@ -437,6 +437,9 @@ namespace microcode {
             if (this.picker.visible) return
 
             if (this.navigator) {
+                console.log(
+                    `nav row = ${this.navigator.getRow()} col = ${this.navigator.getCol()}`
+                )
                 this.navigator.clear()
             } else this.navigator = new RuleRowNavigator()
 
