@@ -426,12 +426,6 @@ namespace microcode {
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
                 return Tid.TID_MODIFIER_OFF
-            case Tid.TID_SENSOR_MICROPHONE:
-                return Tid.TID_FILTER_LOUD
-            case Tid.TID_SENSOR_LED_LIGHT:
-            case Tid.TID_SENSOR_MAGNET:
-            case Tid.TID_SENSOR_TEMP:
-                return Tid.TID_FILTER_UP
             case Tid.TID_ACTUATOR_SPEAKER:
                 return Tid.TID_MODIFIER_EMOJI_GIGGLE
             case Tid.TID_ACTUATOR_CAR:
@@ -761,7 +755,7 @@ namespace microcode {
             case Tid.TID_FILTER_DOWN:
                 return "up_down_event"
             case Tid.TID_FILTER_LOUD:
-            case Tid.TID_FILTER_QUIET: // dead
+            case Tid.TID_FILTER_QUIET:
                 return "sound_event"
             case Tid.TID_MODIFIER_LOOP:
                 return "loop"
@@ -994,6 +988,8 @@ namespace microcode {
     export function defaultEventCode(tile: Tile) {
         const tid = getTid(tile)
         switch (tid) {
+            case Tid.TID_SENSOR_MICROPHONE:
+                return Tid.TID_FILTER_LOUD
             case Tid.TID_SENSOR_TEMP:
             case Tid.TID_SENSOR_LINE: // TODO: generalize from Jacdac
             case Tid.TID_SENSOR_REFLECTED:
