@@ -578,6 +578,7 @@ namespace microcode {
             })
         }
 
+        private eventQueueActive = false
         private eventQueue: MicroCodeEvent[] = []
         public addEvent(event: MicroCodeEvent) {
             this.eventQueue.push(event)
@@ -590,6 +591,7 @@ namespace microcode {
                 )
             }
             control.inBackground(() => {
+                this.eventQueueActive = true
                 while (this.running) {
                     // TODO: drain entire queue
                     if (this.eventQueue.length) {
@@ -651,6 +653,7 @@ namespace microcode {
                     }
                     basic.pause(10)
                 }
+                this.eventQueueActive = false
             })
         }
 
@@ -671,8 +674,10 @@ namespace microcode {
         }
 
         // note that radio is not polled as a sensor
+        private startSensorsActive = false
         private startSensors() {
             control.inBackground(() => {
+                this.startSensorsActive = true
                 while (this.running) {
                     // poll the sensors and check for change
                     sensorTids.forEach((tid, index) => {
@@ -701,15 +706,18 @@ namespace microcode {
                     // DANGER: if this is too fast, the editor has issues!
                     basic.pause(50)
                 }
+                this.startSensorsActive = false
             })
         }
 
         stop() {
+            // stop all activity
             this.running = false
-            basic.pause(1)
+            while (this.startSensorsActive || this.eventQueueActive) {
+                basic.pause(1)
+            }
             this.stopAllRules()
             this.host.stopOngoingActions()
-            this.running = false
         }
 
         public error(msg: string) {
