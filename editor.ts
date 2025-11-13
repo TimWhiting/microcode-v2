@@ -53,7 +53,6 @@ namespace microcode {
         private hudroot: Placeable
         private scrollroot: Placeable
         public picker: Picker
-        public rendering = false
         private dirty = false
         public programChanged = false
 
@@ -467,7 +466,7 @@ namespace microcode {
                 this.drawEditor()
                 this.drawNav()
                 this.picker.draw()
-                if (!this.rendering) this.cursor.draw()
+                this.cursor.draw()
                 this.dirty = false
             }
         }
@@ -492,15 +491,13 @@ namespace microcode {
 
         private drawNav() {
             control.enablePerfCounter()
-            if (!this.rendering) {
-                this.diskBtn.draw()
-                // const wasVisible = this.connectBtn.visible()
-                // this.connectBtn.setVisible(
-                //     false // jdc.numServiceInstances(jacs.ServiceClass.DotMatrix) == 0
-                // )
-                // if (wasVisible !== this.connectBtn.visible()) this.changed()
-                // if (this.connectBtn.visible()) this.connectBtn.draw()
-            }
+            this.diskBtn.draw()
+            // const wasVisible = this.connectBtn.visible()
+            // this.connectBtn.setVisible(
+            //     false // jdc.numServiceInstances(jacs.ServiceClass.DotMatrix) == 0
+            // )
+            // if (wasVisible !== this.connectBtn.visible()) this.changed()
+            // if (this.connectBtn.visible()) this.connectBtn.draw()
             this.pageBtn.draw()
         }
     }
