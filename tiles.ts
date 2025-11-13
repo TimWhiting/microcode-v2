@@ -364,8 +364,28 @@ namespace microcode {
         )
     }
 
+    function classicTerminal(tid: number) {
+        return (
+            microcodeClassic &&
+            (tid == Tid.TID_SENSOR_CAR_WALL ||
+                tid == Tid.TID_SENSOR_SLIDER ||
+                tid == Tid.TID_ACTUATOR_SWITCH_PAGE ||
+                tid == Tid.TID_ACTUATOR_RELAY ||
+                tid == Tid.TID_SENSOR_LIGHT ||
+                tid == Tid.TID_SENSOR_LED_LIGHT ||
+                tid == Tid.TID_SENSOR_MICROPHONE ||
+                tid == Tid.TID_SENSOR_MAGNET ||
+                tid == Tid.TID_SENSOR_LINE ||
+                tid == Tid.TID_SENSOR_DISTANCE ||
+                tid == Tid.TID_SENSOR_REFLECTED ||
+                tid == Tid.TID_ACTUATOR_SERVO_POWER ||
+                tid == Tid.TID_SENSOR_MOISTURE)
+        )
+    }
+
     export function isTerminal(tile: Tile) {
         const tid = getTid(tile)
+        if (classicTerminal(tid)) return true
         // the following modifiers are terminal
         if (isPage(tid)) return true
         // everything else except some filters are not terminal
