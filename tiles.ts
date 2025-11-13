@@ -99,8 +99,8 @@ namespace microcode {
         TID_FILTER_ROTARY_LEFT = 98,
         TID_FILTER_ROTARY_RIGHT = 99,
         //
-        TID_FILTER_TEMP_WARMER = 100,
-        TID_FILTER_TEMP_COLDER = 101,
+        TID_FILTER_UP = 100,
+        TID_FILTER_DOWN = 101,
         //
         LINE_START = 102,
         TID_FILTER_LINE_LEFT = 102,
@@ -275,10 +275,10 @@ namespace microcode {
 
     function isSensorEvent(tid: Tid) {
         switch (tid) {
-            case Tid.TID_FILTER_TEMP_WARMER:
+            case Tid.TID_FILTER_UP:
             case Tid.TID_FILTER_LOUD:
                 return -10
-            case Tid.TID_FILTER_TEMP_COLDER:
+            case Tid.TID_FILTER_DOWN:
             case Tid.TID_FILTER_QUIET:
                 return -9
         }
@@ -426,6 +426,12 @@ namespace microcode {
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
                 return Tid.TID_MODIFIER_OFF
+            case Tid.TID_SENSOR_MICROPHONE:
+                return Tid.TID_FILTER_LOUD
+            case Tid.TID_SENSOR_LED_LIGHT:
+            case Tid.TID_SENSOR_MAGNET:
+            case Tid.TID_SENSOR_TEMP:
+                return Tid.TID_FILTER_UP
             case Tid.TID_ACTUATOR_SPEAKER:
                 return Tid.TID_MODIFIER_EMOJI_GIGGLE
             case Tid.TID_ACTUATOR_CAR:
@@ -751,8 +757,8 @@ namespace microcode {
             case Tid.TID_FILTER_ROTARY_LEFT:
             case Tid.TID_FILTER_ROTARY_RIGHT:
                 return "rotary_event"
-            case Tid.TID_FILTER_TEMP_WARMER:
-            case Tid.TID_FILTER_TEMP_COLDER:
+            case Tid.TID_FILTER_UP:
+            case Tid.TID_FILTER_DOWN:
                 return "up_down_event"
             case Tid.TID_FILTER_LOUD:
             case Tid.TID_FILTER_QUIET: // dead
@@ -801,8 +807,8 @@ namespace microcode {
         switch (tid) {
             case Tid.TID_FILTER_ROTARY_LEFT:
             case Tid.TID_FILTER_ROTARY_RIGHT:
-            case Tid.TID_FILTER_TEMP_WARMER:
-            case Tid.TID_FILTER_TEMP_COLDER:
+            case Tid.TID_FILTER_UP:
+            case Tid.TID_FILTER_DOWN:
             case Tid.TID_FILTER_ACCEL_SHAKE:
             case Tid.TID_FILTER_ACCEL_TILT_UP:
             case Tid.TID_FILTER_ACCEL_TILT_DOWN:
@@ -894,12 +900,12 @@ namespace microcode {
                 return Tid.TID_SENSOR_MICROPHONE
             //
             case Tid.TID_FILTER_ROTARY_LEFT:
-            case Tid.TID_FILTER_TEMP_COLDER:
+            case Tid.TID_FILTER_DOWN:
             case Tid.TID_FILTER_OFF:
                 return SensorChange.Down
             //
             case Tid.TID_FILTER_ROTARY_RIGHT:
-            case Tid.TID_FILTER_TEMP_WARMER:
+            case Tid.TID_FILTER_UP:
             case Tid.TID_FILTER_ON:
                 return SensorChange.Up
             //

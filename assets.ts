@@ -214,8 +214,8 @@ namespace microcode {
                 return icondb.tile_timespan_random
             if (name == Tid.TID_FILTER_LOUD) return icondb.speakerFun
             if (name == Tid.TID_FILTER_QUIET) return icondb.speakerSoft
-            if (name == Tid.TID_FILTER_TEMP_WARMER) return icondb.temp_warmer
-            if (name == Tid.TID_FILTER_TEMP_COLDER) return icondb.temp_colder
+            if (name == Tid.TID_FILTER_UP) return icondb.temp_warmer
+            if (name == Tid.TID_FILTER_DOWN) return icondb.temp_colder
             if (name == Tid.TID_FILTER_ACCEL_SHAKE) return icondb.moveShake
             if (name == Tid.TID_FILTER_ACCEL_TILT_UP) return icondb.moveTiltUp
             if (name == Tid.TID_FILTER_ACCEL_TILT_DOWN)
@@ -2750,9 +2750,9 @@ bffffffffffffffffffffffffffffffb
         if (!transparent) {
             img.fill(1)
             img.setPixel(0, 0, 0)
-            img.setPixel(width -1, 0, 0)
+            img.setPixel(width - 1, 0, 0)
             img.setPixel(0, 17, 0)
-            img.setPixel(width -1, 17, 0)
+            img.setPixel(width - 1, 17, 0)
         }
         img.print(str, font.charWidth >> 1, 5, 15)
         return img
