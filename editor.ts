@@ -463,11 +463,9 @@ namespace microcode {
         draw() {
             if (this.dirty) {
                 Screen.image.fill(this.backgroundColor)
-                if (!this.backgroundCaptured) {
-                    this.drawBackground()
-                    this.drawEditor()
-                    this.drawNav()
-                }
+                this.drawBackground()
+                this.drawEditor()
+                this.drawNav()
                 this.picker.draw()
                 if (!this.rendering) this.cursor.draw()
                 this.dirty = false
