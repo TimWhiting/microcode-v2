@@ -498,6 +498,12 @@ namespace microcode {
                     this.updateState(ruleIndex, varName, param)
                     return
                 default:
+                    // TODO: make these (potentially long running)
+                    // TODO: actions async and cancellable
+                    // Tid.TID_ACTUATOR_PAINT
+                    // Tid.TID_ACTUATOR_SHOW_NUMBER
+                    // Tid.TID_ACTUATOR_SPEAKER
+                    // Tid.TID_ACTUATOR_MUSIC
                     this.host.execute(action as ActionTid, param)
             }
         }
