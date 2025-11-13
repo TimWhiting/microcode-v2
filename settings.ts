@@ -37,7 +37,6 @@ namespace microcode {
         xScaling: 1.0, // Optional Scaling; if you want to make it wider or thinner.
         yScaling: 1.0, // Optional Scaling; if you want to make it taller or shorter.
         backBtn: () => {
-            console.log("Back")
             app.popScene()
         }, // Optional
     })
