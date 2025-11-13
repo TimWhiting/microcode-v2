@@ -230,6 +230,7 @@ namespace microcode {
                     deleted = this.ruledef.deleteAt(name, index)
                 }
                 Language.ensureValid(this.ruledef)
+                this.editor.programChanged = true
                 this.editor.saveAndCompileProgram()
                 this.instantiateProgramTiles()
                 if (numberAdded == 1 && this.nextEmpty(name, index)) {
