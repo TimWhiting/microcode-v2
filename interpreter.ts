@@ -79,16 +79,21 @@ namespace microcode {
             if (!timer || time > 0) this.timerOrSequenceRule()
         }
 
-        kill() {
+        private reset() {
             this.wakeTime = 0
             this.actionRunning = false
             this.modifierIndex = 0
             this.loopIndex = 0
+        }
+
+        kill() {
+            this.actionRunning = false
             // give the background fiber chance to finish
             // otherwise may spawn second on start after kill
             while (this.backgroundActive) {
                 basic.pause(0)
             }
+            this.reset()
         }
 
         public matchWhen(tid: number, filter: number = undefined): boolean {
@@ -173,7 +178,7 @@ namespace microcode {
 
                     const actionKind = this.getActionKind()
                     if (actionKind === ActionKind.Sequence) this.modifierIndex++
-                    else this.modifierIndex = this.rule.modifiers.length
+                    else this.reset()
 
                     if (!this.actionRunning) break
                     this.checkForLoopFinish()
@@ -209,14 +214,14 @@ namespace microcode {
                         ) as number
                         this.loopIndex++
                         if (this.loopIndex >= loopBound) {
-                            this.actionRunning = false
+                            this.reset()
                         } else {
                             this.modifierIndex = 0
                         }
                     }
                 }
             } else {
-                this.actionRunning = false
+                this.reset()
             }
         }
 
