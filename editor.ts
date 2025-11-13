@@ -436,18 +436,21 @@ namespace microcode {
         private rebuildNavigator() {
             if (this.picker.visible) return
 
+            let col = 0
+            let row = 0
             if (this.navigator) {
-                console.log(
-                    `nav row = ${this.navigator.getRow()} col = ${this.navigator.getCol()}`
-                )
+                col = this.navigator.getCol()
+                row = this.navigator.getRow()
                 this.navigator.clear()
-            } else this.navigator = new RuleRowNavigator()
+            } else {
+                this.navigator = new RuleRowNavigator()
+            }
 
             this.navigator.setBtns([[this.diskBtn, this.pageBtn]])
-
             this.pageEditor.addToNavigator()
-
+            this.navigator.initialCursor(row, col)
             this.cursor.navigator = this.navigator
+            this.moveTo(this.navigator.getCurrent())
         }
 
         update() {
