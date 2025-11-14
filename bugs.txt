@@ -9,7 +9,7 @@ Uncaught TypeError: Expected type ProgramDefn but received type undefined. Did y
    at inline (pxt_modules/microgui/inputMethods.ts:456:71)
    at inline (pxt_modules/display-shield/eventcontext.ts:25:51)
 
-- button responsiveness
+- button responsiveness (losing button press - not going through CODAL)
 - classic mode sensor value not working
 - positive # digit widget
 - random (don't allow 1)
