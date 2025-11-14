@@ -1,0 +1,33 @@
+deletion of value on mic caused 
+
+Uncaught TypeError: Expected type ProgramDefn but received type undefined. Did you forget to assign a variable?
+   at toBuffer (language.ts:347:9)
+   at saveAndCompileProgram (editor.ts:107:9)
+   at inline (ruleeditor.ts:217:33)
+   at inline (ruleeditor.ts:256:21)
+   at inline (fieldeditors.ts:337:22)
+   at inline (pxt_modules/microgui/inputMethods.ts:456:71)
+   at inline (pxt_modules/display-shield/eventcontext.ts:25:51)
+
+- button responsiveness
+- classic mode sensor value not working
+- positive # digit widget
+- random (don't allow 1)
+- timers use constants
+
+- is the timer blocking editing?
+
+Uncaught TypeError: Expected type Array but received type undefined. Did you forget to assign a variable?
+   at initialCursor (pxt_modules/user-interface-base/navigator.ts:200:9)
+   at rebuildNavigator (editor.ts:437:9)
+   at update (editor.ts:461:9)
+   at inline (pxt_modules/user-interface-base/scene.ts:92:74)
+   at runCallbacks (pxt_modules/display-shield/eventcontext.ts:69:9)
+   at inline (pxt_modules/display-shield/eventcontext.ts:107:35)
+
+ncaught Cannot read properties of undefined (reading 'vtable')
+   at move (pxt_modules/user-interface-base/cursor.ts:155:5)
+   at scrollAndMove (editor.ts:187:9)
+   at inline (editor.ts:236:68)
+   at inline (pxt_modules/display-shield/eventcontext.ts:25:51)
+   

@@ -249,9 +249,9 @@ namespace microcode {
                 const fieldEditor = getFieldEditor(newOne)
                 this.editor.captureBackground()
                 fieldEditor.editor(
-                    tile.usePreviousField()
-                        ? newOne.getField()
-                        : fieldEditor.init(),
+                    //tile.usePreviousField()
+                    newOne.getField(),
+                    //    : fieldEditor.init(),
                     this.editor.picker,
                     () => {
                         this.editor.releaseBackground()
