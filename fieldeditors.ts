@@ -47,6 +47,9 @@ namespace microcode {
         getNewInstance(field: any = null): ModifierEditor {
             return null
         }
+        usePreviousField() {
+            return true
+        }
     }
 
     interface BoxedNumAsStr {
@@ -108,6 +111,9 @@ namespace microcode {
 
         getNewInstance(field: any = null) {
             return new DecimalEditor(field ? field : this.field)
+        }
+        usePreviousField() {
+            return false
         }
     }
 
