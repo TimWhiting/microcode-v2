@@ -215,6 +215,7 @@ namespace microcode {
         private editTile(name: string, index: number) {
             const ruleTiles = this.ruledef.getRuleRep()[name]
             const tileUpdated = (tile: Tile) => {
+                stopProgram()
                 this.editor.programChanged = true
                 let numberAdded = 0
                 let deleted = 0
@@ -244,7 +245,6 @@ namespace microcode {
                 this.page.changed()
             }
             const newFieldEditor = (tile: ModifierEditor, del = false) => {
-                stopProgram()
                 const newOne = del ? tile : tile.getNewInstance()
                 const fieldEditor = getFieldEditor(newOne)
                 this.editor.captureBackground()
@@ -312,7 +312,6 @@ namespace microcode {
             }
             if (btns.length) {
                 this.editor.picker.setGroup(btns)
-                stopProgram()
                 this.editor.picker.show({
                     title: accessibility.ariaToTooltip(name),
                     navigator: () => new PickerNavigator(this.editor.picker),
