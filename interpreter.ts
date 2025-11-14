@@ -714,8 +714,7 @@ namespace microcode {
                             )
                         }
                     })
-                    // DANGER: if this is too fast, the editor has issues!
-                    basic.pause(50)
+                    basic.pause(100)
                 }
                 this.startSensorsActive = false
             })
