@@ -330,10 +330,13 @@ namespace microcode {
                 app.popScene()
                 onHide()
             },
-            deleteFn: () => {
-                app.popScene()
-                onDelete()
-            },
+            deleteFn:
+                onDelete == undefined
+                    ? undefined
+                    : () => {
+                          app.popScene()
+                          onDelete()
+                      },
             backBtn: (txt: string) => {
                 bn.num = txt
                 app.popScene()
