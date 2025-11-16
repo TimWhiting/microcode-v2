@@ -184,16 +184,17 @@ namespace microcode {
         public stopOngoingActions() {
             music.stopAllSounds()
             led.stopAnimation()
-            music.stopMelody(MelodyStopOptions.All)
             basic.clearScreen()
         }
 
         public execute(action: ActionTid, param: any) {
             switch (action) {
                 case Tid.TID_ACTUATOR_PAINT:
+                    led.stopAnimation()
                     this.showIcon(param)
                     return
                 case Tid.TID_ACTUATOR_SHOW_NUMBER:
+                    led.stopAnimation()
                     basic.showNumber(param)
                     return
                 case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
@@ -203,12 +204,14 @@ namespace microcode {
                     radio.sendNumber(param)
                     return
                 case Tid.TID_ACTUATOR_SPEAKER:
+                    music.stopAllSounds()
                     music.play(
                         music.builtinPlayableSoundEffect(this.getSound(param)),
                         music.PlaybackMode.UntilDone
                     )
                     return
                 case Tid.TID_ACTUATOR_MUSIC:
+                    music.stopAllSounds()
                     music.play(
                         music.stringPlayable(param, 120),
                         music.PlaybackMode.UntilDone

@@ -78,6 +78,7 @@ namespace microcode {
             digitWidgetEditor(field, onHide, onDelete, this.posInt)
         }
         toImage(field: BoxedNumAsStr) {
+            console.log("decimal.toImage")
             return icondb.numberToDecimalImage(field.num, false)
         }
         toBuffer(field: BoxedNumAsStr): Buffer {
