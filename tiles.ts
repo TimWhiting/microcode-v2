@@ -389,6 +389,7 @@ namespace microcode {
         const tid = getTid(tile)
         if (classicTerminal(tid)) return true
         // the following modifiers are terminal
+        if (tid == Tid.TID_POS_INT_EDITOR) return true
         if (isPage(tid)) return true
         // everything else except some filters are not terminal
         if (!isFilter(tid)) return false
@@ -660,8 +661,6 @@ namespace microcode {
                     allow: getFilterMath().concat(["up_down_event"]),
                 }
 
-            // only5 is for microcode-classic
-
             case Tid.TID_SENSOR_REFLECTED:
                 return { only: ["on_off_event"] }
 
@@ -702,27 +701,16 @@ namespace microcode {
             case Tid.TID_ACTUATOR_RGB_LED:
                 return { only: ["rgb_led", "loop"] }
             case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
+            case Tid.TID_MODIFIER_RANDOM_TOSS:
             case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
             case Tid.TID_MODIFIER_LOOP:
                 return {
-                    only: [
-                        "constant",
-                        Tid.TID_OPERATOR_PLUS,
-                        Tid.TID_OPERATOR_MULTIPLY,
-                    ],
+                    only: ["pos_int_editor"],
                 }
             case Tid.TID_ACTUATOR_SWITCH_PAGE:
                 return { only: ["page"] }
             case Tid.TID_ACTUATOR_CAR:
                 return { only: ["car"] }
-            case Tid.TID_MODIFIER_RANDOM_TOSS:
-                return {
-                    only: [
-                        "constant",
-                        Tid.TID_OPERATOR_PLUS,
-                        Tid.TID_OPERATOR_MULTIPLY,
-                    ],
-                }
             case Tid.TID_ACTUATOR_RELAY:
             case Tid.TID_ACTUATOR_SERVO_POWER:
                 return { only: ["on_off"] }

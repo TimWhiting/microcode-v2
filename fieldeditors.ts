@@ -315,7 +315,7 @@ namespace microcode {
             return decimalEditorTile
         } else if (tid == Tid.TID_POS_INT_EDITOR) {
             if (!posIntEditorTile) {
-                posIntEditorTile = new DigitEditor(undefined)
+                posIntEditorTile = new DigitEditor(undefined, true)
                 posIntEditorTile.firstInstance = true
             }
             return posIntEditorTile

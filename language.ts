@@ -413,8 +413,10 @@ namespace microcode {
             if (
                 !microcodeClassic &&
                 (rangeName == "filters" || rangeName == "modifiers")
-            )
+            ) {
                 all.push(getEditor(Tid.TID_DECIMAL_EDITOR))
+                all.push(getEditor(Tid.TID_POS_INT_EDITOR))
+            }
 
             all = all
                 .filter((tile: Tile) => isVisible(tile))
