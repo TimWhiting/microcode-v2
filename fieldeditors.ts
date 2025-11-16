@@ -324,9 +324,7 @@ namespace microcode {
     ) {
         const kb = new microgui.Keyboard({
             app,
-            layout: onDelete
-                ? microgui.KeyboardLayouts.NUMERIC_WITH_DELETE
-                : microgui.KeyboardLayouts.NUMERIC,
+            layout: microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
                 bn.num = txt
                 app.popScene()
