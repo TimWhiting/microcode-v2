@@ -12,7 +12,15 @@ Uncaught TypeError: Expected type ProgramDefn but received type undefined. Did y
 - classic mode sensor value not working
 - is the timer blocking editing?
   - seems so, timer is running in foreground rather than backgroun 
-  - also TypeError
+  - also TypeError, how is timer interfering with editing?
+    - stopping of interpreter with timer running is problematic
+    - loading of new program into editor while interp still going?
+
+Uncaught Cannot read properties of undefined (reading 'vtable')
+   at move (pxt_modules/user-interface-base/cursor.ts:155:5)
+   at scrollAndMove (editor.ts:187:9)
+   at inline (editor.ts:236:68)
+   at inline (pxt_modules/display-shield/eventcontext.ts:25:51)
 
 Uncaught TypeError: Expected type Array but received type undefined. Did you forget to assign a variable?
    at getCurrent (pxt_modules/user-interface-base/navigator.ts:182:9)

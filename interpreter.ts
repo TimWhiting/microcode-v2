@@ -193,7 +193,10 @@ namespace microcode {
                 }
                 this.backgroundActive = false
                 // restart timer
-                if (this.rule.sensor == Tid.TID_SENSOR_TIMER) {
+                if (
+                    this.actionRunning &&
+                    this.rule.sensor == Tid.TID_SENSOR_TIMER
+                ) {
                     this.interp.addEvent({
                         kind: MicroCodeEventKind.RestartTimer,
                         ruleIndex: this.index,
@@ -660,7 +663,7 @@ namespace microcode {
                                 const event = ev as TimerEvent
                                 const rc = this.ruleClosures[event.ruleIndex]
                                 // TODO: this isn't good enough, we need to
-                                // TODO: kill rules that are conflicting
+                                // TODO: kill rules that are conflicting before releasing
                                 rc.releaseTimer()
                                 break
                             }
