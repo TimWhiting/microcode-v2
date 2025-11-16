@@ -337,13 +337,16 @@ namespace microcode {
         onDelete: () => void,
         posInt: boolean
     ) {
+        const fixup = (txt: string) => {
+            return posInt && txt == "0" ? "1" : txt
+        }
         const kb = new microgui.Keyboard({
             app,
             layout: posInt
                 ? microgui.KeyboardLayouts.NUMERIC_POSITIVE_INTEGER
                 : microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
-                bn.num = txt
+                bn.num = fixup(txt)
                 app.popScene()
                 onHide()
             },
@@ -355,7 +358,7 @@ namespace microcode {
                           onDelete()
                       },
             backBtn: (txt: string) => {
-                bn.num = txt
+                bn.num = fixup(txt)
                 app.popScene()
                 onHide()
             },
