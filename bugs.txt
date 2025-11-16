@@ -11,7 +11,7 @@ Uncaught TypeError: Expected type ProgramDefn but received type undefined. Did y
 
 - classic mode sensor value not working
 - is the timer blocking editing?
-  - seems so 
+  - seems so, timer is running in foreground rather than backgroun 
   - also TypeError
 
 Uncaught TypeError: Expected type Array but received type undefined. Did you forget to assign a variable?

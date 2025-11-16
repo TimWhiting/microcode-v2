@@ -165,6 +165,7 @@ namespace microcode {
                 this.backgroundActive = true
                 while (this.actionRunning) {
                     if (this.wakeTime > 0) {
+                        console.log(`wakeTime = ${this.wakeTime}`)
                         basic.pause(this.wakeTime)
                         this.wakeTime = 0
                         this.interp.addEvent({
@@ -653,6 +654,7 @@ namespace microcode {
                                 const event = ev as TimerEvent
                                 const rc = this.ruleClosures[event.ruleIndex]
                                 rc.start()
+                                break
                             }
                             case MicroCodeEventKind.TimerFire: {
                                 const event = ev as TimerEvent
