@@ -80,6 +80,7 @@ namespace microcode {
         }
 
         private reset() {
+            const resource = this.getOutputResource()
             this.wakeTime = 0
             this.actionRunning = false
             this.modifierIndex = 0
