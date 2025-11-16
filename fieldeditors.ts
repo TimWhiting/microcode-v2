@@ -56,7 +56,7 @@ namespace microcode {
         num: string
     }
 
-    export class DecimalFieldEditor extends FieldEditor {
+    export class DigitWidgetEditor extends FieldEditor {
         init() {
             return { num: "10" }
         }
@@ -69,7 +69,7 @@ namespace microcode {
             onHide: () => void,
             onDelete?: () => void
         ) {
-            decimalEditor(field, onHide, onDelete)
+            digitWidgetEditor(field, onHide, onDelete)
         }
         toImage(field: BoxedNumAsStr) {
             return icondb.numberToDecimalImage(field.num, false)
@@ -89,11 +89,10 @@ namespace microcode {
         }
     }
 
-    export class DecimalEditor extends ModifierEditor {
-        field: BoxedNumAsStr
-        constructor(field: BoxedNumAsStr) {
-            super(Tid.TID_DECIMAL_EDITOR)
-            this.fieldEditor = new DecimalFieldEditor()
+    export class DigitEditor extends ModifierEditor {
+        constructor(public field: BoxedNumAsStr, private posInt = false) {
+            super(posInt ? Tid.TID_POS_INT_EDITOR : Tid.TID_DECIMAL_EDITOR)
+            this.fieldEditor = new DigitWidgetEditor()
             this.field = this.fieldEditor.clone(
                 field ? field : this.fieldEditor.init()
             )
@@ -110,7 +109,7 @@ namespace microcode {
         }
 
         getNewInstance(field: any = null) {
-            return new DecimalEditor(field ? field : this.field)
+            return new DigitEditor(field ? field : this.field, this.posInt)
         }
         usePreviousField() {
             return false
@@ -294,6 +293,7 @@ namespace microcode {
     let iconEditorTile: ModifierEditor = undefined
     let melodyEditorTile: ModifierEditor = undefined
     let decimalEditorTile: ModifierEditor = undefined
+    let posIntEditorTile: ModifierEditor = undefined
     export function getEditor(tid: Tid): ModifierEditor {
         if (tid == Tid.TID_MODIFIER_ICON_EDITOR) {
             if (!iconEditorTile) {
@@ -309,15 +309,21 @@ namespace microcode {
             return melodyEditorTile
         } else if (tid == Tid.TID_DECIMAL_EDITOR) {
             if (!decimalEditorTile) {
-                decimalEditorTile = new DecimalEditor(undefined)
+                decimalEditorTile = new DigitEditor(undefined)
                 decimalEditorTile.firstInstance = true
             }
             return decimalEditorTile
+        } else if (tid == Tid.TID_POS_INT_EDITOR) {
+            if (!posIntEditorTile) {
+                posIntEditorTile = new DigitEditor(undefined)
+                posIntEditorTile.firstInstance = true
+            }
+            return posIntEditorTile
         }
         return undefined
     }
 
-    function decimalEditor(
+    function digitWidgetEditor(
         bn: BoxedNumAsStr,
         onHide: () => void,
         onDelete?: () => void

@@ -241,7 +241,11 @@ namespace microcode {
             if (name == Tid.TID_MODIFIER_ICON_EDITOR) return icondb.iconEditor
             if (name == Tid.TID_MODIFIER_MELODY_EDITOR)
                 return icondb.melodyEditor
-            if (name == Tid.TID_DECIMAL_EDITOR) return icondb.decimalEditor
+            if (
+                name == Tid.TID_DECIMAL_EDITOR ||
+                name == Tid.TID_POS_INT_EDITOR
+            )
+                return icondb.decimalEditor
 
             if (name == Tid.TID_MODIFIER_EMOJI_GIGGLE) return icondb.soundGiggle
             if (name == Tid.TID_MODIFIER_EMOJI_HAPPY) return icondb.soundHappy

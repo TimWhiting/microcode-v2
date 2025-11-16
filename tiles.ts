@@ -214,6 +214,7 @@ namespace microcode {
         TID_COMPARE_GTE = 225,
         TID_COMPARE_END = 225,
 
+        TID_POS_INT_EDITOR = 254,
         TID_DECIMAL_EDITOR = 255, // both filter and modifier
     }
 
@@ -254,7 +255,8 @@ namespace microcode {
         return (
             (tid >= Tid.MODIFIER_START && tid <= Tid.MODIFER_END) ||
             isMathOperator(tid) ||
-            tid == Tid.TID_DECIMAL_EDITOR
+            tid == Tid.TID_DECIMAL_EDITOR ||
+            tid == Tid.TID_POS_INT_EDITOR
         )
     }
 
@@ -474,6 +476,7 @@ namespace microcode {
             }
             switch (tid) {
                 case Tid.TID_DECIMAL_EDITOR:
+                case Tid.TID_POS_INT_EDITOR:
                     return -1
                 case Tid.TID_FILTER_BUTTON_A:
                     return 0
@@ -770,6 +773,8 @@ namespace microcode {
                 return "melody_editor"
             case Tid.TID_DECIMAL_EDITOR:
                 return "decimal_editor"
+            case Tid.TID_POS_INT_EDITOR:
+                return "pos_int_editor"
             case Tid.TID_MODIFIER_RANDOM_TOSS:
             case Tid.TID_MODIFIER_TEMP_READ:
             case Tid.TID_MODIFIER_RADIO_READ:
@@ -800,7 +805,8 @@ namespace microcode {
         if (
             isFilterConstant(tid) ||
             isModifierConstant(tid) ||
-            tid == Tid.TID_DECIMAL_EDITOR
+            tid == Tid.TID_DECIMAL_EDITOR ||
+            tid == Tid.TID_POS_INT_EDITOR
         )
             return TileKind.Literal
         switch (tid) {
@@ -866,8 +872,9 @@ namespace microcode {
         if (isPage(tid)) return tid - Tid.TID_MODIFIER_PAGE_1 + 1
         if (isAccelerometerEvent(tid) || isPressReleaseEvent(tid)) return tid
         switch (tid) {
-            case Tid.TID_DECIMAL_EDITOR: {
-                const modEditor = tile as DecimalEditor
+            case Tid.TID_DECIMAL_EDITOR:
+            case Tid.TID_POS_INT_EDITOR: {
+                const modEditor = tile as DigitEditor
                 const str = modEditor.getField().num
                 return str == "" ? 0 : parseFloat(str)
             }
