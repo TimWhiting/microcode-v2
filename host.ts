@@ -77,14 +77,14 @@ namespace microcode {
             buttons.forEach(b => {
                 control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
                     const ev = control.eventValue()
-                    this._handler(
+                    const tid =
                         ev == DAL.DEVICE_BUTTON_EVT_DOWN
                             ? Tid.TID_SENSOR_PRESS
                             : ev == DAL.DEVICE_BUTTON_EVT_UP
                             ? Tid.TID_SENSOR_RELEASE
-                            : undefined,
-                        matchPressReleaseTable[b]
-                    )
+                            : undefined
+                    const filter = matchPressReleaseTable[b]
+                    this._handler(tid, filter)
                 })
             })
 
@@ -147,7 +147,9 @@ namespace microcode {
         registerOnSensorEvent(
             handler: (sensorTid: number, filter: number) => void
         ) {
-            this._handler = handler
+            this._handler = (tid, filter) => {
+                if (tid >= 0 && filter) handler(tid, filter)
+            }
         }
 
         emitClearScreen() {

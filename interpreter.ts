@@ -40,7 +40,7 @@ namespace microcode {
     }
 
     enum ActionKind {
-        Instant,
+        Instant = 1,
         Sequence,
     }
 
@@ -48,6 +48,7 @@ namespace microcode {
         switch (action) {
             case Tid.TID_ACTUATOR_PAINT:
             case Tid.TID_ACTUATOR_MUSIC:
+            case Tid.TID_ACTUATOR_SHOW_NUMBER:
             case Tid.TID_ACTUATOR_SPEAKER:
             case Tid.TID_ACTUATOR_RGB_LED:
             case Tid.TID_ACTUATOR_CAR:
@@ -80,7 +81,6 @@ namespace microcode {
         }
 
         private reset() {
-            const resource = this.getOutputResource()
             this.wakeTime = 0
             this.actionRunning = false
             this.modifierIndex = 0
@@ -88,6 +88,10 @@ namespace microcode {
         }
 
         kill() {
+            const resource = this.getOutputResource()
+            if (resource == OutputResource.LEDScreen) {
+                led.stopAnimation()
+            } else if (resource == OutputResource.Speaker) music.stopAllSounds()
             this.actionRunning = false
             // give the background fiber chance to finish
             // otherwise may spawn second on start after kill
@@ -113,7 +117,6 @@ namespace microcode {
                     getKind(this.rule.filters[0]) == TileKind.EventCode
                 ) {
                     const eventCode = this.lookupEventCode()
-                    // console.log(`matched event code ${eventCode} vs ${filter}`)
                     return eventCode == -1 || filter == eventCode
                 } else {
                     return this.filterViaCompare()
@@ -511,7 +514,6 @@ namespace microcode {
 
         private updateState(ruleIndex: number, varName: string, v: number) {
             if (!this.newState) this.newState = {}
-            // console.log(`rule ${ruleIndex} sets ${varName} = ${v}`)
             this.newState[varName] = v
         }
 
@@ -605,7 +607,6 @@ namespace microcode {
             control.inBackground(() => {
                 this.eventQueueActive = true
                 while (this.running) {
-                    // TODO: drain entire queue
                     if (this.eventQueue.length) {
                         const ev = this.eventQueue[0]
                         this.eventQueue.removeAt(0)
@@ -702,9 +703,6 @@ namespace microcode {
                             (!microcodeClassic &&
                                 delta >= sensorInfo[index].delta)
                         ) {
-                            // console.log(
-                            //     `sensor ${tid} changed ${oldReading} -> ${newReading}`
-                            // )
                             basic.pause(1)
                             this.onSensorEvent(
                                 tid,
