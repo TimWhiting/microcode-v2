@@ -9,6 +9,7 @@ namespace microcode {
     }
 
     class FieldEditor {
+        constructor() {}
         init(): any {
             return undefined
         }
@@ -19,7 +20,8 @@ namespace microcode {
             field: any,
             picker: Picker,
             onHide: () => void,
-            onDelete?: () => void
+            onDelete?: () => void,
+            param?: any
         ): void {}
         toImage(field: any): Bitmap {
             return undefined
@@ -56,7 +58,10 @@ namespace microcode {
         num: string
     }
 
-    export class DecimalFieldEditor extends FieldEditor {
+    export class DigitWidgetEditor extends FieldEditor {
+        constructor(private posInt: boolean) {
+            super()
+        }
         init() {
             return { num: "10" }
         }
@@ -67,9 +72,10 @@ namespace microcode {
             field: any,
             picker: Picker,
             onHide: () => void,
-            onDelete?: () => void
+            onDelete?: () => void,
+            param?: boolean
         ) {
-            decimalEditor(field, onHide, onDelete)
+            digitWidgetEditor(field, onHide, onDelete, this.posInt)
         }
         toImage(field: BoxedNumAsStr) {
             return icondb.numberToDecimalImage(field.num, false)
@@ -89,11 +95,10 @@ namespace microcode {
         }
     }
 
-    export class DecimalEditor extends ModifierEditor {
-        field: BoxedNumAsStr
-        constructor(field: BoxedNumAsStr) {
-            super(Tid.TID_DECIMAL_EDITOR)
-            this.fieldEditor = new DecimalFieldEditor()
+    export class DigitEditor extends ModifierEditor {
+        constructor(public field: BoxedNumAsStr, private posInt = false) {
+            super(posInt ? Tid.TID_POS_INT_EDITOR : Tid.TID_DECIMAL_EDITOR)
+            this.fieldEditor = new DigitWidgetEditor(posInt)
             this.field = this.fieldEditor.clone(
                 field ? field : this.fieldEditor.init()
             )
@@ -110,7 +115,7 @@ namespace microcode {
         }
 
         getNewInstance(field: any = null) {
-            return new DecimalEditor(field ? field : this.field)
+            return new DigitEditor(field ? field : this.field, this.posInt)
         }
         usePreviousField() {
             return false
@@ -134,7 +139,8 @@ namespace microcode {
             field: any,
             picker: Picker,
             onHide: () => void,
-            onDelete?: () => void
+            onDelete?: () => void,
+            param?: any
         ) {
             iconEditor(field, picker, onHide, onDelete)
         }
@@ -212,7 +218,8 @@ namespace microcode {
             field: any,
             picker: Picker,
             onHide: () => void,
-            onDelete?: () => void
+            onDelete?: () => void,
+            param?: any
         ) {
             melodyEditor(field, picker, onHide, onDelete)
         }
@@ -294,6 +301,7 @@ namespace microcode {
     let iconEditorTile: ModifierEditor = undefined
     let melodyEditorTile: ModifierEditor = undefined
     let decimalEditorTile: ModifierEditor = undefined
+    let posIntEditorTile: ModifierEditor = undefined
     export function getEditor(tid: Tid): ModifierEditor {
         if (tid == Tid.TID_MODIFIER_ICON_EDITOR) {
             if (!iconEditorTile) {
@@ -309,22 +317,31 @@ namespace microcode {
             return melodyEditorTile
         } else if (tid == Tid.TID_DECIMAL_EDITOR) {
             if (!decimalEditorTile) {
-                decimalEditorTile = new DecimalEditor(undefined)
+                decimalEditorTile = new DigitEditor(undefined)
                 decimalEditorTile.firstInstance = true
             }
             return decimalEditorTile
+        } else if (tid == Tid.TID_POS_INT_EDITOR) {
+            if (!posIntEditorTile) {
+                posIntEditorTile = new DigitEditor(undefined, true)
+                posIntEditorTile.firstInstance = true
+            }
+            return posIntEditorTile
         }
         return undefined
     }
 
-    function decimalEditor(
+    function digitWidgetEditor(
         bn: BoxedNumAsStr,
         onHide: () => void,
-        onDelete?: () => void
+        onDelete: () => void,
+        posInt: boolean
     ) {
         const kb = new microgui.Keyboard({
             app,
-            layout: microgui.KeyboardLayouts.NUMERIC,
+            layout: posInt
+                ? microgui.KeyboardLayouts.NUMERIC_POSITIVE_INTEGER
+                : microgui.KeyboardLayouts.NUMERIC,
             cb: (txt: string) => {
                 bn.num = txt
                 app.popScene()
