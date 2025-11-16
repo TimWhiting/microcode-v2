@@ -48,6 +48,7 @@ namespace microcode {
         switch (action) {
             case Tid.TID_ACTUATOR_PAINT:
             case Tid.TID_ACTUATOR_MUSIC:
+            case Tid.TID_ACTUATOR_SHOW_NUMBER:
             case Tid.TID_ACTUATOR_SPEAKER:
             case Tid.TID_ACTUATOR_RGB_LED:
             case Tid.TID_ACTUATOR_CAR:
@@ -89,7 +90,6 @@ namespace microcode {
         kill() {
             const resource = this.getOutputResource()
             if (resource == OutputResource.LEDScreen) {
-                console.log(`kill rule ${this.index}`)
                 led.stopAnimation()
             } else if (resource == OutputResource.Speaker) music.stopAllSounds()
             this.actionRunning = false
@@ -117,7 +117,6 @@ namespace microcode {
                     getKind(this.rule.filters[0]) == TileKind.EventCode
                 ) {
                     const eventCode = this.lookupEventCode()
-                    // console.log(`matched event code ${eventCode} vs ${filter}`)
                     return eventCode == -1 || filter == eventCode
                 } else {
                     return this.filterViaCompare()
@@ -277,7 +276,6 @@ namespace microcode {
         }
 
         private runAction() {
-            console.log(`running action at ${this.index}`)
             const actuator = this.rule.actuators[0]
             let param: any = undefined
             if (this.rule.modifiers.length == 0) {
@@ -630,9 +628,6 @@ namespace microcode {
                             }
                             case MicroCodeEventKind.SensorUpdate: {
                                 const event = ev as SensorUpdateEvent
-                                console.log(
-                                    `event ${event.sensor} with ${event.filter}`
-                                )
                                 // see if any rule matches
                                 this.processNewRules(
                                     matchingRules(event.sensor, event.filter)
@@ -708,9 +703,6 @@ namespace microcode {
                             (!microcodeClassic &&
                                 delta >= sensorInfo[index].delta)
                         ) {
-                            // console.log(
-                            //     `sensor ${tid} changed ${oldReading} -> ${newReading}`
-                            // )
                             basic.pause(1)
                             this.onSensorEvent(
                                 tid,
