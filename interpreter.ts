@@ -193,8 +193,9 @@ namespace microcode {
                 }
                 this.backgroundActive = false
                 // restart timer
+                // TODO: this is in the wrong place...
                 if (
-                    this.actionRunning &&
+                    // this.actionRunning &&
                     this.rule.sensor == Tid.TID_SENSOR_TIMER
                 ) {
                     this.interp.addEvent({
