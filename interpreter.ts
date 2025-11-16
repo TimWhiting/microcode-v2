@@ -40,7 +40,7 @@ namespace microcode {
     }
 
     enum ActionKind {
-        Instant,
+        Instant = 1,
         Sequence,
     }
 
@@ -80,7 +80,6 @@ namespace microcode {
         }
 
         private reset() {
-            const resource = this.getOutputResource()
             this.wakeTime = 0
             this.actionRunning = false
             this.modifierIndex = 0
@@ -88,6 +87,11 @@ namespace microcode {
         }
 
         kill() {
+            const resource = this.getOutputResource()
+            if (resource == OutputResource.LEDScreen) {
+                console.log(`kill rule ${this.index}`)
+                led.stopAnimation()
+            } else if (resource == OutputResource.Speaker) music.stopAllSounds()
             this.actionRunning = false
             // give the background fiber chance to finish
             // otherwise may spawn second on start after kill
@@ -273,6 +277,7 @@ namespace microcode {
         }
 
         private runAction() {
+            console.log(`running action at ${this.index}`)
             const actuator = this.rule.actuators[0]
             let param: any = undefined
             if (this.rule.modifiers.length == 0) {
@@ -511,7 +516,6 @@ namespace microcode {
 
         private updateState(ruleIndex: number, varName: string, v: number) {
             if (!this.newState) this.newState = {}
-            // console.log(`rule ${ruleIndex} sets ${varName} = ${v}`)
             this.newState[varName] = v
         }
 
@@ -605,7 +609,6 @@ namespace microcode {
             control.inBackground(() => {
                 this.eventQueueActive = true
                 while (this.running) {
-                    // TODO: drain entire queue
                     if (this.eventQueue.length) {
                         const ev = this.eventQueue[0]
                         this.eventQueue.removeAt(0)
@@ -627,6 +630,9 @@ namespace microcode {
                             }
                             case MicroCodeEventKind.SensorUpdate: {
                                 const event = ev as SensorUpdateEvent
+                                console.log(
+                                    `event ${event.sensor} with ${event.filter}`
+                                )
                                 // see if any rule matches
                                 this.processNewRules(
                                     matchingRules(event.sensor, event.filter)

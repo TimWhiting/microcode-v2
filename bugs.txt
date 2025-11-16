@@ -31,3 +31,313 @@ ncaught Cannot read properties of undefined (reading 'vtable')
    at inline (editor.ts:236:68)
    at inline (pxt_modules/display-shield/eventcontext.ts:25:51)
    
+
+
+   got 13 with 91 and 91
+
+got 13 with 91 and 91
+
+got 11 with 73 and 73
+
+got 11 with 73 and 73
+
+got undefined with 73 and 73
+
+got undefined with 73 and 73
+
+got undefined with 73 and 73
+
+got undefined with 73 and 73
+
+got 13 with 108 and 108
+
+got 13 with 108 and 108
+
+got 11 with 74 and 74
+
+got 11 with 74 and 74
+
+got 13 with 94 and 94
+
+got undefined with 74 and 74
+
+got undefined with 74 and 74
+
+got 13 with 94 and 94
+
+got undefined with 74 and 74
+
+got undefined with 74 and 74
+
+got 11 with 74 and 74
+
+got 11 with 74 and 74
+
+got undefined with 74 and 74
+
+got undefined with 74 and 74
+
+got undefined with 74 and 74
+
+got undefined with 74 and 74
+
+got 13 with 108 and 108
+
+got 13 with 108 and 108
+
+kill rule 0
+
+kill rule 0
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+got 27 with 128 and 2
+
+got 27 with 128 and 2
+
+got 18 with 128 and 2
+
+got 16 with 21 and 2
+
+got 22 with 0 and 2
+
+got 18 with 128 and 2
+
+got 16 with 21 and 2
+
+got 22 with 0 and 2
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+got 27 with 128 and 2
+
+got 27 with 128 and 2
+
+got 18 with 128 and 2
+
+got 16 with 21 and 2
+
+got 22 with 0 and 2
+
+got 
+
+got 
+
+got 
+
+got 
+
+got 18 with 128 and 2
+
+got 16 with 21 and 2
+
+got 22 with 0 and 2
+
+got 
+
+got 
+
+got 
+
+got 
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+got 27 with 128 and 2
+
+got 27 with 128 and 2
+
+got 18 with 128 and 2
+
+got 16 with 21 and 2
+
+got 22 with 0 and 2
+
+got 18 with 128 and 2
+
+got 16 with 21 and 2
+
+got 22 with 0 and 2
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+display-on
+
+got 27 with 128 and 2
+
+got 27 with 128 and 2
+
+got 18 with 128 and 2
+
+got 16 with 21 and 2
+
+got 22 with 0 and 2
+
+event 27 2
+
+event 18 2
+
+event 16 2
+
+event 22 2
+
+got 18 with 128 and 2
+
+got 16 with 21 and 2
+
+got 22 with 0 and 2
+
+event 27 2
+
+event 18 2
+
+event 16 2
+
+event 22 2
+
+got 13 with 93 and 93
+
+got 13 with 93 and 93
+
+event 13 93
+
+event 13 93
+
+got 11 with 73 and 73
+
+got 11 with 73 and 73
+
+event 11 73
+
+got undefined with 73 and 73
+
+got undefined with 73 and 73
+
+event 11 73
+
+got undefined with 73 and 73
+
+got undefined with 73 and 73
+
+got 13 with 108 and 108
+
+got 13 with 108 and 108
+
+got 13 with 94 and 94
+
+got 13 with 94 and 94
+
+got 11 with 74 and 74
+
+got 11 with 74 and 74
+
+got undefined with 74 and 74
+
+got undefined with 74 and 74
+
+got undefined with 74 and 74
+
+got undefined with 74 and 74
+
+got 13 with 91 and 91
+
+got 13 with 91 and 91
+
+got 13 with 108 and 108
+
+got 13 with 108 and 108
+
+kill rule 0
+
+kill rule 0
+
+event undefined 73
+
+event undefined 73
+
+event 13 108
+
+event 13 94
+
+event 11 74
+
+event undefined 74
+
+event undefined 74
+
+event 13 91
+
+event 13 108
+
+event undefined 73
+
+event undefined 73
+
+event 13 108
+
+event 13 94
+
+event 11 74
+
+event undefined 74
+
+event undefined 74
+
+event 13 91
+
+event 13 108
+
