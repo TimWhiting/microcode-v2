@@ -213,6 +213,9 @@ namespace microcode {
         }
 
         private editTile(name: string, index: number) {
+            led.stopAnimation()
+            basic.clearScreen()
+            music.stopAllSounds()
             const ruleTiles = this.ruledef.getRuleRep()[name]
             const tileUpdated = (tile: Tile) => {
                 stopProgram()
