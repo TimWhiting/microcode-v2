@@ -9,13 +9,16 @@ Uncaught TypeError: Expected type ProgramDefn but received type undefined. Did y
    at inline (pxt_modules/microgui/inputMethods.ts:456:71)
    at inline (pxt_modules/display-shield/eventcontext.ts:25:51)
 
-- button responsiveness (losing button press - not going through CODAL)
 - classic mode sensor value not working
-- positive # digit widget
-- random (don't allow 1)
-- timers use constants
-
 - is the timer blocking editing?
+  - seems so 
+  - also TypeError
+
+Uncaught TypeError: Expected type Array but received type undefined. Did you forget to assign a variable?
+   at getCurrent (pxt_modules/user-interface-base/navigator.ts:182:9)
+   at click (pxt_modules/user-interface-base/cursor.ts:163:5)
+   at inline (pxt_modules/user-interface-base/cursorscene.ts:81:21)
+   at inline (pxt_modules/display-shield/eventcontext.ts:25:51)
 
 Uncaught TypeError: Expected type Array but received type undefined. Did you forget to assign a variable?
    at initialCursor (pxt_modules/user-interface-base/navigator.ts:200:9)

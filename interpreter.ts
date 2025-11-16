@@ -790,7 +790,7 @@ namespace microcode {
                 if (getTid(m) == Tid.TID_MODIFIER_RANDOM_TOSS) {
                     const max =
                         i == tiles.length - 1
-                            ? 2
+                            ? 6 // default value
                             : (this.getValue(tiles.slice(i + 1), 0) as number)
                     tokens.push(rnd(max).toString())
                     break
