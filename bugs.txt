@@ -1,3 +1,2 @@
-- handle loop immediate after actuator
 - classic mode sensor value not working
 
