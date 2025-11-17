@@ -183,10 +183,6 @@ namespace microcode {
                     if (!this.ok()) break
                     this.runAction()
 
-                    const actionKind = this.getActionKind()
-                    if (actionKind === ActionKind.Sequence) this.modifierIndex++
-                    else this.reset()
-
                     if (!this.ok()) break
                     this.checkForLoopFinish()
 
@@ -206,6 +202,11 @@ namespace microcode {
         private checkForLoopFinish() {
             if (!this.actionRunning) return
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
+            const actionKind = this.getActionKind()
+            if (actionKind === ActionKind.Instant) {
+                this.reset()
+                return
+            }
             if (this.modifierIndex < this.rule.modifiers.length) {
                 const m = this.rule.modifiers[this.modifierIndex]
                 if (getTid(m) == Tid.TID_MODIFIER_LOOP) {
@@ -225,6 +226,10 @@ namespace microcode {
                             this.modifierIndex = 0
                         }
                     }
+                } else {
+                    this.modifierIndex++
+                    if (this.modifierIndex == this.rule.modifiers.length)
+                        this.reset()
                 }
             } else {
                 this.reset()
