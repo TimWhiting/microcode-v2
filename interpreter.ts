@@ -93,9 +93,8 @@ namespace microcode {
                 led.stopAnimation()
             } else if (resource == OutputResource.Speaker) music.stopAllSounds()
             this.actionRunning = false
-            // give the background fiber chance to finish
-            // otherwise may spawn second on start after kill
-            while (this.backgroundActive) {
+            // give the background fiber chance to finish unless it is waiting
+            while (!this.waitingOnTimer() && this.backgroundActive) {
                 basic.pause(0)
             }
             this.reset()
@@ -169,11 +168,7 @@ namespace microcode {
                 this.backgroundActive = true
                 while (this.ok()) {
                     if (this.wakeTime > 0) {
-                        console.log(
-                            `${this.index} start timer ${this.wakeTime}`
-                        )
                         basic.pause(this.wakeTime)
-                        console.log(`${this.index} end timer`)
                         this.wakeTime = 0
                         this.interp.addEvent({
                             kind: MicroCodeEventKind.TimerFire,
@@ -313,6 +308,10 @@ namespace microcode {
             this.interp.runAction(this.index, actuator, param)
             if (this.getActionKind() === ActionKind.Instant)
                 this.interp.processNewState()
+        }
+
+        private waitingOnTimer() {
+            return this.wakeTime > 0
         }
 
         private getWakeTime() {

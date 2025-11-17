@@ -27,6 +27,7 @@ namespace microcode {
                         x: buttonStart,
                         y: 30,
                         onClick: () => {
+                            stopProgram()
                             this.app.popScene()
                             this.app.pushScene(new Editor(this.app))
                         },

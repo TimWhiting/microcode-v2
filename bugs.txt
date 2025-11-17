@@ -1,5 +1,6 @@
 - timer is delaying editing and causing crash on load from home page
-
+- timer first blocks other rules from executing! but still has same effect 
+  when order later!
 - handle loop immediate after actuator
 
 - classic mode sensor value not working
