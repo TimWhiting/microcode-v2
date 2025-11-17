@@ -41,7 +41,7 @@ namespace microcode {
 
     enum ActionKind {
         Instant = 1,
-        Sequence,
+        TakesTime,
     }
 
     function getActionKind(action: Tid) {
@@ -52,7 +52,7 @@ namespace microcode {
             case Tid.TID_ACTUATOR_SPEAKER:
             case Tid.TID_ACTUATOR_RGB_LED:
             case Tid.TID_ACTUATOR_CAR:
-                return ActionKind.Sequence
+                return ActionKind.TakesTime
         }
         return ActionKind.Instant
     }
@@ -211,7 +211,10 @@ namespace microcode {
             if (!this.actionRunning) return
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
             const actionKind = this.getActionKind()
-            if (actionKind === ActionKind.Instant) {
+            if (
+                actionKind === ActionKind.Instant ||
+                getTid(this.rule.actuators[0]) == Tid.TID_ACTUATOR_SHOW_NUMBER
+            ) {
                 this.reset()
                 return
             }
@@ -575,7 +578,7 @@ namespace microcode {
                 rc.kill()
             })
 
-            // partition the live into instant and sequence
+            // partition the live into instant and takes time
             const instant = live.filter(
                 rc => rc.getActionKind() === ActionKind.Instant
             )
@@ -597,11 +600,11 @@ namespace microcode {
                 return // others don't get chance to run
             }
 
-            const sequence = live.filter(
-                rc => rc.getActionKind() === ActionKind.Sequence
+            const takesTime = live.filter(
+                rc => rc.getActionKind() === ActionKind.TakesTime
             )
 
-            sequence.forEach(rc => {
+            takesTime.forEach(rc => {
                 rc.kill()
                 rc.start()
             })
