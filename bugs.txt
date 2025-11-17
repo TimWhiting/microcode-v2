@@ -1,13 +1,4 @@
-deletion of value on mic caused 
-
-Uncaught TypeError: Expected type ProgramDefn but received type undefined. Did you forget to assign a variable?
-   at toBuffer (language.ts:347:9)
-   at saveAndCompileProgram (editor.ts:107:9)
-   at inline (ruleeditor.ts:217:33)
-   at inline (ruleeditor.ts:256:21)
-   at inline (fieldeditors.ts:337:22)
-   at inline (pxt_modules/microgui/inputMethods.ts:456:71)
-   at inline (pxt_modules/display-shield/eventcontext.ts:25:51)
+- handle loop immediate after actuator
 
 - classic mode sensor value not working
 

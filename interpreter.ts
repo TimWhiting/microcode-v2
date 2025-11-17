@@ -75,7 +75,7 @@ namespace microcode {
         }
 
         public start(timer = false) {
-            if (this.actionRunning) return
+            if (!this.interp.running || this.actionRunning) return
             const time = this.getWakeTime()
             if (!timer || time > 0) this.timerOrSequenceRule()
         }
@@ -224,7 +224,7 @@ namespace microcode {
                     }
                 }
             } else {
-                this.reset() // restart timer
+                this.reset()
             }
         }
 
@@ -282,6 +282,7 @@ namespace microcode {
             } else {
                 switch (actuator) {
                     case Tid.TID_ACTUATOR_PAINT: {
+                        // a loop can appear here!
                         const mod = this.rule.modifiers[this.modifierIndex]
                         const modEditor = mod as ModifierEditor
                         param = modEditor.getField()
@@ -431,7 +432,7 @@ namespace microcode {
 
     export class Interpreter {
         private hasErrors: boolean = false
-        private running: boolean = false
+        public running: boolean = false
         private currentPage: number = 0
         private ruleClosures: RuleClosure[] = []
 
