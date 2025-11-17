@@ -77,7 +77,6 @@ namespace microcode {
         public start(timer = false) {
             if (this.actionRunning) return
             const time = this.getWakeTime()
-            console.log(`start ${this.index} ${timer} ${time}`)
             if (!timer || time > 0) this.timerOrSequenceRule()
         }
 
@@ -161,13 +160,11 @@ namespace microcode {
             if (this.rule.actuators.length == 0) return
             // prevent re-entrancy
             if (this.actionRunning) return
-            console.log(`timerOrSequenceRule ${this.index} ${this.wakeTime}`)
             this.actionRunning = true
             control.runInBackground(() => {
                 this.backgroundActive = true
                 while (this.actionRunning) {
                     if (this.wakeTime > 0) {
-                        console.log(`wakeTime = ${this.wakeTime}`)
                         basic.pause(this.wakeTime)
                         this.wakeTime = 0
                         this.interp.addEvent({
