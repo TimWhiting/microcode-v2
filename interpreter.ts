@@ -75,7 +75,7 @@ namespace microcode {
         }
 
         public start(timer = false) {
-            if (this.actionRunning) return
+            if (!this.interp.running || this.actionRunning) return
             const time = this.getWakeTime()
             if (!timer || time > 0) this.timerOrSequenceRule()
         }
@@ -191,7 +191,6 @@ namespace microcode {
                     basic.pause(5)
                 }
                 this.backgroundActive = false
-                // restart timer
                 if (this.rule.sensor == Tid.TID_SENSOR_TIMER) {
                     this.interp.addEvent({
                         kind: MicroCodeEventKind.RestartTimer,
@@ -283,6 +282,7 @@ namespace microcode {
             } else {
                 switch (actuator) {
                     case Tid.TID_ACTUATOR_PAINT: {
+                        // a loop can appear here!
                         const mod = this.rule.modifiers[this.modifierIndex]
                         const modEditor = mod as ModifierEditor
                         param = modEditor.getField()
@@ -432,7 +432,7 @@ namespace microcode {
 
     export class Interpreter {
         private hasErrors: boolean = false
-        private running: boolean = false
+        public running: boolean = false
         private currentPage: number = 0
         private ruleClosures: RuleClosure[] = []
 
@@ -652,13 +652,14 @@ namespace microcode {
                             case MicroCodeEventKind.RestartTimer: {
                                 const event = ev as TimerEvent
                                 const rc = this.ruleClosures[event.ruleIndex]
-                                rc.start()
+                                rc.start(true)
+                                break
                             }
                             case MicroCodeEventKind.TimerFire: {
                                 const event = ev as TimerEvent
                                 const rc = this.ruleClosures[event.ruleIndex]
                                 // TODO: this isn't good enough, we need to
-                                // TODO: kill rules that are conflicting
+                                // TODO: kill rules that are conflicting before releasing
                                 rc.releaseTimer()
                                 break
                             }
