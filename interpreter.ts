@@ -77,6 +77,7 @@ namespace microcode {
         public start(timer = false) {
             if (this.actionRunning) return
             const time = this.getWakeTime()
+            console.log(`start ${this.index} ${timer} ${time}`)
             if (!timer || time > 0) this.timerOrSequenceRule()
         }
 
@@ -160,6 +161,7 @@ namespace microcode {
             if (this.rule.actuators.length == 0) return
             // prevent re-entrancy
             if (this.actionRunning) return
+            console.log(`timerOrSequenceRule ${this.index} ${this.wakeTime}`)
             this.actionRunning = true
             control.runInBackground(() => {
                 this.backgroundActive = true
@@ -192,12 +194,7 @@ namespace microcode {
                     basic.pause(5)
                 }
                 this.backgroundActive = false
-                // restart timer
-                // TODO: this is in the wrong place...
-                if (
-                    // this.actionRunning &&
-                    this.rule.sensor == Tid.TID_SENSOR_TIMER
-                ) {
+                if (this.rule.sensor == Tid.TID_SENSOR_TIMER) {
                     this.interp.addEvent({
                         kind: MicroCodeEventKind.RestartTimer,
                         ruleIndex: this.index,
@@ -230,7 +227,7 @@ namespace microcode {
                     }
                 }
             } else {
-                this.reset()
+                this.reset() // restart timer
             }
         }
 
@@ -657,7 +654,7 @@ namespace microcode {
                             case MicroCodeEventKind.RestartTimer: {
                                 const event = ev as TimerEvent
                                 const rc = this.ruleClosures[event.ruleIndex]
-                                rc.start()
+                                rc.start(true)
                                 break
                             }
                             case MicroCodeEventKind.TimerFire: {
