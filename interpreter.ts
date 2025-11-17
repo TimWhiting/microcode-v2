@@ -150,6 +150,10 @@ namespace microcode {
             }
         }
 
+        private ok() {
+            return this.interp.running && this.actionRunning
+        }
+
         private timerOrSequenceRule() {
             if (this.backgroundActive) {
                 this.interp.error(
@@ -163,7 +167,7 @@ namespace microcode {
             this.actionRunning = true
             control.runInBackground(() => {
                 this.backgroundActive = true
-                while (this.actionRunning) {
+                while (this.ok()) {
                     if (this.wakeTime > 0) {
                         basic.pause(this.wakeTime)
                         this.wakeTime = 0
@@ -172,19 +176,19 @@ namespace microcode {
                             ruleIndex: this.index,
                         } as TimerEvent)
                         this.timerGoAhead = false
-                        while (this.actionRunning && !this.timerGoAhead) {
+                        while (this.ok() && !this.timerGoAhead) {
                             basic.pause(1)
                         }
                     }
 
-                    if (!this.actionRunning) break
+                    if (!this.ok()) break
                     this.runAction()
 
                     const actionKind = this.getActionKind()
                     if (actionKind === ActionKind.Sequence) this.modifierIndex++
                     else this.reset()
 
-                    if (!this.actionRunning) break
+                    if (!this.ok()) break
                     this.checkForLoopFinish()
 
                     // yield, otherwise the app will hang
@@ -595,6 +599,7 @@ namespace microcode {
         private eventQueueActive = false
         private eventQueue: MicroCodeEvent[] = []
         public addEvent(event: MicroCodeEvent) {
+            if (!this.running) return
             this.eventQueue.push(event)
         }
 
