@@ -93,9 +93,8 @@ namespace microcode {
                 led.stopAnimation()
             } else if (resource == OutputResource.Speaker) music.stopAllSounds()
             this.actionRunning = false
-            // give the background fiber chance to finish
-            // otherwise may spawn second on start after kill
-            while (this.backgroundActive) {
+            // give the background fiber chance to finish unless it is waiting
+            while (!this.waitingOnTimer() && this.backgroundActive) {
                 basic.pause(0)
             }
             this.reset()
@@ -184,10 +183,6 @@ namespace microcode {
                     if (!this.ok()) break
                     this.runAction()
 
-                    const actionKind = this.getActionKind()
-                    if (actionKind === ActionKind.Sequence) this.modifierIndex++
-                    else this.reset()
-
                     if (!this.ok()) break
                     this.checkForLoopFinish()
 
@@ -204,9 +199,23 @@ namespace microcode {
             })
         }
 
+        private atLoop() {
+            return (
+                this.modifierIndex < this.rule.modifiers.length &&
+                getTid(this.rule.modifiers[this.modifierIndex]) ==
+                    Tid.TID_MODIFIER_LOOP
+            )
+        }
+
         private checkForLoopFinish() {
             if (!this.actionRunning) return
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
+            const actionKind = this.getActionKind()
+            if (actionKind === ActionKind.Instant) {
+                this.reset()
+                return
+            }
+            if (!this.atLoop()) this.modifierIndex++
             if (this.modifierIndex < this.rule.modifiers.length) {
                 const m = this.rule.modifiers[this.modifierIndex]
                 if (getTid(m) == Tid.TID_MODIFIER_LOOP) {
@@ -226,6 +235,8 @@ namespace microcode {
                             this.modifierIndex = 0
                         }
                     }
+                } else {
+                    // we move to the next tile in sequence
                 }
             } else {
                 this.reset()
@@ -281,12 +292,14 @@ namespace microcode {
         private runAction() {
             const actuator = this.rule.actuators[0]
             let param: any = undefined
-            if (this.rule.modifiers.length == 0) {
+            if (
+                this.rule.modifiers.length == 0 ||
+                getTid(this.rule.modifiers[0]) == Tid.TID_MODIFIER_LOOP
+            ) {
                 param = defaultModifier(actuator)
             } else {
                 switch (actuator) {
                     case Tid.TID_ACTUATOR_PAINT: {
-                        // a loop can appear here!
                         const mod = this.rule.modifiers[this.modifierIndex]
                         const modEditor = mod as ModifierEditor
                         param = modEditor.getField()
@@ -309,6 +322,10 @@ namespace microcode {
             this.interp.runAction(this.index, actuator, param)
             if (this.getActionKind() === ActionKind.Instant)
                 this.interp.processNewState()
+        }
+
+        private waitingOnTimer() {
+            return this.wakeTime > 0
         }
 
         private getWakeTime() {
@@ -506,12 +523,6 @@ namespace microcode {
                     this.updateState(ruleIndex, varName, param)
                     return
                 default:
-                    // TODO: make these (potentially long running)
-                    // TODO: actions async and cancellable
-                    // Tid.TID_ACTUATOR_PAINT
-                    // Tid.TID_ACTUATOR_SHOW_NUMBER
-                    // Tid.TID_ACTUATOR_SPEAKER
-                    // Tid.TID_ACTUATOR_MUSIC
                     this.host.execute(action as ActionTid, param)
             }
         }
@@ -737,6 +748,7 @@ namespace microcode {
 
         public error(msg: string) {
             this.hasErrors = true
+            this.stop()
             console.log(msg)
             throw new Error("Error: " + msg)
         }
