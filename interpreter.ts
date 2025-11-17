@@ -199,6 +199,14 @@ namespace microcode {
             })
         }
 
+        private atLoop() {
+            return (
+                this.modifierIndex < this.rule.modifiers.length &&
+                getTid(this.rule.modifiers[this.modifierIndex]) ==
+                    Tid.TID_MODIFIER_LOOP
+            )
+        }
+
         private checkForLoopFinish() {
             if (!this.actionRunning) return
             control.waitMicros(ANTI_FREEZE_DELAY * 1000)
@@ -207,6 +215,7 @@ namespace microcode {
                 this.reset()
                 return
             }
+            if (!this.atLoop()) this.modifierIndex++
             if (this.modifierIndex < this.rule.modifiers.length) {
                 const m = this.rule.modifiers[this.modifierIndex]
                 if (getTid(m) == Tid.TID_MODIFIER_LOOP) {
@@ -227,9 +236,7 @@ namespace microcode {
                         }
                     }
                 } else {
-                    this.modifierIndex++
-                    if (this.modifierIndex == this.rule.modifiers.length)
-                        this.reset()
+                    // we move to the next tile in sequence
                 }
             } else {
                 this.reset()
