@@ -280,12 +280,14 @@ namespace microcode {
         private runAction() {
             const actuator = this.rule.actuators[0]
             let param: any = undefined
-            if (this.rule.modifiers.length == 0) {
+            if (
+                this.rule.modifiers.length == 0 ||
+                getTid(this.rule.modifiers[0]) == Tid.TID_MODIFIER_LOOP
+            ) {
                 param = defaultModifier(actuator)
             } else {
                 switch (actuator) {
                     case Tid.TID_ACTUATOR_PAINT: {
-                        // a loop can appear here!
                         const mod = this.rule.modifiers[this.modifierIndex]
                         const modEditor = mod as ModifierEditor
                         param = modEditor.getField()
