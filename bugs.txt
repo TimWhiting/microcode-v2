@@ -1,3 +1,5 @@
+- timer is delaying editing and causing crash on load from home page
+
 - handle loop immediate after actuator
 
 - classic mode sensor value not working

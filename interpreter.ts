@@ -169,7 +169,11 @@ namespace microcode {
                 this.backgroundActive = true
                 while (this.ok()) {
                     if (this.wakeTime > 0) {
+                        console.log(
+                            `${this.index} start timer ${this.wakeTime}`
+                        )
                         basic.pause(this.wakeTime)
+                        console.log(`${this.index} end timer`)
                         this.wakeTime = 0
                         this.interp.addEvent({
                             kind: MicroCodeEventKind.TimerFire,
@@ -535,6 +539,9 @@ namespace microcode {
             this.newState = {}
         }
 
+        // TODO: what about rule waiting on a timer?
+        // TODO: a timer rule can "win" over later rule, blocking
+        // TODO: it from executing.
         private processNewRules(newRules: RuleClosure[]) {
             if (newRules.length == 0) return
             // first new rule (in lexical order) on a resource wins
@@ -599,6 +606,7 @@ namespace microcode {
         private eventQueueActive = false
         private eventQueue: MicroCodeEvent[] = []
         public addEvent(event: MicroCodeEvent) {
+            console.log(`got event ${event.kind}`)
             if (!this.running) return
             this.eventQueue.push(event)
         }
@@ -615,6 +623,7 @@ namespace microcode {
                     if (this.eventQueue.length) {
                         const ev = this.eventQueue[0]
                         this.eventQueue.removeAt(0)
+                        console.log(`remove event ${ev.kind}`)
                         switch (ev.kind) {
                             case MicroCodeEventKind.StateUpdate: {
                                 control.waitMicros(ANTI_FREEZE_DELAY * 1000)
@@ -737,6 +746,7 @@ namespace microcode {
 
         public error(msg: string) {
             this.hasErrors = true
+            this.stop()
             console.log(msg)
             throw new Error("Error: " + msg)
         }
