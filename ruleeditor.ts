@@ -213,12 +213,9 @@ namespace microcode {
         }
 
         private editTile(name: string, index: number) {
-            led.stopAnimation()
-            basic.clearScreen()
-            music.stopAllSounds()
+            stopProgram()
             const ruleTiles = this.ruledef.getRuleRep()[name]
             const tileUpdated = (tile: Tile) => {
-                stopProgram()
                 this.editor.programChanged = true
                 let numberAdded = 0
                 let deleted = 0
@@ -333,6 +330,9 @@ namespace microcode {
                         } else {
                             tileUpdated(theOne)
                         }
+                    },
+                    onHide: () => {
+                        this.editor.saveAndCompileProgram()
                     },
                     onDelete,
                     selected: selectedButton,
