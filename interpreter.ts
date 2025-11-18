@@ -605,7 +605,10 @@ namespace microcode {
             )
 
             takesTime.forEach(rc => {
-                rc.kill()
+                const whenSensor =
+                    rc.rule.sensor &&
+                    getKindTid(rc.rule.sensor) == TileKind.Sensor
+                if (!whenSensor) rc.kill()
                 rc.start()
             })
         }
@@ -720,8 +723,7 @@ namespace microcode {
                         if (
                             oldReading === undefined ||
                             (microcodeClassic && newReading != oldReading) ||
-                            (!microcodeClassic &&
-                                delta >= sensorInfo[index].delta)
+                            !microcodeClassic
                         ) {
                             basic.pause(1)
                             this.onSensorEvent(
@@ -733,7 +735,7 @@ namespace microcode {
                             )
                         }
                     })
-                    basic.pause(100)
+                    basic.pause(500)
                 }
                 this.startSensorsActive = false
             })
