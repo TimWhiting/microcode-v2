@@ -454,6 +454,9 @@ namespace microcode {
                 col = col + this.queuedCursorMove
                 this.queuedCursorMove = undefined
             }
+            if (row >= this.navigator.getRowCount()) {
+                row = this.navigator.getRowCount() - 1
+            }
             this.navigator.initialCursor(row, col)
             this.moveTo(this.navigator.getCurrent())
         }

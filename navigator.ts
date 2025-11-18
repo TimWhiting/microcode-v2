@@ -13,6 +13,10 @@ namespace microcode {
             this.rules = []
         }
 
+        getRowCount() {
+            return this.buttonGroups.length
+        }
+
         /* overrides */
         public clear() {
             super.clear()
