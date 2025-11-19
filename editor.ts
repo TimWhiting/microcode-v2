@@ -29,7 +29,7 @@ namespace microcode {
         private progdef: ProgramDefn
         private currPage: number
         private diskBtn: Button
-        private playBtn: Button
+        private runBtn: Button
         // private connectBtn: Button
         private pageBtn: Button
         public pageEditor: PageEditor
@@ -258,10 +258,10 @@ namespace microcode {
                 y: 8,
                 onClick: () => this.pickDiskSLot(),
             })
-            this.playBtn = new Button({
+            this.runBtn = new Button({
                 parent: this.hudroot,
                 style: ButtonStyles.BorderedPurple,
-                icon: icondb.car_forward,
+                icon: icondb.run,
                 ariaId: "run",
                 x: Screen.LEFT_EDGE + 32,
                 y: 8,
@@ -410,7 +410,7 @@ namespace microcode {
                 this.navigator = new RuleRowNavigator()
             }
 
-            this.navigator.setBtns([[this.diskBtn, this.playBtn, this.pageBtn]])
+            this.navigator.setBtns([[this.diskBtn, this.runBtn, this.pageBtn]])
             this.pageEditor.addToNavigator()
             this.cursor.navigator = this.navigator
             if (this.queuedCursorMove) {
@@ -469,7 +469,7 @@ namespace microcode {
         private drawNav() {
             control.enablePerfCounter()
             this.diskBtn.draw()
-            this.playBtn.draw()
+            this.runBtn.draw()
             this.pageBtn.draw()
         }
     }
