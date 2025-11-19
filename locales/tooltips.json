@@ -13,6 +13,7 @@
     "disk": "save",
     "load": "load",
     "settings": "settings",
+    "run": "run",
 
     "SR_LED": "LED {x} {y} {state}",
     "SR_NOTE": "note {index} {state}",
