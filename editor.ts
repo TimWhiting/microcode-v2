@@ -17,22 +17,6 @@ namespace microcode {
     import BACK_BUTTON_ERROR_KIND = user_interface_base.BACK_BUTTON_ERROR_KIND
     import FORWARD_BUTTON_ERROR_KIND = user_interface_base.FORWARD_BUTTON_ERROR_KIND
 
-    //% shim=TD_NOOP
-    function connectJacdac() {
-        const buf = Buffer.fromUTF8(JSON.stringify({ type: "connect" }))
-        control.simmessages.send("usb", buf)
-    }
-
-    //% shim=TD_NOOP
-    function editorSkipBack(editor: Editor, skipBack: boolean) {
-        if (!skipBack) editor.back()
-    }
-
-    //% shim=TD_NOOP
-    function editorSkipForward(editor: Editor, skipBack: boolean) {
-        if (!skipBack) editor.forward()
-    }
-
     export function diskSlots() {
         return ["disk1", "disk2", "disk3"]
     }
@@ -190,12 +174,12 @@ namespace microcode {
                 this.scrollAndMoveButton(target)
             } catch (e) {
                 if (dir === CursorDir.Up && e.kind === BACK_BUTTON_ERROR_KIND) {
-                    editorSkipBack(this, skipBack)
+                    // editorSkipBack(this, skipBack)
                 } else if (
                     dir == CursorDir.Down &&
                     e.kind == FORWARD_BUTTON_ERROR_KIND
                 ) {
-                    editorSkipForward(this, skipBack)
+                    // editorSkipForward(this, skipBack)
                 } else throw e
             }
         }
@@ -293,7 +277,6 @@ namespace microcode {
                 this.progdef = ProgramDefn.fromBuffer(new BufferReader(buf))
             }
             this.configureP1Keys()
-            this.configureP2Keys()
         }
 
         private configureP1Keys() {
@@ -304,11 +287,6 @@ namespace microcode {
             context.onEvent(
                 ControllerButtonEvent.Pressed,
                 controller.A.id,
-                forward
-            )
-            context.onEvent(
-                ControllerButtonEvent.Pressed,
-                controller.A.id + keymap.PLAYER_OFFSET,
                 forward
             )
             context.onEvent(
@@ -332,34 +310,6 @@ namespace microcode {
                     this.progdef.pages.length,
                 startRow,
                 startCol
-            )
-        }
-
-        private configureP2Keys() {
-            // P2 bindings
-            const nextPage = () => this.nextPage()
-            const prevPage = () => this.prevPage()
-            // page up, page down
-            context.onEvent(
-                ControllerButtonEvent.Pressed,
-                ControllerButton.Up + keymap.PLAYER_OFFSET,
-                nextPage
-            )
-            context.onEvent(
-                ControllerButtonEvent.Pressed,
-                ControllerButton.Down + keymap.PLAYER_OFFSET,
-                prevPage
-            )
-            // next, prev page
-            context.onEvent(
-                ControllerButtonEvent.Pressed,
-                ControllerButton.Left + keymap.PLAYER_OFFSET,
-                prevPage
-            )
-            context.onEvent(
-                ControllerButtonEvent.Pressed,
-                ControllerButton.Right + keymap.PLAYER_OFFSET,
-                nextPage
             )
         }
 
@@ -458,7 +408,7 @@ namespace microcode {
                 row = this.navigator.getRowCount() - 1
             }
             this.navigator.initialCursor(row, col)
-            this.moveTo(this.navigator.getCurrent())
+            this.scrollAndMoveButton(this.navigator.getCurrent())
         }
 
         update() {
@@ -506,12 +456,6 @@ namespace microcode {
         private drawNav() {
             control.enablePerfCounter()
             this.diskBtn.draw()
-            // const wasVisible = this.connectBtn.visible()
-            // this.connectBtn.setVisible(
-            //     false // jdc.numServiceInstances(jacs.ServiceClass.DotMatrix) == 0
-            // )
-            // if (wasVisible !== this.connectBtn.visible()) this.changed()
-            // if (this.connectBtn.visible()) this.connectBtn.draw()
             this.pageBtn.draw()
         }
     }
