@@ -389,7 +389,6 @@ namespace microcode {
         const tid = getTid(tile)
         if (classicTerminal(tid)) return true
         // the following modifiers are terminal
-        if (tid == Tid.TID_POS_INT_EDITOR) return true
         if (isPage(tid)) return true
         // everything else except some filters are not terminal
         if (!isFilter(tid)) return false
@@ -705,7 +704,11 @@ namespace microcode {
             case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
             case Tid.TID_MODIFIER_LOOP:
                 return {
-                    only: ["pos_int_editor"],
+                    only: [
+                        "pos_int_editor",
+                        Tid.TID_OPERATOR_MULTIPLY,
+                        Tid.TID_OPERATOR_PLUS,
+                    ],
                 }
             case Tid.TID_ACTUATOR_SWITCH_PAGE:
                 return { only: ["page"] }
