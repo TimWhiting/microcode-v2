@@ -19,7 +19,8 @@ namespace microcode {
         else if (id === "disk") res = "save";
         else if (id === "load") res = "load";
         else if (id === "settings") res = "settings";
-        else if (id === "run") res = "run";
+        else if (id === "run") res = "run program";
+        else if (id === "stop") res = "stop program";
         else if (id === "SR_LED") res = "LED {x} {y} {state}";
         else if (id === "SR_NOTE") res = "note {index} {state}";
         else if (id === "SR_ON") res = "on";

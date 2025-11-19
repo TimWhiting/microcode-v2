@@ -30,6 +30,7 @@ namespace microcode {
         private currPage: number
         private diskBtn: Button
         private runBtn: Button
+        private stopBtn: Button
         // private connectBtn: Button
         private pageBtn: Button
         public pageEditor: PageEditor
@@ -269,6 +270,17 @@ namespace microcode {
                     runProgram(this.progdef)
                 },
             })
+            this.stopBtn = new Button({
+                parent: this.hudroot,
+                style: ButtonStyles.BorderedPurple,
+                icon: icondb.car_stop,
+                ariaId: "stop",
+                x: Screen.LEFT_EDGE + 52,
+                y: 8,
+                onClick: () => {
+                    stopProgram()
+                },
+            })
             this.pageBtn = new Button({
                 parent: this.hudroot,
                 style: ButtonStyles.BorderedPurple,
@@ -410,7 +422,9 @@ namespace microcode {
                 this.navigator = new RuleRowNavigator()
             }
 
-            this.navigator.setBtns([[this.diskBtn, this.runBtn, this.pageBtn]])
+            this.navigator.setBtns([
+                [this.diskBtn, this.runBtn, this.stopBtn, this.pageBtn],
+            ])
             this.pageEditor.addToNavigator()
             this.cursor.navigator = this.navigator
             if (this.queuedCursorMove) {
@@ -470,6 +484,7 @@ namespace microcode {
             control.enablePerfCounter()
             this.diskBtn.draw()
             this.runBtn.draw()
+            this.stopBtn.draw()
             this.pageBtn.draw()
         }
     }
