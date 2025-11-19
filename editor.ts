@@ -283,7 +283,7 @@ namespace microcode {
                 x: Screen.LEFT_EDGE + 52,
                 y: 8,
                 onClick: () => {
-                    if (isProgramRunning()) this.stopProgram()
+                    this.stopProgram()
                 },
             })
             this.pageBtn = new Button({
@@ -310,12 +310,14 @@ namespace microcode {
         }
 
         public stopProgram() {
-            stopProgram()
-            this.runBtn.buildSprite(icondb.run)
-            this.stopBtn.buildSprite(icondb.stopDisabled)
-            this.dirty = true
-            basic.showIcon(IconNames.No, 100)
-            basic.clearScreen()
+            if (isProgramRunning()) {
+                stopProgram()
+                this.runBtn.buildSprite(icondb.run)
+                this.stopBtn.buildSprite(icondb.stopDisabled)
+                this.dirty = true
+                basic.showIcon(IconNames.No, 100)
+                basic.clearScreen()
+            }
         }
 
         private configureP1Keys() {
