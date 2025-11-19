@@ -365,7 +365,7 @@ namespace microcode {
                     }
                 } else {
                     if (this.navigator.atRuleStart()) {
-                        const target = this.navigator.initialCursor(0, 0)
+                        const target = this.navigator.initialCursor(0, 1)
                         this.moveTo(target)
                     } else this.scrollAndMove(CursorDir.Back)
                 }
