@@ -75,7 +75,13 @@ namespace microcode {
         }
 
         public start(timer = false) {
-            if (!this.interp.running || this.actionRunning) return
+            if (
+                !this.interp.running ||
+                this.actionRunning ||
+                this.backgroundActive
+            )
+                return
+            this.reset()
             const time = this.getWakeTime()
             if (!timer || time > 0) this.timerOrSequenceRule()
         }
@@ -752,10 +758,8 @@ namespace microcode {
         }
 
         public error(msg: string) {
-            this.hasErrors = true
-            this.stop()
             console.log(msg)
-            throw new Error("Error: " + msg)
+            control.panic(123)
         }
 
         private getExprValue(expr: Tile): string {
