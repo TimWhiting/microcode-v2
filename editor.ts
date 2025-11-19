@@ -283,15 +283,7 @@ namespace microcode {
                 x: Screen.LEFT_EDGE + 52,
                 y: 8,
                 onClick: () => {
-                    if (isProgramRunning()) {
-                        stopProgram()
-                        this.runBtn.buildSprite(icondb.run)
-                        this.stopBtn.buildSprite(icondb.stopDisabled)
-                        this.dirty = true
-                        basic.showIcon(IconNames.No)
-                        control.waitMicros(200000)
-                        basic.clearScreen()
-                    }
+                    if (isProgramRunning()) this.stopProgram()
                 },
             })
             this.pageBtn = new Button({
@@ -302,7 +294,7 @@ namespace microcode {
                 y: 8,
                 onClick: () => this.pickPage(),
             })
-            stopProgram()
+            this.stopProgram()
             const buf = this.app.load(SAVESLOT_AUTO)
             if (!buf) {
                 // onboarding experience
@@ -315,6 +307,15 @@ namespace microcode {
                 this.progdef = ProgramDefn.fromBuffer(new BufferReader(buf))
             }
             this.configureP1Keys()
+        }
+
+        public stopProgram() {
+            stopProgram()
+            this.runBtn.buildSprite(icondb.run)
+            this.stopBtn.buildSprite(icondb.stopDisabled)
+            this.dirty = true
+            basic.showIcon(IconNames.No, 100)
+            basic.clearScreen()
         }
 
         private configureP1Keys() {
@@ -605,7 +606,7 @@ namespace microcode {
         }
 
         public moveRuleAt(index: number, up: boolean) {
-            stopProgram()
+            this.editor.stopProgram()
             const delta = up ? -1 : 1
             const deleted = this.pagedef.deleteRuleAt(index)
             this.pagedef.insertRuleAt(index + delta, deleted)
@@ -618,14 +619,14 @@ namespace microcode {
         }
 
         public deleteRuleAt(index: number) {
-            stopProgram()
+            this.editor.stopProgram()
             this.pagedef.deleteRuleAt(index)
             this.ruleEditors.splice(index, 1)
             this.reassignIndices()
         }
 
         public insertRuleAt(index: number) {
-            stopProgram()
+            this.editor.stopProgram()
             const newRule = this.pagedef.insertRuleAt(index, undefined)
             if (newRule) {
                 this.ruleEditors.insertAt(
