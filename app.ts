@@ -74,4 +74,8 @@ namespace microcode {
         if (theInterpreter) theInterpreter.stop()
         theInterpreter = undefined
     }
+
+    export function isProgramRunning() {
+        return theInterpreter != undefined
+    }
 }

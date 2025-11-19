@@ -267,7 +267,11 @@ namespace microcode {
                 x: Screen.LEFT_EDGE + 32,
                 y: 8,
                 onClick: () => {
-                    runProgram(this.progdef)
+                    if (!isProgramRunning()) {
+                        runProgram(this.progdef)
+                        this.runBtn.buildSprite(icondb.running)
+                        this.dirty = true
+                    }
                 },
             })
             this.stopBtn = new Button({
@@ -278,7 +282,14 @@ namespace microcode {
                 x: Screen.LEFT_EDGE + 52,
                 y: 8,
                 onClick: () => {
-                    stopProgram()
+                    if (isProgramRunning()) {
+                        stopProgram()
+                        this.runBtn.buildSprite(icondb.run)
+                        this.dirty = true
+                        basic.showIcon(IconNames.No)
+                        control.waitMicros(200000)
+                        basic.clearScreen()
+                    }
                 },
             })
             this.pageBtn = new Button({
