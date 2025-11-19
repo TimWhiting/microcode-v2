@@ -61,6 +61,15 @@ namespace microcode {
         public popScene() {
             this.sceneManager.popScene()
         }
+
+        public runFromEditor() {
+            const topIndex = this.sceneManager.scenes.length - 1
+            const topScene = this.sceneManager.scenes[topIndex]
+            if (topScene instanceof Editor) {
+                const editor: Editor = topScene
+                editor.runProgram()
+            }
+        }
     }
 
     let theInterpreter: Interpreter = undefined

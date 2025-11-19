@@ -77,14 +77,20 @@ namespace microcode {
             buttons.forEach(b => {
                 control.onEvent(b, DAL.DEVICE_EVT_ANY, () => {
                     const ev = control.eventValue()
-                    const tid =
-                        ev == DAL.DEVICE_BUTTON_EVT_DOWN
-                            ? Tid.TID_SENSOR_PRESS
-                            : ev == DAL.DEVICE_BUTTON_EVT_UP
-                            ? Tid.TID_SENSOR_RELEASE
-                            : undefined
-                    const filter = matchPressReleaseTable[b]
-                    this._handler(tid, filter)
+                    if (isProgramRunning()) {
+                        const tid =
+                            ev == DAL.DEVICE_BUTTON_EVT_DOWN
+                                ? Tid.TID_SENSOR_PRESS
+                                : ev == DAL.DEVICE_BUTTON_EVT_UP
+                                ? Tid.TID_SENSOR_RELEASE
+                                : undefined
+                        const filter = matchPressReleaseTable[b]
+                        this._handler(tid, filter)
+                    } else {
+                        // start up the program using the editor
+                        if (ev == DAL.DEVICE_BUTTON_EVT_DOWN)
+                            app.runFromEditor()
+                    }
                 })
             })
 

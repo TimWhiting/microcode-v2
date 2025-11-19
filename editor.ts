@@ -267,12 +267,7 @@ namespace microcode {
                 x: Screen.LEFT_EDGE + 32,
                 y: 8,
                 onClick: () => {
-                    if (!isProgramRunning()) {
-                        runProgram(this.progdef)
-                        this.runBtn.buildSprite(icondb.runDisabled)
-                        this.stopBtn.buildSprite(icondb.car_stop)
-                        this.dirty = true
-                    }
+                    this.runProgram()
                 },
             })
             this.stopBtn = new Button({
@@ -307,6 +302,15 @@ namespace microcode {
                 this.progdef = ProgramDefn.fromBuffer(new BufferReader(buf))
             }
             this.configureP1Keys()
+        }
+
+        public runProgram() {
+            if (!isProgramRunning()) {
+                runProgram(this.progdef)
+                this.runBtn.buildSprite(icondb.runDisabled)
+                this.stopBtn.buildSprite(icondb.car_stop)
+                this.dirty = true
+            }
         }
 
         public stopProgram() {
