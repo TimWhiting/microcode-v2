@@ -2921,21 +2921,21 @@ bffffffffffffffffffffffffffffffb
         . . . . . . . . . . . . . . . .
     `
 
-    export const running = bmp`
+    export const runDisabled = bmp`
         . . . . . . . . . . . . . . . .
         . . . . . . . . . . . . . . . .
         . c c c . . . . . . . . . . . .
-        . c 5 5 c c . . . . . . . . . .
-        . c 5 5 5 5 c c c . . . . . . .
-        . c 5 5 5 5 5 5 c c . . . . . .
-        . c 5 5 5 5 5 5 5 5 c c . . . .
-        . c 5 5 5 5 5 5 5 5 5 5 c c . .
-        . c 5 5 5 5 5 5 5 5 5 5 5 5 c .
-        . c 5 5 5 5 5 5 5 5 5 5 c c . .
-        . c 5 5 5 5 5 5 5 5 c c . . . .
-        . c 5 5 5 5 5 5 c c . . . . . .
-        . c 5 5 5 5 c c . . . . . . . .
-        . c 5 5 c c . . . . . . . . . .
+        . c b b c c . . . . . . . . . .
+        . c b b b b c c c . . . . . . .
+        . c b b b b b b c c . . . . . .
+        . c b b b b b b b b c c . . . .
+        . c b b b b b b b b b b c c . .
+        . c b b b b b b b b b b b b c .
+        . c b b b b b b b b b b c c . .
+        . c b b b b b b b b c c . . . .
+        . c b b b b b b c c . . . . . .
+        . c b b b b c c . . . . . . . .
+        . c b b c c . . . . . . . . . .
         . c c c . . . . . . . . . . . .
         . . . . . . . . . . . . . . . .
     `
@@ -3071,6 +3071,25 @@ bffffffffffffffffffffffffffffffb
 . . . . . d d d d d d . . . . . 
 . . . . . . . . . . . . . . . . 
 `
+
+    export const stopDisabled = bmp`
+        . . . . . . . . . . . . . . . .
+        . . . . . d d d d d d . . . . .
+        . . . . d c c c c c c d . . . .
+        . . . d c b b b b b b c d . . .
+        . . d c b b b b b b b b c d . .
+        . d c b b b b b b b b b b c d .
+        . d c b b b b b b b b b b c d .
+        . d c b b c c c c c c b b c d .
+        . d c b b c c c c c c b b c d .
+        . d c b b b b b b b b b b c d .
+        . d c b b b b b b b b b b c d .
+        . . d c b b b b b b b b c d . .
+        . . . d c b b b b b b c d . . .
+        . . . . d c c c c c c d . . . .
+        . . . . . d d d d d d . . . . .
+        . . . . . . . . . . . . . . . .
+    `
 
     export const car_wall = bmp`
     . . . . . . . . . . . . . . . .

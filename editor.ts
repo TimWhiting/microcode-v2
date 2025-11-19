@@ -269,7 +269,8 @@ namespace microcode {
                 onClick: () => {
                     if (!isProgramRunning()) {
                         runProgram(this.progdef)
-                        this.runBtn.buildSprite(icondb.running)
+                        this.runBtn.buildSprite(icondb.runDisabled)
+                        this.stopBtn.buildSprite(icondb.car_stop)
                         this.dirty = true
                     }
                 },
@@ -277,7 +278,7 @@ namespace microcode {
             this.stopBtn = new Button({
                 parent: this.hudroot,
                 style: ButtonStyles.BorderedPurple,
-                icon: icondb.car_stop,
+                icon: icondb.stopDisabled,
                 ariaId: "stop",
                 x: Screen.LEFT_EDGE + 52,
                 y: 8,
@@ -285,6 +286,7 @@ namespace microcode {
                     if (isProgramRunning()) {
                         stopProgram()
                         this.runBtn.buildSprite(icondb.run)
+                        this.stopBtn.buildSprite(icondb.stopDisabled)
                         this.dirty = true
                         basic.showIcon(IconNames.No)
                         control.waitMicros(200000)
