@@ -29,6 +29,7 @@ namespace microcode {
         private progdef: ProgramDefn
         private currPage: number
         private diskBtn: Button
+        private playBtn: Button
         // private connectBtn: Button
         private pageBtn: Button
         public pageEditor: PageEditor
@@ -93,7 +94,7 @@ namespace microcode {
                 this.programChanged = false
                 this.app.save(SAVESLOT_AUTO, this.progdef.toBuffer())
             }
-            runProgram(this.progdef)
+            // runProgram(this.progdef)
         }
 
         private pickDiskSLot() {
@@ -216,6 +217,7 @@ namespace microcode {
         }
 
         /* override */ startup() {
+            stopProgram()
             const makeOnEvent = (id: number, dir: CursorDir) => {
                 context.onEvent(ControllerButtonEvent.Pressed, id, () =>
                     this.scrollAndMove(dir)
@@ -255,6 +257,17 @@ namespace microcode {
                 x: Screen.LEFT_EDGE + 12,
                 y: 8,
                 onClick: () => this.pickDiskSLot(),
+            })
+            this.playBtn = new Button({
+                parent: this.hudroot,
+                style: ButtonStyles.BorderedPurple,
+                icon: icondb.car_forward,
+                ariaId: "run",
+                x: Screen.LEFT_EDGE + 32,
+                y: 8,
+                onClick: () => {
+                    runProgram(this.progdef)
+                },
             })
             this.pageBtn = new Button({
                 parent: this.hudroot,
@@ -397,7 +410,7 @@ namespace microcode {
                 this.navigator = new RuleRowNavigator()
             }
 
-            this.navigator.setBtns([[this.diskBtn, this.pageBtn]])
+            this.navigator.setBtns([[this.diskBtn, this.playBtn, this.pageBtn]])
             this.pageEditor.addToNavigator()
             this.cursor.navigator = this.navigator
             if (this.queuedCursorMove) {
@@ -456,6 +469,7 @@ namespace microcode {
         private drawNav() {
             control.enablePerfCounter()
             this.diskBtn.draw()
+            this.playBtn.draw()
             this.pageBtn.draw()
         }
     }
