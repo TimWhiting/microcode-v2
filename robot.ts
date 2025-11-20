@@ -42,6 +42,41 @@ namespace microcode {
             return icondb.line_none_from_right
         return null
     }
+
+    function getCarParam2(tile: Tile) {
+        const tid = getTid(tile)
+        switch (tid) {
+            case Tid.TID_MODIFIER_CAR_FORWARD:
+                return robot.robots.RobotCompactCommand.MotorRunForward
+            case Tid.TID_MODIFIER_CAR_REVERSE:
+                return robot.robots.RobotCompactCommand.MotorRunBackward
+            case Tid.TID_MODIFIER_CAR_TURN_LEFT:
+                return robot.robots.RobotCompactCommand.MotorTurnLeft
+            case Tid.TID_MODIFIER_CAR_TURN_RIGHT:
+                return robot.robots.RobotCompactCommand.MotorTurnRight
+            case Tid.TID_MODIFIER_CAR_STOP:
+                return robot.robots.RobotCompactCommand.MotorStop
+            case Tid.TID_MODIFIER_CAR_FORWARD_FAST:
+                return robot.robots.RobotCompactCommand.MotorRunForwardFast
+            case Tid.TID_MODIFIER_CAR_SPIN_LEFT:
+                return robot.robots.RobotCompactCommand.MotorSpinLeft
+            case Tid.TID_MODIFIER_CAR_SPIN_RIGHT:
+                return robot.robots.RobotCompactCommand.MotorSpinRight
+            case Tid.TID_MODIFIER_CAR_LED_COLOR_1:
+                return robot.robots.RobotCompactCommand.LEDRed
+            case Tid.TID_MODIFIER_CAR_LED_COLOR_2:
+                return robot.robots.RobotCompactCommand.LEDGreen
+            case Tid.TID_MODIFIER_CAR_LED_COLOR_3:
+                return robot.robots.RobotCompactCommand.LEDBlue
+            case Tid.TID_MODIFIER_CAR_LED_COLOR_4:
+                return robot.robots.RobotCompactCommand.LEDOff
+            case Tid.TID_MODIFIER_CAR_ARM_OPEN:
+                return robot.robots.RobotCompactCommand.ArmOpen
+            case Tid.TID_MODIFIER_CAR_ARM_CLOSE:
+                return robot.robots.RobotCompactCommand.ArmClose
+        }
+        return undefined
+    }
 }
 
 namespace icondb {
