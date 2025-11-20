@@ -303,7 +303,7 @@ namespace microcode {
             if (!isProgramRunning()) {
                 runProgram(this.progdef)
                 this.runBtn.buildSprite(icondb.runDisabled)
-                this.stopBtn.buildSprite(icondb.car_stop)
+                this.stopBtn.buildSprite(icondb.stop)
                 this.dirty = true
             }
         }
