@@ -230,16 +230,11 @@ namespace microcode {
             makeOnEvent(controller.left.id, CursorDir.Left)
             makeOnEvent(controller.up.id, CursorDir.Up)
             makeOnEvent(controller.down.id, CursorDir.Down)
-            if (!Options.menuProfiling)
-                context.onEvent(
-                    ControllerButtonEvent.Pressed,
-                    controller.menu.id,
-                    () => {
-                        // go back to home screen
-                        this.app.popScene()
-                        this.app.pushScene(new Home(this.app))
-                    }
-                )
+            context.onEvent(
+                ControllerButtonEvent.Pressed,
+                controller.menu.id,
+                () => this.runProgram()
+            )
             this.hudroot = new Placeable()
             this.hudroot.xfrm.localPos = new Vec2(0, Screen.TOP_EDGE)
             this.scrollroot = new Placeable()
