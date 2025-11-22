@@ -11,7 +11,7 @@ Download the [microcode hex file](./assets/microcode.hex) and copy it your micro
 
 ### With simulators
 
-You can load this repo into https://makecode.microbit.org/beta using the import button on the right-hand side of the home page via "Import URL". Enter https://github.com/microbit-apps/microcode-v2 as the URL.
+You can load this repo into [https://makecode.microbit.org/beta](https://makecode.microbit.org/beta) using the import button on the right-hand side of the home page via "Import URL". Enter [https://github.com/microbit-apps/microcode-v2](https://github.com/microbit-apps/microcode-v2) as the URL.
 
 ## What's new?
 
