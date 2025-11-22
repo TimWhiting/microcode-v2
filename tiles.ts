@@ -939,35 +939,6 @@ namespace microcode {
     export function getParam2(tile: Tile): number {
         const tid = getTid(tile)
         switch (tid) {
-            case Tid.TID_MODIFIER_CAR_FORWARD:
-                return robot.robots.RobotCompactCommand.MotorRunForward
-            case Tid.TID_MODIFIER_CAR_REVERSE:
-                return robot.robots.RobotCompactCommand.MotorRunBackward
-            case Tid.TID_MODIFIER_CAR_TURN_LEFT:
-                return robot.robots.RobotCompactCommand.MotorTurnLeft
-            case Tid.TID_MODIFIER_CAR_TURN_RIGHT:
-                return robot.robots.RobotCompactCommand.MotorTurnRight
-            case Tid.TID_MODIFIER_CAR_STOP:
-                return robot.robots.RobotCompactCommand.MotorStop
-            case Tid.TID_MODIFIER_CAR_FORWARD_FAST:
-                return robot.robots.RobotCompactCommand.MotorRunForwardFast
-            case Tid.TID_MODIFIER_CAR_SPIN_LEFT:
-                return robot.robots.RobotCompactCommand.MotorSpinLeft
-            case Tid.TID_MODIFIER_CAR_SPIN_RIGHT:
-                return robot.robots.RobotCompactCommand.MotorSpinRight
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_1:
-                return robot.robots.RobotCompactCommand.LEDRed
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_2:
-                return robot.robots.RobotCompactCommand.LEDGreen
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_3:
-                return robot.robots.RobotCompactCommand.LEDBlue
-            case Tid.TID_MODIFIER_CAR_LED_COLOR_4:
-                return robot.robots.RobotCompactCommand.LEDOff
-            case Tid.TID_MODIFIER_CAR_ARM_OPEN:
-                return robot.robots.RobotCompactCommand.ArmOpen
-            case Tid.TID_MODIFIER_CAR_ARM_CLOSE:
-                return robot.robots.RobotCompactCommand.ArmClose
-
             case Tid.TID_MODIFIER_RGB_LED_COLOR_1:
                 return 0x2f0000
             case Tid.TID_MODIFIER_RGB_LED_COLOR_2:
@@ -1096,28 +1067,5 @@ namespace microcode {
         }
     }
 
-    TODO: don't need this low-level approach, but need to recall which JD we support
-    export function serviceCommand(tile: Tile) {
-        const tid = getTid(tile)
-        switch (tid) {
-            case Tid.TID_ACTUATOR_PAINT:
-            case Tid.TID_ACTUATOR_RGB_LED:
-            case Tid.TID_ACTUATOR_SERVO_SET_ANGLE:
-                return jacs.CMD_SET_REG | 0x2
-            case Tid.TID_ACTUATOR_RELAY:
-            case Tid.TID_ACTUATOR_SERVO_POWER:
-                return jacs.CMD_SET_REG | 0x1
-            case Tid.TID_ACTUATOR_SPEAKER:
-            case Tid.TID_ACTUATOR_MUSIC:
-                return 0x80
-            case Tid.TID_ACTUATOR_CAR:
-            case Tid.TID_ACTUATOR_RADIO_SEND:
-                return 0x81
-            case Tid.TID_ACTUATOR_RADIO_SET_GROUP:
-                return jacs.CMD_SET_REG | 0x80
-            default:
-                return undefined
-        }
-    }
     */
 }
