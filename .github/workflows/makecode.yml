@@ -34,9 +34,6 @@ jobs:
             - name: npm install makecode@0.34.5
               run: |
                   npm install -g makecode@0.34.5
-            - name: build js
+            - name: build hex file
               run: |
-                  makecode --java-script
-            - name: build hardware N3
-              run: |
-                  makecode --hw N3
+                  makecode
