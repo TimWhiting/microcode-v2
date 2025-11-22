@@ -34,7 +34,7 @@
         "host.ts",
         "interpreter.ts",
         "sensors.ts",
-        "parser.ts",
+        "exprparser.ts",
         "decimal.ts",
         "settings.ts"
     ],
