@@ -39,4 +39,4 @@ See [https://github.com/microbit-apps](https://github.com/microbit-apps) for mor
 
 ## Contributing
 
-This project welcomes contributions and suggestions.
+[This project](https://github.com/microbit-apps/microcode-v2) welcomes contributions and suggestions.
