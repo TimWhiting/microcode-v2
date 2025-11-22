@@ -9,6 +9,12 @@ MicroCode is an icon-based programming language and editor for young learners to
 You will need a micro:bit V2 and one of the [display shields for the microbit](https://makecode.microbit.org/pkg/microbit-apps/display-shield).
 Download the [microcode hex file](./assets/microcode-v2.hex) and copy it your micro:bit.
 
+With the above hardware, in addition to the freely-available MicroCode software, you can also make use
+of these other great programming environments:
+
+-   [MakeCode for micro:bit](https://makecode.microbit.org)
+-   [MakeCode Arcade](https://arcade.makecode.com)
+
 ### With simulators
 
 You can load this repo into [https://makecode.microbit.org/beta](https://makecode.microbit.org/beta) using the import button on the right-hand side of the home page via "Import URL". Enter [https://github.com/microbit-apps/microcode-v2](https://github.com/microbit-apps/microcode-v2) as the URL.
