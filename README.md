@@ -33,7 +33,7 @@ We will bring back support for the following features from the original MicroCod
 
 ## Development
 
-See [https://github.com/microbit-apps] for more information on developing micro:bit apps such as MicroCode.
+See [https://github.com/microbit-apps](https://github.com/microbit-apps) for more information on developing micro:bit apps such as MicroCode.
 
 ## Contributing
 
