@@ -15,19 +15,19 @@ You can load this repo into [https://makecode.microbit.org/beta](https://makecod
 
 ## What's new?
 
--   MicroCode is now built using [MakeCode for the micro:bit](https://makecode.microbit.org/beta), which
+-   MicroCode is built using [MakeCode for the micro:bit](https://makecode.microbit.org/beta), which
     provides direct access to all the micro:bit APIs available through MakeCode.
 
--   Decimal notation
+-   Decimal notation (instead of the 1-5 dots in the original MicroCode)
 
 -   Uniform support for sensors
 
 ## What happened to?
 
-We will bring back support for the following features from the original MicroCode:
+We will soon bring back support for the following features from the original MicroCode:
 
--   Support for 1-5 dots (instead of decimal)
--   Jacdac
+-   Numbers via 1-5 counting dots (instead of decimal notation)
+-   Jacdac services
 -   Robot cars
 -   Localization
 
