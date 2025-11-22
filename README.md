@@ -22,9 +22,10 @@ You can load this repo into [https://makecode.microbit.org/beta](https://makecod
 
 -   Uniform support for sensors
 
-## What happened to?
+## What happened to MicroCode v1 and its cool features?
 
-We will soon bring back support for the following features from the original MicroCode:
+We soon will be removing support for [MicroCode v1]
+(https://aka.ms/microcode). We will bring back the following features from MicroCode v1:
 
 -   Numbers via 1-5 counting dots (instead of decimal notation)
 -   Jacdac services
