@@ -1,1 +1,0 @@
-This folder contains localized firmwares for MicroCode.
