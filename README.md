@@ -16,9 +16,11 @@ You can load this repo into [https://makecode.microbit.org/beta](https://makecod
 ## What's new?
 
 -   MicroCode is built using [MakeCode for the micro:bit](https://makecode.microbit.org/beta), which
-    provides direct access to all the micro:bit APIs available through MakeCode.
+    provides direct access to all the micro:bit APIs available through MakeCode
 
 -   Decimal notation (instead of the 1-5 dots in MicroCode v1)
+
+-   Math (+, -, \*, /) and comparison (=, !=, <, >) operators
 
 -   Uniform support for sensors
 
