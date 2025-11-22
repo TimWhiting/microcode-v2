@@ -26,7 +26,7 @@ You can load this repo into [https://makecode.microbit.org/beta](https://makecod
 
 ## What happened to MicroCode v1 and its cool features?
 
-While we soon will retire the [MicroCode v1](https://aka.ms/microcode) web site, but we will bring back the following features from MicroCode v1:
+While we soon will retire the [MicroCode v1](https://aka.ms/microcode) web site, we plan to bring back the following features from MicroCode v1:
 
 -   Option to to use 1-5 counting dots, instead of decimal notation, for beginners.
 -   Jacdac services
