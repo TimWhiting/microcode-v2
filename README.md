@@ -1,12 +1,12 @@
 ## MicroCode (version 2)
 
-MicroCode is an icon-based programming language and editor for young learners to code with the [BBC micro:bit V2](https://microbit.org). MicroCode allows you to program the micro:bit V2 with only an [display shield accessory](https://github.com/microbit-apps/display-shield) - _no other computer is required!_
+MicroCode is an icon-based programming language and editor for young learners to code with the [BBC micro:bit V2](https://microbit.org). MicroCode allows you to program the micro:bit V2 with only an [display shield accessory](https://makecode.microbit.org/pkg/microbit-apps/display-shield) - _no other computer is required!_
 
 ## Getting started with MicroCode
 
 ### With hardware
 
-You will need a micro:bit V2 and one of the [display shields for the microbit](https://github.com/microbit-apps/display-shield).
+You will need a micro:bit V2 and one of the [display shields for the microbit](https://makecode.microbit.org/pkg/microbit-apps/display-shield).
 Download the [microcode hex file](./assets/microcode.hex) and copy it your micro:bit.
 
 ### With simulators
