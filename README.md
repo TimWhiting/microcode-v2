@@ -10,12 +10,13 @@ To use MicroCode, you will need to:
 
 1. Get a micro:bit (v2) and one of the [display shields](https://makecode.microbit.org/pkg/microbit-apps/display-shield).
 2. Download the [microcode hex file](./assets/microcode-v2.hex) and copy it your micro:bit.
+3. Insert the micro:bit into the display shield, and make sure the combination is powered.
 
 With the above hardware, in addition to the freely-available MicroCode software, you can also make use
 of these other great programming environments:
 
--   [MakeCode for micro:bit](https://makecode.microbit.org)
--   [MakeCode Arcade](https://arcade.makecode.com)
+-   create your own graphics with [MakeCode for micro:bit](https://makecode.microbit.org) and the [display shield extension](makecode.microbit.org/pkg/microbit-apps/display-shield))
+-   develop retro arcade games wuth [MakeCode Arcade](https://arcade.makecode.com)
 
 ### With simulators
 
