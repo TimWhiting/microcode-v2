@@ -26,7 +26,7 @@ You can load this repo into [https://makecode.microbit.org/beta](https://makecod
 -   MicroCode is built using [MakeCode for the micro:bit](https://makecode.microbit.org/beta), which
     provides direct access to all the micro:bit APIs available through MakeCode
 
--   Decimal notation (instead of the 1-5 dots in MicroCode v1)
+-   Decimal notation (instead of the 1-5 dots in MicroCode-classic)
 
 -   Math (+, -, \*, /) and comparison (=, !=, <, >) operators
 
@@ -38,7 +38,7 @@ You can load this repo into [https://makecode.microbit.org/beta](https://makecod
 
 While we soon will retire the [MicroCode-classic](https://aka.ms/microcode) web site, we plan to bring back the following features from MicroCode-classic:
 
--   Option to to use 1-5 counting dots, instead of decimal notation, for beginners.
+-   Option to use 1-5 dots, instead of decimal notation, for beginners.
 -   Jacdac services
 -   Robot cars
 -   Localization
