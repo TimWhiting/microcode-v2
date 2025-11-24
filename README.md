@@ -6,8 +6,10 @@ MicroCode is an icon-based programming language and editor for young learners to
 
 ### With hardware
 
-You will need a micro:bit V2 and one of the [display shields for the microbit](https://makecode.microbit.org/pkg/microbit-apps/display-shield).
-Download the [microcode hex file](./assets/microcode-v2.hex) and copy it your micro:bit.
+To use MicroCode, you will need to:
+
+1. Get a micro:bit (v2) and one of the [display shields](https://makecode.microbit.org/pkg/microbit-apps/display-shield).
+2. Download the [microcode hex file](./assets/microcode-v2.hex) and copy it your micro:bit.
 
 With the above hardware, in addition to the freely-available MicroCode software, you can also make use
 of these other great programming environments:
@@ -32,9 +34,9 @@ You can load this repo into [https://makecode.microbit.org/beta](https://makecod
 
 -   Lots of changes to improve reliability
 
-## What happened to MicroCode v1 and its cool features?
+## What happened to MicroCode-classic and its features?
 
-While we soon will retire the [MicroCode v1](https://aka.ms/microcode) web site, we plan to bring back the following features from MicroCode v1:
+While we soon will retire the [MicroCode-classic](https://aka.ms/microcode) web site, we plan to bring back the following features from MicroCode-classic:
 
 -   Option to to use 1-5 counting dots, instead of decimal notation, for beginners.
 -   Jacdac services
