@@ -37,11 +37,3 @@ jobs:
             - name: build hex file
               run: |
                   makecode
-            - name: copy files
-              run: |
-                  cp ./built/binary.hex ./assets/microcode.hex
-            - name: upload modified assets
-              uses: stefanzweifel/git-auto-commit-action@v4
-              with:
-                  file_pattern: "assets/*"
-                  branch: main

@@ -11,7 +11,7 @@ jobs:
             contents: write
         strategy:
             matrix:
-                node-version: [16.x]
+                node-version: [18.x]
         steps:
             - uses: actions/checkout@v4
               with:
@@ -37,10 +37,9 @@ jobs:
                   makecode
             - name: copy files
               run: |
-                  cp ./built/binary.js ./assets/js/binary.js
-                  cp ./built/n3/binary.hex ./assets/microcode.hex
+                  cp ./built/binary.hex ./assets/microcode.hex
             - name: upload modified assets
               uses: stefanzweifel/git-auto-commit-action@v4
               with:
-                  file_pattern: "assets/* _includes/*"
+                  file_pattern: "assets/*"
                   branch: main
