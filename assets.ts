@@ -26,7 +26,6 @@ namespace microcode {
     function jacdacImages(name: string | number) {
         if (name == Tid.TID_FILTER_KITA_KEY_1) return icondb.kita_key_1
         if (name == Tid.TID_FILTER_KITA_KEY_2) return icondb.kita_key_2
-        if (name == Tid.TID_SENSOR_MAGNET) return icondb.magnet
         if (name == Tid.TID_SENSOR_SLIDER) return icondb.kita_slider
         if (name == Tid.TID_SENSOR_ROTARY) return icondb.kita_rotary
         if (name == Tid.TID_FILTER_ROTARY_LEFT) return icondb.kita_rotary_left
@@ -125,7 +124,7 @@ namespace microcode {
             if (name == Tid.TID_MODIFIER_LOOP) return icondb.loop
 
             // variables
-
+            if (name == Tid.TID_SENSOR_MAGNET) return icondb.magnet
             if (name == Tid.TID_SENSOR_CUP_X_WRITTEN) return icondb.cupXwritten
             if (name == Tid.TID_SENSOR_CUP_Y_WRITTEN) return icondb.cupYwritten
             if (name == Tid.TID_SENSOR_CUP_Z_WRITTEN) return icondb.cupZwritten
