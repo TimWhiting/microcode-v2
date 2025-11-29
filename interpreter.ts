@@ -109,10 +109,7 @@ namespace microcode {
         public matchWhen(tid: number, filter: number = undefined): boolean {
             const sensor = this.rule.sensor
             if (tid != sensor) return false
-            if (
-                sensor == Tid.TID_SENSOR_START_PAGE &&
-                this.rule.filters.length == 0
-            ) {
+            if (sensor == Tid.TID_SENSOR_START_PAGE) {
                 return true
             } else if (getKind(sensor) == TileKind.Variable) {
                 return this.filterViaCompare()
