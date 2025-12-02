@@ -52,6 +52,7 @@
 # 3. Provide counts: new issues, updated issues, new PRs, updated PRs, open/closed counts.
 # 4. Highlight any PRs with failing checks or merge conflicts.
 # 5. Suggest top 3 PRs or issues to prioritize.
+# 6. Create a GitHub Discussion with the report: include a concise title and the full report body. At the end of your agent output, print a machine-parsable block starting with a line exactly "DISCUSSION_TITLE:" followed by the title on the next line, a blank line, then a line exactly "DISCUSSION_BODY:" followed by the discussion body. Do not include any extra commentary after this block so the safe-outputs.create-discussion can pick it up.
 #
 # Formatting:
 #
@@ -1343,6 +1344,7 @@ jobs:
           3. Provide counts: new issues, updated issues, new PRs, updated PRs, open/closed counts.
           4. Highlight any PRs with failing checks or merge conflicts.
           5. Suggest top 3 PRs or issues to prioritize.
+          6. Create a GitHub Discussion with the report: include a concise title and the full report body. At the end of your agent output, print a machine-parsable block starting with a line exactly "DISCUSSION_TITLE:" followed by the title on the next line, a blank line, then a line exactly "DISCUSSION_BODY:" followed by the discussion body. Do not include any extra commentary after this block so the safe-outputs.create-discussion can pick it up.
           
           Formatting:
           

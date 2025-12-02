@@ -45,6 +45,7 @@ Tasks:
 3. Provide counts: new issues, updated issues, new PRs, updated PRs, open/closed counts.
 4. Highlight any PRs with failing checks or merge conflicts.
 5. Suggest top 3 PRs or issues to prioritize.
+6. Create a GitHub Discussion with the report: include a concise title and the full report body using the safe output create discussion tool.
 
 Formatting:
 
