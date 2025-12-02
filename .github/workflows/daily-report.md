@@ -11,7 +11,7 @@ permissions:
 engine: copilot
 timeout-minutes: 15
 network:
-    allowed: ["github", "defaults"]
+    allowed: ["github", "defaults", "api.individual.githubcopilot.com:443"]
 tools:
     github:
         allowed:
