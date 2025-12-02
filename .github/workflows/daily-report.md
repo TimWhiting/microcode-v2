@@ -10,7 +10,9 @@ permissions:
     pull-requests: read
 engine: copilot
 timeout-minutes: 15
+strict: false
 network:
+    firewall: false
     allowed: ["github", "defaults", "api.individual.githubcopilot.com:443"]
 tools:
     github:
