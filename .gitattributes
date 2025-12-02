@@ -1,3 +1,5 @@
 assets/js/binary*.js linguist-generated
 assets/strings/* linguist-generated
 *.hex linguist-generated
+
+.github/workflows/*.lock.yml linguist-generated=true merge=ours
